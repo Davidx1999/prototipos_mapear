@@ -1,0 +1,32 @@
+
+import React from 'react';
+
+const Button = ({ variant = 'primary', size = 'default', iconOnly = false, className = '', children, ...props }) => {
+  let varClass = "";
+  if (variant === 'primary') varClass = "bg-[#008BC9] text-white hover:bg-[#003A79] border-transparent";
+  else if (variant === 'secondary') varClass = "bg-[#D9F0FC] text-[#008BC9] hover:bg-[#94CFEF] border-transparent";
+  else if (variant === 'tertiary') varClass = "bg-transparent text-[#1D2432] border-[#CACDD5] hover:bg-gray-50 border";
+  else if (variant === 'text') varClass = "bg-transparent text-[#677080] hover:bg-gray-100 hover:text-[#1D2432] border-transparent";
+  else if (variant === 'outlined') varClass = "bg-transparent text-[#008BC9] border-[#008BC9] border hover:bg-[#D9F0FC]";
+
+  let sizeClass = "";
+  if (iconOnly) {
+    if (size === 'xs') sizeClass = "w-[24px] h-[24px] p-0";
+    else if (size === 'sm') sizeClass = "w-[32px] h-[32px] p-0";
+    else if (size === 'default') sizeClass = "w-[40px] h-[40px] p-0";
+    else if (size === 'lg') sizeClass = "w-[48px] h-[48px] p-0";
+  } else {
+    if (size === 'xs') sizeClass = "px-[8px] py-[4px] text-[11px]";
+    else if (size === 'sm') sizeClass = "px-[12px] py-[6px] text-[12px]";
+    else if (size === 'default') sizeClass = "px-[16px] py-[8px] text-[13px] md:text-[14px]";
+    else if (size === 'lg') sizeClass = "px-[24px] py-[12px] text-[15px] md:text-[16px]";
+  }
+
+  return (
+    <button className={`rounded-[8px] font-semibold transition-all duration-200 flex items-center justify-center gap-[8px] cursor-pointer outline-none shrink-0 ${varClass} ${sizeClass} ${className}`} {...props}>
+      {children}
+    </button>
+  );
+};
+
+export default Button;
