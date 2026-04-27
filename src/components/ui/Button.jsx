@@ -2,12 +2,12 @@
 import React from 'react';
 
 const Button = ({ variant = 'primary', size = 'default', iconOnly = false, className = '', children, ...props }) => {
-  let varClass = "";
-  if (variant === 'primary') varClass = "bg-[#008BC9] text-white hover:bg-[#003A79] border-transparent";
-  else if (variant === 'secondary') varClass = "bg-[#D9F0FC] text-[#008BC9] hover:bg-[#94CFEF] border-transparent";
-  else if (variant === 'tertiary') varClass = "bg-transparent text-[#1D2432] border-[#CACDD5] hover:bg-gray-50 border";
-  else if (variant === 'text') varClass = "bg-transparent text-[#677080] hover:bg-gray-100 hover:text-[#1D2432] border-transparent";
-  else if (variant === 'outlined') varClass = "bg-transparent text-[#008BC9] border-[#008BC9] border hover:bg-[#D9F0FC]";
+  let varStyle = {};
+  if (variant === 'primary') varStyle = { backgroundColor: 'var(--primary-base)', color: '#FFF', borderColor: 'transparent' };
+  else if (variant === 'secondary') varStyle = { backgroundColor: 'var(--primary-light)', color: 'var(--primary-base)', borderColor: 'transparent' };
+  else if (variant === 'tertiary') varStyle = { backgroundColor: 'transparent', color: 'var(--neutral-7)', borderColor: 'var(--neutral-3)', borderStyle: 'solid', borderWidth: '1px' };
+  else if (variant === 'text') varStyle = { backgroundColor: 'transparent', color: 'var(--neutral-5)', borderColor: 'transparent' };
+  else if (variant === 'outlined') varStyle = { backgroundColor: 'transparent', color: 'var(--primary-base)', borderColor: 'var(--primary-base)', borderStyle: 'solid', borderWidth: '1px' };
 
   let sizeClass = "";
   if (iconOnly) {
@@ -23,7 +23,11 @@ const Button = ({ variant = 'primary', size = 'default', iconOnly = false, class
   }
 
   return (
-    <button className={`rounded-[8px] font-semibold transition-all duration-200 flex items-center justify-center gap-[8px] cursor-pointer outline-none shrink-0 ${varClass} ${sizeClass} ${className}`} {...props}>
+    <button 
+      className={`rounded-[8px] font-semibold transition-all duration-200 flex items-center justify-center gap-[8px] cursor-pointer outline-none shrink-0 ${sizeClass} ${className}`} 
+      style={varStyle}
+      {...props}
+    >
       {children}
     </button>
   );

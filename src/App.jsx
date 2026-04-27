@@ -17,20 +17,22 @@ import Curriculos from './components/screens/Curriculos';
 import AvaliacoesLista from './components/screens/AvaliacoesLista';
 import Usuarios from './components/screens/Usuarios';
 import Acompanhamento from './components/screens/Acompanhamento';
+import Devolutivas from './components/screens/Devolutivas';
+import RegistroPresenca from './components/screens/RegistroPresenca';
 
 export default function MapearApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('dashboard');
-  
-  const [activeMenu, setActiveMenu] = useState('curriculos'); 
+
+  const [activeMenu, setActiveMenu] = useState('curriculos');
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
-  
+
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isA11yOpen, setIsA11yOpen] = useState(false);
   const [isAppDrawerOpen, setIsAppDrawerOpen] = useState(false);
@@ -40,14 +42,25 @@ export default function MapearApp() {
   const [activeCurriculosTab, setActiveCurriculosTab] = useState(0);
   const [expandedUser, setExpandedUser] = useState(1);
   const [expandedItem, setExpandedItem] = useState(null);
-  const [relationsViewMode, setRelationsViewMode] = useState('list'); 
+  const [relationsViewMode, setRelationsViewMode] = useState('list');
   const [isGraphVisible, setIsGraphVisible] = useState(true);
 
-  const [acompanhamentoTab, setAcompanhamentoTab] = useState(0); 
+  const [acompanhamentoTab, setAcompanhamentoTab] = useState(0);
 
   const [fontScale, setFontScale] = useState(3);
   const [isHighContrast, setIsHighContrast] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+
+  const [favorites, setFavorites] = useState(['card-saberes', 'card-relatorios']);
+
+  const toggleFavorite = (cardId) => {
+    setFavorites(prev => {
+      if (prev.includes(cardId)) {
+        return prev.filter(id => id !== cardId);
+      }
+      return [...prev, cardId];
+    });
+  };
 
   const colors = isHighContrast ? highContrastColors : defaultColors;
 
@@ -59,13 +72,13 @@ export default function MapearApp() {
     return () => {
       try {
         document.head.removeChild(link);
-      } catch (e) {}
+      } catch (e) { }
     };
   }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username === 'david.salviano' && password === 'David@123.') {
+    if (username === 'user.test' && password === 'User@123') {
       setLoginError('');
       setIsLoggedIn(true);
     } else {
@@ -108,29 +121,49 @@ export default function MapearApp() {
     setIsProfileOpen(false);
   };
 
+  const cssVars = {
+    '--primary-base': colors.primary.base,
+    '--primary-light': colors.primary.light,
+    '--primary-dark': colors.primary.dark,
+    '--primary-extra-dark': colors.primary.extraDark,
+    '--neutral-7': colors.neutral[7],
+    '--neutral-5': colors.neutral[5],
+    '--neutral-3': colors.neutral[3],
+    '--neutral-2': colors.neutral[2],
+    '--neutral-1': colors.neutral[1],
+    '--neutral-0': colors.neutral[0]
+  };
+
   if (!isLoggedIn) {
     return (
-      <Login 
-        colors={colors}
-        isHighContrast={isHighContrast}
-        setIsHighContrast={setIsHighContrast}
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-        showPassword={showPassword}
-        setShowPassword={setShowPassword}
-        loginError={loginError}
-        handleLogin={handleLogin}
-        setIsLoggedIn={setIsLoggedIn}
-        setCurrentScreen={setCurrentScreen}
-      />
+      <div style={cssVars}>
+        <Login
+          colors={colors}
+          isHighContrast={isHighContrast}
+          setIsHighContrast={setIsHighContrast}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          showPassword={showPassword}
+          setShowPassword={setShowPassword}
+          loginError={loginError}
+          handleLogin={handleLogin}
+          setIsLoggedIn={setIsLoggedIn}
+          setCurrentScreen={setCurrentScreen}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col transition-colors duration-500" style={{ backgroundColor: colors.neutral[0], fontFamily: 'Montserrat, sans-serif' }}>
-      <Header 
+    <div className="min-h-screen flex flex-col transition-all duration-500" style={{ 
+      backgroundColor: colors.neutral[0], 
+      fontFamily: 'Montserrat, sans-serif', 
+      fontSize: `${14 + (fontScale - 3) * 2}px`,
+      ...cssVars
+    }}>
+      <Header
         colors={colors}
         isHighContrast={isHighContrast}
         setIsHighContrast={setIsHighContrast}
@@ -155,9 +188,9 @@ export default function MapearApp() {
         openGripDrawer={openGripDrawer}
       />
 
-      <div className="flex-1 flex flex-col transition-all duration-300" style={{ zoom: 1 + (fontScale - 3) * 0.06 }} onClick={() => { if(isAppDrawerOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
+      <div className="flex-1 flex flex-col transition-all duration-300" onClick={() => { if (isAppDrawerOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
         {currentScreen === 'dashboard' && (
-          <Dashboard 
+          <Dashboard
             colors={colors}
             isHighContrast={isHighContrast}
             searchQuery={searchQuery}
@@ -167,18 +200,26 @@ export default function MapearApp() {
             hoveredMenu={hoveredMenu}
             setHoveredMenu={setHoveredMenu}
             navigateTo={navigateTo}
+            favorites={favorites}
+            toggleFavorite={toggleFavorite}
           />
         )}
         {currentScreen === 'acompanhamento' && (
-          <Acompanhamento 
+          <Acompanhamento
             colors={colors}
             acompanhamentoTab={acompanhamentoTab}
             setAcompanhamentoTab={setAcompanhamentoTab}
             navigateTo={navigateTo}
           />
         )}
+        {currentScreen === 'devolutivas' && (
+          <Devolutivas
+            colors={colors}
+            navigateTo={navigateTo}
+          />
+        )}
         {currentScreen === 'saberes' && (
-          <Saberes 
+          <Saberes
             colors={colors}
             activeSaberesTab={activeSaberesTab}
             setActiveSaberesTab={setActiveSaberesTab}
@@ -195,7 +236,7 @@ export default function MapearApp() {
           />
         )}
         {currentScreen === 'curriculos' && (
-          <Curriculos 
+          <Curriculos
             colors={colors}
             activeCurriculosTab={activeCurriculosTab}
             setActiveCurriculosTab={setActiveCurriculosTab}
@@ -205,23 +246,29 @@ export default function MapearApp() {
           />
         )}
         {currentScreen === 'avaliacoes' && (
-          <AvaliacoesLista 
+          <AvaliacoesLista
             colors={colors}
             navigateTo={navigateTo}
           />
         )}
         {currentScreen === 'usuarios' && (
-          <Usuarios 
+          <Usuarios
             colors={colors}
             expandedUser={expandedUser}
             setExpandedUser={setExpandedUser}
             navigateTo={navigateTo}
           />
         )}
+        {currentScreen === 'registro-presenca' && (
+          <RegistroPresenca
+            colors={colors}
+            navigateTo={navigateTo}
+          />
+        )}
       </div>
 
       {currentScreen === 'dashboard' && (
-        <Footer 
+        <Footer
           colors={colors}
           isHighContrast={isHighContrast}
         />

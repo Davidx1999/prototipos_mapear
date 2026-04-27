@@ -5,15 +5,15 @@ import LogoFgv from '../ui/LogoFgv';
 import Button from '../ui/Button';
 import { sidebarMenus } from '../../data/constants';
 
-const Header = ({ 
-  colors, 
-  isHighContrast, 
-  setIsHighContrast, 
-  currentScreen, 
-  navigateTo, 
-  isAppDrawerOpen, 
-  setIsAppDrawerOpen, 
-  drawerActiveCat, 
+const Header = ({
+  colors,
+  isHighContrast,
+  setIsHighContrast,
+  currentScreen,
+  navigateTo,
+  isAppDrawerOpen,
+  setIsAppDrawerOpen,
+  drawerActiveCat,
   setDrawerActiveCat,
   isA11yOpen,
   setIsA11yOpen,
@@ -30,11 +30,11 @@ const Header = ({
   openGripDrawer
 }) => {
   return (
-    <header className="sticky top-0 z-50 px-[16px] md:px-[32px] py-[12px] md:py-[16px] border-b flex justify-between items-center transition-colors duration-500 bg-white" style={{ borderColor: colors.neutral[2] }}>
+    <header className="sticky top-0 z-50 px-[16px] md:px-[32px] py-[12px] md:py-[16px] border-b flex justify-between items-center transition-colors duration-500" style={{ borderColor: colors.neutral[2], backgroundColor: colors.neutral[0] }}>
       <div className="flex items-center gap-[24px] md:gap-[40px]">
         <Menu className="block lg:hidden cursor-pointer" size={24} style={{ color: colors.neutral[7] }} onClick={() => setIsAppDrawerOpen(!isAppDrawerOpen)} />
         <LogoFgv onClick={() => navigateTo('dashboard')} isHighContrast={isHighContrast} colors={colors} />
-        
+
         {currentScreen === 'acompanhamento' && (
           <nav className="hidden xl:flex items-center gap-[24px] text-[13px] font-bold">
             <span className="cursor-pointer hover:underline" style={{ color: colors.neutral[5] }}>Relatórios</span>
@@ -43,11 +43,11 @@ const Header = ({
           </nav>
         )}
       </div>
-      
+
       <div className="flex items-center gap-[4px] md:gap-[8px]">
         <div className="flex items-center gap-[4px] md:gap-[8px]">
           <Button variant="text" size="default" className="!normal-case !font-medium hidden md:flex"><HelpCircle size={18} /> Ajuda</Button>
-          
+
           <div className="relative hidden lg:block">
             <Button variant="text" iconOnly size="default" onClick={openGripDrawer}><Grip size={20} /></Button>
             {isAppDrawerOpen && (
@@ -66,29 +66,29 @@ const Header = ({
                 </div>
                 <hr className="mb-[16px]" style={{ borderColor: colors.neutral[2] }} />
                 <span className="text-[12px] font-bold mb-[12px] block" style={{ color: colors.neutral[5] }}>{sidebarMenus.find(m => m.id === drawerActiveCat)?.label}</span>
-                
+
                 <div className="flex flex-col gap-[4px] mb-[24px] max-h-[220px] overflow-y-auto pr-[4px] custom-scrollbar">
                   {sidebarMenus.find(m => m.id === drawerActiveCat)?.cards.map((card, idx) => {
                     const isCardActive = currentScreen === card.route;
                     return (
-                      <button key={idx} onClick={() => { if(card.route) navigateTo(card.route); else { navigateTo('dashboard'); } setIsAppDrawerOpen(false); }} className={`w-full text-left px-[16px] py-[10px] rounded-[6px] text-[13px] transition-colors ${isCardActive ? 'bg-[#008BC9] text-white font-bold' : 'bg-transparent text-[#008BC9] font-semibold hover:bg-[#008BC9] hover:text-white'}`}>
+                      <button key={idx} onClick={() => { if (card.route) navigateTo(card.route); else { navigateTo('dashboard'); } setIsAppDrawerOpen(false); }} className={`w-full text-left px-[16px] py-[10px] rounded-[6px] text-[13px] transition-colors ${isCardActive ? 'bg-[#008BC9] text-white font-bold' : 'bg-transparent text-[#008BC9] font-semibold hover:bg-[#008BC9] hover:text-white'}`}>
                         {card.title}
                       </button>
                     )
                   })}
                 </div>
                 <hr className="mb-[16px]" style={{ borderColor: colors.neutral[2] }} />
-                <Button variant="outlined" size="default" className="w-full text-[13px]" onClick={() => { navigateTo('dashboard'); setIsAppDrawerOpen(false); }}>Voltar para Tela Inicial</Button>
+                <Button variant="tertiary" size="default" className="w-full text-[13px]" onClick={() => { navigateTo('dashboard'); setIsAppDrawerOpen(false); }}>Voltar para Tela Inicial</Button>
               </div>
             )}
           </div>
-          
+
           <div className="relative">
             <Button variant="primary" iconOnly size="default" className="md:w-[40px] md:h-[40px] w-[32px] h-[32px]" onClick={() => { setIsA11yOpen(!isA11yOpen); setIsProfileOpen(false); setIsAppDrawerOpen(false); }}><Accessibility className="w-[18px] h-[18px] md:w-[20px] md:h-[20px]" /></Button>
             {isA11yOpen && (
-              <div className="absolute top-[100%] right-0 mt-[8px] w-[260px] md:w-[280px] p-[16px] rounded-[12px] shadow-2xl z-50 flex flex-col gap-[16px] border" style={{ backgroundColor: isHighContrast ? '#222' : '#003A79', color: '#FFF', borderColor: colors.neutral[3] }}>
+              <div className="absolute top-[100%] right-0 mt-[8px] w-[260px] md:w-[280px] p-[16px] rounded-[12px] shadow-2xl z-50 flex flex-col gap-[16px] border" style={{ backgroundColor: isHighContrast ? colors.neutral[0] : '#003A79', color: '#FFF', borderColor: colors.neutral[3] }}>
                 <div className="flex items-center gap-[12px] cursor-pointer hover:bg-white/10 p-[8px] rounded-[8px] transition-colors"><div className="w-[24px] h-[24px] bg-white rounded-[4px] font-bold text-[12px] flex justify-center items-center" style={{ color: isHighContrast ? '#222' : '#003A79' }}>VL</div><span className="text-[13px] md:text-[14px] font-semibold">Tradutor de VLibras</span></div>
-                <hr className="border-white/20"/>
+                <hr className="border-white/20" />
                 <div className="flex flex-col gap-[12px] px-[8px]">
                   <span className="text-[11px] md:text-[12px] font-semibold opacity-80 uppercase tracking-wider">Tamanho da fonte</span>
                   <div className="flex items-center justify-between gap-[12px]">
@@ -100,7 +100,7 @@ const Header = ({
                     <button onClick={() => setFontScale(Math.min(5, fontScale + 1))} className="text-[16px] md:text-[18px] font-bold hover:text-[#94CFEF] transition-colors">A+</button>
                   </div>
                 </div>
-                <hr className="border-white/20"/>
+                <hr className="border-white/20" />
                 <div className="flex items-center gap-[12px] cursor-pointer hover:bg-white/10 p-[8px] rounded-[8px] transition-colors" onClick={() => { setIsHighContrast(!isHighContrast); setIsA11yOpen(false); }}><Contrast size={20} /><span className="text-[13px] md:text-[14px] font-semibold">{isHighContrast ? 'Desativar Alto Contraste' : 'Ativar Alto Contraste'}</span></div>
               </div>
             )}
