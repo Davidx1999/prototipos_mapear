@@ -110,14 +110,14 @@ const Header = ({
         <div className="relative flex items-center gap-[16px]">
           <div className="flex items-center gap-[8px] md:gap-[12px] cursor-pointer p-[4px] md:p-[8px] rounded-[8px] transition-colors" onClick={() => { setIsProfileOpen(!isProfileOpen); setIsA11yOpen(false); setIsAppDrawerOpen(false); }} style={{ backgroundColor: isProfileOpen ? colors.neutral[1] : 'transparent' }}>
             <img src="https://i.pinimg.com/webp/1200x/7b/e7/81/7be781fff8dacf84b38728db30267417.webp" alt="Avatar" className="w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full border object-cover" style={{ borderColor: colors.neutral[2] }} />
-            <div className="hidden md:flex flex-col"><span className="text-[14px] font-bold leading-tight" style={{ color: colors.neutral[7] }}>Priscila Campos</span><span className="text-[12px] leading-tight" style={{ color: colors.primary.base }}>Gestora Educacional</span></div>
+            <div className="hidden md:flex flex-col"><span className="text-[14px] font-bold leading-tight" style={{ color: colors.neutral[7] }}>User Test</span><span className="text-[12px] leading-tight" style={{ color: colors.primary.base }}>Gestora Educacional</span></div>
             <ChevronDown size={14} className="md:w-[16px] md:h-[16px]" style={{ color: colors.neutral[5] }} />
           </div>
 
           {isProfileOpen && (
             <div className="absolute top-[100%] right-0 mt-[8px] w-[180px] md:w-[200px] border rounded-[8px] shadow-lg py-[8px] z-50" style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}>
               <div className="px-[16px] py-[8px] md:hidden border-b mb-[4px]" style={{ borderColor: colors.neutral[2] }}>
-                <span className="block text-[13px] font-bold" style={{ color: colors.neutral[7] }}>Priscila Campos</span>
+                <span className="block text-[13px] font-bold" style={{ color: colors.neutral[7] }}>User Test</span>
                 <span className="block text-[11px]" style={{ color: colors.primary.base }}>Gestora Educacional</span>
               </div>
               <button className="w-full text-left px-[16px] py-[10px] md:py-[12px] text-[13px] md:text-[14px] font-semibold text-red-600 transition-colors hover:bg-red-500/10" onClick={() => { closeAllDropdowns(); setIsLoggedIn(false); setUsername(''); setPassword(''); setSearchQuery(''); setFontScale(3); setIsHighContrast(false); setCurrentScreen('dashboard'); }}>Sair da conta</button>

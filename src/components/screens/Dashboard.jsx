@@ -1,6 +1,9 @@
 
 import React from 'react';
-import { Search, X, Star } from 'lucide-react';
+import { 
+  Search, X, Star, Grid, PenTool, LayoutDashboard, 
+  TrendingUp, CheckSquare, Users, BookOpen 
+} from 'lucide-react';
 import { sidebarMenus } from '../../data/constants';
 
 const Dashboard = ({
@@ -45,7 +48,32 @@ const Dashboard = ({
         </div>
       </div>
 
-      {/* ══ FAVORITES (REMOVIDO TEMPORARIAMENTE) ════════════════════════════ */}
+      {/* ══ LAUNCHER / ACESSOS RÁPIDOS ═════════════════════════════════════════ */}
+      <div className="mt-[24px] md:mt-[32px] animate-fade-slide" style={{ animationDelay: '0.1s' }}>
+        <h3 className="text-[16px] md:text-[18px] font-bold mb-[16px]" style={{ color: colors.neutral[7] }}>Meus Acessos Rápidos</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-[12px]">
+          {[
+            { id: 'app-saberes', route: 'saberes', label: 'Matriz de Saberes', icon: <Grid size={24} />, color: '#008BC9' },
+            { id: 'app-avaliacoes', route: 'avaliacoes', label: 'Avaliações', icon: <PenTool size={24} />, color: '#0C63AA' },
+            { id: 'app-devolutivas', route: 'devolutivas', label: 'Devolutivas', icon: <LayoutDashboard size={24} />, color: '#003A79' },
+            { id: 'app-acompanhamento', route: 'acompanhamento', label: 'Acompanhamento', icon: <TrendingUp size={24} />, color: '#003A79' },
+            { id: 'app-presenca', route: 'registro-presenca', label: 'Presença', icon: <CheckSquare size={24} />, color: '#003A79' },
+            { id: 'app-usuarios', route: 'usuarios', label: 'Usuários', icon: <Users size={24} />, color: '#003A79' },
+            { id: 'app-curriculos', route: 'curriculos', label: 'Currículos', icon: <BookOpen size={24} />, color: '#003A79' },
+          ].map((app) => (
+            <button 
+              key={app.id} 
+              onClick={() => navigateTo(app.route)}
+              className="flex flex-col items-center justify-center p-[16px] rounded-[12px] bg-white border border-gray-200 hover:border-[#008BC9] hover:shadow-lg transition-all group"
+            >
+              <div className="w-[48px] h-[48px] rounded-[10px] flex items-center justify-center mb-[8px] transition-transform group-hover:scale-110" style={{ backgroundColor: isHighContrast ? '#000' : colors.primary.extraLight, color: colors.primary.base }}>
+                {app.icon}
+              </div>
+              <span className="text-[11px] md:text-[12px] font-bold text-center leading-tight" style={{ color: colors.neutral[7] }}>{app.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* ══ SEARCH BAR ══════════════════════════════════════════════════════ */}
       <div className="mt-[24px] md:mt-[32px] mb-[32px] md:mb-[40px] relative w-full group">
