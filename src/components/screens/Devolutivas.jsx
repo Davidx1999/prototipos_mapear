@@ -1,18 +1,18 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { LayoutDashboard } from 'lucide-react';
+import { LayoutDashboard, Grid, BarChart2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import HeatmapSidebar from './devolutivas/HeatmapSidebar';
 import HeatmapControls from './devolutivas/HeatmapControls';
 import HeatmapMatrix from './devolutivas/HeatmapMatrix';
 import HeatmapTooltip from './devolutivas/HeatmapTooltip';
 
-import { 
-  statusColors, 
-  getColorFromGradient, 
-  colGroups, 
-  getMockRows, 
-  devDB, 
-  CASCADE_LEVELS 
+import {
+  statusColors,
+  getColorFromGradient,
+  colGroups,
+  getMockRows,
+  devDB,
+  CASCADE_LEVELS
 } from './devolutivas/HeatmapUtils';
 
 export default function Devolutivas({ colors, navigateTo }) {
@@ -171,7 +171,7 @@ export default function Devolutivas({ colors, navigateTo }) {
     if (sortBy !== 'Score') return colGroups;
 
     // Achata todas as colunas com seus índices globais e totais
-    const allCols = colGroups.flatMap((g, gIdx) => 
+    const allCols = colGroups.flatMap((g, gIdx) =>
       g.cols.map((c, cIdx) => {
         const globalIdx = colGroups.slice(0, gIdx).reduce((acc, curr) => acc + curr.cols.length, 0) + cIdx;
         return {
@@ -191,9 +191,9 @@ export default function Devolutivas({ colors, navigateTo }) {
     });
 
     // Retorna como um grupo único quando ordenado
-    return [{ 
-      title: sortOrder === 'Desempenho Crescente' ? 'Itens: Menor para Maior Desempenho' : 'Itens: Maior para Menor Desempenho', 
-      cols: sortedCols 
+    return [{
+      title: sortOrder === 'Desempenho Crescente' ? 'Itens: Menor para Maior Desempenho' : 'Itens: Maior para Menor Desempenho',
+      cols: sortedCols
     }];
   }, [colGroups, dynamicTotals, sortBy, sortOrder]);
 
@@ -250,16 +250,72 @@ export default function Devolutivas({ colors, navigateTo }) {
       y: rect.top
     });
   };
-
   const handleCellMouseLeave = () => {
     setTooltipData(null);
   };
 
   return (
     <div className="flex flex-col h-screen bg-gray-50 overflow-hidden font-sans">
-      {/* Header Falso Superior (Substituído no App.jsx ou acima) */}
+      <div className="bg-white border-b border-gray-200 h-14 flex items-center px-6 sticky top-0 z-40 shadow-sm shrink-0">
+        <div className="flex bg-gray-100 p-1 rounded-xl mr-6">
+          <button 
+            onClick={() => setMainTab('heatmap')}
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-[12px] font-bold transition-all ${mainTab === 'heatmap' ? 'bg-white text-[#003A79] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+          >
+            <Grid size={16} /> Mapa de Calor
+          </button>
+          <button 
+            onClick={() => setMainTab('detalhes')}
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-[12px] font-bold transition-all ${mainTab === 'detalhes' ? 'bg-white text-[#003A79] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+          >
+            <BarChart2 size={16} /> Detalhes da Resposta
+          </button>
+        </div>
 
-      <main className="flex-1 flex overflow-hidden relative">
+        <div className="flex items-center gap-2 flex-1 overflow-x-auto no-scrollbar">
+           {navPath.map((path, idx) => (
+              <React.Fragment key={idx}>
+                <button 
+                  onClick={() => goBack(idx)}
+                  className={`text-[12px] font-bold px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${idx === navLevel ? 'bg-[#008BC9] text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'}`}
+                >
+                  {path}
+                </button>
+                {idx < navPath.length - 1 && <ChevronRight size={14} className="text-gray-400 shrink-0" />}
+              </React.Fragment>
+            ))}
+        </div>
+
+        <div className="flex items-center gap-3 ml-4">
+           <button 
+              onClick={() => setShowSkills(!showSkills)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] font-extrabold transition-all border shrink-0 ${showSkills ? 'bg-[#94CFEF] text-[#003A79] border-[#008BC9]' : 'bg-white text-[#008BC9] border-[#008BC9] hover:bg-gray-50'}`}
+            >
+              {showSkills ? 'OCULTAR HABILIDADES' : 'DESTACAR HABILIDADES'}
+            </button>
+            
+            {showSkills && (
+               <div className="flex items-center bg-gray-50 rounded-xl px-2 py-1 border border-gray-200 animate-fade-slide shrink-0">
+                  <button onClick={() => scrollSkills('left')} className="p-1.5 text-gray-400 hover:text-[#008BC9]"><ChevronLeft size={16} /></button>
+                  <div ref={skillsScrollRef} className="flex gap-1.5 overflow-hidden w-[200px] px-1">
+                     {skillsList.map(s => (
+                        <button 
+                          key={s} 
+                          onClick={() => setActiveSkill(activeSkill === s ? null : s)}
+                          className={`px-3 py-1 rounded-md text-[10px] font-bold border transition-all whitespace-nowrap ${activeSkill === s ? 'bg-[#003A79] text-white border-[#003A79]' : 'bg-white text-gray-500 border-gray-300 hover:border-[#008BC9]'}`}
+                        >
+                          {s}
+                        </button>
+                     ))}
+                  </div>
+                  <button onClick={() => scrollSkills('right')} className="p-1.5 text-gray-400 hover:text-[#008BC9]"><ChevronRight size={16} /></button>
+               </div>
+            )}
+        </div>
+      </div>
+
+      <main className="flex-1 relative flex overflow-hidden">
+        {/* Sidebar Flutuante */}
         <HeatmapSidebar
           isContextExpanded={isContextExpanded}
           setIsContextExpanded={setIsContextExpanded}
@@ -346,7 +402,7 @@ export default function Devolutivas({ colors, navigateTo }) {
               activeSkill={activeSkill}
             />
           ) : (
-            <div className="p-10 pt-[100px] flex justify-center items-center h-full text-gray-400">
+            <div className="p-10 flex justify-center items-center h-full text-gray-400">
               <div className="flex flex-col items-center gap-4">
                 <LayoutDashboard size={48} className="opacity-20" />
                 <p className="font-bold text-[18px]">Selecione um aluno ou item para ver detalhes...</p>

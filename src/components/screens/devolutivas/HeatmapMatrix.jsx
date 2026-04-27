@@ -29,7 +29,7 @@ export default function HeatmapMatrix({
       onMouseLeave={handleMouseUpOrLeave}
     >
       {mainTab === 'heatmap' && (
-        <div className={`pt-[100px] pb-[300px] pl-[50px] md:pl-[400px] pr-[400px] w-max h-max ${showSkills ? 'mt-[60px] md:mt-[80px]' : ''}`}>
+        <div className="pt-[60px] pb-[300px] pl-[80px] md:pl-[120px] pr-[400px] w-max h-max">
           <div className="inline-block transition-transform duration-200 origin-top-left" style={{ transform: `scale(${zoomLevel})` }}>
             
             {/* Header Dinâmico do Heatmap */}

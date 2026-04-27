@@ -22,39 +22,6 @@ export default function HeatmapControls({
 }) {
   return (
     <>
-      {/* PAINEL FLUTUANTE SUPERIOR: Destacar Habilidades */}
-      {showSkills && (
-        <div className="absolute top-4 left-4 right-4 md:left-[360px] md:right-6 bg-white/95 backdrop-blur-md rounded-xl border border-gray-200 flex items-center px-4 py-3 gap-4 z-30 shadow-[0_8px_30px_rgb(0,0,0,0.12)] animate-fade-slide">
-          <span className="font-bold text-[12px] text-gray-700 whitespace-nowrap shrink-0">Destacar Habilidade:</span>
-          <div className="flex items-center w-full relative overflow-hidden h-[34px]">
-            {canScrollSkillsLeft && (
-              <div className="absolute left-0 top-0 bottom-0 z-10 bg-gradient-to-r from-white via-white/90 to-transparent pr-6 flex items-center">
-                <button onClick={() => scrollSkills('left')} className="p-1 rounded-full bg-white shadow-md border border-gray-200 text-gray-600 hover:text-[#008BC9] transition-colors">
-                  <ChevronLeft size={16} />
-                </button>
-              </div>
-            )}
-            <div ref={skillsScrollRef} className="flex gap-2 overflow-hidden w-full items-center px-2 py-1 h-full">
-              {skillsList.map((skill) => (
-                <button
-                  key={skill}
-                  onClick={() => setActiveSkill(activeSkill === skill ? null : skill)}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-all border shrink-0 shadow-sm outline-none ${activeSkill === skill ? 'bg-[#94CFEF] text-[#003A79] border-[#008BC9] scale-[1.02]' : 'bg-white text-gray-600 hover:bg-gray-50 border-gray-300'}`}
-                >
-                  {skill}
-                </button>
-              ))}
-            </div>
-            {canScrollSkillsRight && (
-              <div className="absolute right-0 top-0 bottom-0 z-10 bg-gradient-to-l from-white via-white/90 to-transparent pl-6 flex items-center">
-                <button onClick={() => scrollSkills('right')} className="p-1 rounded-full bg-white shadow-md border border-gray-200 text-gray-600 hover:text-[#008BC9] transition-colors">
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* CONTROLES FLUTUANTES (Direita) */}
       <div className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-40 shadow-xl bg-white/90 backdrop-blur-md rounded-[10px] border border-gray-200 p-1.5">
