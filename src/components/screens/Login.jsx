@@ -29,7 +29,7 @@ const Login = ({
 
           {/* Logo Login Específica */}
           <div className="mb-[32px]">
-            <img src={`${import.meta.env.BASE_URL}assets/logo_login_mapear.png`} alt="Mapear Login" className="h-[40px] md:h-[72px] object-contain" />
+            <img src="assets/logo_login_mapear.png" alt="Mapear Login" className="h-[40px] md:h-[72px] object-contain" />
           </div>
 
           <div className="text-center w-full">

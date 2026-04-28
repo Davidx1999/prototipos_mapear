@@ -10,9 +10,9 @@ export const highContrastColors = {
 };
 
 import React from 'react';
-import { 
-  Library, BookOpen, FileEdit, PenTool, Users, Database, CheckSquare, 
-  TrendingUp, UploadCloud, BarChart2, LineChart, LayoutDashboard, 
+import {
+  Library, BookOpen, FileEdit, PenTool, Users, Database, CheckSquare,
+  TrendingUp, UploadCloud, BarChart2, LineChart, LayoutDashboard,
   GraduationCap, UserCog, Building2, Grid, BookCheck, Edit3, PieChart
 } from 'lucide-react';
 
@@ -20,7 +20,7 @@ export const sidebarMenus = [
   {
     id: 'curriculos',
     label: 'Currículos e Conteúdos',
-    shortDesc: 'Configure as Matrizes de Saberes',
+    shortDesc: 'Configure as matrizes e conteúdos',
     icon: <Library size={24} />,
     cards: [
       { id: 'card-saberes', title: 'Matriz de Saberes', route: 'saberes', keywords: ['habilidades', 'saberes', 'domínios', 'cognitivos', 'competências'], desc: 'Organize matrizes, relacione domínios e hierarquize habilidades cognitivas essenciais para a rede.', icon: <Grid size={20} /> },
@@ -60,7 +60,8 @@ export const sidebarMenus = [
     shortDesc: 'Ambiente dedicado aos estudantes',
     icon: <GraduationCap size={24} />,
     cards: [
-      { id: 'card-realizacao', title: 'Realização de Testes', keywords: ['alunos', 'estudantes', 'fazer prova', 'responder', 'teste'], desc: 'Acesse o ambiente exclusivo de estudantes para a resolução segura de testes e simulados.', icon: <GraduationCap size={20} /> }
+      { id: 'card-realizacao', title: 'Realização de Testes', keywords: ['alunos', 'estudantes', 'fazer prova', 'responder', 'teste'], desc: 'Acesse o ambiente exclusivo de estudantes para a resolution segura de testes e simulados.', icon: <GraduationCap size={20} /> },
+      { id: 'card-presenca', title: 'Registro de Presença', route: 'registro-presenca', keywords: ['chamada', 'faltas', 'presença', 'alunos', 'aplicação'], desc: 'Realize o registro de presença dos alunos para as avaliações alocadas em cada turma.', icon: <CheckSquare size={20} /> }
     ]
   },
   {
@@ -70,7 +71,6 @@ export const sidebarMenus = [
     icon: <UserCog size={24} />,
     cards: [
       { id: 'card-usuarios', title: 'Usuários', route: 'usuarios', keywords: ['acesso', 'professores', 'diretores', 'senha', 'perfil', 'cargo'], desc: 'Adicione perfis e gerencie as permissões de acesso baseadas nos cargos das entidades escolares.', icon: <UserCog size={20} /> },
-      { id: 'card-presenca', title: 'Registro de Presença', route: 'registro-presenca', keywords: ['chamada', 'faltas', 'presença', 'alunos', 'aplicação'], desc: 'Realize o registro de presença dos alunos para as avaliações alocadas em cada turma.', icon: <CheckSquare size={20} /> },
       { id: 'card-escolas', title: 'Escolas', keywords: ['colégios', 'instituições', 'rede', 'município', 'dados'], desc: 'Atualize cadastros institucionais e administre as informações da rede de escolas ativas.', icon: <Building2 size={20} /> },
       { id: 'card-turmas', title: 'Turmas', keywords: ['alunos', 'classes', 'estudantes', 'agrupamento', 'transferência'], desc: 'Organize o ensalamento, realize remanejamentos de alunos e vincule turmas às avaliações.', icon: <Users size={20} /> }
     ]

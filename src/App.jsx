@@ -135,9 +135,16 @@ export default function MapearApp() {
     '--font-scale': `${1 + (fontScale - 3) * 0.1}`
   };
 
+  const appStyle = {
+    backgroundColor: colors.neutral[0],
+    fontFamily: 'Montserrat, sans-serif',
+    zoom: 1 + (fontScale - 3) * 0.1,
+    ...cssVars
+  };
+
   if (!isLoggedIn) {
     return (
-      <div style={cssVars}>
+      <div style={appStyle}>
         <Login
           colors={colors}
           isHighContrast={isHighContrast}
@@ -158,12 +165,7 @@ export default function MapearApp() {
   }
 
   return (
-    <div className={`flex flex-col transition-all duration-500 ${currentScreen === 'devolutivas' ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={{ 
-      backgroundColor: colors.neutral[0], 
-      fontFamily: 'Montserrat, sans-serif', 
-      zoom: 1 + (fontScale - 3) * 0.2,
-      ...cssVars
-    }}>
+    <div className={`flex flex-col transition-all duration-500 ${currentScreen === 'devolutivas' ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
       <Header
         colors={colors}
         isHighContrast={isHighContrast}

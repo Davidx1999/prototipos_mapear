@@ -8,13 +8,13 @@ const LogoFgv = ({ isFooter = false, stacked = false, onClick, isHighContrast, c
   if (stacked) {
     return (
       <div className={`flex flex-col items-center gap-[4px] ${baseClass}`} onClick={onClick}>
-        <img src={`${import.meta.env.BASE_URL}assets/fgv_logo.png`} alt="FGV Mapear Logo" className="h-[24px]" style={{ filter: imgFilter }} />
+        <img src="assets/fgv_logo.png" alt="FGV Mapear Logo" className="h-[24px]" style={{ filter: imgFilter }} />
       </div>
     );
   }
   return (
     <div className={`flex items-center shrink-0 ${baseClass}`} onClick={onClick}>
-      <img src={`${import.meta.env.BASE_URL}assets/fgv_logo.png`} alt="FGV Mapear Logo" className="h-[24px] md:h-[32px]" style={{ filter: imgFilter }} />
+      <img src="assets/fgv_logo.png" alt="FGV Mapear Logo" className="h-[24px] md:h-[32px]" style={{ filter: imgFilter }} />
     </div>
   );
 };
