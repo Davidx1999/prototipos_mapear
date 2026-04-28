@@ -131,7 +131,8 @@ export default function MapearApp() {
     '--neutral-3': colors.neutral[3],
     '--neutral-2': colors.neutral[2],
     '--neutral-1': colors.neutral[1],
-    '--neutral-0': colors.neutral[0]
+    '--neutral-0': colors.neutral[0],
+    '--font-scale': `${1 + (fontScale - 3) * 0.1}`
   };
 
   if (!isLoggedIn) {
@@ -160,7 +161,7 @@ export default function MapearApp() {
     <div className={`flex flex-col transition-all duration-500 ${currentScreen === 'devolutivas' ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={{ 
       backgroundColor: colors.neutral[0], 
       fontFamily: 'Montserrat, sans-serif', 
-      fontSize: `${14 + (fontScale - 3) * 2}px`,
+      fontSize: `${14 + (fontScale - 3) * 3}px`,
       ...cssVars
     }}>
       <Header
