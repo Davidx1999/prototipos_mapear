@@ -161,7 +161,7 @@ export default function MapearApp() {
     <div className={`flex flex-col transition-all duration-500 ${currentScreen === 'devolutivas' ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={{ 
       backgroundColor: colors.neutral[0], 
       fontFamily: 'Montserrat, sans-serif', 
-      fontSize: `${14 + (fontScale - 3) * 3}px`,
+      zoom: 1 + (fontScale - 3) * 0.2,
       ...cssVars
     }}>
       <Header

@@ -82,10 +82,12 @@ const Dashboard = ({
         {searchQuery && <X size={20} className="absolute right-[16px] top-1/2 -translate-y-1/2 cursor-pointer hover:text-red-500 transition-colors" onClick={() => setSearchQuery('')} style={{ color: colors.neutral[5] }} />}
       </div>
 
-      {/* ══ CARDS SECTION ═══════════════════════════════════════════════════ */}
-      <div className={`flex flex-col lg:flex-row w-full relative transition-all duration-500 ${isSearching ? 'gap-0' : 'gap-[24px] lg:gap-[40px]'}`}>
+      {/* ══ CARDS E MÓDULOS ═══════════════════════════════════════════════════ */}
+      {!isSearching && (
+        <h3 className="text-[20px] md:text-[24px] font-bold mb-[16px] md:mb-[24px] whitespace-nowrap" style={{ color: colors.neutral[7] }}>Módulos do Sistema</h3>
+      )}
+      <div className={`flex flex-col lg:flex-row items-start w-full relative transition-all duration-500 ${isSearching ? 'gap-0' : 'gap-[24px] lg:gap-[40px]'}`}>
         <div className={`shrink-0 flex flex-col gap-[8px] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSearching ? 'h-0 opacity-0 lg:w-0' : 'w-full lg:w-[320px] opacity-100'}`}>
-          <h3 className="text-[20px] md:text-[24px] font-bold mb-[8px] md:mb-[16px] whitespace-nowrap" style={{ color: colors.neutral[7] }}>Módulos do Sistema</h3>
           <div className="flex lg:flex-col overflow-x-auto lg:overflow-visible hide-scrollbar gap-[8px] pb-[8px] lg:pb-0">
             {sidebarMenus.map((menu) => {
               const isActive = activeMenu === menu.id;
