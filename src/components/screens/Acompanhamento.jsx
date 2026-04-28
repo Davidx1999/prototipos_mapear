@@ -31,7 +31,7 @@ const Acompanhamento = ({
         </div>
         <label className="text-[12px] font-bold" style={{ color: colors.neutral[7] }}>Escolha um(a) aluno(a) para realizar análise</label>
         
-        <div className="flex items-center gap-[8px] overflow-x-auto hide-scrollbar bg-white border p-[8px] rounded-[12px] shadow-sm" style={{ borderColor: colors.neutral[2] }}>
+        <div className="flex items-center gap-[8px] overflow-x-auto hide-scrollbar bg-white border p-[8px] rounded-[8px] shadow-sm" style={{ borderColor: colors.neutral[2] }}>
           <div className="flex items-center gap-[8px] px-[8px] border-r" style={{ borderColor: colors.neutral[2] }}>
             <Building2 size={16} style={{ color: colors.neutral[5] }}/>
             <span className="text-[13px] font-semibold whitespace-nowrap" style={{ color: colors.neutral[7] }}>CE</span>
@@ -117,26 +117,26 @@ const Acompanhamento = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[16px] mb-[24px]">
-             <div className="bg-white p-[20px] rounded-[12px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
+             <div className="bg-white p-[20px] rounded-[8px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
                <div className="flex justify-between items-center mb-[16px]"><span className="text-[13px] font-medium" style={{ color: colors.neutral[5] }}>Percentual de Acertos</span><HelpCircle size={14} style={{ color: colors.neutral[4] }}/></div>
                <span className="text-[28px] font-bold" style={{ color: colors.neutral[7] }}>78%</span>
              </div>
-             <div className="bg-white p-[20px] rounded-[12px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
+             <div className="bg-white p-[20px] rounded-[8px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
                <div className="flex justify-between items-center mb-[16px]"><span className="text-[13px] font-medium" style={{ color: colors.neutral[5] }}>Avaliações Realizadas</span><HelpCircle size={14} style={{ color: colors.neutral[4] }}/></div>
                <span className="text-[28px] font-bold" style={{ color: colors.neutral[7] }}>120</span>
              </div>
-             <div className="bg-white p-[20px] rounded-[12px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
+             <div className="bg-white p-[20px] rounded-[8px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
                <div className="flex justify-between items-center mb-[16px]"><span className="text-[13px] font-medium" style={{ color: colors.neutral[5] }}>Itens Resolvidos</span><HelpCircle size={14} style={{ color: colors.neutral[4] }}/></div>
                <span className="text-[28px] font-bold" style={{ color: colors.neutral[7] }}>7.000</span>
              </div>
-             <div className="bg-white p-[20px] rounded-[12px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
+             <div className="bg-white p-[20px] rounded-[8px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
                <div className="flex justify-between items-center mb-[16px]"><span className="text-[13px] font-medium" style={{ color: colors.neutral[5] }}>Total de Intervenções</span><HelpCircle size={14} style={{ color: colors.neutral[4] }}/></div>
                <span className="text-[28px] font-bold" style={{ color: colors.neutral[7] }}>2</span>
              </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-[16px] mb-[24px]">
-             <div className="lg:col-span-2 bg-white rounded-[12px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
+             <div className="lg:col-span-2 bg-white rounded-[8px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
                <div className="p-[20px] border-b flex justify-between items-center" style={{ borderColor: colors.neutral[2] }}>
                  <h3 className="text-[16px] font-bold" style={{ color: colors.neutral[7] }}>Evolução do Aluno</h3>
                  <div className="flex items-center gap-[8px]">
@@ -183,12 +183,12 @@ const Acompanhamento = ({
                  </div>
                  <div className="flex items-center gap-[12px]">
                    <span className="text-[13px] font-medium" style={{ color: colors.neutral[6] }}>Ativar comparação por</span>
-                   <span className="text-[13px] font-bold cursor-pointer flex items-center gap-[4px] px-[12px] py-[6px] rounded-[6px] border bg-white" style={{ borderColor: colors.neutral[3] }}>Turma <ChevronDown size={14}/></span>
+                   <span className="text-[13px] font-bold cursor-pointer flex items-center gap-[4px] px-[12px] py-[6px] rounded-[4px] border bg-white" style={{ borderColor: colors.neutral[3] }}>Turma <ChevronDown size={14}/></span>
                  </div>
                </div>
              </div>
 
-             <div className="bg-white rounded-[12px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
+             <div className="bg-white rounded-[8px] border shadow-sm flex flex-col" style={{ borderColor: colors.neutral[2] }}>
                <div className="p-[20px] border-b flex justify-between items-center" style={{ borderColor: colors.neutral[2] }}>
                  <h3 className="text-[16px] font-bold" style={{ color: colors.neutral[7] }}>Domínios de Repertório</h3>
                  <HelpCircle size={14} style={{ color: colors.neutral[4] }}/>
@@ -228,7 +228,7 @@ const Acompanhamento = ({
              </div>
           </div>
 
-          <div className="bg-white rounded-[12px] border shadow-sm mb-[32px]" style={{ borderColor: colors.neutral[2] }}>
+          <div className="bg-white rounded-[8px] border shadow-sm mb-[32px]" style={{ borderColor: colors.neutral[2] }}>
              <div className="p-[20px] border-b flex justify-between items-center" style={{ borderColor: colors.neutral[2] }}>
                <h3 className="text-[16px] font-bold" style={{ color: colors.neutral[7] }}>Testes do Aluno</h3>
                <div className="flex items-center gap-[8px]">
@@ -310,7 +310,7 @@ const Acompanhamento = ({
                  </div>
                </div>
              </div>
-             <div className="p-[16px] border-t bg-[#FDFDFD] flex justify-end items-center gap-[12px] rounded-b-[12px]" style={{ borderColor: colors.neutral[2] }}>
+             <div className="p-[16px] border-t bg-[#FDFDFD] flex justify-end items-center gap-[12px] rounded-b-[8px]" style={{ borderColor: colors.neutral[2] }}>
                 <span className="text-[13px] font-medium" style={{ color: colors.neutral[6] }}>Visualizar Distribuição de Conceito (%)</span>
                 <div className="w-[40px] h-[24px] bg-[#008BC9] rounded-full relative cursor-pointer"><div className="absolute right-[2px] top-[2px] w-[20px] h-[20px] bg-white rounded-full"></div></div>
              </div>
@@ -362,7 +362,7 @@ const Acompanhamento = ({
                                 </div>
                               )}
                               {item.type === 'card' && (
-                                <div className="bg-white border rounded-[12px] p-[20px] shadow-sm w-full" style={{ borderColor: colors.neutral[2] }}>
+                                <div className="bg-white border rounded-[8px] p-[20px] shadow-sm w-full" style={{ borderColor: colors.neutral[2] }}>
                                   <div className="flex justify-between items-start mb-[16px]">
                                     <span className="text-[12px] font-bold text-[#008BC9] px-[10px] py-[2px] rounded-[4px] border border-[#94CFEF] bg-[#D9F0FC]">{item.rank}</span>
                                   </div>

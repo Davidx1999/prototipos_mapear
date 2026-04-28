@@ -24,7 +24,7 @@ const Button = ({ variant = 'primary', size = 'default', iconOnly = false, class
 
   return (
     <button 
-      className={`rounded-[8px] font-semibold transition-all duration-200 flex items-center justify-center gap-[8px] cursor-pointer outline-none shrink-0 ${sizeClass} ${className}`} 
+      className={`rounded-[4px] font-semibold transition-all duration-200 flex items-center justify-center gap-[8px] cursor-pointer outline-none shrink-0 ${sizeClass} ${className}`} 
       style={varStyle}
       {...props}
     >

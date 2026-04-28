@@ -108,7 +108,7 @@ export default function CascadeSelector({
       </div>
       <button 
         onClick={toggle}
-        className={`${variant === 'sidebar' ? 'w-[36px] h-[36px] md:w-[40px] md:h-[40px]' : 'w-[44px] h-[44px] md:w-[48px] md:h-[48px]'} shrink-0 rounded-[8px] flex items-center justify-center transition-colors ${isOpen ? 'bg-neutral-100 border border-neutral-300 text-neutral-700 hover:bg-neutral-200' : 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-sm'}`}
+        className={`${variant === 'sidebar' ? 'w-[36px] h-[36px] md:w-[40px] md:h-[40px]' : 'w-[44px] h-[44px] md:w-[48px] md:h-[48px]'} shrink-0 rounded-[4px] flex items-center justify-center transition-colors ${isOpen ? 'bg-neutral-100 border border-neutral-300 text-neutral-700 hover:bg-neutral-200' : 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-sm'}`}
       >
         {isOpen ? <X size={variant === 'sidebar' ? 16 : 20} /> : <PanelLeftOpen size={variant === 'sidebar' ? 16 : 20} />}
       </button>
@@ -120,7 +120,7 @@ export default function CascadeSelector({
       {topBar}
       
       {isOpen && (
-        <div className={`absolute top-[calc(100%+12px)] left-0 bg-white rounded-[12px] border border-neutral-300 shadow-2xl overflow-hidden flex flex-col animate-fade-slide z-50 ${variant === 'sidebar' ? 'w-[calc(100vw-32px)] md:w-[48vw] min-w-[800px] max-w-[1200px]' : 'w-[calc(100vw-32px)] md:w-[80vw] max-w-[1100px]'} max-h-[500px]`}>
+        <div className={`absolute top-[calc(100%+12px)] left-0 bg-white rounded-[8px] border border-neutral-300 shadow-2xl overflow-hidden flex flex-col animate-fade-slide z-50 ${variant === 'sidebar' ? 'w-[calc(100vw-32px)] md:w-[48vw] min-w-[800px] max-w-[1200px]' : 'w-[calc(100vw-32px)] md:w-[80vw] max-w-[1100px]'} max-h-[500px]`}>
           
           <div className="flex flex-col md:flex-row border-b border-neutral-200 bg-white shrink-0">
             <div className="w-full md:w-[240px] md:w-[280px] lg:w-[300px] shrink-0 border-b md:border-b-0 md:border-r border-neutral-200 relative">
@@ -192,7 +192,7 @@ export default function CascadeSelector({
                       <div 
                         key={idx}
                         onClick={() => selectItem(i, value, isObj ? item : null)} 
-                        className={`px-[12px] py-[12px] rounded-[6px] text-[13px] font-semibold cursor-pointer transition-colors flex justify-between items-center group ${isSelected ? 'bg-[#003A79] text-white shadow-md' : 'text-neutral-700 hover:bg-neutral-100'}`}
+                        className={`px-[12px] py-[12px] rounded-[4px] text-[13px] font-semibold cursor-pointer transition-colors flex justify-between items-center group ${isSelected ? 'bg-[#003A79] text-white shadow-md' : 'text-neutral-700 hover:bg-neutral-100'}`}
                       >
                         <span className="truncate pr-[8px]" title={label}>{label}</span>
                         {i < levels.length - 1 && <ChevronRight size={16} className={`shrink-0 opacity-50 ${isSelected ? 'text-white' : 'group-hover:text-[#008BC9]'}`} />}
@@ -218,14 +218,14 @@ export default function CascadeSelector({
           <div className="p-[16px] md:px-[24px] md:py-[16px] border-t border-neutral-200 bg-neutral-50 flex justify-end gap-[16px] items-center shrink-0">
             <button 
               onClick={clearAll} 
-              className="px-[16px] py-[10px] text-[13px] font-bold text-neutral-600 hover:bg-neutral-200 border border-neutral-300 rounded-[8px] transition-colors flex items-center gap-[6px] bg-white shadow-sm"
+              className="px-[16px] py-[10px] text-[13px] font-bold text-neutral-600 hover:bg-neutral-200 border border-neutral-300 rounded-[4px] transition-colors flex items-center gap-[6px] bg-white shadow-sm"
             >
               <Eraser size={16} /> LIMPAR SELEÇÃO
             </button>
             <button 
               onClick={handleConfirm}
               disabled={selections.length < levels.length}
-              className={`px-[24px] py-[10px] text-[13px] font-bold rounded-[8px] transition-colors flex items-center gap-[8px] ${selections.length >= levels.length ? 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-md' : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'}`}
+              className={`px-[24px] py-[10px] text-[13px] font-bold rounded-[4px] transition-colors flex items-center gap-[8px] ${selections.length >= levels.length ? 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-md' : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'}`}
             >
               CONFIRMAR <Check size={16} />
             </button>

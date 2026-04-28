@@ -157,7 +157,7 @@ export default function MapearApp() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col transition-all duration-500" style={{ 
+    <div className={`flex flex-col transition-all duration-500 ${currentScreen === 'devolutivas' ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={{ 
       backgroundColor: colors.neutral[0], 
       fontFamily: 'Montserrat, sans-serif', 
       fontSize: `${14 + (fontScale - 3) * 2}px`,
@@ -188,7 +188,7 @@ export default function MapearApp() {
         openGripDrawer={openGripDrawer}
       />
 
-      <div className="flex-1 flex flex-col transition-all duration-300" onClick={() => { if (isAppDrawerOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
+      <div className={`flex-1 flex flex-col transition-all duration-300 ${currentScreen === 'devolutivas' ? 'overflow-hidden' : ''}`} onClick={() => { if (isAppDrawerOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
         {currentScreen === 'dashboard' && (
           <Dashboard
             colors={colors}

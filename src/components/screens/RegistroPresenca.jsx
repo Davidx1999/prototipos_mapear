@@ -133,7 +133,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
 
         {/* Toast Sucesso Flutuante */}
         {isSaved && (
-          <div className="fixed top-[80px] md:top-[100px] left-1/2 -translate-x-1/2 z-[60] bg-neutral-700 text-white px-[24px] py-[14px] rounded-[12px] md:rounded-full shadow-2xl flex items-center gap-[12px] animate-fade-slide w-[90%] md:w-auto justify-center max-w-[400px]">
+          <div className="fixed top-[80px] md:top-[100px] left-1/2 -translate-x-1/2 z-[60] bg-neutral-700 text-white px-[24px] py-[14px] rounded-[8px] md:rounded-full shadow-2xl flex items-center gap-[12px] animate-fade-slide w-[90%] md:w-auto justify-center max-w-[400px]">
             <CheckCircle className="text-green-400 w-[20px] h-[20px]" />
             <span className="font-bold text-[14px] md:text-[15px]">Chamada enviada com sucesso!</span>
           </div>
@@ -142,7 +142,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
         {/* LISTA DE ALUNOS */}
         <div id="student-list-container">
           {!filters.avaliacaoId ? (
-            <div className="bg-white rounded-[16px] border border-neutral-200 py-[48px] px-[24px] flex flex-col items-center justify-center text-center shadow-sm">
+            <div className="bg-white rounded-[8px] border border-neutral-200 py-[48px] px-[24px] flex flex-col items-center justify-center text-center shadow-sm">
               <div className="w-[64px] h-[64px] rounded-full bg-neutral-100 flex items-center justify-center mb-[16px]">
                 <ClipboardList className="text-neutral-400 w-[32px] h-[32px]" />
               </div>
@@ -150,7 +150,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
               <p class="text-[14px] text-neutral-600 max-w-[400px] leading-relaxed">Utilize o seletor acima para encontrar a escola, turma e a avaliação correspondente para carregar a lista de presença.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-[16px] border border-neutral-200 shadow-sm overflow-hidden animate-fade-slide mb-[24px]">
+            <div className="bg-white rounded-[8px] border border-neutral-200 shadow-sm overflow-hidden animate-fade-slide mb-[24px]">
               <div className="p-[20px] md:p-[24px] border-b border-neutral-200 flex flex-col md:flex-row justify-between md:items-center gap-[16px] bg-white">
                 <div>
                   <h2 className="text-[18px] md:text-[20px] font-bold text-neutral-700 flex items-center gap-[8px]">
@@ -197,7 +197,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
                             checked={status === 'ausente'}
                             onChange={() => setPresence(aluno.id, 'ausente')}
                           />
-                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[8px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'ausente' ? 'bg-red-500 text-white border-red-500 shadow-md' : 'bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-100'}`}>
+                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'ausente' ? 'bg-red-500 text-white border-red-500 shadow-md' : 'bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-100'}`}>
                             <XCircle size={18} /> Falta
                           </div>
                         </label>
@@ -210,7 +210,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
                             checked={status === 'presente'}
                             onChange={() => setPresence(aluno.id, 'presente')}
                           />
-                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[8px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'presente' ? 'bg-green-500 text-white border-green-500 shadow-md' : 'bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-100'}`}>
+                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'presente' ? 'bg-green-500 text-white border-green-500 shadow-md' : 'bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-100'}`}>
                             <CheckCircle2 size={18} /> Presente
                           </div>
                         </label>
@@ -241,7 +241,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
         </div>
 
         <button
-          className="bg-[#008BC9] text-white px-[32px] h-[48px] md:h-[44px] w-full md:w-auto rounded-[8px] font-bold text-[14px] hover:bg-[#003A79] transition-colors flex items-center justify-center gap-[8px] shadow-md shrink-0"
+          className="bg-[#008BC9] text-white px-[32px] h-[48px] md:h-[44px] w-full md:w-auto rounded-[4px] font-bold text-[14px] hover:bg-[#003A79] transition-colors flex items-center justify-center gap-[8px] shadow-md shrink-0"
           onClick={savePresence}
         >
           <Save size={18} />

@@ -51,7 +51,7 @@ const Header = ({
           <div className="relative hidden lg:block">
             <Button variant="text" iconOnly size="default" onClick={openGripDrawer}><Grip size={20} /></Button>
             {isAppDrawerOpen && (
-              <div className="absolute top-[100%] right-0 mt-[8px] w-[340px] p-[24px] rounded-[12px] shadow-2xl z-50 flex flex-col border" style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}>
+              <div className="absolute top-[100%] right-0 mt-[8px] w-[340px] p-[24px] rounded-[8px] shadow-2xl z-50 flex flex-col border" style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}>
                 <span className="text-[12px] font-bold mb-[16px] block" style={{ color: colors.neutral[5] }}>Plataformas CENPE</span>
                 <div className="grid grid-cols-3 gap-y-[16px] gap-x-[8px] mb-[16px]">
                   {sidebarMenus.map((cat) => {
@@ -71,7 +71,7 @@ const Header = ({
                   {sidebarMenus.find(m => m.id === drawerActiveCat)?.cards.map((card, idx) => {
                     const isCardActive = currentScreen === card.route;
                     return (
-                      <button key={idx} onClick={() => { if (card.route) navigateTo(card.route); else { navigateTo('dashboard'); } setIsAppDrawerOpen(false); }} className={`w-full text-left px-[16px] py-[10px] rounded-[6px] text-[13px] transition-colors ${isCardActive ? 'bg-[#008BC9] text-white font-bold' : 'bg-transparent text-[#008BC9] font-semibold hover:bg-[#008BC9] hover:text-white'}`}>
+                      <button key={idx} onClick={() => { if (card.route) navigateTo(card.route); else { navigateTo('dashboard'); } setIsAppDrawerOpen(false); }} className={`w-full text-left px-[16px] py-[10px] rounded-[4px] text-[13px] transition-colors ${isCardActive ? 'bg-[#008BC9] text-white font-bold' : 'bg-transparent text-[#008BC9] font-semibold hover:bg-[#008BC9] hover:text-white'}`}>
                         {card.title}
                       </button>
                     )
@@ -86,7 +86,7 @@ const Header = ({
           <div className="relative">
             <Button variant="primary" iconOnly size="default" className="md:w-[40px] md:h-[40px] w-[32px] h-[32px]" onClick={() => { setIsA11yOpen(!isA11yOpen); setIsProfileOpen(false); setIsAppDrawerOpen(false); }}><Accessibility className="w-[18px] h-[18px] md:w-[20px] md:h-[20px]" /></Button>
             {isA11yOpen && (
-              <div className="absolute top-[100%] right-0 mt-[8px] w-[260px] md:w-[280px] p-[16px] rounded-[12px] shadow-2xl z-50 flex flex-col gap-[16px] border" style={{ backgroundColor: isHighContrast ? colors.neutral[0] : '#003A79', color: '#FFF', borderColor: colors.neutral[3] }}>
+              <div className="absolute top-[100%] right-0 mt-[8px] w-[260px] md:w-[280px] p-[16px] rounded-[8px] shadow-2xl z-50 flex flex-col gap-[16px] border" style={{ backgroundColor: isHighContrast ? colors.neutral[0] : '#003A79', color: '#FFF', borderColor: colors.neutral[3] }}>
                 <div className="flex items-center gap-[12px] cursor-pointer hover:bg-white/10 p-[8px] rounded-[8px] transition-colors"><div className="w-[24px] h-[24px] bg-white rounded-[4px] font-bold text-[12px] flex justify-center items-center" style={{ color: isHighContrast ? '#222' : '#003A79' }}>VL</div><span className="text-[13px] md:text-[14px] font-semibold">Tradutor de VLibras</span></div>
                 <hr className="border-white/20" />
                 <div className="flex flex-col gap-[12px] px-[8px]">

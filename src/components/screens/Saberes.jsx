@@ -66,7 +66,7 @@ const Saberes = ({
           </select>
         </div>
 
-        <div className="bg-white rounded-[12px] border overflow-hidden flex-1 shadow-sm mb-[24px]" style={{ borderColor: colors.neutral[2] }}>
+        <div className="bg-white rounded-[8px] border overflow-hidden flex-1 shadow-sm mb-[24px]" style={{ borderColor: colors.neutral[2] }}>
           <div className="w-full">
             <div className="grid grid-cols-[1fr_40px] md:grid-cols-[1fr_1fr_60px] gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[12px] font-bold uppercase tracking-wide bg-[#F7F8FA] text-[#677080]">
               <div>Título do Destino</div>
@@ -152,7 +152,7 @@ const Saberes = ({
         )}
       </div>
 
-      <div className="bg-white rounded-[12px] border flex-1 shadow-sm mb-[24px] md:mb-[32px] overflow-hidden" style={{ borderColor: colors.neutral[2] }}>
+      <div className="bg-white rounded-[8px] border flex-1 shadow-sm mb-[24px] md:mb-[32px] overflow-hidden" style={{ borderColor: colors.neutral[2] }}>
         {activeSaberesTab === 0 && (
           <div className="w-full">
             <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[11px] md:text-[12px] font-bold uppercase tracking-wide bg-[#F7F8FA] text-[#677080]">

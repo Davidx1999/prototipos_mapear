@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { 
-  Search, X, Star, Grid, PenTool, LayoutDashboard, 
-  TrendingUp, CheckSquare, Users, BookOpen 
+import {
+  Search, X, Star, Grid, PenTool, LayoutDashboard,
+  TrendingUp, CheckSquare, Users, BookOpen
 } from 'lucide-react';
 import { sidebarMenus } from '../../data/constants';
 
@@ -21,7 +21,7 @@ const Dashboard = ({
 }) => {
   const isSearching = searchQuery.trim().length > 0;
   const allCards = sidebarMenus.flatMap(menu => menu.cards);
-  
+
   const activeData = sidebarMenus.find(m => m.id === activeMenu);
   const displayedCards = isSearching
     ? allCards.filter(card => {
@@ -35,7 +35,7 @@ const Dashboard = ({
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[32px] transition-all duration-300 animate-fade-slide" style={{ backgroundColor: colors.neutral[0] }}>
       {/* ══ HERO SECTION ════════════════════════════════════════════════════ */}
-      <div className="relative w-full rounded-[16px] p-[24px] md:p-[40px] overflow-hidden flex flex-col justify-center transition-colors duration-500" style={{ backgroundColor: colors.primary.ultraDark, minHeight: '140px', border: isHighContrast ? '1px solid #FFFFFF' : 'none' }}>
+      <div className="relative w-full rounded-[8px] p-[24px] md:p-[40px] overflow-hidden flex flex-col justify-center transition-colors duration-500" style={{ backgroundColor: colors.primary.ultraDark, minHeight: '140px', border: isHighContrast ? '1px solid #FFFFFF' : 'none' }}>
         <div className="absolute right-0 top-0 bottom-0 w-full md:w-1/2 opacity-20 pointer-events-none">
           <svg viewBox="0 0 500 200" preserveAspectRatio="none" className="w-full h-full">
             {[...Array(8)].map((_, i) => <path key={i} d={`M${i * 40},200 C${100 + i * 40},100 ${200 + i * 40},0 500,${i * 20}`} fill="none" stroke={isHighContrast ? '#333333' : colors.neutral[0]} strokeWidth="2" />)}
@@ -48,7 +48,7 @@ const Dashboard = ({
         </div>
       </div>
 
-      {/* ══ LAUNCHER / ACESSOS RÁPIDOS ═════════════════════════════════════════ */}
+      {/* ══ LAUNCHER / ACESSOS RÁPIDOS ═════════════════════════════════════════
       <div className="mt-[24px] md:mt-[32px] animate-fade-slide" style={{ animationDelay: '0.1s' }}>
         <h3 className="text-[16px] md:text-[18px] font-bold mb-[16px]" style={{ color: colors.neutral[7] }}>Meus Acessos Rápidos</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-[12px]">
@@ -64,7 +64,7 @@ const Dashboard = ({
             <button 
               key={app.id} 
               onClick={() => navigateTo(app.route)}
-              className="flex flex-col items-center justify-center p-[16px] rounded-[12px] bg-white border border-gray-200 hover:border-[#008BC9] hover:shadow-lg transition-all group"
+              className="flex flex-col items-center justify-center p-[16px] rounded-[8px] bg-white border border-gray-200 hover:border-[#008BC9] hover:shadow-lg transition-all group"
             >
               <div className="w-[48px] h-[48px] rounded-[10px] flex items-center justify-center mb-[8px] transition-transform group-hover:scale-110" style={{ backgroundColor: isHighContrast ? '#000' : colors.primary.extraLight, color: colors.primary.base }}>
                 {app.icon}
@@ -73,7 +73,7 @@ const Dashboard = ({
             </button>
           ))}
         </div>
-      </div>
+      </div>*/}
 
       {/* ══ SEARCH BAR ══════════════════════════════════════════════════════ */}
       <div className="mt-[24px] md:mt-[32px] mb-[32px] md:mb-[40px] relative w-full group">

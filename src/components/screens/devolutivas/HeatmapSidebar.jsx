@@ -23,11 +23,11 @@ export default function HeatmapSidebar({
   isColorsActive
 }) {
   return (
-    <aside className={`fixed top-[132px] left-6 h-fit bg-white rounded-2xl border border-gray-200 shadow-2xl transition-all duration-500 z-[60] flex flex-col ${isContextExpanded ? 'w-[320px]' : 'w-[52px] h-[52px]'}`}>
+    <aside className={`fixed top-[156px] left-6 h-[calc(100vh-168px)] bg-white rounded-[8px] border border-gray-200 shadow-2xl transition-all duration-400 z-[60] flex flex-col ${isContextExpanded ? 'w-[320px]' : 'w-[52px] h-[52px]'}`}>
 
       {/* Botão de Toggle Contexto */}
       <div
-        className={`flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors bg-white rounded-2xl z-10 ${isContextExpanded ? 'p-4 border-b border-gray-100' : 'w-full h-full justify-center'}`}
+        className={`flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors bg-white rounded-[8px] z-10 ${isContextExpanded ? 'p-4 border-b border-gray-100' : 'w-full h-full justify-center'}`}
         onClick={() => setIsContextExpanded(!isContextExpanded)}
       >
         {isContextExpanded && <h2 className="font-extrabold text-[13px] text-[#003A79] tracking-wide uppercase">Seleção de Contexto</h2>}
@@ -36,7 +36,7 @@ export default function HeatmapSidebar({
 
       {isContextExpanded && (
         <div className="flex flex-col flex-1 animate-fade-slide">
-          <div className="p-5 flex flex-col gap-6 relative">
+          <div className="p-5 flex flex-col gap-2 relative">
 
             <div className="flex flex-col">
               <label className="text-[11px] font-bold text-gray-400 mb-2 uppercase tracking-wide">Filtro em Cascata</label>
@@ -114,7 +114,7 @@ export default function HeatmapSidebar({
               </div>
             </div>
 
-            <div className="p-5 border-t border-gray-100 bg-gray-50/30 rounded-b-2xl">
+            <div className="p-5 border-t border-gray-100 bg-gray-50/30 rounded-b-[8px]">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="font-bold text-[13px] text-[#1D2432]">Legenda dos Centroides</h3>
                 <HelpCircle size={14} className="text-gray-400" />
@@ -134,7 +134,7 @@ export default function HeatmapSidebar({
 
                   return (
                     <div key={idx} className="flex items-center gap-2">
-                      <div className="px-2 py-1.5 rounded-md border text-[11px] font-bold flex items-center gap-2 w-full shadow-sm transition-colors duration-300" style={{ backgroundColor: bg, borderColor: border, color: '#1D2432' }}>
+                      <div className="px-2 py-1.5 rounded-[8px] border text-[11px] font-bold flex items-center gap-2 w-full shadow-sm transition-colors duration-300" style={{ backgroundColor: bg, borderColor: border, color: '#1D2432' }}>
                         {status.icon} <span className={`truncate ${status.label === 'Em Branco' ? 'text-gray-600' : ''}`}>{status.label}</span>
                       </div>
                     </div>

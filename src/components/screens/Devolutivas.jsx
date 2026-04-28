@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { LayoutDashboard, Grid, BarChart2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Grid, BarChart2, ChevronRight } from 'lucide-react';
 
 import HeatmapSidebar from './devolutivas/HeatmapSidebar';
 import HeatmapControls from './devolutivas/HeatmapControls';
@@ -15,14 +15,20 @@ import {
   CASCADE_LEVELS
 } from './devolutivas/HeatmapUtils';
 
+// Altura do Header global da app (sticky top-0) em px
+const GLOBAL_HEADER_H = 61;
+// Altura do header interno da Devolutivas (tabs + breadcrumb) em px
+const DEV_HEADER_H = 56;
+// Total de offset para elementos fixos dentro da tela
+const TOP_OFFSET = GLOBAL_HEADER_H + DEV_HEADER_H;
+
 export default function Devolutivas({ colors, navigateTo }) {
   // --- ESTADOS GERAIS E LAYOUT ---
-  const [mainTab, setMainTab] = useState('heatmap'); // 'heatmap' or 'detalhes'
+  const [mainTab, setMainTab] = useState('heatmap');
   const [calcMethod, setCalcMethod] = useState('Moda');
   const [sortBy, setSortBy] = useState('Score');
   const [sortOrder, setSortOrder] = useState('Desempenho Crescente');
   const [hideNoParticipation, setHideNoParticipation] = useState(false);
-  const [isSidebarOpenMobile, setIsSidebarOpenMobile] = useState(false);
   const [isContextExpanded, setIsContextExpanded] = useState(true);
   const [selectedRows, setSelectedRows] = useState(new Set());
 
@@ -31,12 +37,12 @@ export default function Devolutivas({ colors, navigateTo }) {
   const [showLegendPopover, setShowLegendPopover] = useState(false);
   const [isCombinedView, setIsCombinedView] = useState(false);
   const [isColorsActive, setIsColorsActive] = useState(true);
-  const [colorTheme, setColorTheme] = useState('default'); // 'default', 'colorblind'
+  const [colorTheme, setColorTheme] = useState('default');
   const [activeBottomPanel, setActiveBottomPanel] = useState(null);
 
   // --- NAVEGAÇÃO ---
-  const [navLevel, setNavLevel] = useState(0); // 0: Estado, 1: Município, 2: Escola, 3: Turma, 4: Alunos
-  const [navPath, setNavPath] = useState(['Minas Gerais']); // Dummy path
+  const [navLevel, setNavLevel] = useState(0);
+  const [navPath, setNavPath] = useState(['Minas Gerais']);
 
   const levelLabels = ['Estado', 'Município', 'Escola', 'Turma', 'Alunos'];
 
@@ -63,37 +69,12 @@ export default function Devolutivas({ colors, navigateTo }) {
     });
   };
 
-  // --- ESTADOS DE HABILIDADES FLUTUANTES (CARROSSEL) ---
+  // --- SKILLS ---
   const [showSkills, setShowSkills] = useState(false);
   const [activeSkill, setActiveSkill] = useState(null);
   const [skillsList] = useState(['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'H11', 'H12', 'H13', 'H14', 'H15', 'H16', 'H17', 'H18']);
 
-  const skillsScrollRef = useRef(null);
-  const [canScrollSkillsLeft, setCanScrollSkillsLeft] = useState(false);
-  const [canScrollSkillsRight, setCanScrollSkillsRight] = useState(true);
-
-  const checkSkillsScroll = () => {
-    if (skillsScrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = skillsScrollRef.current;
-      setCanScrollSkillsLeft(scrollLeft > 0);
-      setCanScrollSkillsRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 2);
-    }
-  };
-
-  useEffect(() => {
-    checkSkillsScroll();
-    window.addEventListener('resize', checkSkillsScroll);
-    return () => window.removeEventListener('resize', checkSkillsScroll);
-  }, [skillsList, showSkills]);
-
-  const scrollSkills = (direction) => {
-    if (skillsScrollRef.current) {
-      skillsScrollRef.current.scrollBy({ left: direction === 'right' ? 200 : -200, behavior: 'smooth' });
-      setTimeout(checkSkillsScroll, 350);
-    }
-  };
-
-  // --- ESTADOS DO CANVAS (ZOOM E PAN/ARRASTAR) ---
+  // --- ESTADOS DO CANVAS ---
   const [zoomLevel, setZoomLevel] = useState(1);
   const [isPanMode, setIsPanMode] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
@@ -103,7 +84,7 @@ export default function Devolutivas({ colors, navigateTo }) {
   const [tooltipData, setTooltipData] = useState(null);
   const containerRef = useRef(null);
 
-  // --- LÓGICA DE FILTRAGEM ---
+  // --- LÓGICA DE FILTRAGEM E ORDENAÇÃO ---
   const filteredStudents = useMemo(() => {
     let rows = getMockRows(navLevel, navPath[navLevel]);
 
@@ -111,7 +92,6 @@ export default function Devolutivas({ colors, navigateTo }) {
       rows = rows.filter(student => !student.data.every(val => val === 'branco'));
     }
 
-    // Ordenação dinâmica
     rows = [...rows].sort((a, b) => {
       let valA, valB;
       if (sortBy === 'Score') {
@@ -153,7 +133,7 @@ export default function Devolutivas({ colors, navigateTo }) {
         const sorted = [...colValues].sort((a, b) => a - b);
         const mid = Math.floor(sorted.length / 2);
         return sorted.length % 2 !== 0 ? sorted[mid] : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
-      } else { // Moda
+      } else {
         const freq = {};
         let maxFreq = 0;
         let mode = colValues[0];
@@ -170,7 +150,6 @@ export default function Devolutivas({ colors, navigateTo }) {
   const displayColGroups = useMemo(() => {
     if (sortBy !== 'Score') return colGroups;
 
-    // Achata todas as colunas com seus índices globais e totais
     const allCols = colGroups.flatMap((g, gIdx) =>
       g.cols.map((c, cIdx) => {
         const globalIdx = colGroups.slice(0, gIdx).reduce((acc, curr) => acc + curr.cols.length, 0) + cIdx;
@@ -183,21 +162,19 @@ export default function Devolutivas({ colors, navigateTo }) {
       })
     );
 
-    // Ordena colunas por desempenho (totalVal)
     const sortedCols = [...allCols].sort((a, b) => {
       const valA = (a.totalVal === '-' || a.totalVal === null) ? -1 : a.totalVal;
       const valB = (b.totalVal === '-' || b.totalVal === null) ? -1 : b.totalVal;
       return sortOrder === 'Desempenho Crescente' ? valA - valB : valB - valA;
     });
 
-    // Retorna como um grupo único quando ordenado
     return [{
       title: sortOrder === 'Desempenho Crescente' ? 'Itens: Menor para Maior Desempenho' : 'Itens: Maior para Menor Desempenho',
       cols: sortedCols
     }];
   }, [colGroups, dynamicTotals, sortBy, sortOrder]);
 
-  // --- HANDLERS DO CANVAS INTERATIVO ---
+  // --- HANDLERS DO CANVAS ---
   const handleMouseDown = (e) => {
     if (!isPanMode || !containerRef.current) return;
     setIsDragging(true);
@@ -222,9 +199,7 @@ export default function Devolutivas({ colors, navigateTo }) {
     containerRef.current.scrollTop = scrollPos.top - walkY;
   };
 
-  const handleMouseUpOrLeave = () => {
-    setIsDragging(false);
-  };
+  const handleMouseUpOrLeave = () => setIsDragging(false);
 
   const handleZoom = (delta) => {
     setZoomLevel(prev => Math.min(Math.max(0.4, prev + delta), 2));
@@ -250,72 +225,63 @@ export default function Devolutivas({ colors, navigateTo }) {
       y: rect.top
     });
   };
-  const handleCellMouseLeave = () => {
-    setTooltipData(null);
-  };
+  const handleCellMouseLeave = () => setTooltipData(null);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 overflow-hidden font-sans">
-      <div className="bg-white border-b border-gray-200 h-14 flex items-center px-6 sticky top-0 z-40 shadow-sm shrink-0">
-        <div className="flex bg-gray-100 p-1 rounded-xl mr-6">
-          <button 
+    // Ocupa exatamente o espaço restante abaixo do header global — sem overflow
+    <div
+      className="flex flex-col overflow-hidden bg-gray-50"
+      style={{ height: `calc(100vh - ${GLOBAL_HEADER_H}px)` }}
+    >
+      {/* ── HEADER INTERNO FIXO (tabs + breadcrumb + skills btn) ── */}
+      <div
+        className="bg-white border-b border-gray-200 flex items-center px-6 gap-4 shrink-0 z-40 shadow-sm"
+        style={{ height: DEV_HEADER_H }}
+      >
+        {/* Tabs */}
+        <div className="flex bg-gray-100 p-1 rounded-xl shrink-0">
+          <button
             onClick={() => setMainTab('heatmap')}
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-[12px] font-bold transition-all ${mainTab === 'heatmap' ? 'bg-white text-[#003A79] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-[4px] text-[12px] font-bold transition-all ${mainTab === 'heatmap' ? 'bg-white text-[#003A79] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
           >
             <Grid size={16} /> Mapa de Calor
           </button>
-          <button 
+          <button
             onClick={() => setMainTab('detalhes')}
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-[12px] font-bold transition-all ${mainTab === 'detalhes' ? 'bg-white text-[#003A79] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-[4px] text-[12px] font-bold transition-all ${mainTab === 'detalhes' ? 'bg-white text-[#003A79] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
           >
             <BarChart2 size={16} /> Detalhes da Resposta
           </button>
         </div>
 
-        <div className="flex items-center gap-2 flex-1 overflow-x-auto no-scrollbar">
-           {navPath.map((path, idx) => (
-              <React.Fragment key={idx}>
-                <button 
-                  onClick={() => goBack(idx)}
-                  className={`text-[12px] font-bold px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${idx === navLevel ? 'bg-[#008BC9] text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'}`}
-                >
-                  {path}
-                </button>
-                {idx < navPath.length - 1 && <ChevronRight size={14} className="text-gray-400 shrink-0" />}
-              </React.Fragment>
-            ))}
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 flex-1 overflow-x-auto no-scrollbar min-w-0">
+          {navPath.map((path, idx) => (
+            <React.Fragment key={idx}>
+              <button
+                onClick={() => goBack(idx)}
+                className={`text-[12px] font-bold px-3 py-1.5 rounded-[4px] transition-all whitespace-nowrap ${idx === navLevel ? 'bg-[#008BC9] text-white shadow-md' : 'text-gray-500 hover:bg-gray-100'}`}
+              >
+                {path}
+              </button>
+              {idx < navPath.length - 1 && <ChevronRight size={14} className="text-gray-400 shrink-0" />}
+            </React.Fragment>
+          ))}
         </div>
 
-        <div className="flex items-center gap-3 ml-4">
-           <button 
-              onClick={() => setShowSkills(!showSkills)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] font-extrabold transition-all border shrink-0 ${showSkills ? 'bg-[#94CFEF] text-[#003A79] border-[#008BC9]' : 'bg-white text-[#008BC9] border-[#008BC9] hover:bg-gray-50'}`}
-            >
-              {showSkills ? 'OCULTAR HABILIDADES' : 'DESTACAR HABILIDADES'}
-            </button>
-            
-            {showSkills && (
-               <div className="flex items-center bg-gray-50 rounded-xl px-2 py-1 border border-gray-200 animate-fade-slide shrink-0">
-                  <button onClick={() => scrollSkills('left')} className="p-1.5 text-gray-400 hover:text-[#008BC9]"><ChevronLeft size={16} /></button>
-                  <div ref={skillsScrollRef} className="flex gap-1.5 overflow-hidden w-[200px] px-1">
-                     {skillsList.map(s => (
-                        <button 
-                          key={s} 
-                          onClick={() => setActiveSkill(activeSkill === s ? null : s)}
-                          className={`px-3 py-1 rounded-md text-[10px] font-bold border transition-all whitespace-nowrap ${activeSkill === s ? 'bg-[#003A79] text-white border-[#003A79]' : 'bg-white text-gray-500 border-gray-300 hover:border-[#008BC9]'}`}
-                        >
-                          {s}
-                        </button>
-                     ))}
-                  </div>
-                  <button onClick={() => scrollSkills('right')} className="p-1.5 text-gray-400 hover:text-[#008BC9]"><ChevronRight size={16} /></button>
-               </div>
-            )}
-        </div>
+        {/* Botão Destacar Habilidades */}
+        <button
+          onClick={() => setShowSkills(!showSkills)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-[4px] text-[12px] font-extrabold transition-all border shrink-0 ${showSkills ? 'bg-[#94CFEF] text-[#003A79] border-[#008BC9]' : 'bg-white text-[#008BC9] border-[#008BC9] hover:bg-gray-50'}`}
+        >
+          {showSkills ? 'OCULTAR HABILIDADES' : 'DESTACAR HABILIDADES'}
+        </button>
       </div>
 
-      <main className="flex-1 relative flex overflow-hidden">
-        {/* Sidebar Flutuante */}
+      {/* ── CORPO PRINCIPAL (sidebar + área de conteúdo) ── */}
+      <div className="flex flex-1 overflow-hidden relative">
+
+        {/* Sidebar */}
         <HeatmapSidebar
           isContextExpanded={isContextExpanded}
           setIsContextExpanded={setIsContextExpanded}
@@ -338,16 +304,32 @@ export default function Devolutivas({ colors, navigateTo }) {
           isColorsActive={isColorsActive}
         />
 
-        <div className="flex-1 relative flex flex-col min-w-0 bg-gray-100/50">
+        {/* Área de conteúdo (matrix + controles flutuantes) */}
+        <div className="flex-1 relative overflow-hidden">
+
+          {/* Barra de Skills — entre sidebar e controles flutuantes */}
+          {showSkills && (
+            <div className="absolute top-3 left-[356px] right-[24px] z-30 animate-fade-slide">
+              <div className="flex items-center bg-white/95 backdrop-blur-md rounded-[8px] px-3 py-2 border border-[#008BC9] shadow-xl gap-2 h-10">
+                <span className="text-[10px] font-extrabold text-[#003A79] uppercase tracking-wide whitespace-nowrap shrink-0">Habilidades</span>
+                <div className="w-[1px] h-4 bg-gray-200 shrink-0" />
+                <div className="flex gap-1.5 overflow-x-auto no-scrollbar flex-1 py-0.5">
+                  {skillsList.map(s => (
+                    <button
+                      key={s}
+                      onClick={() => setActiveSkill(activeSkill === s ? null : s)}
+                      className={`px-3 py-1 rounded-[4px] text-[10px] font-bold border transition-all whitespace-nowrap shrink-0 ${activeSkill === s ? 'bg-[#003A79] text-white border-[#003A79]' : 'bg-white text-gray-500 border-gray-300 hover:border-[#008BC9]'}`}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Controles flutuantes (direita + inferior) */}
           <HeatmapControls
-            showSkills={showSkills}
-            canScrollSkillsLeft={canScrollSkillsLeft}
-            canScrollSkillsRight={canScrollSkillsRight}
-            scrollSkills={scrollSkills}
-            skillsScrollRef={skillsScrollRef}
-            skillsList={skillsList}
-            activeSkill={activeSkill}
-            setActiveSkill={setActiveSkill}
             showLegendPopover={showLegendPopover}
             setShowLegendPopover={setShowLegendPopover}
             colorTheme={colorTheme}
@@ -370,6 +352,7 @@ export default function Devolutivas({ colors, navigateTo }) {
             setIsCombinedView={setIsCombinedView}
           />
 
+          {/* Matriz / conteúdo principal */}
           {mainTab === 'heatmap' ? (
             <HeatmapMatrix
               containerRef={containerRef}
@@ -402,7 +385,7 @@ export default function Devolutivas({ colors, navigateTo }) {
               activeSkill={activeSkill}
             />
           ) : (
-            <div className="p-10 flex justify-center items-center h-full text-gray-400">
+            <div className="flex justify-center items-center h-full text-gray-400">
               <div className="flex flex-col items-center gap-4">
                 <LayoutDashboard size={48} className="opacity-20" />
                 <p className="font-bold text-[18px]">Selecione um aluno ou item para ver detalhes...</p>
@@ -410,9 +393,9 @@ export default function Devolutivas({ colors, navigateTo }) {
             </div>
           )}
         </div>
+      </div>
 
-        <HeatmapTooltip tooltipData={tooltipData} statusColors={statusColors} />
-      </main>
+      <HeatmapTooltip tooltipData={tooltipData} statusColors={statusColors} />
     </div>
   );
 }

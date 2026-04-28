@@ -29,9 +29,9 @@ export default function HeatmapMatrix({
       onMouseLeave={handleMouseUpOrLeave}
     >
       {mainTab === 'heatmap' && (
-        <div className="pt-[60px] pb-[300px] pl-[80px] md:pl-[120px] pr-[400px] w-max h-max">
+        <div className={`${showSkills ? 'pt-[64px]' : 'pt-4'} pb-[120px] pl-[80px] md:pl-[120px] pr-[120px] w-max h-max transition-all duration-300`}>
           <div className="inline-block transition-transform duration-200 origin-top-left" style={{ transform: `scale(${zoomLevel})` }}>
-            
+
             {/* Header Dinâmico do Heatmap */}
             <div className="flex mb-3 sticky top-0 z-20">
               <div className="w-[180px] shrink-0 sticky left-0 md:left-[344px] z-30"></div>
@@ -55,7 +55,7 @@ export default function HeatmapMatrix({
                   </div>
                 </div>
               ))}
-              
+
               {/* Header da Escala por Linha */}
               <div className="flex flex-col ml-[80px] shrink-0 sticky right-0 z-30">
                 <div className="border border-[#008BC9] rounded-none bg-[#D9F0FC] mb-2 py-1 px-4 flex items-center justify-center gap-1.5 shadow-sm">
@@ -77,13 +77,13 @@ export default function HeatmapMatrix({
                     </div>
                   )}
                   <div className="flex items-center rounded-l-[8px] transition-all duration-300 pr-4 relative">
-                    <div className="w-[180px] shrink-0 bg-white border border-gray-200 rounded-none py-1.5 px-3 text-[11px] font-bold text-[#1D2432] shadow-sm sticky left-0 md:left-[344px] z-20 truncate flex items-center gap-2 select-none group" title={student.name}>
+                    <div className="w-[180px] shrink-0 bg-white border border-gray-200 rounded-none py-1.5 px-3 text-[11px] font-bold text-[#1D2432] shadow-sm sticky left-0 md:left-[352px] z-20 truncate flex items-center gap-2 select-none group" title={student.name}>
                       {navLevel < 4 && (
                         <input
                           type="checkbox"
                           checked={selectedRows.has(student.name)}
                           onChange={(e) => { e.stopPropagation(); toggleRow(student.name); }}
-                          className="w-4 h-4 rounded border-gray-300 text-[#008BC9] focus:ring-[#008BC9] cursor-pointer"
+                          className="w-4 h-4 rounded-[4px] border-gray-300 text-[#008BC9] focus:ring-[#008BC9] cursor-pointer"
                         />
                       )}
                       <span
@@ -129,20 +129,20 @@ export default function HeatmapMatrix({
                         const values = student.data.map(k => statusColors[k].val).filter(v => v !== null);
                         let res = '-';
                         if (values.length > 0) {
-                          if (calcMethod === 'Média') res = Math.round(values.reduce((a,b)=>a+b,0)/values.length);
+                          if (calcMethod === 'Média') res = Math.round(values.reduce((a, b) => a + b, 0) / values.length);
                           else if (calcMethod === 'Mediana') {
-                            const s = [...values].sort((a,b)=>a-b);
-                            const m = Math.floor(s.length/2);
-                            res = s.length%2!==0?s[m]:Math.round((s[m-1]+s[m])/2);
+                            const s = [...values].sort((a, b) => a - b);
+                            const m = Math.floor(s.length / 2);
+                            res = s.length % 2 !== 0 ? s[m] : Math.round((s[m - 1] + s[m]) / 2);
                           } else {
-                            const f={}; let mf=0; let mo=values[0];
-                            values.forEach(v=>{f[v]=(f[v]||0)+1;if(f[v]>mf){mf=f[v];mo=v;}});
+                            const f = {}; let mf = 0; let mo = values[0];
+                            values.forEach(v => { f[v] = (f[v] || 0) + 1; if (f[v] > mf) { mf = f[v]; mo = v; } });
                             res = mo;
                           }
                         }
                         const bg = getColorFromGradient(res, isColorsActive, colorTheme);
                         return (
-                          <div 
+                          <div
                             className="w-[100px] h-[32px] rounded-none border border-gray-300 flex items-center justify-center text-[11px] font-extrabold text-[#1D2432] shadow-sm transition-all duration-300"
                             style={{ backgroundColor: bg }}
                           >

@@ -43,7 +43,7 @@ const Usuarios = ({
         </div>
       </div>
 
-      <div className="bg-white rounded-[12px] border overflow-hidden flex-1 shadow-sm mb-[24px] md:mb-[32px]" style={{ borderColor: colors.neutral[2] }}>
+      <div className="bg-white rounded-[8px] border overflow-hidden flex-1 shadow-sm mb-[24px] md:mb-[32px]" style={{ borderColor: colors.neutral[2] }}>
         <div className="w-full">
           <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[16px] border-b text-[12px] font-bold uppercase tracking-wide bg-[#F7F8FA] text-[#677080]">
             <div className="w-[24px] shrink-0"></div>
