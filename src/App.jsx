@@ -21,8 +21,8 @@ import Devolutivas from './components/screens/Devolutivas';
 import RegistroPresenca from './components/screens/RegistroPresenca';
 
 export default function MapearApp() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState('dashboard');
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [currentScreen, setCurrentScreen] = useState('devolutivas');
 
   const [activeMenu, setActiveMenu] = useState('curriculos');
   const [hoveredMenu, setHoveredMenu] = useState(null);
