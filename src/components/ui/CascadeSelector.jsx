@@ -224,8 +224,8 @@ export default function CascadeSelector({
             </button>
             <button 
               onClick={handleConfirm}
-              disabled={selections.length < levels.length}
-              className={`px-[24px] py-[10px] text-[13px] font-bold rounded-[4px] transition-colors flex items-center gap-[8px] ${selections.length >= levels.length ? 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-md' : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'}`}
+              disabled={selections.length === 0}
+              className={`px-[24px] py-[10px] text-[13px] font-bold rounded-[4px] transition-colors flex items-center gap-[8px] ${selections.length > 0 ? 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-md' : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'}`}
             >
               CONFIRMAR <Check size={16} />
             </button>

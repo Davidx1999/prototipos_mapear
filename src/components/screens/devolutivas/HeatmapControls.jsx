@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-  LayoutList, X, MousePointer2, Move, ZoomIn, ZoomOut, Maximize,
-  Columns, Rows, Palette
+  X, Move, ZoomIn, ZoomOut, Maximize,
+  Columns, Rows, ChevronDown, Map as MapIcon
 } from 'lucide-react';
 
 export default function HeatmapControls({
@@ -17,113 +17,90 @@ export default function HeatmapControls({
 }) {
   return (
     <>
-      {/* ── CONTROLES FLUTUANTES (Direita) ── */}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 z-40 shadow-xl bg-white/90 backdrop-blur-md rounded-[8px] border border-gray-200 p-1.5">
-        <div className="relative group">
-          <button
-            onClick={() => setShowLegendPopover(!showLegendPopover)}
-            className={`p-2 rounded-[4px] transition-colors ${showLegendPopover ? 'bg-[#008BC9] text-white shadow-inner' : 'text-gray-500 hover:text-[#008BC9] hover:bg-gray-100'}`}
-            title="Escala de Desempenho"
-          >
-            <LayoutList size={16} />
-          </button>
-          {showLegendPopover && (
-            <div className="absolute right-[calc(100%+12px)] top-0 bg-white rounded-[8px] shadow-2xl border border-gray-200 w-[260px] p-5 z-50 animate-fade-slide">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-bold text-[13px] text-[#1D2432]">Escala de Desempenho</h3>
-                <X size={14} className="text-gray-400 cursor-pointer" onClick={() => setShowLegendPopover(false)} />
-              </div>
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                  <div className={`w-full h-3 rounded-full shadow-inner border border-gray-200/50 ${colorTheme === 'colorblind' && isColorsActive ? 'bg-gradient-to-r from-white via-[#CCCCCC] via-[#D55E00] via-[#F0E442] to-[#0072B2]' : isColorsActive ? 'bg-gradient-to-r from-white via-[#B3E6F5] via-[#FF6961] via-[#F8D66D] to-[#8CD47E]' : 'bg-gray-200'}`}></div>
-                  <div className="flex justify-between text-[10px] font-bold text-gray-500 px-0.5">
-                    <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
-                  </div>
-                </div>
-                <p className="text-[11px] text-gray-500 leading-relaxed italic">
-                  * O degradê representa a variação do desempenho médio/mediana/moda calculada para cada item e linha do heatmap.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="w-full h-[1px] bg-gray-200 my-0.5" />
-
+      {/* ── RIGHT SIDE CONTROLS (Move/Zoom/Fit) ── */}
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-40">
+        {/* Move/Pan button */}
         <button
           onClick={() => setIsPanMode(!isPanMode)}
-          className={`p-2 rounded-[4px] transition-colors ${isPanMode ? 'bg-[#008BC9] text-white shadow-inner' : 'text-gray-500 hover:text-[#008BC9] hover:bg-gray-100'}`}
-          title="Arrastar/Mover Heatmap"
+          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all shadow-lg border ${isPanMode ? 'bg-white border-gray-200 text-[#1D2432]' : 'bg-white border-gray-200 text-gray-500 hover:text-[#008BC9]'}`}
+          title="Arrastar/Mover"
         >
-          {isPanMode ? <MousePointer2 size={16} /> : <Move size={16} />}
+          <Move size={18} />
         </button>
 
-        <div className="w-full h-[1px] bg-gray-200 my-0.5" />
-
-        <button onClick={() => handleZoom(0.2)} className="p-2 text-gray-500 hover:text-[#008BC9] hover:bg-gray-100 rounded-[4px] transition-colors" title="Aumentar Zoom">
-          <ZoomIn size={16} />
+        {/* Zoom In */}
+        <button
+          onClick={() => handleZoom(0.2)}
+          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#008BC9] transition-colors"
+          title="Aumentar Zoom"
+        >
+          <ZoomIn size={18} />
         </button>
-        <button onClick={() => handleZoom(-0.2)} className="p-2 text-gray-500 hover:text-[#008BC9] hover:bg-gray-100 rounded-[4px] transition-colors" title="Diminuir Zoom">
-          <ZoomOut size={16} />
+
+        {/* Zoom Out */}
+        <button
+          onClick={() => handleZoom(-0.2)}
+          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#008BC9] transition-colors"
+          title="Diminuir Zoom"
+        >
+          <ZoomOut size={18} />
         </button>
 
-        <div className="w-full h-[1px] bg-gray-200 my-0.5" />
-
-        <button onClick={handleFitScreen} className="p-2 text-gray-500 hover:text-[#008BC9] hover:bg-gray-100 rounded-[4px] transition-colors" title="Ajustar à Tela">
-          <Maximize size={16} />
+        {/* Fit/Reset */}
+        <button
+          onClick={handleFitScreen}
+          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#008BC9] transition-colors"
+          title="Ajustar à Tela"
+        >
+          <Maximize size={18} />
         </button>
       </div>
 
-      {/* ── CONTROLES FLUTUANTES (Inferior Centro) ── */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-3 z-40">
-        <button
-          onClick={() => setIsColsSeparated(!isColsSeparated)}
-          className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-md rounded-[4px] shadow-xl border transition-colors ${isColsSeparated ? 'border-[#008BC9] text-[#008BC9] ring-2 ring-[#D9F0FC]' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
-          title="Separar por Colunas"
-        >
-          <Columns size={18} />
-        </button>
-
-        <button
-          onClick={() => setIsRowsSeparated(!isRowsSeparated)}
-          className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-md rounded-[4px] shadow-xl border transition-colors ${isRowsSeparated ? 'border-[#008BC9] text-[#008BC9] ring-2 ring-[#D9F0FC]' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
-          title="Separar por Linhas"
-        >
-          <Rows size={18} />
-        </button>
-
-        <div className="relative">
+      {/* ── BOTTOM CENTER CONTROLS (Floating bar) ── */}
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-3 z-40">
+        {/* X close button (when in combined view) */}
+        {isCombinedView && (
           <button
-            onClick={() => setActiveBottomPanel(activeBottomPanel === 'palette' ? null : 'palette')}
-            className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-md rounded-[4px] shadow-xl border transition-colors ${activeBottomPanel === 'palette' ? 'border-[#008BC9] text-[#008BC9] ring-2 ring-[#D9F0FC]' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
-            title="Paleta de Cores"
+            onClick={() => setIsCombinedView(false)}
+            className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors"
           >
-            <Palette size={18} />
+            <X size={20} />
           </button>
-          {activeBottomPanel === 'palette' && (
-            <div className="absolute bottom-[calc(100%+12px)] left-1/2 -translate-x-1/2 bg-white rounded-[8px] shadow-2xl border border-gray-200 p-2 min-w-[200px] animate-fade-slide z-50">
-              <div className="flex flex-col gap-1">
-                <button onClick={() => { setColorTheme('default'); setIsColorsActive(true); }} className={`flex items-center gap-3 p-2 rounded-[4px] text-[12px] font-bold transition-colors ${colorTheme === 'default' && isColorsActive ? 'bg-[#D9F0FC] text-[#003A79]' : 'hover:bg-gray-50'}`}>
-                  <div className="w-4 h-4 rounded-full bg-[#8CD47E]" /> Padrão (Semântico)
-                </button>
-                <button onClick={() => { setColorTheme('colorblind'); setIsColorsActive(true); }} className={`flex items-center gap-3 p-2 rounded-[4px] text-[12px] font-bold transition-colors ${colorTheme === 'colorblind' ? 'bg-[#D9F0FC] text-[#003A79]' : 'hover:bg-gray-50'}`}>
-                  <div className="w-4 h-4 rounded-full bg-[#0072B2]" /> Modo Daltônico
-                </button>
-                <button onClick={() => setIsColorsActive(!isColorsActive)} className={`flex items-center gap-3 p-2 rounded-[4px] text-[12px] font-bold transition-colors ${!isColorsActive ? 'bg-[#D9F0FC] text-[#003A79]' : 'hover:bg-gray-50'}`}>
-                  <div className="w-4 h-4 rounded-full bg-gray-300" /> Escala de Cinza
-                </button>
-              </div>
-            </div>
-          )}
+        )}
+
+        {/* Grid / Columns control */}
+        <div className="flex flex-col border border-gray-200 rounded-lg overflow-hidden bg-white shadow-lg">
+          <button
+            onClick={() => setIsColsSeparated(!isColsSeparated)}
+            className={`p-2.5 border-b border-gray-200 transition-colors ${isColsSeparated ? 'bg-[#D9F0FC] text-[#008BC9]' : 'hover:bg-gray-50 text-gray-600'}`}
+          >
+            <Columns size={18} />
+          </button>
+          <button className="p-1 hover:bg-gray-50 flex justify-center text-gray-500">
+            <ChevronDown size={12} />
+          </button>
         </div>
 
-        {(selectedRows.size >= 2 || (navLevel === 4 && selectedRows.size > 0)) && (
+        {/* Map / Rows control */}
+        <div className="flex flex-col border border-gray-200 rounded-lg overflow-hidden bg-white shadow-lg">
+          <button
+            onClick={() => setIsRowsSeparated(!isRowsSeparated)}
+            className={`p-2.5 border-b border-gray-200 transition-colors ${isRowsSeparated ? 'bg-[#D9F0FC] text-[#008BC9]' : 'hover:bg-gray-50 text-gray-600'}`}
+          >
+            <MapIcon size={18} />
+          </button>
+          <button className="p-1 hover:bg-gray-50 flex justify-center text-gray-500">
+            <ChevronDown size={12} />
+          </button>
+        </div>
+
+        {/* VISUALIZAR COMBINAÇÃO button */}
+        {(selectedRows.size >= 2 || isCombinedView) && (
           <button
             onClick={() => setIsCombinedView(!isCombinedView)}
-            disabled={navLevel === 4 && selectedRows.size < 2 && !isCombinedView}
-            className={`px-6 py-0 h-10 md:h-12 rounded-[4px] font-bold text-[12px] md:text-[13px] shadow-xl transition-all whitespace-nowrap hidden lg:block tracking-wide scale-105 ring-2 ring-offset-2 animate-bounce-subtle ${isCombinedView ? 'bg-white text-[#008BC9] ring-[#008BC9]' : 'bg-[#008BC9] text-white ring-[#008BC9] hover:bg-[#003A79]'} ${(navLevel === 4 && selectedRows.size < 2 && !isCombinedView) ? 'opacity-50 cursor-not-allowed bg-gray-400 ring-gray-400 grayscale' : ''}`}
+            className={`px-8 py-3.5 rounded-lg font-extrabold text-[13px] tracking-wider shadow-xl transition-all whitespace-nowrap ${isCombinedView ? 'bg-white text-[#008BC9] border-2 border-[#008BC9] hover:bg-gray-50' : 'bg-[#008BC9] text-white hover:bg-[#003A79]'}`}
           >
-            {isCombinedView ? 'VOLTAR AO MAPA GERAL' : `VISUALIZAR COMBINAÇÃO (${selectedRows.size})`}
+            {isCombinedView ? 'VOLTAR AO MAPA GERAL' : 'VISUALIZAR COMBINAÇÃO'}
           </button>
         )}
       </div>

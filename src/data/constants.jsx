@@ -1,6 +1,6 @@
 
 export const defaultColors = {
-  primary: { ultraDark: '#001D31', extraDark: '#003A79', dark: '#0C63AA', base: '#008BC9', light: '#94CFEF', extraLight: '#D9F0FC' },
+  primary: { ultraDark: '#001D31', extraDark: '#003A79', dark: '#0C63AA', base: '#008BC9', light: '#94CFEF', extraLight: '#D9F0FC', green50: '#F0FFF4' },
   neutral: { 7: '#0F1113', 6: '#1D2432', 5: '#677080', 4: '#969DA9', 3: '#CACDD5', 2: '#DEE1E8', 1: '#F7F8FA', 0: '#FFFFFF' }
 };
 
@@ -25,7 +25,7 @@ export const sidebarMenus = [
     cards: [
       { id: 'card-saberes', title: 'Matriz de Saberes', route: 'saberes', keywords: ['habilidades', 'saberes', 'domínios', 'cognitivos', 'competências'], desc: 'Organize matrizes, relacione domínios e hierarquize habilidades cognitivas essenciais para a rede.', icon: <Grid size={20} /> },
       { id: 'card-curriculos', title: 'Matrizes Curriculares', route: 'curriculos', keywords: ['bncc', 'saeb', 'currículo', 'habilidades', 'nacional'], desc: 'Estruture habilidades educacionais com base em referenciais nacionais padronizados, como BNCC e SAEB.', icon: <BookOpen size={20} /> },
-      { id: 'card-conteudos', title: 'Edição de Conteúdos', keywords: ['material', 'didático', 'aula', 'alunos', 'estudantes', 'publicar'], desc: 'Crie, publique e disponibilize materiais didáticos acessíveis e bem estruturados para os estudantes.', icon: <FileEdit size={20} /> }
+      { id: 'card-conteudos', title: 'Edição de Macacos', keywords: ['material', 'didático', 'aula', 'alunos', 'estudantes', 'publicar'], desc: 'Crie, publique e disponibilize materiais didáticos acessíveis e bem estruturados para os estudantes.', icon: <FileEdit size={20} /> }
     ]
   },
   {
