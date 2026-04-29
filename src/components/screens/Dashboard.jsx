@@ -159,7 +159,7 @@ const Dashboard = ({
                   </div>
 
                   {/* FIRULA: A seta empurra levemente na direção do painel da direita */}
-                  {isActive && <ChevronRight size={20} className="hidden lg:block transition-all opacity-80 arrow-push" style={{ color: colors.primary.base }} />}
+                  {isActive && <ChevronRight size={20} className="hidden lg:block transition-all opacity-80 arrow-push" style={{ color: colors.neutral[5] }} />}
                 </button>
               )
             })}
@@ -204,7 +204,7 @@ const Dashboard = ({
                   >
 
                     <div className="flex justify-between items-start mb-[16px]">
-                      <div className="p-[10px] rounded-[8px] transition-colors group-hover:bg-[#E5F3F9] group-hover:text-[#008BC9] shadow-sm" style={{ backgroundColor: colors.neutral[1], color: colors.neutral[5] }}>
+                      <div className="p-[10px] rounded-[8px] transition-colors group-hover:bg-[#E5F3F9] group-hover:text-[#008BC9] shadow-sm" style={{ backgroundColor: colors.neutral[1] }}>
                         {card.icon}
                       </div>
                       {/* 
