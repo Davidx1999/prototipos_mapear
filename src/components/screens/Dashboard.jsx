@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Search, X, Star, Grid, PenTool, LayoutDashboard,
   TrendingUp, CheckSquare, Users, BookOpen,
-  ChevronRight, ClipboardList, PieChart, Map, GraduationCap
+  ChevronRight, ClipboardList, PieChart, Map, GraduationCap,
+  Heart
 } from 'lucide-react';
 import { sidebarMenus } from '../../data/constants';
 
@@ -34,7 +35,7 @@ const Dashboard = ({
 
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[32px] transition-all duration-300" style={{ backgroundColor: colors.neutral[0] }}>
-      
+
       {/* ══ ESTILOS DAS ANIMAÇÕES (FIRULAS DE CONEXÃO) ════════════════════════════════ */}
       <style>{`
         /* O Segredo do UX: Aba Contínua que quebra a fronteira visual */
@@ -127,8 +128,8 @@ const Dashboard = ({
       <div className="w-full flex flex-col md:flex-row overflow-hidden min-h-[500px] rounded-[12px] border shadow-sm" style={{ borderColor: colors.neutral[2] }}>
 
         {/* LADO ESQUERDO: MASTER (MENU DE MÓDULOS) */}
-        <div 
-          className={`shrink-0 flex flex-col overflow-visible transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSearching ? 'h-0 opacity-0 lg:w-0 border-r-0' : 'w-full lg:w-[360px] opacity-100 border-r'} relative z-10`} 
+        <div
+          className={`shrink-0 flex flex-col overflow-visible transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSearching ? 'h-0 opacity-0 lg:w-0 border-r-0' : 'w-full lg:w-[360px] opacity-100 border-r'} relative z-10`}
           style={{ borderColor: colors.neutral[2], backgroundColor: colors.neutral[1] }}
         >
           <div className="flex lg:flex-col overflow-x-auto lg:overflow-visible hide-scrollbar py-[24px]">
@@ -156,7 +157,7 @@ const Dashboard = ({
                     </span>
                     {isActive && <span className="hidden lg:block text-[11px] md:text-[12px] truncate mt-[2px] leading-tight" style={{ color: colors.neutral[5] }}>{menu.shortDesc}</span>}
                   </div>
-                  
+
                   {/* FIRULA: A seta empurra levemente na direção do painel da direita */}
                   {isActive && <ChevronRight size={20} className="hidden lg:block transition-all opacity-80 arrow-push" style={{ color: colors.primary.base }} />}
                 </button>
@@ -166,8 +167,8 @@ const Dashboard = ({
         </div>
 
         {/* LADO DIREITO: DETAIL (CONTEÚDO/CARDS) */}
-        <div 
-          key={`detail-pane-${activeMenu}-${searchQuery}`} 
+        <div
+          key={`detail-pane-${activeMenu}-${searchQuery}`}
           className="flex-1 p-[24px] md:pt-[32px] md:px-[32px] flex flex-col relative overflow-hidden z-0"
           style={{ backgroundColor: colors.neutral[0] }}
         >
@@ -206,7 +207,7 @@ const Dashboard = ({
                       <div className="p-[10px] rounded-[8px] transition-colors group-hover:bg-[#E5F3F9] group-hover:text-[#008BC9] shadow-sm" style={{ backgroundColor: colors.neutral[1], color: colors.neutral[5] }}>
                         {card.icon}
                       </div>
-                      <button 
+                      <button
                         className="p-[4px] z-10"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -214,7 +215,7 @@ const Dashboard = ({
                         }}
                         title="Favoritar"
                       >
-                        <Star size={20} className={`transition-colors ${isFav ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 hover:text-yellow-400'}`} />
+                        <Heart size={20} className={`transition-colors ${isFav ? 'fill-red-500 text-red-500' : 'text-gray-300 hover:text-red-400'}`} />
                       </button>
                     </div>
 
