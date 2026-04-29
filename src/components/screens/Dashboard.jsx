@@ -105,7 +105,7 @@ const Dashboard = ({
         </div>
         <div className="relative z-10">
           <span className="text-[12px] md:text-[14px] font-medium mb-[4px] block" style={{ color: isHighContrast ? '#FFFFFF' : colors.neutral[2] }}>Bem-vinda de volta</span>
-          <h2 className="text-[24px] md:text-[32px] font-bold mb-[8px]" style={{ color: isHighContrast ? colors.primary.base : colors.neutral[0] }}>Olá, User Test</h2>
+          <h2 className="text-[24px] md:text-[32px] font-bold mb-[8px]" style={{ color: isHighContrast ? colors.primary.base : colors.neutral[0] }}>Olá, David Salviano</h2>
           <p className="text-[13px] md:text-[14px] font-medium" style={{ color: isHighContrast ? '#FFFFFF' : colors.neutral[2] }}>Realize sua gestão educacional com o Mapear.</p>
         </div>
       </div>
