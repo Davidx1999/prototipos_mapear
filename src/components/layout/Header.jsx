@@ -52,7 +52,7 @@ const Header = ({
             <Button variant="text" iconOnly size="default" onClick={openGripDrawer}><Grip size={20} /></Button>
             {isAppDrawerOpen && (
               <div className="absolute top-[100%] right-0 mt-[8px] w-[340px] p-[24px] rounded-[8px] shadow-2xl z-50 flex flex-col border" style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}>
-                <span className="text-[12px] font-bold mb-[16px] block" style={{ color: colors.neutral[5] }}>Plataformas CENPE</span>
+                <span className="text-[12px] font-bold mb-[16px] block" style={{ color: colors.neutral[5] }}>Plataformas FGV DGPE</span>
                 <div className="grid grid-cols-3 gap-y-[16px] gap-x-[8px] mb-[16px]">
                   {sidebarMenus.map((cat) => {
                     const isActive = drawerActiveCat === cat.id;

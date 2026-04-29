@@ -207,6 +207,7 @@ const Dashboard = ({
                       <div className="p-[10px] rounded-[8px] transition-colors group-hover:bg-[#E5F3F9] group-hover:text-[#008BC9] shadow-sm" style={{ backgroundColor: colors.neutral[1], color: colors.neutral[5] }}>
                         {card.icon}
                       </div>
+                      {/* 
                       <button
                         className="p-[4px] z-10"
                         onClick={(e) => {
@@ -217,6 +218,7 @@ const Dashboard = ({
                       >
                         <Heart size={20} className={`transition-colors ${isFav ? 'fill-red-500 text-red-500' : 'text-gray-300 hover:text-red-400'}`} />
                       </button>
+                      */}
                     </div>
 
                     <div className="flex flex-col h-full">
