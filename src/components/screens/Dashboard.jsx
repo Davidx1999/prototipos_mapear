@@ -56,9 +56,11 @@ const Dashboard = ({
           border-left: 4px solid transparent;
           width: 100%;
           z-index: 10;
+          color: ${colors.neutral[6]};
         }
         .menu-tab-inactive:hover {
           background-color: rgba(0,0,0,0.03);
+          color: ${colors.primary.base};
         }
 
         /* Animação: Cascata vindo da Esquerda (Simula nascer do menu) */
@@ -97,12 +99,27 @@ const Dashboard = ({
       `}</style>
 
       {/* ══ HERO SECTION ════════════════════════════════════════════════════ */}
-      <div className="relative w-full rounded-[12px] p-[24px] md:p-[40px] overflow-hidden flex flex-col justify-center transition-colors duration-500 shadow-sm" style={{ backgroundColor: colors.primary.ultraDark, minHeight: '140px', border: isHighContrast ? '1px solid #FFFFFF' : 'none' }}>
-        <div className="absolute right-0 top-0 bottom-0 w-full md:w-1/2 opacity-20 pointer-events-none">
-          <svg viewBox="0 0 500 200" preserveAspectRatio="none" className="w-full h-full">
-            {[...Array(8)].map((_, i) => <path key={i} d={`M${i * 40},200 C${100 + i * 40},100 ${200 + i * 40},0 500,${i * 20}`} fill="none" stroke={isHighContrast ? '#333333' : colors.neutral[0]} strokeWidth="2" />)}
-          </svg>
-        </div>
+      <div
+        className="relative w-full rounded-[12px] p-[24px] md:p-[40px] overflow-hidden flex flex-col justify-center transition-colors duration-500 shadow-sm"
+        style={{
+          background: `linear-gradient(135deg, ${colors.primary.ultraDark} 56%, ${colors.primary.dark} 100%)`,
+          minHeight: '140px',
+          border: isHighContrast ? '1px solid #FFFFFF' : 'none'
+        }}
+      >
+        {/* Imagem de Fundo (Extrema Direita) */}
+        <div
+          className="absolute right-0 top-0 bottom-0 w-[60%] md:w-[40%] mix-blend-overlay opacity-60 pointer-events-none"
+          style={{
+            backgroundImage: `url('${import.meta.env.BASE_URL}assets/bg_card_start_screen.png')`,
+            backgroundPosition: 'right bottom',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            maskImage: 'linear-gradient(to right, transparent, black 40%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent, black 40%)'
+          }}
+        />
+
         <div className="relative z-10">
           <span className="text-[12px] md:text-[14px] font-medium mb-[4px] block" style={{ color: isHighContrast ? '#FFFFFF' : colors.neutral[2] }}>Bem-vinda de volta</span>
           <h2 className="text-[24px] md:text-[32px] font-bold mb-[8px]" style={{ color: isHighContrast ? colors.primary.base : colors.neutral[0] }}>Olá, David Salviano</h2>
@@ -140,6 +157,13 @@ const Dashboard = ({
 
             {sidebarMenus.map((menu) => {
               const isActive = activeMenu === menu.id;
+              const isHovered = hoveredMenu === menu.id;
+              // active: neutral 7 label, neutral 0 icon, primary.base bg
+              // inactive: neutral 6 label/icon. hover: primary.base label/icon
+              const labelColor = isActive ? colors.neutral[7] : (isHovered ? colors.primary.base : colors.neutral[6]);
+              const iconColor = isActive ? colors.neutral[0] : (isHovered ? colors.primary.base : colors.neutral[6]);
+              const iconBg = isActive ? colors.primary.base : 'transparent';
+
               return (
                 <button
                   key={menu.id}
@@ -148,11 +172,11 @@ const Dashboard = ({
                   onMouseLeave={() => setHoveredMenu(null)}
                   className={`relative flex items-center gap-[12px] md:gap-[16px] px-[24px] py-[16px] text-left transition-colors overflow-visible group ${isActive ? 'menu-tab-active' : 'menu-tab-inactive'}`}
                 >
-                  <div className={`w-[40px] h-[40px] shrink-0 flex items-center justify-center rounded-[6px] transition-colors ${isActive ? 'shadow-md' : ''}`} style={{ backgroundColor: isActive ? colors.primary.base : 'transparent', color: isActive ? '#FFF' : colors.neutral[5] }}>
+                  <div className={`w-[40px] h-[40px] shrink-0 flex items-center justify-center rounded-[6px] transition-colors ${isActive ? 'shadow-md' : ''}`} style={{ backgroundColor: iconBg, color: iconColor }}>
                     {menu.icon}
                   </div>
                   <div className="flex flex-col justify-center overflow-hidden flex-1">
-                    <span className="font-semibold text-[14px] md:text-[16px] truncate transition-colors" style={{ color: isActive || hoveredMenu === menu.id ? colors.neutral[7] : colors.neutral[5] }}>
+                    <span className="font-semibold text-[14px] md:text-[16px] truncate transition-colors" style={{ color: labelColor }}>
                       {menu.label}
                     </span>
                     {isActive && <span className="hidden lg:block text-[11px] md:text-[12px] truncate mt-[2px] leading-tight" style={{ color: colors.neutral[5] }}>{menu.shortDesc}</span>}
@@ -200,7 +224,7 @@ const Dashboard = ({
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.borderColor = colors.primary.base}
                     onMouseLeave={(e) => e.currentTarget.style.borderColor = colors.neutral[2]}
-                    onClick={() => card.route && navigateTo(card.route)}
+                    onClick={() => navigateTo(card.route || 'generic')}
                   >
 
                     <div className="flex justify-between items-start mb-[16px]">

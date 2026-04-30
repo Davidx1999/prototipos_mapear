@@ -1,6 +1,6 @@
 
 export const defaultColors = {
-  primary: { ultraDark: '#001D31', extraDark: '#003A79', dark: '#0C63AA', base: '#008BC9', light: '#94CFEF', extraLight: '#D9F0FC', green50: '#F0FFF4' },
+  primary: { ultraDark: '#001D31', extraDark: '#003A79', dark: '#0C63AA', base: '#008BC9', light: '#94CFEF', extraLight: '#D9F0FC' },
   neutral: { 7: '#0F1113', 6: '#1D2432', 5: '#677080', 4: '#969DA9', 3: '#CACDD5', 2: '#DEE1E8', 1: '#F7F8FA', 0: '#FFFFFF' }
 };
 

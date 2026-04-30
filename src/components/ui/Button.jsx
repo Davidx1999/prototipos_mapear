@@ -1,13 +1,14 @@
-
 import React from 'react';
 
 const Button = ({ variant = 'primary', size = 'default', iconOnly = false, className = '', children, ...props }) => {
-  let varStyle = {};
-  if (variant === 'primary') varStyle = { backgroundColor: 'var(--primary-base)', color: '#FFF', borderColor: 'transparent' };
-  else if (variant === 'secondary') varStyle = { backgroundColor: 'var(--primary-light)', color: 'var(--primary-base)', borderColor: 'transparent' };
-  else if (variant === 'tertiary') varStyle = { backgroundColor: 'transparent', color: 'var(--neutral-7)', borderColor: 'var(--neutral-3)', borderStyle: 'solid', borderWidth: '1px' };
-  else if (variant === 'text') varStyle = { backgroundColor: 'transparent', color: 'var(--neutral-5)', borderColor: 'transparent' };
-  else if (variant === 'outlined') varStyle = { backgroundColor: 'transparent', color: 'var(--primary-base)', borderColor: 'var(--primary-base)', borderStyle: 'solid', borderWidth: '1px' };
+  const variantClasses = {
+    primary: 'bg-[var(--primary-base)] text-white border-transparent hover:bg-[var(--primary-dark)] active:bg-[var(--primary-extra-dark)]',
+    secondary: 'bg-[var(--primary-light)] text-[var(--primary-dark)] border-transparent hover:bg-[var(--primary-base)] hover:text-[var(--primary-dark)] active:bg-[var(--primary-dark)] active:text-white',
+    tertiary: 'bg-transparent text-[var(--neutral-7)] border border-[var(--neutral-3)] hover:bg-[var(--neutral-2)] hover:border-[var(--neutral-3)] active:bg-[var(--neutral-3)]',
+    neutral: 'bg-transparent text-[var(--neutral-6)] border-transparent hover:bg-[var(--neutral-3)] active:bg-[var(--neutral-4)]',
+    text: 'bg-transparent text-[var(--neutral-5)] border-transparent hover:bg-[var(--neutral-3)] active:bg-[var(--neutral-4)]',
+    outlined: 'bg-transparent text-[var(--primary-base)] border border-[var(--primary-base)] hover:bg-[var(--primary-light)] active:bg-[var(--primary-base)] active:text-white',
+  };
 
   let sizeClass = "";
   if (iconOnly) {
@@ -23,9 +24,17 @@ const Button = ({ variant = 'primary', size = 'default', iconOnly = false, class
   }
 
   return (
-    <button 
-      className={`rounded-[4px] font-semibold transition-all duration-200 flex items-center justify-center gap-[8px] cursor-pointer outline-none shrink-0 ${sizeClass} ${className}`} 
-      style={varStyle}
+    <button
+      className={`
+        rounded-[4px] font-semibold transition-all duration-200 
+        flex items-center justify-center gap-[8px] cursor-pointer outline-none shrink-0
+        active:scale-[0.98] 
+        disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale-[0.5]
+        ${variantClasses[variant] || variantClasses.primary}
+        ${sizeClass} 
+        ${className}
+      `}
+      style={props.style}
       {...props}
     >
       {children}

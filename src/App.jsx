@@ -19,6 +19,7 @@ import Usuarios from './components/screens/Usuarios';
 import Acompanhamento from './components/screens/Acompanhamento';
 import Devolutivas from './components/screens/Devolutivas';
 import RegistroPresenca from './components/screens/RegistroPresenca';
+import GenericModulePage from './components/screens/GenericModulePage';
 
 export default function MapearApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -127,7 +128,9 @@ export default function MapearApp() {
     '--primary-dark': colors.primary.dark,
     '--primary-extra-dark': colors.primary.extraDark,
     '--neutral-7': colors.neutral[7],
+    '--neutral-6': colors.neutral[6],
     '--neutral-5': colors.neutral[5],
+    '--neutral-4': colors.neutral[4],
     '--neutral-3': colors.neutral[3],
     '--neutral-2': colors.neutral[2],
     '--neutral-1': colors.neutral[1],
@@ -264,6 +267,12 @@ export default function MapearApp() {
         )}
         {currentScreen === 'registro-presenca' && (
           <RegistroPresenca
+            colors={colors}
+            navigateTo={navigateTo}
+          />
+        )}
+        {currentScreen === 'generic' && (
+          <GenericModulePage
             colors={colors}
             navigateTo={navigateTo}
           />
