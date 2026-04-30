@@ -51,7 +51,15 @@ const Header = ({
 
       <div className="flex items-center gap-[4px] md:gap-[8px]">
         <div className="flex items-center gap-[4px] md:gap-[8px]">
-          <Button variant="text" size="default" className="!normal-case !font-medium hidden md:flex" style={{ color: colors.neutral[6] }}><HelpCircle size={18} /> Ajuda</Button>
+          <Button 
+            variant="text" 
+            size="default" 
+            className="!normal-case !font-medium hidden md:flex" 
+            style={{ color: colors.neutral[6] }}
+            onClick={() => navigateTo('help', 'Ajuda e Suporte')}
+          >
+            <HelpCircle size={18} /> Ajuda
+          </Button>
 
           <div className="relative">
             <Button
@@ -81,7 +89,7 @@ const Header = ({
           <div className="relative">
             <Button variant="primary" iconOnly size="default" className="md:w-[40px] md:h-[40px] w-[32px] h-[32px]" onClick={() => { setIsA11yOpen(!isA11yOpen); setIsProfileOpen(false); }}><Accessibility className="w-[18px] h-[18px] md:w-[20px] md:h-[20px]" /></Button>
             {isA11yOpen && (
-              <div className="absolute top-[100%] right-0 mt-[8px] w-[260px] md:w-[280px] p-[16px] rounded-[8px] shadow-2xl z-50 flex flex-col gap-[16px] border" style={{ backgroundColor: isHighContrast ? colors.neutral[0] : '#003A79', color: '#FFF', borderColor: colors.neutral[3] }}>
+              <div className="absolute top-[100%] right-0 mt-[8px] w-[260px] md:w-[280px] p-[16px] rounded-[8px] shadow-2xl z-[120] flex flex-col gap-[16px] border" style={{ backgroundColor: isHighContrast ? colors.neutral[0] : '#003A79', color: '#FFF', borderColor: colors.neutral[3] }}>
                 <div className="flex items-center gap-[12px] cursor-pointer hover:bg-white/10 p-[8px] rounded-[8px] transition-colors"><div className="w-[24px] h-[24px] bg-white rounded-[4px] font-bold text-[12px] flex justify-center items-center" style={{ color: isHighContrast ? '#222' : '#003A79' }}>VL</div><span className="text-[13px] md:text-[14px] font-semibold">Tradutor de VLibras</span></div>
                 <hr className="border-white/20" />
                 <div className="flex flex-col gap-[12px] px-[8px]">
@@ -106,7 +114,7 @@ const Header = ({
           {/* Botão de Perfil Simplificado (Apenas Foto e Ícone) */}
           <div
             className="flex items-center gap-[8px] cursor-pointer p-[4px] md:p-[6px] rounded-full transition-colors border"
-            onClick={() => { setIsProfileOpen(!isProfileOpen); setIsA11yOpen(false); setIsAppDrawerOpen(false); }}
+            onClick={() => { setIsProfileOpen(!isProfileOpen); setIsA11yOpen(false); }}
             style={{ backgroundColor: isProfileOpen ? colors.neutral[1] : 'transparent', borderColor: isProfileOpen ? colors.neutral[3] : 'transparent' }}
           >
             <img src="https://i.pinimg.com/736x/51/09/b1/5109b1d79c9a9bb693d9464c675248db.jpg" alt="Avatar" className="w-[32px] h-[32px] md:w-[36px] md:h-[36px] rounded-full object-cover" />
@@ -115,7 +123,7 @@ const Header = ({
 
           {/* Menu de Perfil Completo (Dropdown Rico) */}
           {isProfileOpen && (
-            <div className="absolute top-[100%] right-0 mt-[12px] w-[280px] border rounded-[12px] shadow-2xl z-50 flex flex-col overflow-hidden" style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}>
+            <div className="absolute top-[100%] right-0 mt-[12px] w-[280px] border rounded-[12px] shadow-2xl z-[120] flex flex-col overflow-hidden" style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}>
 
               {/* Cabeçalho do Dropdown (Info do Utilizador) */}
               <div className="px-[20px] py-[16px] border-b flex items-center gap-[12px]" style={{ borderColor: colors.neutral[2], backgroundColor: colors.neutral[1] }}>
@@ -151,6 +159,14 @@ const Header = ({
           )}
         </div>
       </div>
+
+      {/* Backdrop secundário para bloquear interação com GripMenu quando Dropdowns do Header estiverem abertos */}
+      {(isA11yOpen || isProfileOpen) && isGripOpen && (
+        <div 
+          className="fixed inset-0 z-[110] bg-black/5" 
+          onClick={() => { setIsA11yOpen(false); setIsProfileOpen(false); }}
+        />
+      )}
     </header>
   );
 };

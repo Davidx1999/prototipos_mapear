@@ -281,7 +281,7 @@ export default function MapearApp() {
             navigateTo={navigateTo}
           />
         )}
-        {currentScreen === 'empty-state' && (
+        {(currentScreen === 'empty-state' || currentScreen === 'help') && (
           <EmptyStatePage
             colors={colors}
             navigateTo={navigateTo}
