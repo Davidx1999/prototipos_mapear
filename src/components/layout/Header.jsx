@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu, Grip, HelpCircle, Accessibility, Contrast, ChevronDown, User, Settings, Bell, LogOut } from 'lucide-react';
 import LogoFgv from '../ui/LogoFgv';
 import Button from '../ui/Button';
+import GripMenu from './GripMenu';
 import { sidebarMenus } from '../../data/constants';
 
 const Header = ({
@@ -10,10 +11,10 @@ const Header = ({
   setIsHighContrast,
   currentScreen,
   navigateTo,
-  isAppDrawerOpen,
-  setIsAppDrawerOpen,
-  drawerActiveCat,
-  setDrawerActiveCat,
+  isGripOpen,
+  setIsGripOpen,
+  gripActiveTab,
+  setGripActiveTab,
   isA11yOpen,
   setIsA11yOpen,
   isProfileOpen,
@@ -31,12 +32,17 @@ const Header = ({
   return (
     <header className="sticky top-0 z-50 px-[16px] md:px-[32px] py-[12px] md:py-[16px] border-b flex justify-between items-center transition-colors duration-500" style={{ borderColor: colors.neutral[2], backgroundColor: colors.neutral[0] }}>
       <div className="flex items-center gap-[24px] md:gap-[40px]">
-        <Menu className="block lg:hidden cursor-pointer" size={24} style={{ color: colors.neutral[7] }} onClick={() => setIsAppDrawerOpen(!isAppDrawerOpen)} />
-        <LogoFgv onClick={() => navigateTo('dashboard')} isHighContrast={isHighContrast} colors={colors} />
+        <Menu className="block lg:hidden cursor-pointer" size={24} style={{ color: colors.neutral[7] }} />
 
+        <div className="flex items-center gap-[12px] cursor-pointer" onClick={() => navigateTo('dashboard')}>
+          <LogoFgv colors={colors} isHighContrast={isHighContrast} />
+        </div>
+
+        {/* Desktop Navigation */}
         {currentScreen === 'acompanhamento' && (
-          <nav className="hidden xl:flex items-center gap-[24px] text-[13px] font-bold">
-            <span className="cursor-pointer hover:underline" style={{ color: colors.neutral[5] }}>Relatórios</span>
+          <nav className="hidden lg:flex items-center gap-[32px] text-[14px] font-bold h-full">
+            <span className="cursor-pointer hover:underline" style={{ color: colors.neutral[5] }} onClick={() => navigateTo('dashboard')}>Dashboard</span>
+            <span className="cursor-pointer hover:underline" style={{ color: colors.neutral[5] }} onClick={() => navigateTo('generic')}>Módulos</span>
             <span className="cursor-pointer hover:underline" style={{ color: colors.neutral[5] }}>Devolutivas</span>
             <span className="cursor-pointer border-b-2 pb-[4px]" style={{ color: colors.primary.base, borderColor: colors.primary.base }}>Acompanhamento Escolar</span>
           </nav>
@@ -47,43 +53,33 @@ const Header = ({
         <div className="flex items-center gap-[4px] md:gap-[8px]">
           <Button variant="text" size="default" className="!normal-case !font-medium hidden md:flex" style={{ color: colors.neutral[6] }}><HelpCircle size={18} /> Ajuda</Button>
 
-          <div className="relative hidden lg:block">
-            <Button variant="text" iconOnly size="default" onClick={openGripDrawer} style={{ color: colors.neutral[6] }}><Grip size={20} /></Button>
-            {isAppDrawerOpen && (
-              <div className="absolute top-[100%] right-0 mt-[8px] w-[340px] p-[24px] rounded-[8px] shadow-2xl z-50 flex flex-col border" style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}>
-                <span className="text-[12px] font-bold mb-[16px] block" style={{ color: colors.neutral[5] }}>Plataformas CENPE</span>
-                <div className="grid grid-cols-3 gap-y-[16px] gap-x-[8px] mb-[16px]">
-                  {sidebarMenus.map((cat) => {
-                    const isActive = drawerActiveCat === cat.id;
-                    return (
-                      <div key={cat.id} onClick={() => setDrawerActiveCat(cat.id)} className="flex flex-col items-center p-[8px] rounded-[8px] cursor-pointer transition-colors" style={{ backgroundColor: isActive ? colors.primary.light : 'transparent' }}>
-                        <div className="w-[32px] h-[32px] flex justify-center items-center mb-[8px] rounded-[8px]" style={{ color: isActive ? colors.primary.extraDark : colors.primary.base }}>{cat.icon}</div>
-                        <span className="text-[10px] text-center font-bold leading-tight" style={{ color: isActive ? colors.primary.extraDark : colors.neutral[7] }}>{cat.label}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-                <hr className="mb-[16px]" style={{ borderColor: colors.neutral[2] }} />
-                <span className="text-[12px] font-bold mb-[12px] block" style={{ color: colors.neutral[5] }}>{sidebarMenus.find(m => m.id === drawerActiveCat)?.label}</span>
+          <div className="relative">
+            <Button
+              variant="text"
+              iconOnly
+              size="default"
+              onClick={openGripDrawer}
+              style={{
+                color: colors.neutral[6],
+                backgroundColor: isGripOpen ? colors.neutral[3] : 'transparent'
+              }}
+            >
+              <Grip size={20} />
+            </Button>
 
-                <div className="flex flex-col gap-[4px] mb-[24px] max-h-[220px] overflow-y-auto pr-[4px] custom-scrollbar">
-                  {sidebarMenus.find(m => m.id === drawerActiveCat)?.cards.map((card, idx) => {
-                    const isCardActive = currentScreen === card.route;
-                    return (
-                      <button key={idx} onClick={() => { navigateTo(card.route || 'empty-state', card.title); setIsAppDrawerOpen(false); }} className={`w-full text-left px-[16px] py-[10px] rounded-[4px] text-[13px] transition-colors ${isCardActive ? 'bg-[#008BC9] text-white font-bold' : 'bg-transparent text-[#008BC9] font-semibold hover:bg-[#008BC9] hover:text-white'}`}>
-                        {card.title}
-                      </button>
-                    )
-                  })}
-                </div>
-                <hr className="mb-[16px]" style={{ borderColor: colors.neutral[2] }} />
-                <Button variant="tertiary" size="default" className="w-full text-[13px]" onClick={() => { navigateTo('dashboard'); setIsAppDrawerOpen(false); }}>Voltar para Tela Inicial</Button>
-              </div>
-            )}
+            <GripMenu
+              colors={colors}
+              isGripOpen={isGripOpen}
+              setIsGripOpen={setIsGripOpen}
+              gripActiveTab={gripActiveTab}
+              setGripActiveTab={setGripActiveTab}
+              currentScreen={currentScreen}
+              navigateTo={navigateTo}
+            />
           </div>
 
           <div className="relative">
-            <Button variant="primary" iconOnly size="default" className="md:w-[40px] md:h-[40px] w-[32px] h-[32px]" onClick={() => { setIsA11yOpen(!isA11yOpen); setIsProfileOpen(false); setIsAppDrawerOpen(false); }}><Accessibility className="w-[18px] h-[18px] md:w-[20px] md:h-[20px]" /></Button>
+            <Button variant="primary" iconOnly size="default" className="md:w-[40px] md:h-[40px] w-[32px] h-[32px]" onClick={() => { setIsA11yOpen(!isA11yOpen); setIsProfileOpen(false); }}><Accessibility className="w-[18px] h-[18px] md:w-[20px] md:h-[20px]" /></Button>
             {isA11yOpen && (
               <div className="absolute top-[100%] right-0 mt-[8px] w-[260px] md:w-[280px] p-[16px] rounded-[8px] shadow-2xl z-50 flex flex-col gap-[16px] border" style={{ backgroundColor: isHighContrast ? colors.neutral[0] : '#003A79', color: '#FFF', borderColor: colors.neutral[3] }}>
                 <div className="flex items-center gap-[12px] cursor-pointer hover:bg-white/10 p-[8px] rounded-[8px] transition-colors"><div className="w-[24px] h-[24px] bg-white rounded-[4px] font-bold text-[12px] flex justify-center items-center" style={{ color: isHighContrast ? '#222' : '#003A79' }}>VL</div><span className="text-[13px] md:text-[14px] font-semibold">Tradutor de VLibras</span></div>
@@ -132,25 +128,20 @@ const Header = ({
               </div>
 
               {/* Links de Ação Rápida */}
-              <div className="py-[8px] flex flex-col">
-                <button className="w-full flex items-center gap-[12px] px-[20px] py-[12px] text-[14px] font-medium transition-colors hover:bg-black/5" style={{ color: colors.neutral[7] }}>
-                  <User size={18} style={{ color: colors.neutral[5] }} /> Meu Perfil
-                </button>
-                <button className="w-full flex items-center gap-[12px] px-[20px] py-[12px] text-[14px] font-medium transition-colors hover:bg-black/5" style={{ color: colors.neutral[7] }}>
-                  <Settings size={18} style={{ color: colors.neutral[5] }} /> Configurações
-                </button>
-                <button className="w-full flex items-center justify-between px-[20px] py-[12px] text-[14px] font-medium transition-colors hover:bg-black/5" style={{ color: colors.neutral[7] }}>
-                  <div className="flex items-center gap-[12px]">
-                    <Bell size={18} style={{ color: colors.neutral[5] }} /> Notificações
-                  </div>
-                  <span className="text-white text-[10px] font-bold px-[6px] py-[2px] rounded-full" style={{ backgroundColor: colors.primary.base }}>3</span>
+              <div className="py-[8px] flex flex-col gap-[4px]">
+                <button
+                  className="mx-[4px] flex items-center gap-[12px] px-[16px] py-[10px] text-[14px] font-medium transition-colors rounded-[8px] hover:bg-[var(--neutral-2)]"
+                  style={{ color: colors.neutral[7] }}
+                >
+                  <User size={18} style={{ color: colors.neutral[7] }} /> Meu Perfil
                 </button>
               </div>
 
               {/* Rodapé (Saída/Logout) */}
               <div className="border-t py-[8px]" style={{ borderColor: colors.neutral[2] }}>
                 <button
-                  className="w-full flex items-center gap-[12px] px-[20px] py-[12px] text-[14px] font-semibold text-red-600 transition-colors hover:bg-red-50"
+                  className="mx-[4px] w-[calc(100%-8px)] flex items-center gap-[12px] px-[16px] py-[10px] text-[14px] font-medium transition-colors rounded-[8px] hover:bg-[var(--neutral-2)]"
+                  style={{ color: colors.neutral[7] }}
                   onClick={() => { closeAllDropdowns(); setIsLoggedIn(false); setUsername(''); setPassword(''); setSearchQuery(''); setFontScale(3); setIsHighContrast(false); setCurrentScreen('dashboard'); }}
                 >
                   <LogOut size={18} /> Sair da conta

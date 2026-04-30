@@ -38,8 +38,8 @@ export default function MapearApp() {
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isA11yOpen, setIsA11yOpen] = useState(false);
-  const [isAppDrawerOpen, setIsAppDrawerOpen] = useState(false);
-  const [drawerActiveCat, setDrawerActiveCat] = useState('curriculos');
+  const [isGripOpen, setIsGripOpen] = useState(false);
+  const [gripActiveTab, setGripActiveTab] = useState('curriculos');
 
   const [activeSaberesTab, setActiveSaberesTab] = useState(0);
   const [activeCurriculosTab, setActiveCurriculosTab] = useState(0);
@@ -92,7 +92,7 @@ export default function MapearApp() {
   const closeAllDropdowns = () => {
     setIsProfileOpen(false);
     setIsA11yOpen(false);
-    setIsAppDrawerOpen(false);
+    setIsGripOpen(false);
   };
 
   const navigateTo = (screen, moduleName = '') => {
@@ -112,15 +112,15 @@ export default function MapearApp() {
   };
 
   const openGripDrawer = () => {
-    let targetCat = drawerActiveCat;
+    let targetCat = gripActiveTab;
     if (currentScreen === 'saberes' || currentScreen === 'curriculos') targetCat = 'curriculos';
     else if (currentScreen === 'avaliacoes') targetCat = 'avaliacoes';
     else if (currentScreen === 'acompanhamento') targetCat = 'analise';
     else if (currentScreen === 'usuarios') targetCat = 'administracao';
     else targetCat = activeMenu;
 
-    setDrawerActiveCat(targetCat);
-    setIsAppDrawerOpen(!isAppDrawerOpen);
+    setGripActiveTab(targetCat);
+    setIsGripOpen(!isGripOpen);
     setIsA11yOpen(false);
     setIsProfileOpen(false);
   };
@@ -177,11 +177,12 @@ export default function MapearApp() {
         isHighContrast={isHighContrast}
         setIsHighContrast={setIsHighContrast}
         currentScreen={currentScreen}
+        currentScreen={currentScreen}
         navigateTo={navigateTo}
-        isAppDrawerOpen={isAppDrawerOpen}
-        setIsAppDrawerOpen={setIsAppDrawerOpen}
-        drawerActiveCat={drawerActiveCat}
-        setDrawerActiveCat={setDrawerActiveCat}
+        isGripOpen={isGripOpen}
+        setIsGripOpen={setIsGripOpen}
+        gripActiveTab={gripActiveTab}
+        setGripActiveTab={setGripActiveTab}
         isA11yOpen={isA11yOpen}
         setIsA11yOpen={setIsA11yOpen}
         isProfileOpen={isProfileOpen}
@@ -197,7 +198,7 @@ export default function MapearApp() {
         openGripDrawer={openGripDrawer}
       />
 
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${currentScreen === 'devolutivas' ? 'overflow-hidden' : ''}`} onClick={() => { if (isAppDrawerOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
+      <div className={`flex-1 flex flex-col transition-all duration-300 ${currentScreen === 'devolutivas' ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
         {currentScreen === 'dashboard' && (
           <Dashboard
             colors={colors}
