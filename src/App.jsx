@@ -177,7 +177,6 @@ export default function MapearApp() {
         isHighContrast={isHighContrast}
         setIsHighContrast={setIsHighContrast}
         currentScreen={currentScreen}
-        currentScreen={currentScreen}
         navigateTo={navigateTo}
         isGripOpen={isGripOpen}
         setIsGripOpen={setIsGripOpen}
