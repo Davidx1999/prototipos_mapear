@@ -31,7 +31,7 @@ export const mockRelacoes = [
 ];
 
 export const mockUsuarios = [
-  { id: 1, user: 'salviano', name: 'David Salviano', email: 'davidsalviano@gmail.com', role: 'ADM' },
+  { id: 1, user: 'salviano', name: 'David Salviano', email: 'davidsalviano52@gmail.com', role: 'ADM' },
   { id: 2, user: 'torres.yanna', name: 'Yanna Gonçalves', email: 'yannatorres@gmail.com', role: 'ADM' },
   { id: 3, user: 'user.name.very.long', name: 'Dom Pedro de Alcântara João Carlos', email: 'email.extremamente.longo@instituicao.gov.br', role: 'COORDENADOR' }
 ];

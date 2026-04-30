@@ -127,7 +127,7 @@ const Header = ({
                 <div className="flex flex-col overflow-hidden">
                   <span className="block text-[15px] font-bold truncate" style={{ color: colors.neutral[7] }}>David Salviano</span>
                   <span className="block text-[12px] font-medium truncate" style={{ color: colors.primary.base }}>Gestor Educacional</span>
-                  <span className="block text-[11px] truncate mt-[2px]" style={{ color: colors.neutral[5] }}>davidsalviano@gmail.com</span>
+                  <span className="block text-[11px] truncate mt-[2px]" style={{ color: colors.neutral[5] }}>davidsalviano52@gmail.com</span>
                 </div>
               </div>
 
