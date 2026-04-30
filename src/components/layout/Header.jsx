@@ -70,7 +70,7 @@ const Header = ({
                   {sidebarMenus.find(m => m.id === drawerActiveCat)?.cards.map((card, idx) => {
                     const isCardActive = currentScreen === card.route;
                     return (
-                      <button key={idx} onClick={() => { if (card.route) navigateTo(card.route); else { navigateTo('dashboard'); } setIsAppDrawerOpen(false); }} className={`w-full text-left px-[16px] py-[10px] rounded-[4px] text-[13px] transition-colors ${isCardActive ? 'bg-[#008BC9] text-white font-bold' : 'bg-transparent text-[#008BC9] font-semibold hover:bg-[#008BC9] hover:text-white'}`}>
+                      <button key={idx} onClick={() => { navigateTo(card.route || 'empty-state', card.title); setIsAppDrawerOpen(false); }} className={`w-full text-left px-[16px] py-[10px] rounded-[4px] text-[13px] transition-colors ${isCardActive ? 'bg-[#008BC9] text-white font-bold' : 'bg-transparent text-[#008BC9] font-semibold hover:bg-[#008BC9] hover:text-white'}`}>
                         {card.title}
                       </button>
                     )

@@ -20,10 +20,12 @@ import Acompanhamento from './components/screens/Acompanhamento';
 import Devolutivas from './components/screens/Devolutivas';
 import RegistroPresenca from './components/screens/RegistroPresenca';
 import GenericModulePage from './components/screens/GenericModulePage';
+import EmptyStatePage from './components/screens/EmptyStatePage';
 
 export default function MapearApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('dashboard');
+  const [activeModuleName, setActiveModuleName] = useState('');
 
   const [activeMenu, setActiveMenu] = useState('curriculos');
   const [hoveredMenu, setHoveredMenu] = useState(null);
@@ -93,7 +95,8 @@ export default function MapearApp() {
     setIsAppDrawerOpen(false);
   };
 
-  const navigateTo = (screen) => {
+  const navigateTo = (screen, moduleName = '') => {
+    setActiveModuleName(moduleName);
     setCurrentScreen(screen);
     setShowAlert(false);
     setExpandedItem(null);
@@ -275,6 +278,13 @@ export default function MapearApp() {
           <GenericModulePage
             colors={colors}
             navigateTo={navigateTo}
+          />
+        )}
+        {currentScreen === 'empty-state' && (
+          <EmptyStatePage
+            colors={colors}
+            navigateTo={navigateTo}
+            title={activeModuleName}
           />
         )}
       </div>

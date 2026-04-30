@@ -224,7 +224,7 @@ const Dashboard = ({
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.borderColor = colors.primary.base}
                     onMouseLeave={(e) => e.currentTarget.style.borderColor = colors.neutral[2]}
-                    onClick={() => navigateTo(card.route || 'generic')}
+                    onClick={() => navigateTo(card.route || 'empty-state', card.title)}
                   >
 
                     <div className="flex justify-between items-start mb-[16px]">
