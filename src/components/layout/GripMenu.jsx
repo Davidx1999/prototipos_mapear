@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, LayoutGrid, Columns, House } from 'lucide-react';
 import { sidebarMenus } from '../../data/constants';
+import Button from '../ui/Button';
 
 const GripMenu = ({
   colors,
@@ -29,23 +30,24 @@ const GripMenu = ({
         {/* Topo: Categorias Master ou Toggle de Visualização */}
         <div className="w-full bg-white border-b border-[#DEE1E8] relative flex items-center justify-between px-[24px]">
           <div className="flex-1 flex items-center gap-[16px]">
-            <button
-              onClick={() => { navigateTo('dashboard'); setIsGripOpen(false); }}
-              className="flex items-center gap-[8px] py-[8px] px-[12px] rounded-[8px] text-[13px] font-bold transition-all border-r pr-[20px] mr-[4px]"
-              style={{ color: colors.neutral[6] }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = colors.neutral[2]; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-            >
-              <House size={18} />
-              <span>Início</span>
-            </button>
-
             <div className="py-[16px]">
               <h2 className="text-[14px] font-bold text-[#1D2432]">Ferramentas do Mapear</h2>
             </div>
           </div>
 
           <div className="flex items-center gap-[4px] ml-[16px] py-[8px]">
+            <Button 
+              variant="tertiary" 
+              size="sm" 
+              className="flex items-center gap-[8px] h-[32px] !text-[12px] !px-[12px] !rounded-[8px]"
+              onClick={() => { navigateTo('dashboard'); setIsGripOpen(false); }}
+            >
+              <House size={16} />
+              <span>Início</span>
+            </Button>
+
+            <div className="w-[1px] h-[20px] bg-[#DEE1E8] mx-[8px]" />
+
             <button
               onClick={() => setViewMode('tabs')}
               className={`p-[6px] rounded-[6px] transition-all ${viewMode === 'tabs' ? 'bg-[#DEE1E8] text-[#008BC9]' : 'text-[#969DA9] hover:bg-gray-50'}`}
@@ -64,10 +66,10 @@ const GripMenu = ({
         </div>
 
         <div className="w-full bg-[#FCFDFD] overflow-y-auto max-h-[70vh] custom-scrollbar">
-          <div className={`w-full px-[24px] ${viewMode === 'tabs' ? 'pt-[4px] pb-[40px]' : 'pt-[16px] pb-[40px]'}`}>
+          <div className={`w-full ${viewMode === 'tabs' ? 'pt-[4px] pb-[40px]' : 'pt-[16px] pb-[40px]'}`}>
             {viewMode === 'tabs' ? (
               <>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-0 mb-[32px] border-b border-[#DEE1E8] mx-[-24px]">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-0 mb-[32px] border-b border-[#DEE1E8]">
                   {sidebarMenus.map((menu) => {
                     const isActive = gripActiveTab === menu.id;
                     return (
@@ -93,7 +95,7 @@ const GripMenu = ({
                   })}
                 </div>
 
-                <div key={gripActiveTab} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[16px] md:gap-[20px]">
+                <div key={gripActiveTab} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[16px] md:gap-[20px] px-[24px]">
                   {sidebarMenus.find(m => m.id === gripActiveTab)?.cards.map((card, index) => {
                     const isCardActive = currentScreen === (card.route || card.title);
 
@@ -138,17 +140,18 @@ const GripMenu = ({
                 </div>
               </>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[12px] md:gap-[16px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-0 animate-fade-slide mt-[-16px] mb-[-40px]">
                 {sidebarMenus.map((menu, index) => (
                   <div
                     key={menu.id}
-                    className="flex flex-col gap-[16px] animate-fade-slide-stagger"
+                    className={`flex flex-col gap-[16px] animate-fade-slide-stagger pt-[16px] pb-[40px] ${index !== sidebarMenus.length - 1 ? 'lg:border-r' : ''}`}
                     style={{
+                      borderColor: '#DEE1E8',
                       animationDelay: `${index * 60}ms`,
                       animationFillMode: 'both'
                     }}
                   >
-                    <div className="flex items-center gap-[10px] pb-[8px] border-b border-[#DEE1E8]">
+                    <div className="flex items-center gap-[10px] pb-[8px] px-[24px] border-b border-[#DEE1E8]">
                       <div style={{ color: colors.primary.dark }}>
                         {React.cloneElement(menu.icon, { size: 16, strokeWidth: 2.5 })}
                       </div>
@@ -163,14 +166,14 @@ const GripMenu = ({
                           <div
                             key={card.id}
                             onClick={() => { navigateTo(card.route || 'empty-state', card.title); setIsGripOpen(false); }}
-                            className={`group flex items-center gap-[10px] cursor-pointer py-[8px] px-[8px] rounded-[6px] transition-all hover:bg-[#DEE1E8]`}
-                            style={{
+                            className={`group flex items-center gap-[12px] cursor-pointer py-[10px] px-[24px] transition-all hover:bg-[#DEE1E8]`}
+                            style={{ 
                               color: isCardActive ? colors.primary.dark : colors.neutral[7]
                             }}
                           >
-                            <div
+                            <div 
                               className={`w-[6px] h-[6px] rounded-full shrink-0 transition-all ${isCardActive ? '' : 'bg-transparent group-hover:bg-[#008BC9]'}`}
-                              style={{
+                              style={{ 
                                 backgroundColor: isCardActive ? colors.primary.dark : undefined
                               }}
                             />
