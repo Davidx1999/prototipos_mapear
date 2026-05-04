@@ -113,12 +113,12 @@ export default function RegistroPresenca({ colors, navigateTo }) {
   const allMarked = db.alunos.length > 0 && Object.keys(presenceList).length === db.alunos.length;
 
   return (
-    <div className="flex-1 w-full bg-[#F7F8FA] min-h-screen">
+    <div className="flex-1 w-full bg-neutral-1 min-h-screen">
       <main className="max-w-[1000px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[40px] pb-[160px] md:pb-[100px]">
 
         <div className="mb-[24px] md:mb-[32px] animate-fade-slide">
-          <span className="text-[12px] md:text-[13px] font-bold text-[#008BC9] tracking-widest uppercase">Aplicação em Andamento</span>
-          <h1 className="text-[24px] md:text-[32px] font-black text-neutral-700 mt-[4px] md:mt-[8px] leading-tight font-montserrat">Registro de Presença</h1>
+          <span className="text-[12px] md:text-[13px] font-bold text-primary-base tracking-widest uppercase">Aplicação em Andamento</span>
+          <h1 className="text-[24px] md:text-[32px] font-black text-neutral-6 mt-[4px] md:mt-[8px] leading-tight font-montserrat">Registro de Presença</h1>
         </div>
 
         {/* SELETOR EM CASCATA */}
@@ -133,7 +133,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
 
         {/* Toast Sucesso Flutuante */}
         {isSaved && (
-          <div className="fixed top-[80px] md:top-[100px] left-1/2 -translate-x-1/2 z-[60] bg-neutral-700 text-white px-[24px] py-[14px] rounded-[8px] md:rounded-full shadow-2xl flex items-center gap-[12px] animate-fade-slide w-[90%] md:w-auto justify-center max-w-[400px]">
+          <div className="fixed top-[80px] md:top-[100px] left-1/2 -translate-x-1/2 z-[60] bg-neutral-6 text-white px-[24px] py-[14px] rounded-[8px] md:rounded-full shadow-2xl flex items-center gap-[12px] animate-fade-slide w-[90%] md:w-auto justify-center max-w-[400px]">
             <CheckCircle className="text-green-400 w-[20px] h-[20px]" />
             <span className="font-bold text-[14px] md:text-[15px]">Chamada enviada com sucesso!</span>
           </div>
@@ -142,21 +142,21 @@ export default function RegistroPresenca({ colors, navigateTo }) {
         {/* LISTA DE ALUNOS */}
         <div id="student-list-container">
           {!filters.avaliacaoId ? (
-            <div className="bg-white rounded-[8px] border border-neutral-200 py-[48px] px-[24px] flex flex-col items-center justify-center text-center shadow-sm">
-              <div className="w-[64px] h-[64px] rounded-full bg-neutral-100 flex items-center justify-center mb-[16px]">
-                <ClipboardList className="text-neutral-400 w-[32px] h-[32px]" />
+            <div className="bg-neutral-0 rounded-[8px] border border-neutral-2 py-[48px] px-[24px] flex flex-col items-center justify-center text-center shadow-sm">
+              <div className="w-[64px] h-[64px] rounded-full bg-neutral-1 flex items-center justify-center mb-[16px]">
+                <ClipboardList className="text-neutral-4 w-[32px] h-[32px]" />
               </div>
-              <h3 className="text-[18px] md:text-[20px] font-bold text-neutral-700 mb-[8px]">Nenhuma lista ativa</h3>
-              <p class="text-[14px] text-neutral-600 max-w-[400px] leading-relaxed">Utilize o seletor acima para encontrar a escola, turma e a avaliação correspondente para carregar a lista de presença.</p>
+              <h3 className="text-[18px] md:text-[20px] font-bold text-neutral-6 mb-[8px]">Nenhuma lista ativa</h3>
+              <p class="text-[14px] text-neutral-5 max-w-[400px] leading-relaxed">Utilize o seletor acima para encontrar a escola, turma e a avaliação correspondente para carregar a lista de presença.</p>
             </div>
           ) : (
-            <div className="bg-white rounded-[8px] border border-neutral-200 shadow-sm overflow-hidden animate-fade-slide mb-[24px]">
-              <div className="p-[20px] md:p-[24px] border-b border-neutral-200 flex flex-col md:flex-row justify-between md:items-center gap-[16px] bg-white">
+            <div className="bg-neutral-0 rounded-[8px] border border-neutral-2 shadow-sm overflow-hidden animate-fade-slide mb-[24px]">
+              <div className="p-[20px] md:p-[24px] border-b border-neutral-2 flex flex-col md:flex-row justify-between md:items-center gap-[16px] bg-neutral-0">
                 <div>
-                  <h2 className="text-[18px] md:text-[20px] font-bold text-neutral-700 flex items-center gap-[8px]">
-                    <Users className="text-[#008BC9] w-[22px] h-[22px]" /> Lista de Chamada
+                  <h2 className="text-[18px] md:text-[20px] font-bold text-neutral-6 flex items-center gap-[8px]">
+                    <Users className="text-primary-base w-[22px] h-[22px]" /> Lista de Chamada
                   </h2>
-                  <p className="text-[13px] text-neutral-600 mt-[6px] leading-tight">Alocados para: <strong className="text-[#003A79]">{filters.avaliacaoNome}</strong></p>
+                  <p className="text-[13px] text-neutral-5 mt-[6px] leading-tight">Alocados para: <strong className="text-[#003A79]">{filters.avaliacaoNome}</strong></p>
                 </div>
 
                 <div className="flex items-center gap-[12px] w-full md:w-auto">
@@ -171,19 +171,19 @@ export default function RegistroPresenca({ colors, navigateTo }) {
                 </div>
               </div>
 
-              <div className="flex flex-col divide-y divide-neutral-200">
+              <div className="flex flex-col divide-y divide-neutral-2">
                 {db.alunos.map((aluno, index) => {
                   const status = presenceList[aluno.id];
                   return (
-                    <div key={aluno.id} className="flex flex-col lg:flex-row lg:items-center justify-between p-[16px] md:p-[20px] gap-[12px] md:gap-[16px] hover:bg-neutral-50 transition-colors">
+                    <div key={aluno.id} className="flex flex-col lg:flex-row lg:items-center justify-between p-[16px] md:p-[20px] gap-[12px] md:gap-[16px] hover:bg-neutral-1 transition-colors">
                       <div className="flex items-center gap-[12px] md:gap-[16px]">
-                        <div className="font-bold text-neutral-400 text-[12px] md:text-[14px] w-[24px] text-center">{String(index + 1).padStart(2, '0')}</div>
-                        <div className="w-[36px] h-[36px] md:w-[40px] md:h-[40px] rounded-full bg-neutral-200 flex items-center justify-center text-[13px] md:text-[14px] font-bold text-neutral-600 shrink-0">
+                        <div className="font-bold text-neutral-4 text-[12px] md:text-[14px] w-[24px] text-center">{String(index + 1).padStart(2, '0')}</div>
+                        <div className="w-[36px] h-[36px] md:w-[40px] md:h-[40px] rounded-full bg-neutral-2 flex items-center justify-center text-[13px] md:text-[14px] font-bold text-neutral-5 shrink-0">
                           {aluno.nome.charAt(0)}
                         </div>
                         <div className="flex flex-col">
-                          <span className="font-bold text-neutral-700 text-[14px] md:text-[15px] leading-tight">{aluno.nome}</span>
-                          <span className="text-[12px] text-neutral-500 font-medium mt-[2px]">Matrícula: {aluno.matricula}</span>
+                          <span className="font-bold text-neutral-6 text-[14px] md:text-[15px] leading-tight">{aluno.nome}</span>
+                          <span className="text-[12px] text-neutral-5 font-medium mt-[2px]">Matrícula: {aluno.matricula}</span>
                         </div>
                       </div>
 
@@ -197,7 +197,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
                             checked={status === 'ausente'}
                             onChange={() => setPresence(aluno.id, 'ausente')}
                           />
-                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'ausente' ? 'bg-red-500 text-white border-red-500 shadow-md' : 'bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-100'}`}>
+                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'ausente' ? 'bg-red-500 text-white border-red-500 shadow-md' : 'bg-neutral-0 border-neutral-3 text-neutral-5 hover:bg-neutral-1'}`}>
                             <XCircle size={18} /> Falta
                           </div>
                         </label>
@@ -210,7 +210,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
                             checked={status === 'presente'}
                             onChange={() => setPresence(aluno.id, 'presente')}
                           />
-                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'presente' ? 'bg-green-500 text-white border-green-500 shadow-md' : 'bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-100'}`}>
+                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'presente' ? 'bg-green-500 text-white border-green-500 shadow-md' : 'bg-neutral-0 border-neutral-3 text-neutral-5 hover:bg-neutral-1'}`}>
                             <CheckCircle2 size={18} /> Presente
                           </div>
                         </label>
@@ -225,7 +225,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
       </main>
 
       {/* FOOTER FIXO */}
-      <div className={`fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 p-[16px] pb-[calc(16px+env(safe-area-inset-bottom))] md:px-[32px] md:py-[20px] flex flex-col md:flex-row justify-between md:items-center gap-[12px] md:gap-[16px] z-30 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] transition-transform duration-500 ${filters.avaliacaoId ? 'translate-y-0' : 'translate-y-full'}`}>
+      <div className={`fixed bottom-0 left-0 right-0 bg-neutral-0 border-t border-neutral-2 p-[16px] pb-[calc(16px+env(safe-area-inset-bottom))] md:px-[32px] md:py-[20px] flex flex-col md:flex-row justify-between md:items-center gap-[12px] md:gap-[16px] z-30 shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] transition-transform duration-500 ${filters.avaliacaoId ? 'translate-y-0' : 'translate-y-full'}`}>
         <div className="flex items-center w-full md:w-auto">
           {allMarked ? (
             <div className="flex items-center gap-[8px] text-green-700 bg-green-50 px-[16px] py-[10px] md:py-[8px] rounded-[8px] md:rounded-full border border-green-200 w-full md:w-auto justify-center">

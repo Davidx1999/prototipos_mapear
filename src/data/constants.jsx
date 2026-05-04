@@ -19,7 +19,7 @@ import {
 export const sidebarMenus = [
   {
     id: 'curriculos',
-    label: 'Currículos e Conteúdos',
+    label: 'Matrizes e Conteúdos',
     shortDesc: 'Configure as matrizes e conteúdos',
     icon: <Library size={24} />,
     cards: [
@@ -30,13 +30,13 @@ export const sidebarMenus = [
   },
   {
     id: 'avaliacoes',
-    label: 'Avaliações',
-    shortDesc: 'Gerenciamento de avaliações',
+    label: 'Gestão de Avaliações',
+    shortDesc: 'Ciclo completo de avaliações',
     icon: <Edit3 size={24} />, // Note: Edit3 was in the original imports but might need checking
     cards: [
       { id: 'card-editor-av', title: 'Editor de Avaliações', route: 'avaliacoes', keywords: ['prova', 'teste', 'exame', 'criar', 'caderno'], desc: 'Estruture cadernos, blocos de itens e defina todos os parâmetros para aplicação de novas provas.', icon: <PenTool size={20} /> },
-      { id: 'card-alocacao', title: 'Alocação de Avaliações', keywords: ['alunos', 'professores', 'turmas', 'enviar prova', 'distribuir'], desc: 'Distribua as provas criadas associando os testes a turmas ou grupos específicos de estudantes.', icon: <Users size={20} /> },
       { id: 'card-banco', title: 'Banco de Tarefas', keywords: ['questões', 'itens', 'perguntas', 'banco', 'repositório'], desc: 'Acesse e colabore em tarefas educacionais mantendo uma curadoria técnica de excelência pedagógica.', icon: <Database size={20} /> },
+      { id: 'card-alocacao', title: 'Alocação de Avaliações', keywords: ['alunos', 'professores', 'turmas', 'enviar prova', 'distribuir'], desc: 'Distribua as provas criadas associando os testes a turmas ou grupos específicos de estudantes.', icon: <Users size={20} /> },
       { id: 'card-correcao', title: 'Correção de Avaliações', keywords: ['corrigir', 'ia', 'respostas', 'alunos', 'inteligência artificial'], desc: 'Utilize inteligência artificial para agrupar respostas e otimizar a velocidade de correção manual.', icon: <CheckSquare size={20} /> },
       { id: 'card-metricas', title: 'Métricas', keywords: ['desempenho', 'notas', 'alunos', 'escolas', 'indicadores'], desc: 'Acompanhe métricas gerais de correção e tenha a visão do status atual de estudantes e turmas.', icon: <TrendingUp size={20} /> },
       { id: 'card-upload', title: 'Carregamento', keywords: ['upload', 'pdf', 'scanner', 'digitalizar', 'alunos', 'htr'], desc: 'Faça upload de provas físicas e valide a leitura de respostas manuscritas via tecnologia HTR.', icon: <UploadCloud size={20} /> }
@@ -44,8 +44,8 @@ export const sidebarMenus = [
   },
   {
     id: 'analise',
-    label: 'Análise & Resultados',
-    shortDesc: 'Relatórios e Psicometrias',
+    label: 'Resultados & Indicadores',
+    shortDesc: 'Análise de relatórios e psicométricos',
     icon: <PieChart size={24} />,
     cards: [
       { id: 'card-relatorios', title: 'Relatórios', keywords: ['notas', 'alunos', 'resultados', 'ranking', 'boletim'], desc: 'Acesse análises e rankings com indicadores consolidados de proficiência de toda a rede de ensino.', icon: <BarChart2 size={20} /> },
@@ -56,7 +56,7 @@ export const sidebarMenus = [
   },
   {
     id: 'realizacao',
-    label: 'Realização de Testes',
+    label: 'Ambiente do Estudante',
     shortDesc: 'Ambiente dedicado aos estudantes',
     icon: <GraduationCap size={24} />,
     cards: [
@@ -66,7 +66,7 @@ export const sidebarMenus = [
   },
   {
     id: 'administracao',
-    label: 'Administração',
+    label: 'Controle Institucional',
     shortDesc: 'Usuários, escolas e turmas',
     icon: <UserCog size={24} />,
     cards: [
@@ -82,7 +82,7 @@ export const launcherApps = [
   { id: 'app-avaliacoes', route: 'avaliacoes', label: 'Edição de Avaliações', icon: <PenTool size={24} /> },
   { id: 'app-correcao', label: 'Correção de Avaliações', icon: <CheckSquare size={24} /> },
   { id: 'app-conteudos', label: 'Edição de Conteúdos', icon: <FileEdit size={24} /> },
-  { id: 'app-admin', route: 'usuarios', label: 'Administração de Turmas', icon: <UserCog size={24} /> },
+  { id: 'app-admin', route: 'usuarios', label: 'Controle Institucional de Turmas', icon: <UserCog size={24} /> },
   { id: 'app-relatorios', route: 'acompanhamento', label: 'Relatórios e Devolutivas', icon: <LayoutDashboard size={24} /> },
   { id: 'app-realizacao', label: 'Realização de Avaliações', icon: <BookCheck size={24} /> }
 ];

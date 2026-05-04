@@ -14,11 +14,11 @@ export default function HeatmapTooltip({ tooltipData, statusColors }) {
         <span className="font-bold text-[11px] uppercase tracking-wider text-gray-300">Dados Intersecção</span>
       </div>
       <div className="flex justify-between items-center mb-2 gap-4">
-        <span className="text-gray-400 font-medium text-[12px]">Aluno</span>
+        <span className="text-neutral-4 font-medium text-[12px]">Aluno</span>
         <span className="font-bold text-[13px] truncate text-right">{tooltipData.aluno}</span>
       </div>
       <div className="flex justify-between items-center mb-4 gap-4">
-        <span className="text-gray-400 font-medium text-[12px]">Item Curricular</span>
+        <span className="text-neutral-4 font-medium text-[12px]">Item Curricular</span>
         <span className="font-bold text-[13px]">{tooltipData.questao}</span>
       </div>
       <div

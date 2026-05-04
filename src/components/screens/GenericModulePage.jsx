@@ -18,10 +18,12 @@ const GenericModulePage = ({ colors, navigateTo }) => {
         </div>
         <Button 
           variant="secondary" 
+          size="md"
+          iconLeft={<Home />}
           onClick={() => navigateTo('dashboard')}
           className="md:self-start"
         >
-          <Home size={18} /> Voltar para Tela Inicial
+          Voltar para Tela Inicial
         </Button>
       </div>
 
@@ -29,17 +31,17 @@ const GenericModulePage = ({ colors, navigateTo }) => {
         {sidebarMenus.map((menu) => (
           <div 
             key={menu.id}
-            className="p-[24px] rounded-[12px] border bg-white flex flex-col h-full shadow-sm hover:shadow-md transition-all duration-300 group"
+            className="p-[24px] rounded-[12px] border bg-neutral-0 flex flex-col h-full shadow-sm hover:shadow-md transition-all duration-300 group"
             style={{ borderColor: colors.neutral[2] }}
           >
             <div className="flex items-center gap-[16px] mb-[20px]">
               <div 
-                className="w-[48px] h-[48px] rounded-[10px] flex items-center justify-center transition-colors group-hover:bg-[#E5F3F9] group-hover:text-[#008BC9]" 
+                className="w-[48px] h-[48px] rounded-[10px] flex items-center justify-center transition-colors group-hover:bg-primary-light group-hover:text-primary-base" 
                 style={{ backgroundColor: colors.neutral[1], color: colors.neutral[5] }}
               >
                 {menu.icon}
               </div>
-              <h2 className="text-[18px] font-bold transition-colors group-hover:text-[#008BC9]" style={{ color: colors.neutral[7] }}>
+              <h2 className="text-[18px] font-bold transition-colors group-hover:text-primary-base" style={{ color: colors.neutral[7] }}>
                 {menu.label}
               </h2>
             </div>
@@ -49,18 +51,18 @@ const GenericModulePage = ({ colors, navigateTo }) => {
                 <button
                   key={card.id}
                   onClick={() => card.route ? navigateTo(card.route) : null}
-                  className="flex items-center justify-between p-[12px] rounded-[8px] text-left hover:bg-gray-50 transition-colors group/item"
+                  className="flex items-center justify-between p-[12px] rounded-[8px] text-left hover:bg-neutral-1 transition-colors group/item"
                   style={{ color: colors.neutral[6] }}
                 >
                   <div className="flex items-center gap-[12px]">
-                    <div className="text-gray-400 group-hover/item:text-[#008BC9] transition-colors">
+                    <div className="text-neutral-4 group-hover/item:text-primary-base transition-colors">
                       {card.icon}
                     </div>
-                    <span className="text-[14px] font-semibold group-hover/item:text-[#008BC9] transition-colors">
+                    <span className="text-[14px] font-semibold group-hover/item:text-primary-base transition-colors">
                       {card.title}
                     </span>
                   </div>
-                  <ChevronRight size={16} className="text-gray-300 group-hover/item:text-[#008BC9] transition-colors" />
+                  <ChevronRight size={16} className="text-gray-300 group-hover/item:text-primary-base transition-colors" />
                 </button>
               ))}
             </div>

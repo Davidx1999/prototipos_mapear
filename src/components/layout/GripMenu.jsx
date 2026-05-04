@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, LayoutGrid, Columns, House } from 'lucide-react';
+import { X, LayoutGrid, List, House } from 'lucide-react';
 import { sidebarMenus } from '../../data/constants';
 import Button from '../ui/Button';
 
@@ -13,6 +13,7 @@ const GripMenu = ({
   navigateTo
 }) => {
   const [viewMode, setViewMode] = useState('tabs'); // 'tabs' or 'list'
+  const [hoveredTabId, setHoveredTabId] = useState(null);
 
   if (!isGripOpen) return null;
 
@@ -25,77 +26,114 @@ const GripMenu = ({
       />
 
       {/* Painel centralizado e harmonizado com o botão Grip */}
-      <div className="fixed top-[72px] left-[88px] right-[88px] md:left-[164px] md:right-[164px] bg-white shadow-[0_24px_50px_rgba(0,0,0,0.1)] z-[100] border border-[#DEE1E8] flex flex-col origin-top animate-slide-down-full rounded-b-[8px] rounded-t-none overflow-hidden">
+      <div
+        className="fixed top-[72px] left-[16px] right-[16px] md:left-[40px] md:right-[40px] lg:left-[24px] lg:right-[24px] xl:left-[164px] xl:right-[164px] shadow-[0_24px_50px_rgba(0,0,0,0.1)] z-[100] border flex flex-col origin-top animate-slide-down-full rounded-b-[8px] rounded-t-none overflow-hidden"
+        style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}
+      >
 
         {/* Topo: Categorias Master ou Toggle de Visualização */}
-        <div className="w-full bg-white border-b border-[#DEE1E8] relative flex items-center justify-between px-[24px]">
+        <div
+          className="w-full border-b relative flex items-center justify-between px-[24px]"
+          style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}
+        >
           <div className="flex-1 flex items-center gap-[16px]">
             <div className="py-[16px]">
-              <h2 className="text-[14px] font-bold text-[#1D2432]">Ferramentas do Mapear</h2>
+              <h2 className="text-[14px] font-bold" style={{ color: colors.neutral[6] }}>Ferramentas do Mapear</h2>
             </div>
           </div>
 
           <div className="flex items-center gap-[4px] ml-[16px] py-[8px]">
-            <Button 
-              variant="tertiary" 
-              size="sm" 
-              className="flex items-center gap-[8px] h-[32px] !text-[12px] !px-[12px] !rounded-[8px]"
+            <Button
+              variant="tertiary"
+              appearance="solid"
+              size="sm"
+              tertiaryTone="high"
+              iconLeft={<House />}
               onClick={() => { navigateTo('dashboard'); setIsGripOpen(false); }}
             >
-              <House size={16} />
-              <span>Início</span>
+              Início
             </Button>
 
-            <div className="w-[1px] h-[20px] bg-[#DEE1E8] mx-[8px]" />
+            <div className="w-[1px] h-[20px] mx-[8px]" style={{ backgroundColor: colors.neutral[2] }} />
 
-            <button
+            <Button
+              variant="tertiary"
+              appearance="ghost"
+              iconOnly
+              size="sm"
+              tertiaryTone="medium"
+              iconLeft={<LayoutGrid />}
               onClick={() => setViewMode('tabs')}
-              className={`p-[6px] rounded-[6px] transition-all ${viewMode === 'tabs' ? 'bg-[#DEE1E8] text-[#008BC9]' : 'text-[#969DA9] hover:bg-gray-50'}`}
+              className={viewMode === 'tabs' ? 'bg-[var(--neutral-3)] !text-[var(--neutral-6)]' : '!text-[var(--neutral-5)]'}
               title="Visualização por Abas"
-            >
-              <LayoutGrid size={18} />
-            </button>
-            <button
+            />
+
+            <Button
+              variant="tertiary"
+              appearance="ghost"
+              iconOnly
+              size="sm"
+              tertiaryTone={viewMode === 'list' ? 'high' : 'medium'}
+              iconLeft={<List />}
               onClick={() => setViewMode('list')}
-              className={`p-[6px] rounded-[6px] transition-all ${viewMode === 'list' ? 'bg-[#DEE1E8] text-[#008BC9]' : 'text-[#969DA9] hover:bg-gray-50'}`}
+              className={viewMode === 'list' ? 'bg-[var(--neutral-3)]' : ''}
               title="Visualização em Lista"
-            >
-              <Columns size={18} />
-            </button>
+            />
           </div>
         </div>
 
-        <div className="w-full bg-[#FCFDFD] overflow-y-auto max-h-[70vh] custom-scrollbar">
+        <div
+          className="w-full overflow-y-auto max-h-[calc(100vh-120px)] md:max-h-[70vh] custom-scrollbar"
+          style={{ backgroundColor: colors.neutral[0] }}
+        >
           <div className={`w-full ${viewMode === 'tabs' ? 'pt-[4px] pb-[40px]' : 'pt-[16px] pb-[40px]'}`}>
             {viewMode === 'tabs' ? (
               <>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-0 mb-[32px] border-b border-[#DEE1E8]">
+                <div className="flex flex-wrap lg:grid lg:grid-cols-5 gap-0 mb-[32px] border-b border-neutral-2 justify-center">
                   {sidebarMenus.map((menu) => {
                     const isActive = gripActiveTab === menu.id;
+                    const isHovered = hoveredTabId === menu.id;
+                    
                     return (
                       <button
                         key={menu.id}
-                        onClick={(e) => { e.stopPropagation(); setGripActiveTab(menu.id); }}
-                        className={`relative flex items-center justify-center gap-[10px] py-[16px] px-[12px] transition-all whitespace-nowrap ${isActive
-                          ? 'text-[#008BC9]'
-                          : 'text-[#677080] hover:text-[#1D2432]'
-                          }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setGripActiveTab(menu.id);
+                        }}
+                        onMouseEnter={() => setHoveredTabId(menu.id)}
+                        onMouseLeave={() => setHoveredTabId(null)}
+                        className={`relative flex items-center justify-center gap-[10px] py-[16px] px-[12px] transition-all whitespace-nowrap min-w-[140px] flex-1 lg:flex-none rounded-t-[4px]`}
+                        style={{
+                          backgroundColor: !isActive && isHovered ? colors.neutral[1] : 'transparent',
+                          color: isActive ? colors.primary.base : (isHovered ? colors.neutral[6] : colors.neutral[5])
+                        }}
                       >
-                        <div className={`transition-colors ${isActive ? 'text-[#008BC9]' : 'text-[#969DA9]'}`}>
+                        <div
+                          className="tab-icon transition-colors shrink-0"
+                          style={{ color: isActive ? colors.primary.base : (isHovered ? colors.neutral[6] : colors.neutral[4]) }}
+                        >
                           {React.cloneElement(menu.icon, { size: 18, strokeWidth: isActive ? 2.5 : 2 })}
                         </div>
-                        <span className={`text-[13px] md:text-[14px] leading-tight ${isActive ? 'font-bold' : 'font-medium'}`}>
+                        <span
+                          className={`tab-label text-[13px] md:text-[14px] leading-tight truncate px-[4px] transition-colors ${isActive ? 'font-bold' : 'font-medium'}`}
+                          title={menu.label}
+                          style={{ color: isActive ? colors.primary.base : (isHovered ? colors.neutral[6] : colors.neutral[5]) }}
+                        >
                           {menu.label}
                         </span>
                         {isActive && (
-                          <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#008BC9] rounded-t-full" />
+                          <div
+                            className="absolute bottom-0 left-0 w-full h-[3px] rounded-t-full"
+                            style={{ backgroundColor: colors.primary.base }}
+                          />
                         )}
                       </button>
                     );
                   })}
                 </div>
 
-                <div key={gripActiveTab} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[16px] md:gap-[20px] px-[24px]">
+                <div key={gripActiveTab} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[16px] md:gap-[20px] px-[24px]">
                   {sidebarMenus.find(m => m.id === gripActiveTab)?.cards.map((card, index) => {
                     const isCardActive = currentScreen === (card.route || card.title);
 
@@ -105,9 +143,28 @@ const GripMenu = ({
                         onClick={() => { navigateTo(card.route || 'empty-state', card.title); setIsGripOpen(false); }}
                         className={`group flex items-center gap-[16px] p-[16px] rounded-[12px] border cursor-pointer transition-all h-full animate-fade-slide-stagger ${isCardActive
                           ? 'bg-[#F4F8FB] shadow-sm'
-                          : 'border-[#DEE1E8] bg-white hover:border-[#008BC9] hover:shadow-md'
+                          : 'border-neutral-2 hover:shadow-md'
                           }`}
+                        onMouseEnter={(e) => {
+                          if (!isCardActive) {
+                            e.currentTarget.style.borderColor = colors.primary.base;
+                            const title = e.currentTarget.querySelector('.card-title');
+                            const iconBox = e.currentTarget.querySelector('.card-icon-box');
+                            if (title) title.style.color = colors.primary.base;
+                            if (iconBox) iconBox.style.color = colors.primary.base;
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isCardActive) {
+                            e.currentTarget.style.borderColor = colors.neutral[2];
+                            const title = e.currentTarget.querySelector('.card-title');
+                            const iconBox = e.currentTarget.querySelector('.card-icon-box');
+                            if (title) title.style.color = colors.neutral[7];
+                            if (iconBox) iconBox.style.color = colors.neutral[4];
+                          }
+                        }}
                         style={{
+                          backgroundColor: isCardActive ? `${colors.primary.base}15` : colors.neutral[0],
                           borderColor: isCardActive ? colors.primary.dark : undefined,
                           borderWidth: isCardActive ? '2px' : '1px',
                           animationDelay: `${index * 40}ms`,
@@ -115,21 +172,18 @@ const GripMenu = ({
                         }}
                       >
                         <div
-                          className={`p-[10px] rounded-[8px] transition-colors shrink-0 ${isCardActive
-                            ? ''
-                            : 'bg-[#F4F6F8] text-[#969DA9] group-hover:bg-[#E5F3F9] group-hover:text-[#008BC9]'
-                            }`}
+                          className={`card-icon-box p-[10px] rounded-[8px] transition-colors shrink-0`}
                           style={{
-                            backgroundColor: isCardActive ? `${colors.primary.base}15` : undefined,
-                            color: isCardActive ? colors.primary.dark : undefined
+                            backgroundColor: isCardActive ? `${colors.primary.base}15` : colors.neutral[1],
+                            color: isCardActive ? colors.primary.dark : colors.neutral[4]
                           }}
                         >
                           {React.cloneElement(card.icon, { size: 20, strokeWidth: isCardActive ? 2 : 2 })}
                         </div>
                         <div className="flex flex-col flex-1 overflow-hidden">
                           <h4
-                            className={`text-[14px] font-bold leading-tight truncate transition-colors ${!isCardActive ? 'text-[#1D2432] group-hover:text-[#008BC9]' : ''}`}
-                            style={{ color: isCardActive ? colors.primary.dark : undefined }}
+                            className={`card-title text-[14px] font-bold leading-tight truncate transition-colors`}
+                            style={{ color: isCardActive ? colors.primary.dark : colors.neutral[7] }}
                           >
                             {card.title}
                           </h4>
@@ -151,14 +205,15 @@ const GripMenu = ({
                       animationFillMode: 'both'
                     }}
                   >
-                    <div className="flex items-center gap-[10px] pb-[8px] px-[24px] border-b border-[#DEE1E8]">
+                    <div className="flex items-center gap-[10px] pb-[8px] px-[24px] border-b border-neutral-2">
                       <div style={{ color: colors.primary.dark }}>
                         {React.cloneElement(menu.icon, { size: 16, strokeWidth: 2.5 })}
                       </div>
-                      <h5 className="text-[12px] font-bold uppercase tracking-wider text-[#1D2432]">
+                      <h5 className="text-[12px] font-bold uppercase tracking-wider text-neutral-6">
                         {menu.label}
                       </h5>
                     </div>
+                    {/* List Mode */}
                     <div className="flex flex-col gap-[2px]">
                       {menu.cards.map((card) => {
                         const isCardActive = currentScreen === (card.route || card.title);
@@ -166,18 +221,41 @@ const GripMenu = ({
                           <div
                             key={card.id}
                             onClick={() => { navigateTo(card.route || 'empty-state', card.title); setIsGripOpen(false); }}
-                            className={`group flex items-center gap-[12px] cursor-pointer py-[10px] px-[24px] transition-all hover:bg-[#DEE1E8]`}
-                            style={{ 
+                            className={`group flex items-start gap-[12px] cursor-pointer py-[10px] px-[24px] transition-all`}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = colors.neutral[1];
+                              const label = e.currentTarget.querySelector('.list-label');
+                              const dot = e.currentTarget.querySelector('.list-dot');
+                              if (label) {
+                                label.style.color = colors.primary.dark;
+                                if (!isCardActive) label.style.fontWeight = '600';
+                              }
+                              if (dot && !isCardActive) dot.style.backgroundColor = colors.primary.base;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                              const label = e.currentTarget.querySelector('.list-label');
+                              const dot = e.currentTarget.querySelector('.list-dot');
+                              if (label) {
+                                label.style.color = isCardActive ? colors.primary.dark : colors.neutral[7];
+                                if (!isCardActive) label.style.fontWeight = '400';
+                              }
+                              if (dot && !isCardActive) dot.style.backgroundColor = 'transparent';
+                            }}
+                            style={{
                               color: isCardActive ? colors.primary.dark : colors.neutral[7]
                             }}
                           >
-                            <div 
-                              className={`w-[6px] h-[6px] rounded-full shrink-0 transition-all ${isCardActive ? '' : 'bg-transparent group-hover:bg-[#008BC9]'}`}
-                              style={{ 
-                                backgroundColor: isCardActive ? colors.primary.dark : undefined
+                            <div
+                              className={`list-dot w-[6px] h-[6px] rounded-full shrink-0 transition-all mt-[7px]`}
+                              style={{
+                                backgroundColor: isCardActive ? colors.primary.dark : 'transparent'
                               }}
                             />
-                            <span className={`text-[13px] transition-colors ${isCardActive ? 'font-bold' : 'font-medium group-hover:text-[#008BC9]'}`}>
+                            <span
+                              className={`list-label text-[13px] transition-colors ${isCardActive ? 'font-semibold' : 'font-normal'}`}
+                              style={{ color: isCardActive ? colors.primary.dark : colors.neutral[7] }}
+                            >
                               {card.title}
                             </span>
                           </div>

@@ -6,6 +6,7 @@ import {
   Heart
 } from 'lucide-react';
 import { sidebarMenus } from '../../data/constants';
+import Input from '../ui/Input';
 
 // ══ COMPONENTE (PROPOSTA 4: MASTER-DETAIL / PAINEL UNIFICADO) ════
 const Dashboard = ({
@@ -100,7 +101,7 @@ const Dashboard = ({
 
       {/* ══ HERO SECTION ════════════════════════════════════════════════════ */}
       <div
-        className="relative w-full rounded-[12px] p-[24px] md:p-[40px] overflow-hidden flex flex-col justify-center transition-colors duration-500 shadow-sm"
+        className="relative w-full rounded-[8px] p-[24px] md:p-[40px] overflow-hidden flex flex-col justify-center transition-colors duration-500 shadow-sm"
         style={{
           background: `linear-gradient(135deg, ${colors.primary.ultraDark} 56%, ${colors.primary.dark} 100%)`,
           minHeight: '140px',
@@ -128,21 +129,23 @@ const Dashboard = ({
       </div>
 
       {/* ══ SEARCH BAR ══════════════════════════════════════════════════════ */}
-      <div className="mt-[24px] md:mt-[32px] mb-[24px] relative w-full group">
-        <Search size={20} className="absolute left-[16px] top-1/2 -translate-y-1/2 transition-colors group-focus-within:text-[#008BC9]" style={{ color: colors.neutral[4] }} />
-        <input
-          type="text"
+      <div className="mt-[24px] md:mt-[32px] mb-[24px]">
+        <Input
+          iconLeft={<Search />}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Pesquise pela plataforma (ex: alunos, notas, avaliações)..."
-          className="w-full pl-[48px] pr-[48px] py-[14px] md:py-[18px] rounded-[10px] border text-[13px] md:text-[14px] outline-none transition-all duration-300 focus:shadow-md focus:border-[#008BC9] bg-white"
-          style={{ borderColor: colors.neutral[3], color: colors.neutral[7] }}
+          className="focus:shadow-md"
+          iconRight={searchQuery ? (
+            <div onClick={() => setSearchQuery('')} className="hover:text-red-500 transition-colors">
+              <X />
+            </div>
+          ) : null}
         />
-        {searchQuery && <X size={20} className="absolute right-[16px] top-1/2 -translate-y-1/2 cursor-pointer hover:text-red-500 transition-colors" onClick={() => setSearchQuery('')} style={{ color: colors.neutral[5] }} />}
       </div>
 
       {/* ══ PAINEL MASTER-DETAIL COM CONEXÃO FÍSICA (ABA CONTÍNUA) ══════════════ */}
-      <div className="w-full flex flex-col md:flex-row overflow-hidden min-h-[500px] rounded-[12px] border shadow-sm" style={{ borderColor: colors.neutral[2] }}>
+      <div className="w-full flex flex-col md:flex-row overflow-hidden min-h-[500px] rounded-[8px] border shadow-sm" style={{ borderColor: colors.neutral[2] }}>
 
         {/* LADO ESQUERDO: MASTER (MENU DE MÓDULOS) */}
         <div
@@ -172,7 +175,7 @@ const Dashboard = ({
                   onMouseLeave={() => setHoveredMenu(null)}
                   className={`relative flex items-center gap-[12px] md:gap-[16px] px-[24px] py-[16px] text-left transition-colors overflow-visible group ${isActive ? 'menu-tab-active' : 'menu-tab-inactive'}`}
                 >
-                  <div className={`w-[40px] h-[40px] shrink-0 flex items-center justify-center rounded-[6px] transition-colors ${isActive ? 'shadow-md' : ''}`} style={{ backgroundColor: iconBg, color: iconColor }}>
+                  <div className={`w-[40px] h-[40px] shrink-0 flex items-center justify-center rounded-[4px] transition-colors ${isActive ? 'shadow-md' : ''}`} style={{ backgroundColor: iconBg, color: iconColor }}>
                     {menu.icon}
                   </div>
                   <div className="flex flex-col justify-center overflow-hidden flex-1">
@@ -217,18 +220,42 @@ const Dashboard = ({
                 return (
                   <div
                     key={card.id}
-                    className="card-flow p-[20px] rounded-[10px] border transition-all duration-300 flex flex-col group h-full relative cursor-pointer hover:shadow-[0_8px_16px_-6px_rgba(12,99,170,0.2)] bg-white"
+                    className="card-flow p-[20px] rounded-[8px] border transition-all duration-300 flex flex-col group h-full relative cursor-pointer hover:shadow-[0_8px_16px_-6px_rgba(12,99,170,0.2)] bg-neutral-0"
                     style={{
                       borderColor: colors.neutral[2],
                       animationDelay: `${index * 80}ms`
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.borderColor = colors.primary.base}
-                    onMouseLeave={(e) => e.currentTarget.style.borderColor = colors.neutral[2]}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = colors.primary.base;
+                      const iconBox = e.currentTarget.querySelector('.icon-box');
+                      const title = e.currentTarget.querySelector('h4');
+                      if (iconBox) {
+                        iconBox.style.backgroundColor = `${colors.primary.base}15`;
+                        iconBox.style.color = colors.primary.base;
+                      }
+                      if (title) title.style.color = colors.primary.base;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = colors.neutral[2];
+                      const iconBox = e.currentTarget.querySelector('.icon-box');
+                      const title = e.currentTarget.querySelector('h4');
+                      if (iconBox) {
+                        iconBox.style.backgroundColor = colors.neutral[1];
+                        iconBox.style.color = colors.neutral[4];
+                      }
+                      if (title) title.style.color = colors.neutral[7];
+                    }}
                     onClick={() => navigateTo(card.route || 'empty-state', card.title)}
                   >
 
                     <div className="flex justify-between items-start mb-[16px]">
-                      <div className="p-[10px] rounded-[8px] transition-colors group-hover:bg-[#E5F3F9] group-hover:text-[#008BC9] shadow-sm" style={{ backgroundColor: colors.neutral[1] }}>
+                      <div
+                        className="p-[10px] rounded-[8px] transition-colors shadow-sm icon-box"
+                        style={{
+                          backgroundColor: colors.neutral[1],
+                          color: colors.neutral[4]
+                        }}
+                      >
                         {card.icon}
                       </div>
                       {/* 
@@ -246,7 +273,7 @@ const Dashboard = ({
                     </div>
 
                     <div className="flex flex-col h-full">
-                      <h4 className="text-[16px] font-bold leading-tight mb-[8px] group-hover:text-[#008BC9] transition-colors" title={card.title} style={{ color: colors.neutral[7] }}>
+                      <h4 className="text-[16px] font-bold leading-tight mb-[8px] group-hover:text-primary-base transition-colors" title={card.title} style={{ color: colors.neutral[7] }}>
                         {card.title}
                       </h4>
                       <p className="text-[13px] leading-relaxed mb-[16px] line-clamp-3" style={{ color: colors.neutral[5] }}>

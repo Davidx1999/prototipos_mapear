@@ -249,22 +249,22 @@ export default function Devolutivas({ colors, navigateTo }) {
   return (
     // Ocupa exatamente o espaço restante abaixo do header global — sem overflow
     <div
-      className="flex flex-col overflow-hidden bg-gray-50"
+      className="flex flex-col overflow-hidden bg-neutral-1"
       style={{ height: `calc(100vh - ${GLOBAL_HEADER_H}px)` }}
     >
       {/* ── HEADER INTERNO (tabs + breadcrumb + skills btn) ── */}
-      <div className="bg-white border-b border-gray-200 flex items-center justify-between px-6 shrink-0 z-40 h-[48px]">
+      <div className="bg-neutral-0 border-b border-neutral-2 flex items-center justify-between px-6 shrink-0 z-40 h-[48px]">
         {/* Left: Tabs */}
         <div className="flex items-center h-full">
           <button
             onClick={() => setMainTab('heatmap')}
-            className={`px-4 h-full text-[13px] font-semibold transition-all border-b-2 flex items-center ${mainTab === 'heatmap' ? 'border-[#008BC9] text-[#008BC9]' : 'border-transparent text-[#1D2432] hover:text-[#008BC9]'}`}
+            className={`px-4 h-full text-[13px] font-semibold transition-all border-b-2 flex items-center ${mainTab === 'heatmap' ? 'border-primary-base text-primary-base' : 'border-transparent text-neutral-6 hover:text-primary-base'}`}
           >
             Mapa de Calor
           </button>
           <button
             onClick={() => setMainTab('detalhes')}
-            className={`px-4 h-full text-[13px] font-semibold transition-all border-b-2 flex items-center ${mainTab === 'detalhes' ? 'border-[#008BC9] text-[#008BC9]' : 'border-transparent text-[#1D2432] hover:text-[#008BC9]'}`}
+            className={`px-4 h-full text-[13px] font-semibold transition-all border-b-2 flex items-center ${mainTab === 'detalhes' ? 'border-primary-base text-primary-base' : 'border-transparent text-neutral-6 hover:text-primary-base'}`}
           >
             Detalhes da Resposta
           </button>
@@ -276,17 +276,17 @@ export default function Devolutivas({ colors, navigateTo }) {
             <React.Fragment key={idx}>
               <button
                 onClick={() => goBack(idx)}
-                className={`transition-colors ${idx === navLevel ? 'text-[#677080]' : 'text-[#008BC9] hover:underline cursor-pointer'}`}
+                className={`transition-colors ${idx === navLevel ? 'text-neutral-5' : 'text-primary-base hover:underline cursor-pointer'}`}
               >
                 {typeof path === 'object' ? path.nome : path}
               </button>
-              {idx < navPath.length - 1 && <span className="text-gray-400">/</span>}
+              {idx < navPath.length - 1 && <span className="text-neutral-4">/</span>}
             </React.Fragment>
           ))}
           {navPath.length > 0 && (
             <>
-              <span className="text-gray-400">/</span>
-              <span className="text-[#677080]">{levelLabels[Math.min(navLevel + 1, 4)]}s</span>
+              <span className="text-neutral-4">/</span>
+              <span className="text-neutral-5">{levelLabels[Math.min(navLevel + 1, 4)]}s</span>
             </>
           )}
         </div>
@@ -294,10 +294,10 @@ export default function Devolutivas({ colors, navigateTo }) {
         {/* Right: Destacar Habilidades button */}
         <button
           onClick={() => setShowSkills(!showSkills)}
-          className={`flex items-center gap-2 px-4 py-1.5 text-[12px] font-semibold transition-all ${showSkills ? 'text-[#008BC9]' : 'text-[#008BC9] hover:underline'}`}
+          className={`flex items-center gap-2 px-4 py-1.5 text-[12px] font-semibold transition-all ${showSkills ? 'text-primary-base' : 'text-primary-base hover:underline'}`}
         >
           Destacar Habilidades
-          {showSkills && <X size={14} className="text-[#008BC9]" />}
+          {showSkills && <X size={14} className="text-primary-base" />}
         </button>
       </div>
 
@@ -328,14 +328,14 @@ export default function Devolutivas({ colors, navigateTo }) {
 
           {/* Barra de Skills */}
           {showSkills && (
-            <div className="absolute top-0 left-0 right-0 z-30 bg-white border-b border-gray-200 px-4 py-2 flex items-center gap-3 h-[48px]">
-              <span className="text-[12px] font-semibold text-[#1D2432] whitespace-nowrap shrink-0">Destacar Habilidade:</span>
+            <div className="absolute top-0 left-0 right-0 z-30 bg-neutral-0 border-b border-neutral-2 px-4 py-2 flex items-center gap-3 h-[48px]">
+              <span className="text-[12px] font-semibold text-neutral-6 whitespace-nowrap shrink-0">Destacar Habilidade:</span>
               <div className="flex gap-1.5 overflow-x-auto no-scrollbar flex-1 py-0.5">
                 {skillsList.map(s => (
                   <button
                     key={s}
                     onClick={() => setActiveSkill(activeSkill === s ? null : s)}
-                    className={`min-w-[36px] px-2 py-1 rounded text-[11px] font-bold border transition-all whitespace-nowrap shrink-0 ${activeSkill === s ? 'bg-[#94CFEF] border-[#0C63AA] text-[#0C63AA]' : 'bg-white border-[#DEE1E8] text-[#677080] hover:bg-gray-50'}`}
+                    className={`min-w-[36px] px-2 py-1 rounded text-[11px] font-bold border transition-all whitespace-nowrap shrink-0 ${activeSkill === s ? 'bg-[#94CFEF] border-primary-dark text-primary-dark' : 'bg-neutral-0 border-neutral-2 text-neutral-5 hover:bg-neutral-1'}`}
                   >
                     {s}
                   </button>
@@ -402,7 +402,7 @@ export default function Devolutivas({ colors, navigateTo }) {
               dynamicTotals={dynamicTotals}
             />
           ) : (
-            <div className="flex justify-center items-center h-full text-gray-400">
+            <div className="flex justify-center items-center h-full text-neutral-4">
               <div className="flex flex-col items-center gap-4">
                 <LayoutDashboard size={48} className="opacity-20" />
                 <p className="font-bold text-[18px]">Selecione um aluno ou item para ver detalhes...</p>

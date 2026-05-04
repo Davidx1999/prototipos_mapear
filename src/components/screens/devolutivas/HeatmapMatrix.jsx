@@ -58,16 +58,16 @@ export default function HeatmapMatrix({
               {displayColGroups.map((group, gIdx) => (
                 <div key={gIdx} className={`flex flex-col first:ml-0 ${isColsSeparated ? 'ml-[40px]' : 'ml-2'}`}>
                   {isColsSeparated && (
-                    <div className="border border-gray-200 rounded-md bg-white mb-1 py-1 px-3 flex items-center justify-center gap-1.5 shadow-sm">
-                      <span className="text-[10px] font-semibold text-gray-600 truncate max-w-[140px] select-none">{group.title}</span>
-                      <Info size={12} className="text-gray-400 cursor-pointer hover:text-[#008BC9]" />
+                    <div className="border border-neutral-2 rounded-md bg-neutral-0 mb-1 py-1 px-3 flex items-center justify-center gap-1.5 shadow-sm">
+                      <span className="text-[10px] font-semibold text-neutral-5 truncate max-w-[140px] select-none">{group.title}</span>
+                      <Info size={12} className="text-neutral-4 cursor-pointer hover:text-primary-base" />
                     </div>
                   )}
                   <div className="flex gap-[2px]">
                     {group.cols.map((col, cIdx) => {
                       const faded = isColOpacated(col);
                       return (
-                        <div key={cIdx} className={`w-[30px] h-[26px] bg-white border rounded-sm flex items-center justify-center text-[9px] font-bold transition-all duration-300 select-none ${faded ? 'opacity-30 border-gray-200 text-gray-400' : 'border-gray-300 text-[#1D2432]'}`}>
+                        <div key={cIdx} className={`w-[30px] h-[26px] bg-neutral-0 border rounded-sm flex items-center justify-center text-[9px] font-bold transition-all duration-300 select-none ${faded ? 'opacity-30 border-neutral-2 text-neutral-4' : 'border-gray-300 text-neutral-6'}`}>
                           {col.id}
                         </div>
                       )
@@ -84,7 +84,7 @@ export default function HeatmapMatrix({
                   {/* Regional label */}
                   {group.label && (
                     <div className="flex items-center gap-2 mb-2 mt-2 sticky left-0 z-20">
-                      <span className="text-[12px] font-bold text-[#1D2432]">{group.label}</span>
+                      <span className="text-[12px] font-bold text-neutral-6">{group.label}</span>
                     </div>
                   )}
 
@@ -93,17 +93,17 @@ export default function HeatmapMatrix({
                     {group.rows.map((student, sIdx) => (
                       <div key={sIdx} className="flex items-center">
                         {/* Name cell with checkbox */}
-                        <div className="w-[220px] shrink-0 flex items-center gap-2 py-1 pr-3 sticky left-0 z-20 bg-gray-50">
+                        <div className="w-[220px] shrink-0 flex items-center gap-2 py-1 pr-3 sticky left-0 z-20 bg-neutral-1">
                           {navLevel < 4 && (
                             <input
                               type="checkbox"
                               checked={selectedRows.has(student.name)}
                               onChange={(e) => { e.stopPropagation(); toggleRow(student.name); }}
-                              className="w-4 h-4 rounded border-gray-300 text-[#008BC9] focus:ring-[#008BC9] cursor-pointer accent-[#008BC9] shrink-0"
+                              className="w-4 h-4 rounded border-gray-300 text-primary-base focus:ring-[#008BC9] cursor-pointer accent-[#008BC9] shrink-0"
                             />
                           )}
                           <span
-                            className={`text-[12px] font-bold truncate transition-colors ${navLevel < 3 && !isCombinedView ? 'text-[#008BC9] hover:underline cursor-pointer' : 'text-[#1D2432]'}`}
+                            className={`text-[12px] font-bold truncate transition-colors ${navLevel < 3 && !isCombinedView ? 'text-primary-base hover:underline cursor-pointer' : 'text-neutral-6'}`}
                             onClick={() => { if (!isCombinedView && navLevel < 3) drillDown(student.name) }}
                             title={student.name}
                           >
@@ -147,7 +147,7 @@ export default function HeatmapMatrix({
             </div>
 
             {/* Footer totals row */}
-            <div className="flex items-center mt-4 border-t border-gray-200 pt-3">
+            <div className="flex items-center mt-4 border-t border-neutral-2 pt-3">
               <div className="w-[220px] shrink-0 sticky left-0 z-20"></div>
               {displayColGroups.map((group, gIdx) => (
                 <div key={gIdx} className={`flex gap-[2px] first:ml-0 ${isColsSeparated ? 'ml-[40px]' : 'ml-2'}`}>
@@ -159,7 +159,7 @@ export default function HeatmapMatrix({
                     return (
                       <div
                         key={cIdx}
-                        className={`w-[30px] h-[24px] rounded-sm flex items-center justify-center text-[8px] font-bold text-[#1D2432] transition-all duration-300 border border-gray-300 select-none ${faded ? 'opacity-30 border-transparent text-gray-400' : 'shadow-sm'}`}
+                        className={`w-[30px] h-[24px] rounded-sm flex items-center justify-center text-[8px] font-bold text-neutral-6 transition-all duration-300 border border-gray-300 select-none ${faded ? 'opacity-30 border-transparent text-neutral-4' : 'shadow-sm'}`}
                         style={{ backgroundColor: faded ? '#E5E7EB' : bg }}
                       >
                         {totalVal}{totalVal !== '-' ? '' : ''}

@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Contrast, Eye, EyeOff } from 'lucide-react';
+import { Contrast, Eye, EyeOff, User, Lock } from 'lucide-react';
 import LogoFgv from '../ui/LogoFgv';
 import Button from '../ui/Button';
+import Input from '../ui/Input';
 
 const Login = ({
   colors,
@@ -37,22 +38,44 @@ const Login = ({
             <p className="text-[13px] md:text-[14px] mt-[8px]" style={{ color: isHighContrast ? '#FFFFFF' : colors.neutral[5] }}>Por favor, realize seu login ou solicite cadastro</p>
           </div>
           <form className="w-full mt-[32px] flex flex-col gap-[16px]" onSubmit={handleLogin}>
-            <div className="flex flex-col gap-[4px]">
-              <label className="text-[12px] font-semibold" style={{ color: colors.neutral[7] }}>Nome de Usuário</label>
-              <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Seu login" className="w-full px-[16px] py-[12px] rounded-[8px] border text-[14px] outline-none transition-colors focus:border-[#008BC9]" style={{ borderColor: loginError ? '#EF4444' : colors.neutral[3], color: colors.neutral[7], backgroundColor: colors.neutral[0] }} />
-            </div>
-            <div className="flex flex-col gap-[4px] relative">
-              <label className="text-[12px] font-semibold" style={{ color: colors.neutral[7] }}>Senha</label>
-              <div className="relative">
-                <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Sua senha" className="w-full px-[16px] py-[12px] rounded-[8px] border text-[14px] outline-none transition-colors focus:border-[#008BC9]" style={{ borderColor: loginError ? '#EF4444' : colors.neutral[3], color: colors.neutral[7], backgroundColor: colors.neutral[0] }} />
-                <div className="absolute right-[16px] top-[12px] cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <Eye size={18} style={{ color: colors.neutral[5] }} /> : <EyeOff size={18} style={{ color: colors.neutral[5] }} />}
+            <Input
+              label="Nome de Usuário"
+              iconLeft={<User />}
+              placeholder="Seu login"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              error={loginError ? true : false}
+            />
+
+            <Input
+              label="Senha"
+              iconLeft={<Lock />}
+              type={showPassword ? "text" : "password"}
+              placeholder="Sua senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={loginError}
+              iconRight={
+                <div onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <Eye /> : <EyeOff />}
                 </div>
-              </div>
-            </div>
-            {loginError && <span className="text-red-500 text-[12px] font-semibold">{loginError}</span>}
-            <Button variant="primary" type="submit" className="w-full mt-[8px]">Login</Button>
-            <Button variant="tertiary" type="button" className="w-full" onClick={() => { setIsLoggedIn(true); setCurrentScreen('dashboard'); }}>Acessar Plataforma</Button>
+              }
+            />
+            <Button
+              variant="primary"
+              size='md'
+              type="submit"
+              justify="center"
+              className="w-full mt-[8px]">Login</Button>
+            <Button
+              variant="tertiary"
+              appearance='solid'
+              size='md'
+              tertiaryTone="high"
+              type="button"
+              justify="center"
+              className="w-full"
+              onClick={() => { setIsLoggedIn(true); setCurrentScreen('dashboard'); }}>Acessar Plataforma</Button>
           </form>
           <p className="text-[10px] mt-[48px]" style={{ color: isHighContrast ? '#FFFFFF' : colors.neutral[4] }}>Todos os direitos reservados © 2026 FGV DGPE</p>
         </div>

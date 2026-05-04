@@ -22,7 +22,7 @@ export default function HeatmapControls({
         {/* Move/Pan button */}
         <button
           onClick={() => setIsPanMode(!isPanMode)}
-          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all shadow-lg border ${isPanMode ? 'bg-white border-gray-200 text-[#1D2432]' : 'bg-white border-gray-200 text-gray-500 hover:text-[#008BC9]'}`}
+          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all shadow-lg border ${isPanMode ? 'bg-neutral-0 border-neutral-2 text-neutral-6' : 'bg-neutral-0 border-neutral-2 text-neutral-5 hover:text-primary-base'}`}
           title="Arrastar/Mover"
         >
           <Move size={18} />
@@ -31,7 +31,7 @@ export default function HeatmapControls({
         {/* Zoom In */}
         <button
           onClick={() => handleZoom(0.2)}
-          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#008BC9] transition-colors"
+          className="w-10 h-10 bg-neutral-0 rounded-lg shadow-lg border border-neutral-2 flex items-center justify-center text-neutral-5 hover:text-primary-base transition-colors"
           title="Aumentar Zoom"
         >
           <ZoomIn size={18} />
@@ -40,7 +40,7 @@ export default function HeatmapControls({
         {/* Zoom Out */}
         <button
           onClick={() => handleZoom(-0.2)}
-          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#008BC9] transition-colors"
+          className="w-10 h-10 bg-neutral-0 rounded-lg shadow-lg border border-neutral-2 flex items-center justify-center text-neutral-5 hover:text-primary-base transition-colors"
           title="Diminuir Zoom"
         >
           <ZoomOut size={18} />
@@ -49,7 +49,7 @@ export default function HeatmapControls({
         {/* Fit/Reset */}
         <button
           onClick={handleFitScreen}
-          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-[#008BC9] transition-colors"
+          className="w-10 h-10 bg-neutral-0 rounded-lg shadow-lg border border-neutral-2 flex items-center justify-center text-neutral-5 hover:text-primary-base transition-colors"
           title="Ajustar à Tela"
         >
           <Maximize size={18} />
@@ -62,34 +62,34 @@ export default function HeatmapControls({
         {isCombinedView && (
           <button
             onClick={() => setIsCombinedView(false)}
-            className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-red-500 transition-colors"
+            className="w-10 h-10 flex items-center justify-center text-neutral-5 hover:text-red-500 transition-colors"
           >
             <X size={20} />
           </button>
         )}
 
         {/* Grid / Columns control */}
-        <div className="flex flex-col border border-gray-200 rounded-lg overflow-hidden bg-white shadow-lg">
+        <div className="flex flex-col border border-neutral-2 rounded-lg overflow-hidden bg-neutral-0 shadow-lg">
           <button
             onClick={() => setIsColsSeparated(!isColsSeparated)}
-            className={`p-2.5 border-b border-gray-200 transition-colors ${isColsSeparated ? 'bg-[#D9F0FC] text-[#008BC9]' : 'hover:bg-gray-50 text-gray-600'}`}
+            className={`p-2.5 border-b border-neutral-2 transition-colors ${isColsSeparated ? 'bg-[#D9F0FC] text-primary-base' : 'hover:bg-neutral-1 text-neutral-5'}`}
           >
             <Columns size={18} />
           </button>
-          <button className="p-1 hover:bg-gray-50 flex justify-center text-gray-500">
+          <button className="p-1 hover:bg-neutral-1 flex justify-center text-neutral-5">
             <ChevronDown size={12} />
           </button>
         </div>
 
         {/* Map / Rows control */}
-        <div className="flex flex-col border border-gray-200 rounded-lg overflow-hidden bg-white shadow-lg">
+        <div className="flex flex-col border border-neutral-2 rounded-lg overflow-hidden bg-neutral-0 shadow-lg">
           <button
             onClick={() => setIsRowsSeparated(!isRowsSeparated)}
-            className={`p-2.5 border-b border-gray-200 transition-colors ${isRowsSeparated ? 'bg-[#D9F0FC] text-[#008BC9]' : 'hover:bg-gray-50 text-gray-600'}`}
+            className={`p-2.5 border-b border-neutral-2 transition-colors ${isRowsSeparated ? 'bg-[#D9F0FC] text-primary-base' : 'hover:bg-neutral-1 text-neutral-5'}`}
           >
             <MapIcon size={18} />
           </button>
-          <button className="p-1 hover:bg-gray-50 flex justify-center text-gray-500">
+          <button className="p-1 hover:bg-neutral-1 flex justify-center text-neutral-5">
             <ChevronDown size={12} />
           </button>
         </div>
@@ -98,7 +98,7 @@ export default function HeatmapControls({
         {(selectedRows.size >= 2 || isCombinedView) && (
           <button
             onClick={() => setIsCombinedView(!isCombinedView)}
-            className={`px-8 py-3.5 rounded-lg font-extrabold text-[13px] tracking-wider shadow-xl transition-all whitespace-nowrap ${isCombinedView ? 'bg-white text-[#008BC9] border-2 border-[#008BC9] hover:bg-gray-50' : 'bg-[#008BC9] text-white hover:bg-[#003A79]'}`}
+            className={`px-8 py-3.5 rounded-lg font-extrabold text-[13px] tracking-wider shadow-xl transition-all whitespace-nowrap ${isCombinedView ? 'bg-neutral-0 text-primary-base border-2 border-primary-base hover:bg-neutral-1' : 'bg-[#008BC9] text-white hover:bg-[#003A79]'}`}
           >
             {isCombinedView ? 'VOLTAR AO MAPA GERAL' : 'VISUALIZAR COMBINAÇÃO'}
           </button>

@@ -100,10 +100,10 @@ export default function CascadeSelector({
   const topBar = (
     <div className={`flex items-center gap-[6px] md:gap-[8px] w-full transition-all ${variant === 'sidebar' ? '' : 'md:max-w-full'}`}>
       <div 
-        className={`flex-1 flex items-center bg-white border ${isOpen ? 'border-[#008BC9] shadow-sm ring-2 ring-[#D9F0FC]' : 'border-neutral-300 shadow-sm'} rounded-[8px] ${variant === 'sidebar' ? 'h-[36px] md:h-[40px] px-[12px]' : 'h-[44px] md:h-[48px] px-[16px]'} cursor-pointer hover:border-[#008BC9] overflow-hidden`}
+        className={`flex-1 flex items-center bg-neutral-0 border ${isOpen ? 'border-primary-base shadow-sm ring-2 ring-[#D9F0FC]' : 'border-neutral-300 shadow-sm'} rounded-[8px] ${variant === 'sidebar' ? 'h-[36px] md:h-[40px] px-[12px]' : 'h-[44px] md:h-[48px] px-[16px]'} cursor-pointer hover:border-primary-base overflow-hidden`}
         onClick={toggle}
       >
-        <PanelLeftOpen size={variant === 'sidebar' ? 14 : 18} className="text-[#008BC9] shrink-0 mr-[8px] md:mr-[12px]" />
+        <PanelLeftOpen size={variant === 'sidebar' ? 14 : 18} className="text-primary-base shrink-0 mr-[8px] md:mr-[12px]" />
         {breadcrumbHtml}
       </div>
       <button 
@@ -120,12 +120,12 @@ export default function CascadeSelector({
       {topBar}
       
       {isOpen && (
-        <div className={`absolute top-[calc(100%+12px)] left-0 bg-white rounded-[8px] border border-neutral-300 shadow-2xl overflow-hidden flex flex-col animate-fade-slide z-50 ${variant === 'sidebar' ? 'w-[calc(100vw-32px)] md:w-[48vw] min-w-[800px] max-w-[1200px]' : 'w-[calc(100vw-32px)] md:w-[80vw] max-w-[1100px]'} max-h-[500px]`}>
+        <div className={`absolute top-[calc(100%+12px)] left-0 bg-neutral-0 rounded-[8px] border border-neutral-300 shadow-2xl overflow-hidden flex flex-col animate-fade-slide z-50 ${variant === 'sidebar' ? 'w-[calc(100vw-32px)] md:w-[48vw] min-w-[800px] max-w-[1200px]' : 'w-[calc(100vw-32px)] md:w-[80vw] max-w-[1100px]'} max-h-[500px]`}>
           
-          <div className="flex flex-col md:flex-row border-b border-neutral-200 bg-white shrink-0">
+          <div className="flex flex-col md:flex-row border-b border-neutral-200 bg-neutral-0 shrink-0">
             <div className="w-full md:w-[240px] md:w-[280px] lg:w-[300px] shrink-0 border-b md:border-b-0 md:border-r border-neutral-200 relative">
               <select 
-                className="w-full h-[48px] px-[16px] text-[13px] font-bold text-neutral-700 outline-none appearance-none cursor-pointer hover:bg-neutral-50 focus:text-[#008BC9]"
+                className="w-full h-[48px] px-[16px] text-[13px] font-bold text-neutral-700 outline-none appearance-none cursor-pointer hover:bg-neutral-50 focus:text-primary-base"
                 value={searchLevel}
                 onChange={(e) => setSearchLevel(parseInt(e.target.value))}
               >
@@ -150,7 +150,7 @@ export default function CascadeSelector({
 
           <div 
             ref={columnsRef}
-            className="flex w-full h-[240px] md:h-[280px] overflow-x-auto custom-scrollbar snap-x snap-mandatory scroll-smooth relative bg-white"
+            className="flex w-full h-[240px] md:h-[280px] overflow-x-auto custom-scrollbar snap-x snap-mandatory scroll-smooth relative bg-neutral-0"
           >
             {levels.map((lvl, i) => {
               const rawItems = getCascadeDataForLevel(i);
@@ -195,7 +195,7 @@ export default function CascadeSelector({
                         className={`px-[12px] py-[12px] rounded-[4px] text-[13px] font-semibold cursor-pointer transition-colors flex justify-between items-center group ${isSelected ? 'bg-[#003A79] text-white shadow-md' : 'text-neutral-700 hover:bg-neutral-100'}`}
                       >
                         <span className="truncate pr-[8px]" title={label}>{label}</span>
-                        {i < levels.length - 1 && <ChevronRight size={16} className={`shrink-0 opacity-50 ${isSelected ? 'text-white' : 'group-hover:text-[#008BC9]'}`} />}
+                        {i < levels.length - 1 && <ChevronRight size={16} className={`shrink-0 opacity-50 ${isSelected ? 'text-white' : 'group-hover:text-primary-base'}`} />}
                       </div>
                     );
                   });
@@ -203,8 +203,8 @@ export default function CascadeSelector({
               }
 
               return (
-                <div key={i} className="w-[240px] md:w-[280px] lg:w-[300px] shrink-0 border-r border-neutral-200 flex flex-col h-full snap-start bg-white">
-                  <div className="p-[12px] border-b border-neutral-200 bg-white shrink-0 sticky top-0 flex items-center justify-between">
+                <div key={i} className="w-[240px] md:w-[280px] lg:w-[300px] shrink-0 border-r border-neutral-200 flex flex-col h-full snap-start bg-neutral-0">
+                  <div className="p-[12px] border-b border-neutral-200 bg-neutral-0 shrink-0 sticky top-0 flex items-center justify-between">
                     <span className="text-[13px] font-bold text-neutral-600">{lvl.title}</span>
                   </div>
                   <div className="flex-1 overflow-y-auto custom-scrollbar p-[8px] flex flex-col gap-[2px]">
@@ -218,7 +218,7 @@ export default function CascadeSelector({
           <div className="p-[16px] md:px-[24px] md:py-[16px] border-t border-neutral-200 bg-neutral-50 flex justify-end gap-[16px] items-center shrink-0">
             <button 
               onClick={clearAll} 
-              className="px-[16px] py-[10px] text-[13px] font-bold text-neutral-600 hover:bg-neutral-200 border border-neutral-300 rounded-[4px] transition-colors flex items-center gap-[6px] bg-white shadow-sm"
+              className="px-[16px] py-[10px] text-[13px] font-bold text-neutral-600 hover:bg-neutral-200 border border-neutral-300 rounded-[4px] transition-colors flex items-center gap-[6px] bg-neutral-0 shadow-sm"
             >
               <Eraser size={16} /> LIMPAR SELEÇÃO
             </button>

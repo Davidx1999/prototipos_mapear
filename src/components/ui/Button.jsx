@@ -1,43 +1,170 @@
 import React from 'react';
 
-const Button = ({ variant = 'primary', size = 'default', iconOnly = false, className = '', children, ...props }) => {
-  const variantClasses = {
-    primary: 'bg-[var(--primary-base)] text-white border-transparent hover:bg-[var(--primary-dark)] active:bg-[var(--primary-extra-dark)]',
-    secondary: 'bg-[var(--primary-light)] text-[var(--primary-dark)] border-transparent hover:bg-[var(--primary-base)] hover:text-[var(--primary-dark)] active:bg-[var(--primary-dark)] active:text-white',
-    tertiary: 'bg-transparent text-[var(--neutral-7)] border border-[var(--neutral-3)] hover:bg-[var(--neutral-2)] hover:border-[var(--neutral-3)] active:bg-[var(--neutral-3)]',
-    neutral: 'bg-transparent text-[var(--neutral-6)] border-transparent hover:bg-[var(--neutral-3)] active:bg-[var(--neutral-4)]',
-    text: 'bg-transparent text-[var(--neutral-5)] border-transparent hover:bg-[var(--neutral-3)] active:bg-[var(--neutral-4)]',
-    outlined: 'bg-transparent text-[var(--primary-base)] border border-[var(--primary-base)] hover:bg-[var(--primary-light)] active:bg-[var(--primary-base)] active:text-white',
+/**
+ * Button Component
+ * Scalable, design-system-driven component based on the Mapear Design System.
+ */
+const Button = ({
+  variant = 'primary',
+  appearance = 'solid',
+  size = 'md',
+  iconLeft,
+  iconRight,
+  iconOnly = false,
+  loading = false,
+  disabled = false,
+  tertiaryTone = 'medium',
+  justify = 'left',
+  className = '',
+  children,
+  ...props
+}) => {
+  
+  // ══ SIZE CONFIGURATION ══════════════════════════════════════════════════
+  const sizeStyles = {
+    lg: {
+      height: 'h-[56px]',
+      padding: iconOnly ? 'px-0 w-[56px]' : 'px-[24px]',
+      fontSize: 'text-[16px]',
+      lineHeight: 'leading-[24px]',
+      iconSize: 18,
+      gap: 'gap-[8px]'
+    },
+    md: {
+      height: 'h-[40px]',
+      padding: iconOnly ? 'px-0 w-[40px]' : 'px-[16px]',
+      fontSize: 'text-[14px]',
+      lineHeight: 'leading-[21px]',
+      iconSize: 18,
+      gap: 'gap-[8px]'
+    },
+    sm: {
+      height: 'h-[36px]',
+      padding: iconOnly ? 'px-0 w-[36px]' : 'px-[12px]',
+      fontSize: 'text-[14px]',
+      lineHeight: 'leading-[21px]',
+      iconSize: 16,
+      gap: 'gap-[8px]'
+    },
+    xs: {
+      height: 'h-[28px]',
+      padding: iconOnly ? 'px-0 w-[28px]' : 'px-[8px]',
+      fontSize: 'text-[12px]',
+      lineHeight: 'leading-[18px]',
+      iconSize: 14,
+      gap: 'gap-[6px]'
+    }
   };
 
-  let sizeClass = "";
-  if (iconOnly) {
-    if (size === 'xs') sizeClass = "w-[24px] h-[24px] p-0";
-    else if (size === 'sm') sizeClass = "w-[32px] h-[32px] p-0";
-    else if (size === 'default') sizeClass = "w-[40px] h-[40px] p-0";
-    else if (size === 'lg') sizeClass = "w-[48px] h-[48px] p-0";
-  } else {
-    if (size === 'xs') sizeClass = "px-[8px] py-[4px] text-[11px]";
-    else if (size === 'sm') sizeClass = "px-[12px] py-[6px] text-[12px]";
-    else if (size === 'default') sizeClass = "px-[16px] py-[8px] text-[13px] md:text-[14px]";
-    else if (size === 'lg') sizeClass = "px-[24px] py-[12px] text-[15px] md:text-[16px]";
-  }
+  // ══ VARIANT & APPEARANCE CONFIGURATION ══════════════════════════════════
+  const variantStyles = {
+    primary: {
+      solid: `bg-[var(--primary-base)] text-[var(--neutral-0)] border-transparent 
+              hover:bg-[var(--primary-dark)] 
+              active:bg-[var(--primary-extra-dark)]`,
+      ghost: `bg-transparent text-[var(--primary-base)] border-transparent
+              hover:bg-[var(--primary-light)] hover:text-[var(--primary-dark)]
+              active:bg-[var(--primary-dark)] active:text-[var(--primary-extra-light)]`
+    },
+    secondary: {
+      solid: `bg-[var(--primary-extra-light)] text-[var(--primary-dark)] border-transparent
+              hover:bg-[var(--primary-light)]
+              active:bg-[var(--primary-base)]`,
+      ghost: `bg-transparent text-[var(--primary-extra-dark)] border-transparent
+              hover:bg-[var(--primary-light)] hover:bg-opacity-[0.48]
+              active:bg-[var(--primary-base)] active:text-[var(--primary-dark)]`
+    },
+    tertiary: {
+      solid: `bg-[var(--neutral-0)] border-[var(--neutral-3)] border
+              hover:bg-[var(--neutral-2)] hover:border-[var(--neutral-3)]
+              active:bg-[var(--neutral-4)] active:border-[var(--neutral-5)]`,
+      ghost: `bg-transparent border-transparent
+              hover:bg-[var(--neutral-2)]
+              active:bg-[var(--neutral-4)]`
+    }
+  };
+
+  // ══ TERTIARY LABEL RULE ════════════════════════════════════════════════
+  const getTertiaryLabelColor = () => {
+    if (variant !== 'tertiary') return '';
+    return tertiaryTone === 'high' ? 'text-[var(--neutral-6)]' : 'text-[var(--neutral-5)]';
+  };
+
+  const justifyStyles = {
+    left: 'justify-start',
+    center: 'justify-center',
+    right: 'justify-end'
+  };
+
+  const currentSize = sizeStyles[size] || sizeStyles.md;
+  const currentVariant = variantStyles[variant]?.[appearance] || variantStyles.primary.solid;
+  const tertiaryLabelColor = getTertiaryLabelColor();
+  const currentJustify = iconOnly ? 'justify-center' : (justifyStyles[justify] || justifyStyles.left);
+
+  // ══ LOADING SPINNER ════════════════════════════════════════════════════
+  const Spinner = () => (
+    <svg 
+      className="animate-spin" 
+      width={currentSize.iconSize} 
+      height={currentSize.iconSize} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    >
+      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+    </svg>
+  );
 
   return (
     <button
       className={`
-        rounded-[4px] font-semibold transition-all duration-200 
-        flex items-center justify-center gap-[8px] cursor-pointer outline-none shrink-0
-        active:scale-[0.98] 
-        disabled:opacity-40 disabled:cursor-not-allowed disabled:grayscale-[0.5]
-        ${variantClasses[variant] || variantClasses.primary}
-        ${sizeClass} 
+        relative flex items-center font-semibold transition-all duration-120
+        rounded-[4px] cursor-pointer outline-none shrink-0 overflow-hidden
+        focus-visible:ring-2 focus-visible:ring-[var(--primary-dark)] focus-visible:ring-offset-2
+        active:scale-[0.97]
+        disabled:bg-[var(--neutral-2)] disabled:text-[var(--neutral-3)] 
+        disabled:cursor-not-allowed disabled:pointer-events-none disabled:scale-100
+        ${currentJustify}
+        ${currentVariant}
+        ${currentSize.height}
+        ${currentSize.padding}
+        ${currentSize.fontSize}
+        ${currentSize.lineHeight}
+        ${currentSize.gap}
+        ${tertiaryLabelColor}
         ${className}
       `}
-      style={props.style}
+      disabled={disabled || loading}
       {...props}
     >
-      {children}
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          {iconLeft && !iconOnly && (
+            <span className="flex items-center justify-center transition-colors shrink-0">
+              {React.cloneElement(iconLeft, { size: currentSize.iconSize, stroke: 'currentColor' })}
+            </span>
+          )}
+          
+          {iconOnly ? (
+            <span className="flex items-center justify-center transition-colors">
+              {React.cloneElement(iconLeft || iconRight || children, { size: currentSize.iconSize, stroke: 'currentColor' })}
+            </span>
+          ) : (
+            <span className="truncate">{children}</span>
+          )}
+
+          {iconRight && !iconOnly && (
+            <span className="flex items-center justify-center transition-colors shrink-0">
+              {React.cloneElement(iconRight, { size: currentSize.iconSize, stroke: 'currentColor' })}
+            </span>
+          )}
+        </>
+      )}
     </button>
   );
 };
