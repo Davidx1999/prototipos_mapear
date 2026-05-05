@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, ClipboardList, CheckCircle2, XCircle, Save, AlertTriangle, CheckCircle, ChevronRight } from 'lucide-react';
 import CascadeSelector from '../ui/CascadeSelector';
+import Breadcrumb from '../ui/Breadcrumb';
 
 const CASCADE_LEVELS = [
   { id: 'estado', title: 'Estados' },
@@ -116,13 +117,22 @@ export default function RegistroPresenca({ colors, navigateTo }) {
     <div className="flex-1 w-full bg-neutral-1 min-h-screen">
       <main className="max-w-[1000px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[40px] pb-[160px] md:pb-[100px]">
 
+        <Breadcrumb
+          colors={colors}
+          onBack={() => navigateTo('dashboard')}
+          paths={[
+            { label: 'Início', onClick: () => navigateTo('dashboard') },
+            { label: 'Registro de Presença' }
+          ]}
+        />
+
         <div className="mb-[24px] md:mb-[32px] animate-fade-slide">
           <span className="text-[12px] md:text-[13px] font-bold text-primary-base tracking-widest uppercase">Aplicação em Andamento</span>
           <h1 className="text-[24px] md:text-[32px] font-black text-neutral-6 mt-[4px] md:mt-[8px] leading-tight font-montserrat">Registro de Presença</h1>
         </div>
 
         {/* SELETOR EM CASCATA */}
-        <div className="mb-[32px]">
+        <div className="mb-[32px] relative" style={{ zIndex: 500 }}>
           <CascadeSelector
             db={db}
             levels={CASCADE_LEVELS}

@@ -37,7 +37,7 @@ export default function HeatmapSidebar({
           <hr className="border-neutral-2" />
 
           {/* Filtro em Cascata */}
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 relative" style={{ zIndex: 500 }}>
             <span className="text-[11px] font-bold text-neutral-5 uppercase tracking-wider mb-1">Filtro em Cascata</span>
             <CascadeSelector
               db={devDB}

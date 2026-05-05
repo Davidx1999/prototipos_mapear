@@ -2,10 +2,21 @@
 import React from 'react';
 import { Home, Layout, ArrowLeft } from 'lucide-react';
 import Button from '../ui/Button';
+import Breadcrumb from '../ui/Breadcrumb';
 
 const EmptyStatePage = ({ colors, navigateTo, title }) => {
   return (
-    <main className="flex-1 w-full flex flex-col items-center animate-fade-in-up text-center min-h-[calc(100vh-100px)]">
+    <main className="flex-1 w-full flex flex-col animate-fade-in-up text-center min-h-[calc(100vh-100px)]">
+      <div className="w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] pt-[24px]">
+        <Breadcrumb 
+          colors={colors}
+          onBack={() => navigateTo('dashboard')}
+          paths={[
+            { label: 'Início', onClick: () => navigateTo('dashboard') },
+            { label: title }
+          ]}
+        />
+      </div>
       <div className="flex-1 w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] flex flex-col items-center justify-center py-[60px]">
         {/* Ilustração ou Ícone Grande */}
         <div className="relative mb-[80px]">

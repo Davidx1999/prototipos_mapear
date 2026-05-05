@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import Button from '../ui/Button';
 import ScrollableTabs from '../ui/ScrollableTabs';
+import Input from '../ui/Input';
+import Breadcrumb from '../ui/Breadcrumb';
 import { mockComponentes, mockDominios, mockConhecimentos, mockHabilidades, mockRelacoes } from '../../data/mockData';
 
 const Saberes = ({ 
@@ -59,9 +61,12 @@ const Saberes = ({
         </div>
 
         <h3 className="text-[16px] md:text-[18px] font-bold mb-[16px]" style={{ color: colors.neutral[7] }}>Filtrar Destino</h3>
-        <div className="flex flex-col sm:flex-row gap-[16px] mb-[24px]">
-          <input type="text" placeholder="Pesquise por título do destino" className="flex-1 px-[16px] py-[10px] rounded-[8px] border outline-none" style={{ borderColor: colors.neutral[3] }} />
-          <select className="flex-1 px-[16px] py-[10px] rounded-[8px] border outline-none bg-neutral-0" style={{ borderColor: colors.neutral[3] }}>
+        <div className="flex flex-col gap-[12px] mb-[24px]">
+          <Input 
+            iconLeft={<Search />}
+            placeholder="Pesquise por título do destino"
+          />
+          <select className="w-full px-[16px] py-[10px] rounded-[8px] border outline-none bg-neutral-0" style={{ borderColor: colors.neutral[3] }}>
             <option>Escolha as relações</option>
           </select>
         </div>
@@ -96,16 +101,40 @@ const Saberes = ({
 
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[32px] animate-fade-slide flex flex-col h-full bg-neutral-0">
-      <div className="flex items-center gap-[8px] mb-[16px] md:mb-[24px] overflow-x-auto hide-scrollbar whitespace-nowrap">
-        <Button variant="tertiary" iconOnly size="sm" onClick={() => navigateTo('dashboard')}><ChevronLeft size={16}/></Button>
-        <span className="text-[13px] md:text-[14px] font-medium cursor-pointer hover:underline shrink-0" onClick={() => navigateTo('dashboard')} style={{ color: colors.primary.base }}>Início</span>
-        <span className="text-[13px] md:text-[14px] font-medium shrink-0" style={{ color: colors.neutral[4] }}>/ Gerenciamento de Matrizes de Saberes</span>
-      </div>
+      <Breadcrumb 
+        colors={colors}
+        onBack={() => navigateTo('dashboard')}
+        paths={[
+          { label: 'Início', onClick: () => navigateTo('dashboard') },
+          { label: 'Gerenciamento de Matrizes de Saberes' }
+        ]}
+      />
 
       <h2 className="text-[22px] md:text-[28px] font-bold mb-[24px] md:mb-[32px]" style={{ color: colors.neutral[7] }}>Gerenciamento da Matriz de Saberes</h2>
 
-      <div className="sticky top-[58px] md:top-[74px] z-40 bg-neutral-0 pt-[8px] md:pt-[16px] pb-[8px] -mx-[16px] md:-mx-[32px] px-[16px] md:px-[32px] mb-[16px] md:mb-[24px]">
-        <ScrollableTabs tabs={tabs} activeTab={activeSaberesTab} onTabClick={setActiveSaberesTab} colors={colors} />
+      <div className="sticky top-[52px] md:top-[74px] z-40 bg-neutral-0 pt-[8px] md:pt-[16px] pb-[8px] -mx-[16px] md:-mx-[32px] px-[16px] md:px-[32px] mb-[16px] md:mb-[24px]">
+        {/* Desktop Tabs */}
+        <div className="hidden md:block">
+          <ScrollableTabs tabs={tabs} activeTab={activeSaberesTab} onTabClick={setActiveSaberesTab} colors={colors} />
+        </div>
+
+        {/* Mobile "Pill" Tabs */}
+        <div className="md:hidden flex overflow-x-auto hide-scrollbar gap-[8px] px-[4px] py-[4px] bg-neutral-1 rounded-[10px] border shadow-inner" style={{ borderColor: colors.neutral[2] }}>
+           {tabs.map((tab, idx) => (
+             <button 
+               key={tab} 
+               onClick={() => setActiveSaberesTab(idx)}
+               className={`px-[16px] py-[8px] rounded-[8px] text-[12px] font-bold whitespace-nowrap transition-all duration-200 ${
+                 activeSaberesTab === idx 
+                   ? 'bg-primary-base text-neutral-0 shadow-md transform scale-[1.02]' 
+                   : 'text-neutral-5 hover:text-primary-base'
+               }`}
+             >
+               {tab}
+             </button>
+           ))}
+        </div>
+
         {showAlert && (
           <div className="flex justify-between items-start md:items-center px-[16px] md:px-[24px] py-[12px] md:py-[16px] rounded-[8px] mt-[16px] animate-fade-slide" style={{ backgroundColor: '#FEE2E2', border: '1px solid #FCA5A5' }}>
             <div className="flex items-start md:items-center gap-[12px] text-[#DC2626] font-medium text-[13px] md:text-[14px]">
@@ -121,11 +150,14 @@ const Saberes = ({
         {activeSaberesTab !== 6 && (
           <div className="flex flex-col md:flex-row justify-between md:items-center gap-[12px]">
             <div className="flex items-center gap-[8px] md:gap-[16px] w-full">
-               <input type="text" placeholder="Pesquise pelo código ou título" className="flex-1 px-[16px] py-[10px] md:py-[12px] rounded-[8px] border text-[13px] md:text-[14px] outline-none transition-colors focus:border-primary-base" style={{ borderColor: colors.neutral[3] }} />
+               <Input 
+                 iconLeft={<Search />}
+                 placeholder="Pesquise pelo código ou título"
+               />
                <Button variant="primary" iconOnly size="default"><Search size={20} /></Button>
             </div>
             {activeSaberesTab > 0 && (
-              <div className="flex gap-[8px] overflow-x-auto hide-scrollbar w-full md:w-auto justify-start md:justify-end">
+              <div className="flex gap-[8px] overflow-x-auto hide-scrollbar w-full md:w-auto justify-start md:justify-end pb-[2px]">
                 <div className="flex items-center gap-[8px] px-[12px] py-[6px] rounded-[8px] border cursor-pointer bg-neutral-0 text-[12px] font-semibold hover:bg-neutral-1 whitespace-nowrap shrink-0" style={{ borderColor: colors.neutral[3], color: colors.neutral[6] }}><Filter size={14} /> Comp. Curricular <ChevronDown size={14} /></div>
                 {(activeSaberesTab === 4 || activeSaberesTab === 5) && <div className="flex items-center gap-[8px] px-[12px] py-[6px] rounded-[8px] border cursor-pointer bg-neutral-0 text-[12px] font-semibold hover:bg-neutral-1 whitespace-nowrap shrink-0" style={{ borderColor: colors.neutral[3], color: colors.neutral[6] }}><Filter size={14} /> Dom. Repertório <ChevronDown size={14} /></div>}
                 {activeSaberesTab === 5 && (
@@ -155,24 +187,44 @@ const Saberes = ({
       <div className="bg-neutral-0 rounded-[8px] border flex-1 shadow-sm mb-[24px] md:mb-[32px] overflow-hidden" style={{ borderColor: colors.neutral[2] }}>
         {activeSaberesTab === 0 && (
           <div className="w-full">
-            <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[11px] md:text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
-              <div className="w-[24px] shrink-0"></div><div className="w-[80px] shrink-0">Código</div><div className="flex-1 min-w-0">Título</div><div className="w-[40px] md:w-[80px] shrink-0"></div>
+            <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
+              <div className="w-[24px] shrink-0"></div><div className="w-[80px] shrink-0">Código</div><div className="flex-1 min-w-0">Título</div><div className="w-[80px] shrink-0"></div>
             </div>
             {mockComponentes.map((m) => (
               <React.Fragment key={m.cod}>
-                <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[13px] md:text-[14px] text-neutral-6">
+                {/* Desktop Row */}
+                <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[14px] text-neutral-6">
                   <div className="w-[24px] shrink-0 flex justify-center cursor-pointer" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
                     <ChevronDown size={18} className={`transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`} style={{ color: colors.primary.base }} />
                   </div>
                   <div className="w-[80px] shrink-0 font-medium text-neutral-5 truncate" title={m.cod}>{m.cod}</div>
                   <div className="flex-1 min-w-0 font-bold truncate" title={m.title}>{m.title}</div>
-                  <div className="w-[40px] md:w-[80px] shrink-0 flex justify-end gap-[4px] md:gap-[8px]">
+                  <div className="w-[80px] shrink-0 flex justify-end gap-[8px]">
                     <Button variant="tertiary" iconOnly size="sm"><Edit2 size={14}/></Button>
                   </div>
                 </div>
+
+                {/* Mobile Card */}
+                <div className="md:hidden flex flex-col border-b p-[16px] gap-[12px]">
+                   <div className="flex items-start justify-between gap-[12px]">
+                      <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
+                         <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`}>
+                            <ChevronDown size={18} className="text-primary-base" />
+                         </div>
+                         <div className="flex flex-col flex-1 min-w-0">
+                            <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">{m.cod}</span>
+                            <h4 className="text-[15px] font-bold text-neutral-7 leading-tight">{m.title}</h4>
+                         </div>
+                      </div>
+                      <div className="flex gap-[8px]">
+                         <Button variant="tertiary" iconOnly size="sm"><Edit2 size={14}/></Button>
+                      </div>
+                   </div>
+                </div>
+
                 {expandedItem === m.cod && (
-                  <div className="px-[48px] sm:px-[64px] py-[16px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
-                    <h4 className="font-bold text-[14px] text-neutral-6 mb-[8px]">{m.title}</h4>
+                  <div className="px-[24px] md:px-[64px] py-[16px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
+                    <h4 className="md:hidden font-bold text-[14px] text-neutral-6 mb-[8px]">{m.title}</h4>
                     <p className="text-[13px] text-neutral-5">Código Identificador: {m.cod}</p>
                   </div>
                 )}
@@ -183,29 +235,52 @@ const Saberes = ({
 
         {(activeSaberesTab >= 1 && activeSaberesTab <= 3) && (
           <div className="w-full">
-            <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[11px] md:text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
-              <div className="w-[24px] shrink-0"></div><div className="w-[60px] sm:w-[80px] shrink-0">Código</div><div className="flex-1 min-w-0">Título</div><div className="flex-1 min-w-0 hidden md:block">Comp. Curricular</div><div className="w-[120px] shrink-0"></div>
+            <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
+              <div className="w-[24px] shrink-0"></div><div className="w-[80px] shrink-0">Código</div><div className="flex-1 min-w-0">Título</div><div className="flex-1 min-w-0">Comp. Curricular</div><div className="w-[120px] shrink-0"></div>
             </div>
             {mockDominios.map((m) => (
               <React.Fragment key={m.cod}>
-                <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[13px] md:text-[14px] text-neutral-6">
+                {/* Desktop Row */}
+                <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[14px] text-neutral-6">
                   <div className="w-[24px] shrink-0 flex justify-center cursor-pointer" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
                     <ChevronDown size={18} className={`transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`} style={{ color: colors.primary.base }} />
                   </div>
-                  <div className="w-[60px] sm:w-[80px] shrink-0 font-medium text-neutral-5 truncate" title={m.cod}>{m.cod}</div>
+                  <div className="w-[80px] shrink-0 font-medium text-neutral-5 truncate" title={m.cod}>{m.cod}</div>
                   <div className="flex-1 min-w-0 font-bold truncate" title={m.title}>{m.title}</div>
-                  <div className="flex-1 min-w-0 hidden md:block truncate" title={m.comp}>{m.comp}</div>
-                  <div className="w-[120px] shrink-0 flex justify-end gap-[4px] md:gap-[8px]">
+                  <div className="flex-1 min-w-0 truncate" title={m.comp}>{m.comp}</div>
+                  <div className="w-[120px] shrink-0 flex justify-end gap-[8px]">
                     <Button variant="tertiary" iconOnly size="sm"><AlignLeft size={14}/></Button>
                     <Button variant="tertiary" iconOnly size="sm"><Edit2 size={14}/></Button>
                     <Button variant="tertiary" iconOnly size="sm" onClick={() => handleExcluirItem(m.cod)}><Trash2 size={14}/></Button>
                   </div>
                 </div>
+
+                {/* Mobile Card */}
+                <div className="md:hidden flex flex-col border-b p-[16px] gap-[12px]">
+                   <div className="flex items-start justify-between gap-[12px]">
+                      <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
+                         <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`}>
+                            <ChevronDown size={18} className="text-primary-base" />
+                         </div>
+                         <div className="flex flex-col flex-1 min-w-0">
+                            <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">{m.cod}</span>
+                            <h4 className="text-[15px] font-bold text-neutral-7 leading-tight">{m.title}</h4>
+                            <span className="text-[12px] text-neutral-5 mt-[2px] truncate">{m.comp}</span>
+                         </div>
+                      </div>
+                      <div className="flex gap-[4px]">
+                         <Button variant="tertiary" iconOnly size="xs"><AlignLeft size={14}/></Button>
+                         <Button variant="tertiary" iconOnly size="xs" onClick={() => handleExcluirItem(m.cod)}><Trash2 size={14}/></Button>
+                      </div>
+                   </div>
+                </div>
+
                 {expandedItem === m.cod && (
-                  <div className="px-[48px] sm:px-[64px] py-[16px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
-                    <h4 className="font-bold text-[14px] text-neutral-6 mb-[12px]">{m.title}</h4>
-                    <div className="md:hidden flex flex-col gap-[8px] text-[13px] text-neutral-5">
-                      <div><strong>Comp. Curricular:</strong> {m.comp}</div>
+                  <div className="px-[24px] md:px-[64px] py-[16px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
+                    <h4 className="md:hidden font-bold text-[14px] text-neutral-6 mb-[12px]">{m.title}</h4>
+                    <div className="flex flex-col gap-[8px] text-[13px] text-neutral-5">
+                      <div><strong>Componente Curricular:</strong> {m.comp}</div>
+                      <div><strong>Código:</strong> {m.cod}</div>
                     </div>
                   </div>
                 )}
@@ -216,32 +291,54 @@ const Saberes = ({
 
         {activeSaberesTab === 4 && (
           <div className="w-full">
-            <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[11px] md:text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
-              <div className="w-[24px] shrink-0"></div><div className="w-[80px] shrink-0 hidden sm:block">Código</div><div className="flex-1 min-w-0">Título</div><div className="flex-1 min-w-0 hidden lg:block">Dom. Repertório</div><div className="flex-1 min-w-0 hidden md:block">Comp. Curricular</div><div className="w-[120px] shrink-0"></div>
+            <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
+              <div className="w-[24px] shrink-0"></div><div className="w-[80px] shrink-0">Código</div><div className="flex-1 min-w-0">Título</div><div className="flex-1 min-w-0">Dom. Repertório</div><div className="flex-1 min-w-0">Comp. Curricular</div><div className="w-[120px] shrink-0"></div>
             </div>
             {mockConhecimentos.map((m) => (
               <React.Fragment key={m.cod}>
-                <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[13px] md:text-[14px] text-neutral-6">
+                {/* Desktop Row */}
+                <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[14px] text-neutral-6">
                   <div className="w-[24px] shrink-0 flex justify-center cursor-pointer" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
                     <ChevronDown size={18} className={`transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`} style={{ color: colors.primary.base }} />
                   </div>
-                  <div className="w-[80px] shrink-0 font-medium text-neutral-5 truncate hidden sm:block" title={m.cod}>{m.cod}</div>
+                  <div className="w-[80px] shrink-0 font-medium text-neutral-5 truncate" title={m.cod}>{m.cod}</div>
                   <div className="flex-1 min-w-0 font-bold truncate" title={m.title}>{m.title}</div>
-                  <div className="flex-1 min-w-0 hidden lg:block truncate" title={m.dom}>{m.dom}</div>
-                  <div className="flex-1 min-w-0 hidden md:block truncate" title={m.comp}>{m.comp}</div>
-                  <div className="w-[120px] shrink-0 flex justify-end gap-[4px] md:gap-[8px]">
+                  <div className="flex-1 min-w-0 truncate" title={m.dom}>{m.dom}</div>
+                  <div className="flex-1 min-w-0 truncate" title={m.comp}>{m.comp}</div>
+                  <div className="w-[120px] shrink-0 flex justify-end gap-[8px]">
                     <Button variant="tertiary" iconOnly size="sm"><AlignLeft size={14}/></Button>
                     <Button variant="tertiary" iconOnly size="sm"><Edit2 size={14}/></Button>
                     <Button variant="tertiary" iconOnly size="sm"><Trash2 size={14}/></Button>
                   </div>
                 </div>
+
+                {/* Mobile Card */}
+                <div className="md:hidden flex flex-col border-b p-[16px] gap-[12px]">
+                   <div className="flex items-start justify-between gap-[12px]">
+                      <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
+                         <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`}>
+                            <ChevronDown size={18} className="text-primary-base" />
+                         </div>
+                         <div className="flex flex-col flex-1 min-w-0">
+                            <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">{m.cod}</span>
+                            <h4 className="text-[15px] font-bold text-neutral-7 leading-tight">{m.title}</h4>
+                            <span className="text-[12px] text-neutral-5 mt-[2px] truncate">{m.dom}</span>
+                         </div>
+                      </div>
+                      <div className="flex gap-[4px]">
+                         <Button variant="tertiary" iconOnly size="xs"><AlignLeft size={14}/></Button>
+                         <Button variant="tertiary" iconOnly size="xs"><Trash2 size={14}/></Button>
+                      </div>
+                   </div>
+                </div>
+
                 {expandedItem === m.cod && (
-                  <div className="px-[48px] sm:px-[64px] py-[16px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
-                    <h4 className="font-bold text-[14px] text-neutral-6 mb-[8px]">{m.title}</h4>
+                  <div className="px-[24px] md:px-[64px] py-[16px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
+                    <h4 className="md:hidden font-bold text-[14px] text-neutral-6 mb-[8px]">{m.title}</h4>
                     <p className="text-[13px] text-neutral-5 mb-[12px]"><strong>Código:</strong> {m.cod}</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-[12px] text-[13px] text-neutral-5">
-                      <div className="lg:hidden"><strong>Domínio de Repertório:</strong><br/>{m.dom}</div>
-                      <div className="md:hidden"><strong>Componente Curricular:</strong><br/>{m.comp}</div>
+                    <div className="grid grid-cols-1 gap-[8px] text-[13px] text-neutral-5">
+                      <div><strong>Domínio de Repertório:</strong> {m.dom}</div>
+                      <div><strong>Componente Curricular:</strong> {m.comp}</div>
                     </div>
                   </div>
                 )}
@@ -252,31 +349,53 @@ const Saberes = ({
 
         {activeSaberesTab === 5 && (
           <div className="w-full">
-            <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[11px] md:text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
-              <div className="w-[24px] shrink-0"></div><div className="w-[80px] shrink-0 hidden sm:block">Código</div><div className="flex-[2] min-w-0">Título</div><div className="flex-1 min-w-0 hidden lg:block">Conhecimento</div><div className="flex-1 min-w-0 hidden xl:block">Dom. Cog</div><div className="w-[80px] shrink-0"></div>
+            <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
+              <div className="w-[24px] shrink-0"></div><div className="w-[80px] shrink-0">Código</div><div className="flex-[2] min-w-0">Título</div><div className="flex-1 min-w-0">Conhecimento</div><div className="flex-1 min-w-0">Dom. Cog</div><div className="w-[80px] shrink-0"></div>
             </div>
             {mockHabilidades.map((m) => (
               <React.Fragment key={m.cod}>
-                <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[13px] md:text-[14px] text-neutral-6">
+                {/* Desktop Row */}
+                <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[14px] text-neutral-6">
                   <div className="w-[24px] shrink-0 flex justify-center cursor-pointer" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
                     <ChevronDown size={18} className={`transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`} style={{ color: colors.primary.base }} />
                   </div>
-                  <div className="w-[80px] shrink-0 font-bold truncate hidden sm:block" title={m.cod}>{m.cod}</div>
+                  <div className="w-[80px] shrink-0 font-bold truncate" title={m.cod}>{m.cod}</div>
                   <div className="flex-[2] min-w-0 font-bold truncate" title={m.title}>{m.title}</div>
-                  <div className="flex-1 min-w-0 hidden lg:block truncate" title={m.conh}>{m.conh}</div>
-                  <div className="flex-1 min-w-0 hidden xl:block truncate" title={m.domC}>{m.domC}</div>
-                  <div className="w-[80px] shrink-0 flex justify-end gap-[4px] md:gap-[8px]">
+                  <div className="flex-1 min-w-0 truncate" title={m.conh}>{m.conh}</div>
+                  <div className="flex-1 min-w-0 truncate" title={m.domC}>{m.domC}</div>
+                  <div className="w-[80px] shrink-0 flex justify-end gap-[8px]">
                     <Button variant="tertiary" iconOnly size="sm"><Edit2 size={14}/></Button>
                     <Button variant="tertiary" iconOnly size="sm"><Trash2 size={14}/></Button>
                   </div>
                 </div>
+
+                {/* Mobile Card */}
+                <div className="md:hidden flex flex-col border-b p-[16px] gap-[12px]">
+                   <div className="flex items-start justify-between gap-[12px]">
+                      <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
+                         <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`}>
+                            <ChevronDown size={18} className="text-primary-base" />
+                         </div>
+                         <div className="flex flex-col flex-1 min-w-0">
+                            <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">{m.cod}</span>
+                            <h4 className="text-[15px] font-bold text-neutral-7 leading-tight">{m.title}</h4>
+                            <span className="text-[12px] text-neutral-5 mt-[2px] truncate">{m.conh}</span>
+                         </div>
+                      </div>
+                      <div className="flex gap-[4px]">
+                         <Button variant="tertiary" iconOnly size="xs"><Edit2 size={14}/></Button>
+                         <Button variant="tertiary" iconOnly size="xs"><Trash2 size={14}/></Button>
+                      </div>
+                   </div>
+                </div>
+
                 {expandedItem === m.cod && (
-                  <div className="px-[48px] sm:px-[64px] py-[24px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
-                    <h4 className="font-bold text-[14px] mb-[16px]" style={{ color: colors.neutral[7] }}>{m.title}</h4>
+                  <div className="px-[24px] md:px-[64px] py-[24px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
+                    <h4 className="md:hidden font-bold text-[14px] mb-[16px]" style={{ color: colors.neutral[7] }}>{m.title}</h4>
                     
-                    <div className="xl:hidden grid grid-cols-2 md:grid-cols-4 gap-[16px] mb-[24px] text-[13px] text-neutral-5">
-                       <div className="sm:hidden"><strong>Código:</strong><br/>{m.cod}</div>
-                       <div className="lg:hidden"><strong>Conhecimento:</strong><br/>{m.conh}</div>
+                    <div className="grid grid-cols-2 gap-[16px] mb-[24px] text-[13px] text-neutral-5">
+                       <div><strong>Código:</strong><br/>{m.cod}</div>
+                       <div><strong>Conhecimento:</strong><br/>{m.conh}</div>
                        <div><strong>Domínio Cognitivo:</strong><br/>{m.domC}</div>
                        <div><strong>Domínio Repertório:</strong><br/>{m.domR}</div>
                        <div><strong>Comp. Curricular:</strong><br/>{m.comp}</div>
@@ -296,26 +415,49 @@ const Saberes = ({
 
         {activeSaberesTab === 6 && (
           <div className="w-full">
-            <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[11px] md:text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
-              <div className="w-[24px] shrink-0"></div><div className="w-[100px] sm:w-[140px] shrink-0">Hab. Origem</div><div className="flex-1 min-w-0 hidden sm:block">Relações</div><div className="w-[80px] shrink-0"></div>
+            <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[12px] font-bold uppercase tracking-wide bg-neutral-1 text-neutral-5">
+              <div className="w-[24px] shrink-0"></div><div className="w-[140px] shrink-0">Hab. Origem</div><div className="flex-1 min-w-0">Relações</div><div className="w-[80px] shrink-0"></div>
             </div>
             {mockRelacoes.map((m) => (
               <React.Fragment key={m.origem}>
-                <div className="flex items-center gap-[8px] sm:gap-[16px] px-[16px] sm:px-[24px] py-[12px] border-b text-[13px] md:text-[14px] text-neutral-6">
+                {/* Desktop Row */}
+                <div className="hidden md:flex items-center gap-[16px] px-[24px] py-[12px] border-b text-[14px] text-neutral-6">
                   <div className="w-[24px] shrink-0 flex justify-center cursor-pointer" onClick={() => setExpandedItem(expandedItem === m.origem ? null : m.origem)}>
                     <ChevronDown size={18} className={`transition-transform ${expandedItem === m.origem ? 'rotate-180' : ''}`} style={{ color: colors.primary.base }} />
                   </div>
-                  <div className="w-[100px] sm:w-[140px] shrink-0 font-bold truncate" title={m.origem}>{m.origem}</div>
-                  <div className="flex-1 min-w-0 hidden sm:flex gap-[8px] overflow-hidden">
+                  <div className="w-[140px] shrink-0 font-bold truncate" title={m.origem}>{m.origem}</div>
+                  <div className="flex-1 min-w-0 flex gap-[8px] overflow-hidden">
                     {m.rel.map(r => <span key={r} className="bg-[#D9F0FC] text-primary-base px-[8px] py-[2px] rounded-[4px] font-semibold text-[11px] shrink-0">{r}</span>)}
                   </div>
-                  <div className="w-[80px] shrink-0 flex justify-end gap-[4px] md:gap-[8px]">
-                    <Button variant="tertiary" iconOnly size="sm" className="hidden md:flex"><Edit2 size={14}/></Button>
+                  <div className="w-[80px] shrink-0 flex justify-end gap-[8px]">
                     <Button variant="secondary" iconOnly size="sm" onClick={() => setRelationsViewMode('details')}><Eye size={14}/></Button>
                   </div>
                 </div>
+
+                {/* Mobile Card */}
+                <div className="md:hidden flex flex-col border-b p-[16px] gap-[12px]">
+                   <div className="flex items-start justify-between gap-[12px]">
+                      <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.origem ? null : m.origem)}>
+                         <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.origem ? 'rotate-180' : ''}`}>
+                            <ChevronDown size={18} className="text-primary-base" />
+                         </div>
+                         <div className="flex flex-col flex-1 min-w-0">
+                            <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">Origem</span>
+                            <h4 className="text-[15px] font-bold text-neutral-7 leading-tight">{m.origem}</h4>
+                            <div className="flex gap-[4px] mt-[6px] overflow-x-auto hide-scrollbar">
+                               {m.rel.slice(0, 3).map(r => <span key={r} className="bg-[#D9F0FC] text-primary-base px-[6px] py-[2px] rounded-[4px] font-bold text-[10px] shrink-0">{r}</span>)}
+                               {m.rel.length > 3 && <span className="text-[10px] text-neutral-4 font-bold">+{m.rel.length - 3}</span>}
+                            </div>
+                         </div>
+                      </div>
+                      <div className="flex gap-[4px]">
+                         <Button variant="secondary" iconOnly size="xs" onClick={() => setRelationsViewMode('details')}><Eye size={14}/></Button>
+                      </div>
+                   </div>
+                </div>
+
                 {expandedItem === m.origem && (
-                  <div className="px-[48px] sm:px-[64px] py-[16px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
+                  <div className="px-[24px] md:px-[64px] py-[16px] border-b bg-[#FDFDFD]" style={{ borderColor: colors.neutral[2] }}>
                     <h4 className="font-bold text-[13px] mb-[12px]" style={{ color: colors.neutral[5] }}>Habilidades relacionadas à Habilidade de Origem</h4>
                     <div className="flex flex-wrap gap-[8px] mb-[16px]">
                       {m.rel.map(r => <span key={r} className="border px-[12px] py-[4px] rounded-[4px] font-semibold text-[12px] shadow-sm bg-neutral-0">{r}</span>)}
@@ -328,16 +470,20 @@ const Saberes = ({
         )}
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mt-auto pt-[16px] md:pt-[24px] border-t gap-[16px] md:gap-0" style={{ borderColor: colors.neutral[2] }}>
-        <div className="flex flex-col sm:flex-row items-center gap-[8px] sm:gap-[16px] w-full md:w-auto order-2 md:order-1">
-          <span className="text-[12px] md:text-[13px]" style={{ color: colors.neutral[5] }}>1 a 10 de 231 registros</span>
-          <div className="flex items-center gap-[8px]">
+      <div className="flex flex-col md:flex-row justify-between items-center mt-auto pt-[16px] md:pt-[24px] border-t gap-[20px] md:gap-0" style={{ borderColor: colors.neutral[2] }}>
+        <div className="flex flex-col sm:flex-row items-center gap-[12px] sm:gap-[16px] w-full md:w-auto order-2 md:order-1">
+          <span className="text-[12px] md:text-[13px] font-medium" style={{ color: colors.neutral[5] }}>Exibindo 1 a 10 de 231 registros</span>
+          <div className="flex items-center gap-[12px]">
             <Button variant="tertiary" iconOnly size="sm"><ChevronLeft size={16} /></Button>
-            <span className="text-[12px] md:text-[13px] font-medium">Página <input type="text" defaultValue="1" className="w-[32px] md:w-[40px] text-center border rounded-[4px] mx-[4px] py-[2px] md:py-[4px]" style={{ borderColor: colors.neutral[3] }} /> de 88</span>
+            <div className="flex items-center text-[12px] md:text-[13px] font-bold text-neutral-6">
+              Página 
+              <input type="text" defaultValue="1" className="w-[36px] md:w-[44px] text-center border rounded-[4px] mx-[8px] py-[4px] md:py-[6px] outline-none focus:border-primary-base transition-colors" style={{ borderColor: colors.neutral[3] }} /> 
+              de 88
+            </div>
             <Button variant="tertiary" iconOnly size="sm"><ChevronRight size={16} /></Button>
           </div>
         </div>
-        <Button variant="primary" size="default" className="w-full md:w-auto uppercase tracking-wide order-1 md:order-2">
+        <Button variant="primary" size="lg" className="w-full md:w-auto uppercase tracking-wider font-bold shadow-sm order-1 md:order-2">
           Adicionar {tabs[activeSaberesTab].split(' ')[0]}
         </Button>
       </div>

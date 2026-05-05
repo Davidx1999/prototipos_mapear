@@ -3,6 +3,7 @@ import React from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, Search, Edit2, Trash2, Users as UsersIcon } from 'lucide-react';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
+import Breadcrumb from '../ui/Breadcrumb';
 import { mockUsuarios } from '../../data/mockData';
 
 const Usuarios = ({ 
@@ -13,11 +14,14 @@ const Usuarios = ({
 }) => {
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[32px] animate-fade-slide flex flex-col h-full bg-neutral-0">
-      <div className="flex items-center gap-[8px] mb-[16px] md:mb-[24px] overflow-x-auto hide-scrollbar whitespace-nowrap">
-        <Button variant="tertiary" iconOnly size="sm" onClick={() => navigateTo('dashboard')}><ChevronLeft size={16}/></Button>
-        <span className="text-[13px] md:text-[14px] font-medium cursor-pointer hover:underline shrink-0" onClick={() => navigateTo('dashboard')} style={{ color: colors.primary.base }}>Início</span>
-        <span className="text-[13px] md:text-[14px] font-medium shrink-0" style={{ color: colors.neutral[4] }}>/ Gerenciamento de Usuários</span>
-      </div>
+      <Breadcrumb 
+        colors={colors}
+        onBack={() => navigateTo('dashboard')}
+        paths={[
+          { label: 'Início', onClick: () => navigateTo('dashboard') },
+          { label: 'Gerenciamento de Usuários' }
+        ]}
+      />
       <h2 className="text-[22px] md:text-[28px] font-bold mb-[24px] md:mb-[32px]" style={{ color: colors.neutral[7] }}>Gerenciamento de Usuários</h2>
 
       <div className="flex flex-col gap-[12px] mb-[24px] md:mb-[32px]">

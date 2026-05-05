@@ -5,6 +5,7 @@ import {
   Building2, FileText, BarChart, BarChart2, Grid 
 } from 'lucide-react';
 import Button from '../ui/Button';
+import Breadcrumb from '../ui/Breadcrumb';
 import { mockTimeline } from '../../data/mockData';
 
 const Acompanhamento = ({ 
@@ -15,11 +16,14 @@ const Acompanhamento = ({
 }) => {
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[32px] animate-fade-slide flex flex-col h-full bg-neutral-0">
-      <div className="flex items-center gap-[8px] mb-[16px] md:mb-[24px] overflow-x-auto hide-scrollbar whitespace-nowrap">
-        <Button variant="tertiary" iconOnly size="sm" onClick={() => navigateTo('dashboard')}><ChevronLeft size={16}/></Button>
-        <span className="text-[13px] md:text-[14px] font-medium cursor-pointer hover:underline shrink-0" onClick={() => navigateTo('dashboard')} style={{ color: colors.primary.base }}>Início</span>
-        <span className="text-[13px] md:text-[14px] font-medium shrink-0" style={{ color: colors.neutral[4] }}>/ Acompanhamento Escolar</span>
-      </div>
+      <Breadcrumb 
+        colors={colors}
+        onBack={() => navigateTo('dashboard')}
+        paths={[
+          { label: 'Início', onClick: () => navigateTo('dashboard') },
+          { label: 'Acompanhamento Escolar' }
+        ]}
+      />
 
       <h2 className="text-[22px] md:text-[28px] font-bold mb-[8px]" style={{ color: colors.neutral[7] }}>Acompanhamento Escolar</h2>
       <p className="text-[13px] md:text-[14px] mb-[24px] md:mb-[32px]" style={{ color: colors.neutral[5] }}>Para começar, selecione o acompanhamento de notas que deseja realizar entre Alunos ou Escolas.</p>

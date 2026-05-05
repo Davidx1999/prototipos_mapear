@@ -37,7 +37,7 @@ const Input = ({
             ${iconRight ? 'pr-[44px]' : ''}
             ${error 
               ? 'border-red-500 focus:border-red-600' 
-              : 'border-[var(--neutral-3)] focus:border-[var(--primary-base)] focus:ring-1 focus:ring-[var(--primary-base)]/10'}
+              : 'border-[var(--neutral-3)] focus:border-[var(--primary-base)] focus:ring-4 focus:ring-[var(--primary-base)]/5'}
             placeholder:text-[var(--neutral-4)]
             placeholder:font-normal
             text-[var(--neutral-7)]

@@ -19,6 +19,7 @@ import Usuarios from './components/screens/Usuarios';
 import Acompanhamento from './components/screens/Acompanhamento';
 import Devolutivas from './components/screens/Devolutivas';
 import RegistroPresenca from './components/screens/RegistroPresenca';
+import CarregamentoProvas from './components/screens/CarregamentoProvas';
 import GenericModulePage from './components/screens/GenericModulePage';
 import EmptyStatePage from './components/screens/EmptyStatePage';
 
@@ -270,6 +271,12 @@ export default function MapearApp() {
         )}
         {currentScreen === 'registro-presenca' && (
           <RegistroPresenca
+            colors={colors}
+            navigateTo={navigateTo}
+          />
+        )}
+        {currentScreen === 'carregamento-provas' && (
+          <CarregamentoProvas
             colors={colors}
             navigateTo={navigateTo}
           />

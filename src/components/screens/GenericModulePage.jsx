@@ -3,10 +3,19 @@ import React from 'react';
 import { Home, Grid, ChevronRight } from 'lucide-react';
 import { sidebarMenus } from '../../data/constants';
 import Button from '../ui/Button';
+import Breadcrumb from '../ui/Breadcrumb';
 
 const GenericModulePage = ({ colors, navigateTo }) => {
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[48px] animate-fade-in-up">
+      <Breadcrumb 
+        colors={colors}
+        onBack={() => navigateTo('dashboard')}
+        paths={[
+          { label: 'Início', onClick: () => navigateTo('dashboard') },
+          { label: 'Explorar Módulos' }
+        ]}
+      />
       <div className="mb-[40px] flex flex-col md:flex-row md:items-center justify-between gap-[24px]">
         <div>
           <h1 className="text-[28px] md:text-[36px] font-bold mb-[8px]" style={{ color: colors.neutral[7] }}>

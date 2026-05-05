@@ -13,7 +13,7 @@ import React from 'react';
 import {
   Library, BookOpen, FileEdit, PenTool, Users, Database, CheckSquare,
   TrendingUp, UploadCloud, BarChart2, LineChart, LayoutDashboard,
-  GraduationCap, UserCog, Building2, Grid, BookCheck, Edit3, PieChart
+  GraduationCap, UserCog, Building2, Grid, BookCheck, Edit3, PieChart, ClipboardList
 } from 'lucide-react';
 
 export const sidebarMenus = [
@@ -39,7 +39,7 @@ export const sidebarMenus = [
       { id: 'card-alocacao', title: 'Alocação de Avaliações', keywords: ['alunos', 'professores', 'turmas', 'enviar prova', 'distribuir'], desc: 'Distribua as provas criadas associando os testes a turmas ou grupos específicos de estudantes.', icon: <Users size={20} /> },
       { id: 'card-correcao', title: 'Correção de Avaliações', keywords: ['corrigir', 'ia', 'respostas', 'alunos', 'inteligência artificial'], desc: 'Utilize inteligência artificial para agrupar respostas e otimizar a velocidade de correção manual.', icon: <CheckSquare size={20} /> },
       { id: 'card-metricas', title: 'Métricas', keywords: ['desempenho', 'notas', 'alunos', 'escolas', 'indicadores'], desc: 'Acompanhe métricas gerais de correção e tenha a visão do status atual de estudantes e turmas.', icon: <TrendingUp size={20} /> },
-      { id: 'card-upload', title: 'Carregamento', keywords: ['upload', 'pdf', 'scanner', 'digitalizar', 'alunos', 'htr'], desc: 'Faça upload de provas físicas e valide a leitura de respostas manuscritas via tecnologia HTR.', icon: <UploadCloud size={20} /> }
+      { id: 'card-upload', title: 'Carregamento de Provas', route: 'carregamento-provas', keywords: ['upload', 'pdf', 'scanner', 'digitalizar', 'alunos', 'htr'], desc: 'Faça upload de provas físicas e valide a leitura de respostas manuscritas via tecnologia HTR.', icon: <UploadCloud size={20} /> }
     ]
   },
   {
