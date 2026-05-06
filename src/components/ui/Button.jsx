@@ -13,13 +13,14 @@ const Button = ({
   iconOnly = false,
   loading = false,
   disabled = false,
-  tertiaryTone = 'medium',
+  selected = false,
+  tertiaryTone = 'high',
   justify = 'left',
   className = '',
   children,
   ...props
 }) => {
-  
+
   // ══ SIZE CONFIGURATION ══════════════════════════════════════════════════
   const sizeStyles = {
     lg: {
@@ -87,7 +88,7 @@ const Button = ({
   // ══ TERTIARY LABEL RULE ════════════════════════════════════════════════
   const getTertiaryLabelColor = () => {
     if (variant !== 'tertiary') return '';
-    return tertiaryTone === 'high' ? 'text-[var(--neutral-6)]' : 'text-[var(--neutral-5)]';
+    return tertiaryTone === 'high' ? 'text-[var(--neutral-7)]' : 'text-[var(--neutral-5)]';
   };
 
   const justifyStyles = {
@@ -96,6 +97,12 @@ const Button = ({
     right: 'justify-end'
   };
 
+  const selectedStyles = selected ? ({
+    primary: '!bg-[var(--primary-light)] !text-[var(--primary-dark)]',
+    secondary: '!bg-[var(--primary-base)] !text-[var(--primary-dark)]',
+    tertiary: '!bg-[var(--neutral-2)] !text-[var(--neutral-7)]'
+  }[variant] || '') : '';
+
   const currentSize = sizeStyles[size] || sizeStyles.md;
   const currentVariant = variantStyles[variant]?.[appearance] || variantStyles.primary.solid;
   const tertiaryLabelColor = getTertiaryLabelColor();
@@ -103,15 +110,15 @@ const Button = ({
 
   // ══ LOADING SPINNER ════════════════════════════════════════════════════
   const Spinner = () => (
-    <svg 
-      className="animate-spin" 
-      width={currentSize.iconSize} 
-      height={currentSize.iconSize} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2.5" 
-      strokeLinecap="round" 
+    <svg
+      className="animate-spin"
+      width={currentSize.iconSize}
+      height={currentSize.iconSize}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
       strokeLinejoin="round"
     >
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
@@ -121,7 +128,7 @@ const Button = ({
   return (
     <button
       className={`
-        relative flex items-center font-semibold transition-all duration-120
+        relative flex flex-row items-center font-semibold transition-all duration-120
         rounded-[4px] cursor-pointer outline-none shrink-0 overflow-hidden
         focus-visible:ring-2 focus-visible:ring-[var(--primary-dark)] focus-visible:ring-offset-2
         active:scale-[0.97]
@@ -129,6 +136,7 @@ const Button = ({
         disabled:cursor-not-allowed disabled:pointer-events-none disabled:scale-100
         ${currentJustify}
         ${currentVariant}
+        ${selectedStyles}
         ${currentSize.height}
         ${currentSize.padding}
         ${currentSize.fontSize}
@@ -149,13 +157,13 @@ const Button = ({
               {React.cloneElement(iconLeft, { size: currentSize.iconSize, stroke: 'currentColor' })}
             </span>
           )}
-          
+
           {iconOnly ? (
             <span className="flex items-center justify-center transition-colors">
               {React.cloneElement(iconLeft || iconRight || children, { size: currentSize.iconSize, stroke: 'currentColor' })}
             </span>
           ) : (
-            <span className="truncate">{children}</span>
+            <span className="truncate flex items-center gap-[inherit]">{children}</span>
           )}
 
           {iconRight && !iconOnly && (

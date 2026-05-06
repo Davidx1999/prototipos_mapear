@@ -34,16 +34,6 @@ const Header = ({
     <header className="sticky top-0 z-[1000] px-[16px] md:px-[32px] py-[10px] md:py-[16px] border-b flex justify-between items-center transition-colors duration-500" style={{ borderColor: colors.neutral[2], backgroundColor: colors.neutral[0] }}>
       {/* ══ ESQUERDA: MENU E LOGO ══════════════════════════════════════════ */}
       <div className="flex items-center gap-[12px] md:gap-[24px]">
-        <div className="lg:hidden">
-          <Button 
-            variant="tertiary" 
-            appearance="ghost" 
-            iconOnly 
-            size="md" 
-            tertiaryTone="high"
-            iconLeft={<Menu size={24} />} 
-          />
-        </div>
         <div className="flex items-center gap-[12px] cursor-pointer" onClick={() => navigateTo('dashboard')}>
           <LogoFgv colors={colors} isHighContrast={isHighContrast} />
         </div>
@@ -104,15 +94,15 @@ const Header = ({
           <div
             className="flex items-center gap-[4px] cursor-pointer p-[2px] md:p-[4px] rounded-full transition-all border hover:shadow-sm"
             onClick={() => { setIsProfileOpen(!isProfileOpen); setIsA11yOpen(false); }}
-            style={{ 
-              backgroundColor: isProfileOpen ? colors.neutral[1] : 'transparent', 
-              borderColor: isProfileOpen ? colors.neutral[3] : 'transparent' 
+            style={{
+              backgroundColor: isProfileOpen ? colors.neutral[1] : 'transparent',
+              borderColor: isProfileOpen ? colors.neutral[3] : 'transparent'
             }}
           >
-            <img 
-              src="https://i.pinimg.com/736x/51/09/b1/5109b1d79c9a9bb693d9464c675248db.jpg" 
-              alt="Avatar" 
-              className="w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full object-cover border" 
+            <img
+              src="https://i.pinimg.com/736x/51/09/b1/5109b1d79c9a9bb693d9464c675248db.jpg"
+              alt="Avatar"
+              className="w-[32px] h-[32px] md:w-[40px] md:h-[40px] rounded-full object-cover border"
               style={{ borderColor: colors.neutral[2] }}
             />
             <ChevronDown size={14} className={`hidden sm:block transition-transform duration-200 ${isProfileOpen ? 'rotate-180' : ''}`} style={{ color: colors.neutral[5], marginRight: '4px' }} />

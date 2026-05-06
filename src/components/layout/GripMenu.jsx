@@ -57,26 +57,26 @@ const GripMenu = ({
             <div className="w-[1px] h-[20px] mx-[8px]" style={{ backgroundColor: colors.neutral[2] }} />
 
             <Button
-              variant="tertiary"
+              variant={viewMode === 'tabs' ? 'primary' : 'tertiary'}
               appearance="ghost"
               iconOnly
               size="sm"
-              tertiaryTone="medium"
+              selected={viewMode === 'tabs'}
+              tertiaryTone="high"
               iconLeft={<LayoutGrid />}
               onClick={() => setViewMode('tabs')}
-              className={viewMode === 'tabs' ? 'bg-[var(--neutral-3)] !text-[var(--neutral-6)]' : '!text-[var(--neutral-5)]'}
               title="Visualização por Abas"
             />
 
             <Button
-              variant="tertiary"
+              variant={viewMode === 'list' ? 'primary' : 'tertiary'}
               appearance="ghost"
               iconOnly
               size="sm"
-              tertiaryTone={viewMode === 'list' ? 'high' : 'medium'}
+              selected={viewMode === 'list'}
+              tertiaryTone="high"
               iconLeft={<List />}
               onClick={() => setViewMode('list')}
-              className={viewMode === 'list' ? 'bg-[var(--neutral-3)]' : ''}
               title="Visualização em Lista"
             />
           </div>
@@ -93,7 +93,7 @@ const GripMenu = ({
                   {sidebarMenus.map((menu) => {
                     const isActive = gripActiveTab === menu.id;
                     const isHovered = hoveredTabId === menu.id;
-                    
+
                     return (
                       <button
                         key={menu.id}
@@ -106,19 +106,19 @@ const GripMenu = ({
                         className={`relative flex items-center justify-center gap-[10px] py-[16px] px-[12px] transition-all whitespace-nowrap min-w-[140px] flex-1 lg:flex-none rounded-t-[4px]`}
                         style={{
                           backgroundColor: !isActive && isHovered ? colors.neutral[1] : 'transparent',
-                          color: isActive ? colors.primary.base : (isHovered ? colors.neutral[6] : colors.neutral[5])
+                          color: isActive ? colors.primary.base : colors.neutral[6]
                         }}
                       >
                         <div
                           className="tab-icon transition-colors shrink-0"
-                          style={{ color: isActive ? colors.primary.base : (isHovered ? colors.neutral[6] : colors.neutral[4]) }}
+                          style={{ color: isActive ? colors.primary.base : colors.neutral[6] }}
                         >
                           {React.cloneElement(menu.icon, { size: 18, strokeWidth: isActive ? 2.5 : 2 })}
                         </div>
                         <span
                           className={`tab-label text-[13px] md:text-[14px] leading-tight truncate px-[4px] transition-colors ${isActive ? 'font-bold' : 'font-medium'}`}
                           title={menu.label}
-                          style={{ color: isActive ? colors.primary.base : (isHovered ? colors.neutral[6] : colors.neutral[5]) }}
+                          style={{ color: isActive ? colors.primary.base : colors.neutral[6] }}
                         >
                           {menu.label}
                         </span>
@@ -142,7 +142,7 @@ const GripMenu = ({
                         key={card.id}
                         onClick={() => { navigateTo(card.route || 'empty-state', card.title); setIsGripOpen(false); }}
                         className={`group flex items-center gap-[16px] p-[16px] rounded-[12px] border cursor-pointer transition-all h-full animate-fade-slide-stagger ${isCardActive
-                          ? 'bg-[#F4F8FB] shadow-sm'
+                          ? ''
                           : 'border-neutral-2 hover:shadow-md'
                           }`}
                         onMouseEnter={(e) => {
@@ -164,15 +164,15 @@ const GripMenu = ({
                           }
                         }}
                         style={{
-                          backgroundColor: isCardActive ? `${colors.primary.base}15` : colors.neutral[0],
-                          borderColor: isCardActive ? colors.primary.dark : undefined,
+                          backgroundColor: colors.neutral[0],
+                          borderColor: isCardActive ? colors.primary.base : undefined,
                           borderWidth: isCardActive ? '2px' : '1px',
                           animationDelay: `${index * 40}ms`,
                           animationFillMode: 'both'
                         }}
                       >
                         <div
-                          className={`card-icon-box p-[10px] rounded-[8px] transition-colors shrink-0`}
+                          className={`card-icon-box p-[8px] rounded-[8px] transition-colors shrink-0`}
                           style={{
                             backgroundColor: isCardActive ? `${colors.primary.base}15` : colors.neutral[1],
                             color: isCardActive ? colors.primary.dark : colors.neutral[4]
@@ -206,7 +206,7 @@ const GripMenu = ({
                     }}
                   >
                     <div className="flex items-center gap-[10px] pb-[8px] px-[24px] border-b border-neutral-2">
-                      <div style={{ color: colors.primary.dark }}>
+                      <div style={{ color: colors.primary.base }}>
                         {React.cloneElement(menu.icon, { size: 16, strokeWidth: 2.5 })}
                       </div>
                       <h5 className="text-[12px] font-bold uppercase tracking-wider text-neutral-6">
@@ -221,37 +221,49 @@ const GripMenu = ({
                           <div
                             key={card.id}
                             onClick={() => { navigateTo(card.route || 'empty-state', card.title); setIsGripOpen(false); }}
-                            className={`group flex items-start gap-[12px] cursor-pointer py-[10px] px-[24px] transition-all`}
+                            className={`group flex items-start gap-[12px] cursor-pointer py-[8px] px-[24px] transition-all`}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.backgroundColor = colors.neutral[1];
                               const label = e.currentTarget.querySelector('.list-label');
-                              const dot = e.currentTarget.querySelector('.list-dot');
+                              const iconBox = e.currentTarget.querySelector('.list-icon-box');
                               if (label) {
                                 label.style.color = colors.primary.dark;
                                 if (!isCardActive) label.style.fontWeight = '600';
                               }
-                              if (dot && !isCardActive) dot.style.backgroundColor = colors.primary.base;
+                              if (iconBox && !isCardActive) {
+                                iconBox.style.color = colors.primary.base;
+                                iconBox.style.backgroundColor = `${colors.primary.base}10`;
+                              }
                             }}
                             onMouseLeave={(e) => {
                               e.currentTarget.style.backgroundColor = 'transparent';
                               const label = e.currentTarget.querySelector('.list-label');
-                              const dot = e.currentTarget.querySelector('.list-dot');
+                              const iconBox = e.currentTarget.querySelector('.list-icon-box');
                               if (label) {
                                 label.style.color = isCardActive ? colors.primary.dark : colors.neutral[7];
                                 if (!isCardActive) label.style.fontWeight = '400';
                               }
-                              if (dot && !isCardActive) dot.style.backgroundColor = 'transparent';
+                              if (iconBox && !isCardActive) {
+                                iconBox.style.color = colors.neutral[4];
+                                iconBox.style.backgroundColor = 'transparent';
+                              }
                             }}
                             style={{
                               color: isCardActive ? colors.primary.dark : colors.neutral[7]
                             }}
                           >
                             <div
-                              className={`list-dot w-[6px] h-[6px] rounded-full shrink-0 transition-all mt-[7px]`}
+                              className="list-icon-box w-[24px] h-[24px] flex items-center justify-center shrink-0 transition-all rounded-[4px]"
                               style={{
-                                backgroundColor: isCardActive ? colors.primary.dark : 'transparent'
+                                color: isCardActive ? colors.primary.dark : colors.neutral[4],
+                                backgroundColor: isCardActive ? `${colors.primary.base}15` : 'transparent'
                               }}
-                            />
+                            >
+                              {React.cloneElement(card.icon, {
+                                size: 16,
+                                strokeWidth: isCardActive ? 2.5 : 2
+                              })}
+                            </div>
                             <span
                               className={`list-label text-[13px] transition-colors ${isCardActive ? 'font-semibold' : 'font-normal'}`}
                               style={{ color: isCardActive ? colors.primary.dark : colors.neutral[7] }}

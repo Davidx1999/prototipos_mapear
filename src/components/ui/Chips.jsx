@@ -28,27 +28,99 @@ const Chips = ({
     },
     success: {
       light: 'bg-[#B8EBAD] text-neutral-7 border-transparent',
-      dark: 'bg-[#0D9488] text-white border-transparent',
-      stroked: 'bg-transparent text-[#0D9488] border-[#0D9488]',
-      none: 'bg-transparent text-[#0D9488] border-transparent px-0'
+      dark: 'bg-[#3FCC33] text-neutral-7 border-transparent',
+      stroked: 'bg-transparent text-[#3FCC33] border-[#3FCC33]',
+      none: 'bg-transparent text-[#3FCC33] border-transparent px-0'
     },
     warning: {
       light: 'bg-[#FEF0C7] text-neutral-7 border-transparent',
-      dark: 'bg-[#D97706] text-white border-transparent',
-      stroked: 'bg-transparent text-[#D97706] border-[#D97706]',
-      none: 'bg-transparent text-[#D97706] border-transparent px-0'
+      dark: 'bg-[#DC9403] text-white border-transparent',
+      stroked: 'bg-transparent text-[#DC9403] border-[#DC9403]',
+      none: 'bg-transparent text-[#DC9403] border-transparent px-0'
     },
     error: {
       light: 'bg-[#FFACB7] text-neutral-7 border-transparent',
-      dark: 'bg-[#DC2626] text-white border-transparent',
-      stroked: 'bg-transparent text-[#DC2626] border-[#DC2626]',
-      none: 'bg-transparent text-[#DC2626] border-transparent px-0'
+      dark: 'bg-[#E00120] text-white border-transparent',
+      stroked: 'bg-transparent text-[#E00120] border-[#E00120]',
+      none: 'bg-transparent text-[#E00120] border-transparent px-0'
     },
     neutral: {
       light: 'bg-[#DEE1E8] text-neutral-7 border-transparent',
       dark: 'bg-[#1D2432] text-white border-transparent',
-      stroked: 'bg-transparent text-[#677080] border-[#DEE1E8]',
+      stroked: 'bg-[#FFFFFF] text-[#1D2432] border-[#1D2432] hover:bg-[#DEE1E8] shadow-none',
       none: 'bg-transparent text-[#677080] border-transparent px-0'
+    },
+    lavender: {
+      light: 'bg-[#D9BBFF] text-neutral-7 border-transparent',
+      dark: 'bg-[#B070F0] text-white border-transparent',
+      stroked: 'bg-transparent text-[#B070F0] border-[#B070F0]',
+      none: 'bg-transparent text-[#B070F0] border-transparent px-0'
+    },
+    orange: {
+      light: 'bg-[#FBBE77] text-neutral-7 border-transparent',
+      dark: 'bg-[#E17A00] text-white border-transparent',
+      stroked: 'bg-transparent text-[#E17A00] border-[#E17A00]',
+      none: 'bg-transparent text-[#E17A00] border-transparent px-0'
+    },
+    oliva: {
+      light: 'bg-[#ADCE6D] text-neutral-7 border-transparent',
+      dark: 'bg-[#88A94A] text-white border-transparent',
+      stroked: 'bg-transparent text-[#88A94A] border-[#88A94A]',
+      none: 'bg-transparent text-[#88A94A] border-transparent px-0'
+    },
+    terracota: {
+      light: 'bg-[#CFA88A] text-neutral-7 border-transparent',
+      dark: 'bg-[#AC7F5E] text-white border-transparent',
+      stroked: 'bg-transparent text-[#AC7F5E] border-[#AC7F5E]',
+      none: 'bg-transparent text-[#AC7F5E] border-transparent px-0'
+    },
+    wine: {
+      light: 'bg-[#CE7E8F] text-neutral-7 border-transparent',
+      dark: 'bg-[#A41450] text-white border-transparent',
+      stroked: 'bg-transparent text-[#A41450] border-[#A41450]',
+      none: 'bg-transparent text-[#A41450] border-transparent px-0'
+    },
+    cherry: {
+      light: 'bg-[#F5A3BC] text-neutral-7 border-transparent',
+      dark: 'bg-[#D9265C] text-white border-transparent',
+      stroked: 'bg-transparent text-[#D9265C] border-[#D9265C]',
+      none: 'bg-transparent text-[#D9265C] border-transparent px-0'
+    },
+    clay: {
+      light: 'bg-[#FAB49E] text-neutral-7 border-transparent',
+      dark: 'bg-[#FF6333] text-white border-transparent',
+      stroked: 'bg-transparent text-[#FF6333] border-[#FF6333]',
+      none: 'bg-transparent text-[#FF6333] border-transparent px-0'
+    },
+    wheat: {
+      light: 'bg-[#F7C8A1] text-neutral-7 border-transparent',
+      dark: 'bg-[#F2890D] text-white border-transparent',
+      stroked: 'bg-transparent text-[#F2890D] border-[#F2890D]',
+      none: 'bg-transparent text-[#F2890D] border-transparent px-0'
+    },
+    aqua: {
+      light: 'bg-[#7ED4CD] text-neutral-7 border-transparent',
+      dark: 'bg-[#259E96] text-white border-transparent',
+      stroked: 'bg-transparent text-[#259E96] border-[#259E96]',
+      none: 'bg-transparent text-[#259E96] border-transparent px-0'
+    },
+    storm: {
+      light: 'bg-[#9EC4FA] text-neutral-7 border-transparent',
+      dark: 'bg-[#0D5BF2] text-white border-transparent',
+      stroked: 'bg-transparent text-[#0D5BF2] border-[#0D5BF2]',
+      none: 'bg-transparent text-[#0D5BF2] border-transparent px-0'
+    },
+    purple: {
+      light: 'bg-[#C693C2] text-neutral-7 border-transparent',
+      dark: 'bg-[#9F579E] text-white border-transparent',
+      stroked: 'bg-transparent text-[#9F579E] border-[#9F579E]',
+      none: 'bg-transparent text-[#9F579E] border-transparent px-0'
+    },
+    yellowAlt: {
+      light: 'bg-[#FFE596] text-neutral-7 border-transparent',
+      dark: '#FFD744 text-neutral-7 border-transparent', // Yellow is also bright, using neutral-7
+      stroked: 'bg-transparent text-[#FFD744] border-[#FFD744]',
+      none: 'bg-transparent text-[#FFD744] border-transparent px-0'
     }
   };
 

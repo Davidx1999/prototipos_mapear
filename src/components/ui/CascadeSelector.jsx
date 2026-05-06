@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { PanelLeftOpen, ChevronRight, ChevronDown, X, Search, Eraser, Check, LayoutList } from 'lucide-react';
+import { Blocks, PanelLeftOpen, ChevronRight, ChevronDown, X, Search, Eraser, Check, LayoutList } from 'lucide-react';
 
 export default function CascadeSelector({
   db,
@@ -77,6 +77,12 @@ export default function CascadeSelector({
     setIsOpen(false);
   };
 
+  const selectLevel = (levelIndex) => {
+    setSelections(selections.slice(0, levelIndex));
+    setSearchLevel(levelIndex);
+    setIsOpen(true);
+  };
+
   const getCascadeDataForLevel = (levelIndex) => {
     if (typeof db === 'function') {
       return db(levelIndex, selections);
@@ -99,11 +105,17 @@ export default function CascadeSelector({
   ) : (
     <div className={`flex items-center gap-[8px] w-full pr-[16px] overflow-hidden whitespace-nowrap ${variant === 'sidebar' ? 'text-[11px] md:text-[12px]' : 'text-[13px] md:text-[14px]'}`}>
       {selections.map((s, i) => {
-        const label = typeof s === 'object' ? s.nome : s;
+        const fullLabel = typeof s === 'object' ? s.nome : s;
+        const label = fullLabel.length > 16 ? fullLabel.substring(0, 13) + '...' : fullLabel;
         const isLast = i === selections.length - 1;
         return (
           <React.Fragment key={i}>
-            <span className={`font-semibold ${isLast ? 'text-neutral-700 truncate block' : 'text-neutral-500 shrink-0 hidden md:block max-w-[120px]'}`}>
+            <span
+              onClick={(e) => { e.stopPropagation(); selectLevel(i); }}
+              className={`font-semibold shrink-0 cursor-pointer hover:underline transition-colors ${isLast ? '' : 'hidden md:block'}`}
+              style={{ color: isLast ? (colors?.neutral?.[7] || '#1D2432') : (colors?.neutral?.[5] || '#64748B') }}
+              title={fullLabel}
+            >
               {label}
             </span>
             {!isLast && <ChevronRight size={variant === 'sidebar' ? 12 : 14} className="text-neutral-400 shrink-0 hidden md:block" />}
@@ -114,12 +126,12 @@ export default function CascadeSelector({
   );
 
   const topBar = (
-    <div className={`flex items-center gap-[6px] md:gap-[8px] transition-all ${variant === 'sidebar' ? 'w-full' : 'w-fit min-w-[48%] max-w-full'}`}>
+    <div className={`items-center gap-[6px] md:gap-[8px] transition-all flex w-full`}>
       <div
-        className={`flex-1 flex items-center bg-neutral-0 border ${isOpen ? 'border-primary-base shadow-sm ring-2 ring-[#D9F0FC]' : 'border-neutral-300 shadow-sm'} rounded-[4px] ${variant === 'sidebar' ? 'h-[36px] md:h-[40px] px-[12px]' : 'h-[44px] md:h-[48px] px-[16px]'} cursor-pointer hover:border-primary-base overflow-hidden`}
+        className={`flex items-center bg-neutral-0 border ${isOpen ? 'border-primary-base shadow-sm ring-2 ring-[#D9F0FC]' : 'border-neutral-300 shadow-sm'} rounded-[4px] ${variant === 'sidebar' ? 'h-[36px] md:h-[40px] px-[12px] w-full' : 'h-[44px] md:h-[48px] px-[16px] w-fit min-w-[40%] max-w-[calc(100%-56px)]'} cursor-pointer hover:border-primary-base overflow-hidden transition-all`}
         onClick={toggle}
       >
-        <PanelLeftOpen size={variant === 'sidebar' ? 14 : 18} className="text-primary-base shrink-0 mr-[8px] md:mr-[12px]" />
+        <Blocks size={variant === 'sidebar' ? 14 : 18} className="text-primary-base shrink-0 mr-[8px] md:mr-[12px]" />
         {breadcrumbHtml}
       </div>
       {!isMobile && (
@@ -134,7 +146,7 @@ export default function CascadeSelector({
   );
 
   return (
-    <div className={`relative ${variant === 'sidebar' ? 'w-full' : 'w-fit min-w-[48%] max-w-full'}`} style={{ zIndex: isOpen ? 80 : 40 }} ref={containerRef}>
+    <div className={`relative w-full`} style={{ zIndex: isOpen ? 80 : 40 }} ref={containerRef}>
       {topBar}
 
       {isOpen && (

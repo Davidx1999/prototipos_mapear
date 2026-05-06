@@ -6,10 +6,10 @@ import Breadcrumb from '../ui/Breadcrumb';
 import Chips from '../ui/Chips';
 import { mockAvaliacoes } from '../../data/mockData';
 
-const AvaliacoesLista = ({ colors, navigateTo }) => {  
+const AvaliacoesLista = ({ colors, navigateTo }) => {
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[32px] animate-fade-slide flex flex-col h-full bg-neutral-0">
-      <Breadcrumb 
+      <Breadcrumb
         colors={colors}
         onBack={() => navigateTo('dashboard')}
         paths={[
@@ -22,7 +22,11 @@ const AvaliacoesLista = ({ colors, navigateTo }) => {
         {mockAvaliacoes.map((item, idx) => (
           <div key={idx} className="rounded-[8px] p-[16px] md:p-[20px] flex flex-col border shadow-sm hover:shadow-md transition-shadow bg-neutral-0" style={{ borderColor: colors.neutral[2] }}>
             <div className="flex justify-between items-start mb-[16px]">
-              <Chips label={item.status} status={item.status === 'Em Andamento' ? 'primary' : item.status === 'Concluído' ? 'success' : 'neutral'} variant="light" />
+              <Chips
+                label={item.status}
+                status={item.status === 'Em Andamento' ? 'primary' : item.status === 'Concluído' ? 'success' : 'neutral'}
+                variant={item.status === 'Em Andamento' ? 'light' : item.status === 'Concluído' ? 'light' : 'light'}
+              />
               <MoreVertical size={20} className="cursor-pointer" style={{ color: colors.neutral[4] }} />
             </div>
             <span className="text-[11px] md:text-[12px] font-bold mb-[4px] truncate" title={item.id} style={{ color: colors.primary.base }}>{item.id}</span>

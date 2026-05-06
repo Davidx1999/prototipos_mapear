@@ -10,6 +10,7 @@ import CascadeSelector from '../ui/CascadeSelector';
 import Input from '../ui/Input';
 import Breadcrumb from '../ui/Breadcrumb';
 import Chips from '../ui/Chips';
+import Tabs from '../ui/Tabs';
 
 const mockUploads = [
   { id: 1, name: 'Ana Júlia da Silva', file: '124894.pdf', date: '18 Dez, 2025', status: 'Em processamento' },
@@ -34,13 +35,13 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
 
   const getStatusStyle = (status) => {
     switch (status) {
-      case 'Em processamento': return { status: 'primary', icon: <Loader2 className="animate-spin" /> };
-      case 'Aguardando Validação': return { status: 'warning', icon: <RefreshCcw /> };
-      case 'Não Iniciado': return { status: 'neutral', icon: null };
-      case 'Inválido': return { status: 'warning', icon: <AlertCircle /> };
-      case 'Concluído': return { status: 'success', icon: <CheckCircle2 /> };
-      case 'Erro': return { status: 'error', icon: <XCircle /> };
-      default: return { status: 'neutral', icon: null };
+      case 'Em processamento': return { status: 'primary', variant: 'light', icon: <Loader2 size={14} className="animate-spin" /> };
+      case 'Aguardando Validação': return { status: 'wheat', variant: 'light', icon: <RefreshCcw size={14} /> };
+      case 'Não Iniciado': return { status: 'neutral', variant: 'light', icon: null };
+      case 'Inválido': return { status: 'warning', variant: 'light', icon: <AlertCircle size={14} /> };
+      case 'Concluído': return { status: 'success', variant: 'light', icon: <CheckCircle2 size={14} /> };
+      case 'Erro': return { status: 'error', variant: 'light', icon: <XCircle size={14} /> };
+      default: return { status: 'neutral', variant: 'light', icon: null };
     }
   };
 
@@ -171,9 +172,9 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
                   <span className="text-[14px] font-bold text-neutral-6">Resultado do HTR:</span>
                   <Chips
                     label="INTELIGÊNCIA ARTIFICIAL"
-                    variant="light"
+                    variant="stroked"
                     status="warning"
-                    iconLeft={<Bot />}
+                    iconLeft={<Bot size={14} />}
                   />
                 </div>
                 <textarea
@@ -233,19 +234,16 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
           />
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b mb-[32px] overflow-x-auto hide-scrollbar" style={{ borderColor: colors.neutral[2] }}>
-          {['Upload', 'Processamento'].map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-[24px] py-[16px] text-[14px] font-bold transition-all border-b-[3px] whitespace-nowrap ${activeTab === tab ? 'text-primary-base' : 'text-neutral-4 hover:text-neutral-6 border-transparent'}`}
-              style={{ borderBottomColor: activeTab === tab ? colors.primary.base : 'transparent' }}
-            >
-              {tab === 'Upload' ? 'UPLOAD DE ARQUIVOS' : 'PROCESSAMENTO E VALIDAÇÃO'}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          colors={colors}
+          tabs={[
+            { id: 'Upload', label: 'Upload' },
+            { id: 'Processamento', label: 'Processamento' }
+          ]}
+          activeTab={activeTab}
+          onChange={(id) => setActiveTab(id)}
+          className="mb-[32px]"
+        />
 
         {/* Toolbar de Processamento */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-[16px] mb-[24px] animate-fade-slide">
@@ -297,7 +295,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
                   <div className="flex items-center justify-end gap-[12px]">
                     <Chips
                       label={row.status}
-                      variant="light"
+                      variant={statusStyle.variant}
                       status={statusStyle.status}
                       iconLeft={statusStyle.icon}
                     />

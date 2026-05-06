@@ -1,0 +1,48 @@
+{
+  "chips": {
+    "primary": {
+      "light": { "backgroundColor": "#B3E6F5", "textColor": "#0F1113", "borderColor": "transparent" },
+      "dark": { "backgroundColor": "#008BC9", "textColor": "#FFFFFF", "borderColor": "transparent" },
+      "stroked": { "backgroundColor": "transparent", "textColor": "#008BC9", "borderColor": "#008BC9" },
+      "none": { "backgroundColor": "transparent", "textColor": "#008BC9", "borderColor": "transparent" }
+    },
+    "success": {
+      "light": { "backgroundColor": "#B8EBAD", "textColor": "#0F1113", "borderColor": "transparent" },
+      "dark": { "backgroundColor": "#3FCC33", "textColor": "#0F1113", "borderColor": "transparent" },
+      "stroked": { "backgroundColor": "transparent", "textColor": "#3FCC33", "borderColor": "#3FCC33" },
+      "none": { "backgroundColor": "transparent", "textColor": "#3FCC33", "borderColor": "transparent" }
+    },
+    "warning": {
+      "light": { "backgroundColor": "#FEF0C7", "textColor": "#0F1113", "borderColor": "transparent" },
+      "dark": { "backgroundColor": "#DC9403", "textColor": "#FFFFFF", "borderColor": "transparent" },
+      "stroked": { "backgroundColor": "transparent", "textColor": "#DC9403", "borderColor": "#DC9403" },
+      "none": { "backgroundColor": "transparent", "textColor": "#DC9403", "borderColor": "transparent" }
+    },
+    "error": {
+      "light": { "backgroundColor": "#FFACB7", "textColor": "#0F1113", "borderColor": "transparent" },
+      "dark": { "backgroundColor": "#E00120", "textColor": "#FFFFFF", "borderColor": "transparent" },
+      "stroked": { "backgroundColor": "transparent", "textColor": "#E00120", "borderColor": "#E00120" },
+      "none": { "backgroundColor": "transparent", "textColor": "#E00120", "borderColor": "transparent" }
+    },
+    "neutral": {
+      "light": { "backgroundColor": "#DEE1E8", "textColor": "#0F1113", "borderColor": "transparent" },
+      "dark": { "backgroundColor": "#1D2432", "textColor": "#FFFFFF", "borderColor": "transparent" },
+      "stroked": { "backgroundColor": "transparent", "textColor": "#677080", "borderColor": "#677080" },
+      "none": { "backgroundColor": "transparent", "textColor": "#677080", "borderColor": "transparent" }
+    },
+    "extended": {
+      "lavender": { "dark": "#B070F0", "light": "#D9BBFF", "textDark": "#FFFFFF" },
+      "orange": { "dark": "#E17A00", "light": "#FBBE77", "textDark": "#FFFFFF" },
+      "oliva": { "dark": "#88A94A", "light": "#ADCE6D", "textDark": "#FFFFFF" },
+      "terracota": { "dark": "#AC7F5E", "light": "#CFA88A", "textDark": "#FFFFFF" },
+      "wine": { "dark": "#A41450", "light": "#CE7E8F", "textDark": "#FFFFFF" },
+      "cherry": { "dark": "#D9265C", "light": "#F5A3BC", "textDark": "#FFFFFF" },
+      "clay": { "dark": "#FF6333", "light": "#FAB49E", "textDark": "#FFFFFF" },
+      "wheat": { "dark": "#F2890D", "light": "#F7C8A1", "textDark": "#FFFFFF" },
+      "aqua": { "dark": "#259E96", "light": "#7ED4CD", "textDark": "#FFFFFF" },
+      "storm": { "dark": "#0D5BF2", "light": "#9EC4FA", "textDark": "#FFFFFF" },
+      "purple": { "dark": "#9F579E", "light": "#C693C2", "textDark": "#FFFFFF" },
+      "yellowAlt": { "dark": "#FFD744", "light": "#FFE596", "textDark": "#0F1113" }
+    }
+  }
+}
