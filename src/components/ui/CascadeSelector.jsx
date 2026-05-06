@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Blocks, PanelLeftOpen, ChevronRight, ChevronDown, X, Search, Eraser, Check, LayoutList } from 'lucide-react';
+import { Blocks, PanelLeftOpen, ChevronRight, ChevronDown, X, Search, Eraser, Check, LayoutList, AlertCircle } from 'lucide-react';
 
 export default function CascadeSelector({
   db,
@@ -7,14 +7,20 @@ export default function CascadeSelector({
   colors,
   onConfirm,
   variant = 'default', // 'default' or 'sidebar'
-  initialSelections = []
+  initialSelections = [],
+  multiSelectLeaf = false,
+  selectedLeafItems = [],
+  pendingLeafItems = [] // Items that have a "pending" status
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selections, setSelections] = useState(initialSelections);
+  const [selectedLeafs, setSelectedLeafs] = useState(selectedLeafItems);
   const [searchLevel, setSearchLevel] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobile, setIsMobile] = useState(false);
   const [mobileStep, setMobileStep] = useState(0); // For step-by-step selection on mobile
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncingLevel, setSyncingLevel] = useState(null);
   const containerRef = useRef(null);
   const columnsRef = useRef(null);
 
@@ -29,7 +35,10 @@ export default function CascadeSelector({
     if (initialSelections.length > 0) {
       setSelections(initialSelections);
     }
-  }, [initialSelections]);
+    if (selectedLeafItems.length > 0) {
+      setSelectedLeafs(selectedLeafItems);
+    }
+  }, [initialSelections, selectedLeafItems]);
 
   const toggle = () => {
     const nextState = !isOpen;
@@ -41,18 +50,59 @@ export default function CascadeSelector({
     }
   };
 
-  const scrollToActive = () => {
+  const scrollToActive = (indexOverride) => {
     if (columnsRef.current) {
-      const targetCol = Math.min(selections.length, levels.length - 1);
-      const colWidth = window.innerWidth < 768 ? 240 : 280;
+      const targetCol = indexOverride !== undefined ? indexOverride : Math.min(selections.length, levels.length - 1);
+      const colWidth = window.innerWidth < 768 ? 240 : (window.innerWidth < 1024 ? 280 : 300);
       columnsRef.current.scrollTo({ left: targetCol * colWidth, behavior: 'smooth' });
     }
   };
 
   const selectItem = (levelIndex, value, objData = null) => {
+    const isLastLevel = levelIndex === levels.length - 1;
+    const isTurmaLevel = levelIndex === 4; // Hardcoded for this specific request: Turmas is level 5 (index 4)
+
+    if (isTurmaLevel) {
+      const currentTurmas = selections[levelIndex] || [];
+      const newTurmas = Array.isArray(currentTurmas) 
+        ? (currentTurmas.includes(value) ? currentTurmas.filter(t => t !== value) : [...currentTurmas, value])
+        : [value];
+      
+      const newSelections = [...selections];
+      newSelections[levelIndex] = newTurmas;
+      setSelections(newSelections);
+
+      // Sincronizando Avaliações (next level)
+      setSyncingLevel(levelIndex + 1);
+      setIsSyncing(true);
+      
+      if (!isMobile) {
+        setTimeout(() => scrollToActive(levelIndex + 1), 50);
+      }
+
+      setTimeout(() => {
+        setIsSyncing(false);
+        setSyncingLevel(null);
+      }, 4000);
+
+      return;
+    }
+
+    if (multiSelectLeaf && isLastLevel) {
+      toggleLeafSelection(value);
+      return;
+    }
+
     const newSelections = selections.slice(0, levelIndex);
     newSelections[levelIndex] = objData || value;
     setSelections(newSelections);
+    
+    if (multiSelectLeaf) {
+      // If we change something before the leaf, we might want to keep the leaf selection if it's still valid,
+      // but the current logic resets it. We'll keep it simple for now.
+      setSelectedLeafs([]); 
+    }
+    
     setSearchQuery('');
     setSearchLevel(Math.min(levelIndex + 1, levels.length - 1));
 
@@ -65,15 +115,34 @@ export default function CascadeSelector({
     }
   };
 
+  const toggleLeafSelection = (value) => {
+    setSelectedLeafs(prev => 
+      prev.includes(value) ? prev.filter(t => t !== value) : [...prev, value]
+    );
+  };
+
+  const toggleAllLeafs = (allAvailable) => {
+    if (selectedLeafs.length === allAvailable.length) {
+      setSelectedLeafs([]);
+    } else {
+      setSelectedLeafs([...allAvailable]);
+    }
+  };
+
   const clearAll = () => {
     setSelections([]);
+    setSelectedLeafs([]);
     setSearchQuery('');
     setSearchLevel(0);
-    setTimeout(scrollToActive, 50);
+    setTimeout(() => scrollToActive(0), 50);
   };
 
   const handleConfirm = () => {
-    onConfirm(selections);
+    if (multiSelectLeaf) {
+      onConfirm(selections, selectedLeafs);
+    } else {
+      onConfirm(selections);
+    }
     setIsOpen(false);
   };
 
@@ -105,7 +174,9 @@ export default function CascadeSelector({
   ) : (
     <div className={`flex items-center gap-[8px] w-full pr-[16px] overflow-hidden whitespace-nowrap ${variant === 'sidebar' ? 'text-[11px] md:text-[12px]' : 'text-[13px] md:text-[14px]'}`}>
       {selections.map((s, i) => {
-        const fullLabel = typeof s === 'object' ? s.nome : s;
+        if (!s) return null;
+        const isArray = Array.isArray(s);
+        const fullLabel = isArray ? `${s.length} ${levels[i]?.title}` : (typeof s === 'object' ? s.nome : s);
         const label = fullLabel.length > 16 ? fullLabel.substring(0, 13) + '...' : fullLabel;
         const isLast = i === selections.length - 1;
         return (
@@ -114,14 +185,19 @@ export default function CascadeSelector({
               onClick={(e) => { e.stopPropagation(); selectLevel(i); }}
               className={`font-semibold shrink-0 cursor-pointer hover:underline transition-colors ${isLast ? '' : 'hidden md:block'}`}
               style={{ color: isLast ? (colors?.neutral?.[7] || '#1D2432') : (colors?.neutral?.[5] || '#64748B') }}
-              title={fullLabel}
+              title={isArray ? s.join(', ') : fullLabel}
             >
               {label}
             </span>
-            {!isLast && <ChevronRight size={variant === 'sidebar' ? 12 : 14} className="text-neutral-400 shrink-0 hidden md:block" />}
+            {(!isLast || (multiSelectLeaf && selectedLeafs.length > 0)) && <ChevronRight size={variant === 'sidebar' ? 12 : 14} className="text-neutral-400 shrink-0 hidden md:block" />}
           </React.Fragment>
         );
       })}
+      {multiSelectLeaf && selectedLeafs.length > 0 && (
+        <span className="font-bold whitespace-nowrap" style={{ color: colors.primary.base }}>
+          ({selectedLeafs.length}) {levels[levels.length - 1]?.title}
+        </span>
+      )}
     </div>
   );
 
@@ -181,18 +257,23 @@ export default function CascadeSelector({
               {/* Mobile Path / Breadcrumbs */}
               {selections.length > 0 && (
                 <div className="flex items-center gap-[6px] overflow-x-auto hide-scrollbar text-[11px] font-bold uppercase tracking-wider" style={{ color: colors.neutral[4] }}>
-                  {selections.map((s, i) => (
-                    <React.Fragment key={i}>
-                      <span
-                        onClick={() => setMobileStep(i)}
-                        className={`whitespace-nowrap ${i === mobileStep ? '' : ''}`}
-                        style={{ color: i === mobileStep ? colors.primary.base : colors.neutral[4] }}
-                      >
-                        {typeof s === 'object' ? s.nome : s}
-                      </span>
-                      {i < selections.length - 1 && <ChevronRight size={10} className="shrink-0" />}
-                    </React.Fragment>
-                  ))}
+                  {selections.map((s, i) => {
+                    if (!s) return null;
+                    const isArray = Array.isArray(s);
+                    const label = isArray ? `${s.length} ${levels[i]?.title}` : (typeof s === 'object' ? s.nome : s);
+                    return (
+                      <React.Fragment key={i}>
+                        <span
+                          onClick={() => setMobileStep(i)}
+                          className={`whitespace-nowrap ${i === mobileStep ? '' : ''}`}
+                          style={{ color: i === mobileStep ? colors.primary.base : colors.neutral[4] }}
+                        >
+                          {label}
+                        </span>
+                        {i < selections.length - 1 && <ChevronRight size={10} className="shrink-0" />}
+                      </React.Fragment>
+                    );
+                  })}
                 </div>
               )}
 
@@ -229,29 +310,82 @@ export default function CascadeSelector({
 
                 return (
                   <div className="flex flex-col">
-                    {filtered.map((item, idx) => {
-                      const label = typeof item === 'object' ? item.nome : item;
-                      const value = typeof item === 'object' ? item.id : item;
-                      const isSelected = typeof item === 'object' ? (selections[mobileStep]?.id === value) : (selections[mobileStep] === value);
-
-                      return (
-                        <div
-                          key={idx}
-                          onClick={() => selectItem(mobileStep, value, typeof item === 'object' ? item : null)}
-                          className={`px-[20px] py-[18px] border-b flex items-center justify-between active:opacity-70 transition-colors ${isSelected ? '' : ''}`}
-                          style={{
-                            borderColor: colors.neutral[1],
-                            backgroundColor: isSelected ? `${colors.primary.extraLight}50` : 'transparent'
-                          }}
-                        >
-                          <div className="flex items-center gap-[12px]">
-                            <div className={`w-[8px] h-[8px] rounded-full ${isSelected ? '' : ''}`} style={{ backgroundColor: isSelected ? colors.primary.base : 'transparent' }} />
-                            <span className={`text-[15px] ${isSelected ? 'font-bold' : 'font-medium'}`} style={{ color: isSelected ? colors.primary.base : colors.neutral[6] }}>{label}</span>
-                          </div>
-                          {mobileStep < levels.length - 1 && <ChevronRight size={18} style={{ color: colors.neutral[3] }} />}
+                    {isSyncing && mobileStep === syncingLevel ? (
+                      <div className="flex flex-col gap-3 p-5">
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: colors.primary.dark, borderTopColor: 'transparent' }}></div>
+                          <span className="text-[14px] font-bold" style={{ color: colors.primary.dark }}>Sincronizando...</span>
                         </div>
-                      );
-                    })}
+                        {[1, 2, 3].map(s => (
+                          <div key={s} className="h-[60px] w-full bg-neutral-100 rounded animate-pulse"></div>
+                        ))}
+                      </div>
+                    ) : (
+                      filtered.map((item, idx) => {
+                        const isObj = typeof item === 'object';
+                        const label = isObj ? item.nome : item;
+                        const value = isObj ? item.id : item;
+                        
+                        const isLastLevel = mobileStep === levels.length - 1;
+                        const isTurmaLevel = mobileStep === 4;
+                        const isAvaliacaoLevel = mobileStep === 5;
+
+                        const isSelected = isLastLevel && multiSelectLeaf
+                          ? selectedLeafs.includes(value)
+                          : (isTurmaLevel 
+                             ? (Array.isArray(selections[mobileStep]) && selections[mobileStep].includes(value))
+                             : (isObj ? (selections[mobileStep]?.id === value) : (selections[mobileStep] === value)));
+
+                        // Lógica de sub-linha para Avaliações
+                        let subLine = null;
+                        if (isAvaliacaoLevel) {
+                          const selectedTurmas = selections[4] || [];
+                          if (selectedTurmas.length > 0) {
+                            const participacoes = db(null, null, 'getParticipation', label) || [];
+                            const faltantes = selectedTurmas.filter(t => !participacoes.includes(t));
+                            
+                            if (faltantes.length === 0) {
+                              subLine = <span className="text-[11px] text-green-600 font-bold">Todas as Turmas (100%)</span>;
+                            } else {
+                              subLine = <span className="text-[11px] text-red-500 font-medium">Falta: {faltantes.join(', ')}</span>;
+                            }
+                          }
+                        }
+
+                        return (
+                          <div
+                            key={idx}
+                            onClick={() => selectItem(mobileStep, value, isObj ? item : null)}
+                            className={`px-[20px] py-[18px] border-b flex items-center justify-between active:opacity-70 transition-colors ${isSelected ? '' : ''}`}
+                            style={{
+                              borderColor: colors.neutral[1],
+                              backgroundColor: isSelected ? `${colors.primary.extraLight}50` : 'transparent'
+                            }}
+                          >
+                            <div className="flex items-center gap-[12px] w-full overflow-hidden">
+                              {(multiSelectLeaf && isLastLevel) || isTurmaLevel ? (
+                                <div 
+                                  className={`w-5 h-5 rounded border flex items-center justify-center transition-colors shrink-0 ${isSelected ? 'bg-[#008BC9] border-[#008BC9] text-white' : 'border-gray-300 bg-white'}`}
+                                  style={{ backgroundColor: isSelected ? colors.primary.base : '', borderColor: isSelected ? colors.primary.base : '' }}
+                                >
+                                  {isSelected && <Check size={14} strokeWidth={3} />}
+                                </div>
+                              ) : (
+                                <div className={`w-[8px] h-[8px] rounded-full shrink-0 ${isSelected ? '' : ''}`} style={{ backgroundColor: isSelected ? colors.primary.base : 'transparent' }} />
+                              )}
+                              <div className="flex flex-col gap-0.5 overflow-hidden">
+                                <span className={`text-[15px] truncate ${isSelected ? 'font-bold' : 'font-medium'}`} style={{ color: isSelected ? colors.primary.base : colors.neutral[6] }}>{label}</span>
+                                {subLine}
+                                {isLastLevel && pendingLeafItems.includes(value) && (
+                                  <span className="text-[10px] text-orange-600 font-bold uppercase tracking-wider">Pendente Avaliação</span>
+                                )}
+                              </div>
+                            </div>
+                            {!isLastLevel && !isTurmaLevel && <ChevronRight size={18} style={{ color: colors.neutral[3] }} />}
+                          </div>
+                        );
+                      })
+                    )}
                   </div>
                 );
               })()}
@@ -268,11 +402,11 @@ export default function CascadeSelector({
               </button>
               <button
                 onClick={handleConfirm}
-                disabled={selections.length === 0}
+                disabled={selections.length === 0 || (multiSelectLeaf && selectedLeafs.length === 0)}
                 className={`flex-[2] h-[48px] rounded-[8px] text-[14px] font-bold flex items-center justify-center gap-[8px] transition-all ${selections.length > 0 ? 'shadow-lg active:scale-[0.98]' : ''}`}
                 style={{
-                  backgroundColor: selections.length > 0 ? colors.primary.base : colors.neutral[2],
-                  color: selections.length > 0 ? colors.neutral[0] : colors.neutral[4]
+                  backgroundColor: (selections.length > 0 && (!multiSelectLeaf || selectedLeafs.length > 0)) ? colors.primary.base : colors.neutral[2],
+                  color: (selections.length > 0 && (!multiSelectLeaf || selectedLeafs.length > 0)) ? colors.neutral[0] : colors.neutral[4]
                 }}
               >
                 CONFIRMAR SELEÇÃO <Check size={18} />
@@ -327,9 +461,11 @@ export default function CascadeSelector({
                 if (!rawItems || rawItems.length === 0) {
                   let emptyMsg = '';
                   if (i === 1) emptyMsg = 'Selecione um Estado para ver os Municípios';
-                  else if (i === 2) emptyMsg = 'Selecione um Município para ver as Escolas';
-                  else if (i === 3) emptyMsg = 'Selecione uma Escola para ver as Turmas';
-                  else if (i === 4) emptyMsg = 'Selecione uma Turma para ver os Testes';
+                  else if (i === 2) emptyMsg = 'Selecione um Município para ver as Regionais';
+                  else if (i === 3) emptyMsg = 'Selecione uma Regional para ver as Escolas';
+                  else if (i === 4) emptyMsg = 'Selecione uma Escola para ver as Turmas';
+                  else if (i === 5) emptyMsg = 'Selecione uma Turma para ver as Avaliações';
+                  else if (i === 6) emptyMsg = 'Selecione uma Avaliação para ver os Testes';
                   else emptyMsg = 'Nenhum item disponível';
 
                   innerContent = (
@@ -350,30 +486,102 @@ export default function CascadeSelector({
                   if (filteredItems.length === 0) {
                     innerContent = <div className="p-[16px] text-[13px] text-neutral-400 text-center font-medium">Nenhum resultado encontrado.</div>;
                   } else {
-                    innerContent = filteredItems.map((item, idx) => {
-                      const isObj = typeof item === 'object';
-                      const label = isObj ? item.nome : item;
-                      const value = isObj ? item.id : item;
-                      const isSelected = isObj ? (selections[i]?.id === value) : (selections[i] === value);
-
-                      return (
-                        <div
-                          key={idx}
-                          onClick={() => selectItem(i, value, isObj ? item : null)}
-                          className={`px-[12px] py-[12px] rounded-[4px] text-[13px] font-semibold cursor-pointer transition-colors flex justify-between items-center group ${isSelected ? 'bg-[#003A79] text-white shadow-md' : 'text-neutral-700 hover:bg-neutral-100'}`}
-                        >
-                          <span className="truncate pr-[8px]" title={label}>{label}</span>
-                          {i < levels.length - 1 && <ChevronRight size={16} className={`shrink-0 opacity-50 ${isSelected ? 'text-white' : 'group-hover:text-primary-base'}`} />}
+                    if (isSyncing && i === syncingLevel) {
+                      innerContent = (
+                        <div className="flex flex-col gap-3 p-2">
+                          <div className="flex items-center gap-2 px-2 py-1">
+                            <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: colors.primary.dark, borderTopColor: 'transparent' }}></div>
+                            <span className="text-[12px] font-bold" style={{ color: colors.primary.dark }}>Sincronizando...</span>
+                          </div>
+                          {[1, 2, 3].map(s => (
+                            <div key={s} className="h-[44px] w-full bg-neutral-100 rounded animate-pulse"></div>
+                          ))}
                         </div>
                       );
-                    });
+                    } else {
+                      innerContent = filteredItems.map((item, idx) => {
+                        const isObj = typeof item === 'object';
+                        const label = isObj ? item.nome : item;
+                        const value = isObj ? item.id : item;
+                        
+                        const isLastLevel = i === levels.length - 1;
+                        const isTurmaLevel = i === 4;
+                        const isAvaliacaoLevel = i === 5;
+
+                        const isSelected = isLastLevel && multiSelectLeaf
+                          ? selectedLeafs.includes(value)
+                          : (isTurmaLevel 
+                             ? (Array.isArray(selections[i]) && selections[i].includes(value))
+                             : (isObj ? (selections[i]?.id === value) : (selections[i] === value)));
+
+                        // Lógica de sub-linha para Avaliações
+                        let subLine = null;
+                        if (isAvaliacaoLevel) {
+                          const selectedTurmas = selections[4] || [];
+                          if (selectedTurmas.length > 0) {
+                            // Check participation from DB or mock
+                            // We expect item to have participation info or we use a mock helper
+                            const participacoes = db(null, null, 'getParticipation', label) || [];
+                            const faltantes = selectedTurmas.filter(t => !participacoes.includes(t));
+                            
+                            if (faltantes.length === 0) {
+                              subLine = <span className="text-[10px] text-green-600 font-bold">Todas as Turmas (100%)</span>;
+                            } else {
+                              subLine = <span className="text-[10px] text-red-500 font-medium truncate">Falta: {faltantes.join(', ')}</span>;
+                            }
+                          }
+                        }
+
+                        return (
+                          <div
+                            key={idx}
+                            onClick={() => selectItem(i, value, isObj ? item : null)}
+                            className={`px-[12px] py-[12px] rounded-[4px] text-[13px] font-semibold cursor-pointer transition-colors flex justify-between items-center group ${isSelected ? ((isLastLevel && multiSelectLeaf) || isTurmaLevel ? 'bg-blue-50 text-neutral-800' : 'bg-[#003A79] text-white shadow-md') : 'text-neutral-700 hover:bg-neutral-100'}`}
+                          >
+                            <div className="flex flex-col gap-0.5 overflow-hidden w-full">
+                              <span className="truncate pr-[8px]" title={label}>{label}</span>
+                              {subLine}
+                              {isLastLevel && pendingLeafItems.includes(value) && (
+                                <span className="text-[9px] text-orange-600 font-bold uppercase tracking-wider">Pendente Avaliação</span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              {((multiSelectLeaf && isLastLevel) || isTurmaLevel) ? (
+                                <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${isSelected ? 'bg-[#008BC9] border-[#008BC9] text-white' : 'border-gray-300 bg-white group-hover:border-gray-400'}`}>
+                                  {isSelected && <Check size={12} strokeWidth={3} />}
+                                </div>
+                              ) : (
+                                i < levels.length - 1 && <ChevronRight size={16} className={`shrink-0 opacity-50 ${isSelected ? 'text-white' : 'group-hover:text-primary-base'}`} />
+                              )}
+                            </div>
+                          </div>
+                        );
+                      });
+                    }
                   }
                 }
 
                 return (
                   <div key={i} className="w-[240px] md:w-[280px] lg:w-[300px] shrink-0 border-r border-neutral-200 flex flex-col h-full snap-start bg-neutral-0">
                     <div className="p-[12px] border-b border-neutral-200 bg-neutral-0 shrink-0 sticky top-0 flex items-center justify-between">
-                      <span className="text-[13px] font-bold text-neutral-600">{lvl.title}</span>
+                      <button
+                        onClick={() => selectLevel(i)}
+                        disabled={i >= selections.length}
+                        className={`text-[13px] font-bold transition-colors ${i < selections.length ? 'text-[#008BC9] hover:underline cursor-pointer' : 'text-neutral-400 cursor-default'}`}
+                      >
+                        {lvl.title}
+                      </button>
+                      {i === levels.length - 1 && multiSelectLeaf && rawItems && rawItems.length > 0 && (
+                        <button 
+                          onClick={() => toggleAllLeafs(rawItems.map(it => typeof it === 'object' ? it.id : it))}
+                          className="text-[10px] font-bold text-neutral-500 hover:text-primary-base flex items-center gap-1.5 transition-colors"
+                        >
+                          Todas
+                          <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${selectedLeafs.length === rawItems.length ? 'bg-primary-base border-primary-base text-white' : (selectedLeafs.length > 0 ? 'bg-primary-base/20 border-primary-base' : 'border-gray-300 bg-white')}`}>
+                            {selectedLeafs.length === rawItems.length ? <Check size={12} strokeWidth={3} /> : (selectedLeafs.length > 0 && <div className="w-2 h-[2px] bg-primary-base rounded-full"></div>)}
+                          </div>
+                        </button>
+                      )}
                     </div>
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-[8px] flex flex-col gap-[2px]">
                       {innerContent}
@@ -382,6 +590,22 @@ export default function CascadeSelector({
                 );
               })}
             </div>
+
+            {multiSelectLeaf && selections.length >= levels.length - 1 && (
+              (() => {
+                const items = getCascadeDataForLevel(levels.length - 1) || [];
+                const missing = items.filter(t => pendingLeafItems.includes(typeof t === 'object' ? t.id : t));
+                if (missing.length > 0) {
+                  return (
+                    <div className="bg-orange-50 border-t border-orange-200 p-3 px-4 flex items-start gap-3 text-orange-800 text-[12px] font-medium shrink-0 shadow-inner z-10">
+                      <AlertCircle size={16} className="shrink-0 mt-[1px] text-orange-600" />
+                      <span>Aviso: Algumas {levels[levels.length - 1]?.title.toLowerCase()} ainda não concluíram a avaliação selecionada e seus relatórios não serão gerados no mapa de calor.</span>
+                    </div>
+                  );
+                }
+                return null;
+              })()
+            )}
 
             <div className="p-[16px] md:px-[24px] md:py-[16px] border-t border-neutral-200 bg-neutral-50 flex justify-end gap-[16px] items-center shrink-0">
               <button
@@ -392,7 +616,7 @@ export default function CascadeSelector({
               </button>
               <button
                 onClick={handleConfirm}
-                disabled={selections.length === 0}
+                disabled={selections.length === 0 || (multiSelectLeaf && selectedLeafs.length === 0)}
                 className={`px-[24px] py-[10px] text-[13px] font-bold rounded-[4px] transition-colors flex items-center gap-[8px] ${selections.length > 0 ? 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-md' : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'}`}
               >
                 CONFIRMAR <Check size={16} />

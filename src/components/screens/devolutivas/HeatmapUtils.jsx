@@ -61,95 +61,116 @@ export const colGroups = Array.from({ length: 3 }, (_, gIdx) => ({
 }));
 
 export const getMockRows = (level, parentName) => {
-  let rowNames = [];
-  
-  // Nível 0: Estado selecionado -> mostrar Cidades
-  if (level === 0) {
-    rowNames = devDB.cidades[parentName] || ['Município A', 'Município B', 'Município C'];
-  } 
-  // Nível 1: Cidade selecionada -> mostrar Escolas
-  else if (level === 1) {
-    rowNames = devDB.escolas[parentName] || ['Escola A', 'Escola B', 'Escola C'];
-  } 
-  // Nível 2: Escola selecionada -> mostrar Turmas
-  else if (level === 2) {
-    rowNames = devDB.turmas[parentName] || ['Turma A', 'Turma B', 'Turma C'];
-  } 
-  // Níveis 3 ou mais: Mostrar Alunos (20 alunos com a lógica específica solicitada)
-  else {
-    return Array.from({ length: 20 }, (_, i) => {
-      let data = [];
-      if (i < 12) {
-        // 12 alunos com predominância Suficiente (2)
-        data = Array.from({ length: 30 }, () => Math.random() > 0.2 ? 2 : 1);
-      } else if (i < 16) {
-        // 4 alunos com predominância Parcialmente suficiente (1)
-        data = Array.from({ length: 30 }, () => {
-          const r = Math.random();
-          return r > 0.3 ? 1 : (r > 0.15 ? 2 : 0);
-        });
-      } else if (i < 18) {
-        // 2 alunos com predominância Insuficiente (0)
-        data = Array.from({ length: 30 }, () => Math.random() > 0.2 ? 0 : (Math.random() > 0.5 ? 1 : -1));
-      } else {
-        // 2 alunos que não participaram (todas respostas null)
-        data = Array.from({ length: 30 }, () => null);
-      }
-      
-      // Adiciona alguns valores null e -1 pseudo-aleatórios para os que participaram
-      if (i < 18) {
-        data = data.map(v => {
-          if (Math.random() < 0.05) return null;
-          if (Math.random() < 0.05) return -1;
-          return v;
-        });
-      }
+  // Mock data implementation adjusted for students only
+  return Array.from({ length: 20 }, (_, i) => {
+    let data = [];
+    if (i < 12) {
+      data = Array.from({ length: 30 }, () => Math.random() > 0.2 ? 2 : 1);
+    } else if (i < 16) {
+      data = Array.from({ length: 30 }, () => {
+        const r = Math.random();
+        return r > 0.3 ? 1 : (r > 0.15 ? 2 : 0);
+      });
+    } else if (i < 18) {
+      data = Array.from({ length: 30 }, () => Math.random() > 0.2 ? 0 : (Math.random() > 0.5 ? 1 : -1));
+    } else {
+      data = Array.from({ length: 30 }, () => null);
+    }
+    
+    if (i < 18) {
+      data = data.map(v => {
+        if (Math.random() < 0.05) return null;
+        if (Math.random() < 0.05) return -1;
+        return v;
+      });
+    }
 
-      // Avaliação is usually object with nome, let's parse if it is an object
-      const evalName = typeof parentName === 'object' ? parentName.nome : parentName;
-      return {
-        name: `Aluno ${i + 1} ${evalName ? `(${evalName})` : ''}`,
-        data
-      };
-    });
-  }
-
-  // Para níveis superiores (cidades, escolas, turmas) geramos dados com predominâncias aleatórias
-  return rowNames.map((name, i) => {
-    const predominance = Math.floor(Math.random() * 3); // 0, 1, ou 2
-    let data = Array.from({ length: 30 }, () => {
-      const r = Math.random();
-      if (predominance === 2) return r > 0.3 ? 2 : 1;
-      if (predominance === 1) return r > 0.4 ? 1 : (r > 0.2 ? 2 : 0);
-      return r > 0.4 ? 0 : (r > 0.2 ? 1 : -1);
-    });
-
-    data = data.map(v => {
-      if (Math.random() < 0.05) return null;
-      if (Math.random() < 0.05) return -1;
-      return v;
-    });
-
+    const evalName = typeof parentName === 'object' ? parentName.nome : parentName;
     return {
-      name: name,
+      name: `Aluno ${i + 1} ${evalName ? `(${evalName})` : ''}`,
       data
     };
   });
 };
 
-// Mock DB for CascadeSelector
+// --- MOCK DATA: CASCATA INVERTIDA (ESCOLA > AVALIAÇÃO > TURMAS) ---
 export const devDB = {
-  estados: ['Ceará', 'Minas Gerais', 'São Paulo'],
-  cidades: { 'Ceará': ['Sobral', 'Fortaleza'], 'Minas Gerais': ['Teófilo Otoni', 'Belo Horizonte'] },
-  escolas: { 'Sobral': ['Escola Osmar de Sá', 'Colégio Sant’Ana'], 'Teófilo Otoni': ['Escola Estadual', 'Colégio Alpha'] },
-  turmas: { 'Escola Osmar de Sá': ['Turma A', 'Turma B'], 'Escola Estadual': ['Turma 101', 'Turma 102'] },
-  avaliacoes: { 'Turma A': [{ id: 'av1', nome: 'Brasil em Foco: Cultura e Sociedade' }, { id: 'av2', nome: 'Matemática Básica' }] }
+  'Ceará': {
+    'Fortaleza': {
+      'Regional 1': {
+        'Liceu do Conjunto Ceará': {
+          'Avaliação 1 Lorem ipsum': ['Turma A', 'Turma B', 'Turma C', 'Turma D'],
+          'Avaliação 2 Diagnóstica': ['Turma A', 'Turma B']
+        },
+        'Colégio da Polícia Militar': {
+          'Avaliação 1 Lorem ipsum': ['Turma Única']
+        }
+      },
+      'Regional 2': {
+        'EEEP Maria José': {
+          'Avaliação Global': ['Turma 1', 'Turma 2']
+        }
+      }
+    },
+    'Caucaia': {
+      'Regional Caucaia Litoral': {
+        'Escola Praia do Cumbuco': {
+          'Avaliação Estadual': ['Turma A']
+        }
+      },
+      'Regional Caucaia Sertão': {} 
+    },
+    'Eusébio': {
+      'Regional Sede Eusébio': {
+        'Escola Profissionalizante Eusébio': {
+          'Avaliação Matemática': ['Turma Tarde', 'Turma Manhã'],
+          'Avaliação Ciências': ['Turma Tarde']
+        },
+        'Colégio Padrão': {} 
+      }
+    }
+  },
+  'São Paulo': {
+    'São Paulo': {
+      'Zona Sul': {
+        'Escola Estadual SP': {
+          'Avaliação SARESP': ['Turma 9A', 'Turma 9B']
+        }
+      }
+    }
+  }
 };
 
 export const CASCADE_LEVELS = [
-  { id: 'estado', title: 'Estado' },
-  { id: 'cidade', title: 'Município' },
-  { id: 'escola', title: 'Escola' },
-  { id: 'turma', title: 'Turma' },
-  { id: 'avaliacao', title: 'Avaliação' }
+  { id: 'estado', title: 'Estados' },
+  { id: 'municipio', title: 'Municípios' },
+  { id: 'regional', title: 'Regionais' },
+  { id: 'escola', title: 'Escolas' },
+  { id: 'turma', title: 'Turmas' },
+  { id: 'avaliacao', title: 'Avaliações' },
+  { id: 'teste', title: 'Teste' }
 ];
+
+// Mock de participações para simulação do CascadeSelector
+export const participacaoAvaliacaoMock = {
+  'Avaliação 1 Lorem ipsum': ['Turma A', 'Turma B', 'Turma C', 'Turma D'],
+  'Avaliação 2 Diagnóstica': ['Turma A'],
+  'Avaliação Global': ['Turma 1', 'Turma 2'],
+  'Avaliação Estadual': ['Turma A'],
+  'Avaliação Matemática': ['Turma Tarde', 'Turma Manhã'],
+  'Avaliação Ciências': ['Turma Tarde'],
+  'Avaliação SARESP': ['Turma 9A']
+};
+
+export const testesMock = {
+  'Avaliação 1 Lorem ipsum': ['Língua Portuguesa', 'Matemática', 'Ciências'],
+  'Avaliação 2 Diagnóstica': ['Entrada', 'Saída'],
+  'Avaliação Global': ['Primeiro Bimestre', 'Segundo Bimestre'],
+  'Avaliação Estadual': ['Prova Brasil'],
+  'Avaliação Matemática': ['Álgebra', 'Geometria'],
+  'Avaliação Ciências': ['Biologia', 'Química'],
+  'Avaliação SARESP': ['Matemática SP', 'Português SP']
+};
+
+// Mock das turmas que não realizaram a avaliação
+export const turmasPendentesMock = ['Turma B', 'Turma C', 'Turma 2', 'Turma Manhã'];

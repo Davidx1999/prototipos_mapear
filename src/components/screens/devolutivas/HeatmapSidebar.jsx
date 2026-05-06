@@ -1,7 +1,7 @@
 import React from 'react';
-import { ChevronUp, HelpCircle, Eye, XCircle, Maximize, Grid, CheckCircle2, MinusCircle, XCircle as XCircleIcon, Route, FileText, ChevronDown } from 'lucide-react';
+import { ChevronUp, HelpCircle, Eye, XCircle, Maximize, Grid, CheckCircle2, MinusCircle, XCircle as XCircleIcon, Route, FileText, ChevronDown, ChevronLeft, Settings2 } from 'lucide-react';
 import CascadeSelector from '../../ui/CascadeSelector';
-import { devDB, CASCADE_LEVELS } from './HeatmapUtils';
+import { devDB, CASCADE_LEVELS, turmasPendentesMock, participacaoAvaliacaoMock, testesMock } from './HeatmapUtils';
 
 export default function HeatmapSidebar({
   isContextExpanded,
@@ -18,32 +18,71 @@ export default function HeatmapSidebar({
   colorTheme,
   isColorsActive,
   navPath,
+  selectedTurmas,
   handleContextChange
 }) {
   return (
-    <aside className={`shrink-0 bg-neutral-0 border-r border-neutral-2 overflow-y-auto flex flex-col transition-all duration-300 ${isContextExpanded ? 'w-[280px]' : 'w-0 overflow-hidden'}`}>
+    <aside 
+      className={`absolute top-4 left-4 z-[100] bg-white/95 backdrop-blur-md border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-2xl flex flex-col transition-all duration-500 ease-in-out ${isContextExpanded ? 'translate-x-0 opacity-100' : '-translate-x-[360px] opacity-0 pointer-events-none'}`}
+      style={{ width: '300px', maxHeight: 'calc(100vh - 140px)', overflow: 'visible' }}
+    >
       {isContextExpanded && (
-        <div className="flex flex-col gap-2 p-4 h-full">
+        <div className="flex flex-col gap-4 p-5 h-full" style={{ overflow: 'visible' }}>
 
           {/* Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
-              <ChevronUp size={16} className="text-neutral-6 cursor-pointer" onClick={() => setIsContextExpanded(false)} />
-              <span className="font-semibold text-[13px] text-neutral-6">Seleção de Contexto</span>
+              <div className="w-8 h-8 rounded-lg bg-primary-base/10 flex items-center justify-center">
+                <Settings2 size={16} className="text-primary-base" />
+              </div>
+              <span className="font-bold text-[14px] text-neutral-7">Configurações</span>
             </div>
-            <HelpCircle size={16} className="text-neutral-5" />
+            <button 
+              onClick={() => setIsContextExpanded(false)}
+              className="p-1.5 hover:bg-neutral-100 rounded-full transition-colors text-neutral-5"
+              title="Fechar painel"
+            >
+              <ChevronLeft size={20} />
+            </button>
           </div>
 
-          <hr className="border-neutral-2" />
+          <div className="h-px bg-neutral-200 w-full shrink-0" />
 
           {/* Filtro em Cascata */}
           <div className="flex flex-col gap-1 relative" style={{ zIndex: 500 }}>
             <span className="text-[11px] font-bold text-neutral-5 uppercase tracking-wider mb-1">Filtro em Cascata</span>
             <CascadeSelector
-              db={devDB}
+              db={(levelIndex, selections, action, params) => {
+                if (action === 'getParticipation') {
+                  return participacaoAvaliacaoMock[params] || [];
+                }
+                try {
+                  if (levelIndex === 0) return Object.keys(devDB);
+                  const [st, mu, re, es, tu, av] = selections;
+                  if (levelIndex === 1) return st ? Object.keys(devDB[st] || {}) : null;
+                  if (levelIndex === 2) return mu ? Object.keys(devDB[st]?.[mu] || {}) : null;
+                  if (levelIndex === 3) return re ? Object.keys(devDB[st]?.[mu]?.[re] || {}) : null;
+                  if (levelIndex === 4) {
+                    const escolaData = devDB[st]?.[mu]?.[re]?.[es] || {};
+                    // Pega todas as turmas únicas presentes nas avaliações dessa escola
+                    return [...new Set(Object.values(escolaData).flat())];
+                  }
+                  if (levelIndex === 5) {
+                    const escolaData = devDB[st]?.[mu]?.[re]?.[es] || {};
+                    return Object.keys(escolaData);
+                  }
+                  if (levelIndex === 6) {
+                    return testesMock[av] || ['Prova 1', 'Prova 2'];
+                  }
+                } catch(e) { return null; }
+                return null;
+              }}
               levels={CASCADE_LEVELS}
               colors={{ primary: { base: '#008BC9' }, neutral: ['#FFFFFF', '#F3F4F6', '#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280', '#4B5563', '#1F2937'] }}
               onConfirm={handleContextChange}
+              multiSelectLeaf={true}
+              selectedLeafItems={selectedTurmas}
+              pendingLeafItems={turmasPendentesMock}
               variant="sidebar"
               initialSelections={navPath}
             />

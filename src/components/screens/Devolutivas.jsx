@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { LayoutDashboard, Grid, BarChart2, ChevronRight, X } from 'lucide-react';
+import { LayoutDashboard, Grid, BarChart2, ChevronRight, X, Settings2 } from 'lucide-react';
 
 import HeatmapSidebar from './devolutivas/HeatmapSidebar';
 import HeatmapControls from './devolutivas/HeatmapControls';
@@ -27,6 +27,7 @@ export default function Devolutivas({ colors, navigateTo }) {
   const [hideNoParticipation, setHideNoParticipation] = useState(false);
   const [isContextExpanded, setIsContextExpanded] = useState(true);
   const [selectedRows, setSelectedRows] = useState(new Set());
+  const [selectedTurmas, setSelectedTurmas] = useState([]);
 
   const [isColsSeparated, setIsColsSeparated] = useState(false);
   const [isRowsSeparated, setIsRowsSeparated] = useState(false);
@@ -38,12 +39,12 @@ export default function Devolutivas({ colors, navigateTo }) {
 
   // --- NAVEGAÇÃO ---
   const [navLevel, setNavLevel] = useState(0);
-  const [navPath, setNavPath] = useState(['Minas Gerais']);
+  const [navPath, setNavPath] = useState(['Ceará']);
 
-  const levelLabels = ['Estado', 'Município', 'Escola', 'Turma', 'Alunos'];
+  const levelLabels = ['Estado', 'Município', 'Regional', 'Escola', 'Avaliação', 'Turma'];
 
   const drillDown = (name) => {
-    if (navLevel < 4) {
+    if (navLevel < 5) {
       setNavLevel(navLevel + 1);
       setNavPath([...navPath, name]);
       setSelectedRows(new Set());
@@ -65,11 +66,12 @@ export default function Devolutivas({ colors, navigateTo }) {
     });
   };
 
-  const handleContextChange = (selections) => {
-    const validSelections = selections.filter(s => s !== null && s !== undefined);
+  const handleContextChange = (path, turmas = []) => {
+    const validSelections = path.filter(s => s !== null && s !== undefined);
     if (validSelections.length > 0) {
       setNavLevel(validSelections.length - 1);
       setNavPath(validSelections);
+      setSelectedTurmas(turmas);
       setSelectedRows(new Set());
     }
   };
@@ -91,6 +93,7 @@ export default function Devolutivas({ colors, navigateTo }) {
 
   // --- LÓGICA DE FILTRAGEM E ORDENAÇÃO ---
   const filteredStudents = useMemo(() => {
+    // Agora sempre mostramos alunos (mock) no nível final (Turma)
     let rows = getMockRows(navLevel, navPath[navLevel]);
 
     if (hideNoParticipation) {
@@ -237,15 +240,6 @@ export default function Devolutivas({ colors, navigateTo }) {
   };
   const handleCellMouseLeave = () => setTooltipData(null);
 
-  // Breadcrumb paths for display
-  const breadcrumbParts = [
-    'Minas Gerais',
-    ...(navPath.length > 1 ? ['Teófilo Otoni'] : []),
-    ...(navPath.length > 2 ? ['Águas Formosas'] : []),
-    ...(navPath.length > 3 ? [`Regional (${navPath.length - 1})`] : []),
-    ...(navLevel >= 0 ? [levelLabels[navLevel] + (navLevel < 4 ? 's' : '')] : [])
-  ];
-
   return (
     // Ocupa exatamente o espaço restante abaixo do header global — sem overflow
     <div
@@ -283,10 +277,10 @@ export default function Devolutivas({ colors, navigateTo }) {
               {idx < navPath.length - 1 && <span className="text-neutral-4">/</span>}
             </React.Fragment>
           ))}
-          {navPath.length > 0 && (
+          {navPath.length > 0 && navPath.length < levelLabels.length && (
             <>
               <span className="text-neutral-4">/</span>
-              <span className="text-neutral-5">{levelLabels[Math.min(navLevel + 1, 4)]}s</span>
+              <span className="text-neutral-5">{levelLabels[navPath.length]}s</span>
             </>
           )}
         </div>
@@ -304,6 +298,20 @@ export default function Devolutivas({ colors, navigateTo }) {
       {/* ── CORPO PRINCIPAL (sidebar + área de conteúdo) ── */}
       <div className="flex flex-1 overflow-hidden relative">
 
+        {/* Trigger Sidebar (quando oculta) */}
+        {!isContextExpanded && (
+          <button
+            onClick={() => setIsContextExpanded(true)}
+            className="absolute top-4 left-4 z-[90] w-12 h-12 bg-white border border-neutral-200 shadow-xl rounded-xl flex items-center justify-center text-primary-base hover:bg-neutral-50 transition-all active:scale-95 group animate-in fade-in slide-in-from-left-4 duration-300"
+            title="Abrir configurações"
+          >
+            <Settings2 size={24} />
+            <div className="absolute left-14 bg-neutral-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap transition-opacity">
+              Configurações
+            </div>
+          </button>
+        )}
+
         {/* Sidebar */}
         <HeatmapSidebar
           isContextExpanded={isContextExpanded}
@@ -320,6 +328,7 @@ export default function Devolutivas({ colors, navigateTo }) {
           colorTheme={colorTheme}
           isColorsActive={isColorsActive}
           navPath={navPath}
+          selectedTurmas={selectedTurmas}
           handleContextChange={handleContextChange}
         />
 
