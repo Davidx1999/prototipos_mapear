@@ -80,7 +80,7 @@ export default function HeatmapSidebar({
                 return null;
               }}
               levels={CASCADE_LEVELS}
-              colors={{ primary: { base: '#008BC9' }, neutral: ['#FFFFFF', '#F3F4F6', '#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280', '#4B5563', '#1F2937'] }}
+              colors={{ primary: { base: '#008BC9', dark: '#003A79' }, neutral: ['#FFFFFF', '#F3F4F6', '#E5E7EB', '#D1D5DB', '#9CA3AF', '#6B7280', '#4B5563', '#1F2937'] }}
               onConfirm={handleContextChange}
               multiSelectLeaf={true}
               selectedLeafItems={selectedTurmas}

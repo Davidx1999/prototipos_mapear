@@ -397,8 +397,8 @@ export default function CascadeSelector({
                       {isSyncing && mobileStep === syncingLevel ? (
                         <div className="flex flex-col gap-3 p-5">
                           <div className="flex items-center gap-2">
-                            <div className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: colors.primary.dark, borderTopColor: 'transparent' }}></div>
-                            <span className="text-[14px] font-bold" style={{ color: colors.primary.dark }}>Sincronizando...</span>
+                            <div className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: colors.primary?.dark || '#003A79', borderTopColor: 'transparent' }}></div>
+                            <span className="text-[14px] font-bold" style={{ color: colors.primary?.dark || '#003A79' }}>Sincronizando...</span>
                           </div>
                           {[1, 2, 3].map(s => (
                             <div key={s} className="h-[60px] w-full bg-neutral-100 rounded animate-pulse"></div>
@@ -605,8 +605,8 @@ export default function CascadeSelector({
                       innerContent = (
                         <div className="flex flex-col gap-3 p-2">
                           <div className="flex items-center gap-2 px-2 py-1">
-                            <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: colors.primary.dark, borderTopColor: 'transparent' }}></div>
-                            <span className="text-[12px] font-bold" style={{ color: colors.primary.dark }}>Sincronizando...</span>
+                            <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: colors.primary?.dark || '#003A79', borderTopColor: 'transparent' }}></div>
+                            <span className="text-[12px] font-bold" style={{ color: colors.primary?.dark || '#003A79' }}>Sincronizando...</span>
                           </div>
                           {[1, 2, 3].map(s => (
                             <div key={s} className="h-[44px] w-full bg-neutral-100 rounded animate-pulse"></div>
