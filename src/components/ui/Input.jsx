@@ -21,23 +21,23 @@ const Input = ({
           {label}
         </label>
       )}
-      
+
       <div className="relative flex items-center">
         {iconLeft && (
           <div className="absolute left-[16px] text-[var(--neutral-4)] flex items-center justify-center pointer-events-none transition-colors group-focus-within:text-[var(--primary-base)]">
             {React.cloneElement(iconLeft, { size: 18, strokeWidth: 2 })}
           </div>
         )}
-        
+
         <input
           className={`
             w-full bg-[var(--neutral-0)] border text-[13px] md:text-[14px] outline-none transition-all
             rounded-[4px] px-[16px] py-[10px] md:py-[12px]
             ${iconLeft ? 'pl-[44px]' : ''}
             ${iconRight ? 'pr-[44px]' : ''}
-            ${error 
-              ? 'border-red-500 focus:border-red-600' 
-              : 'border-[var(--neutral-3)] focus:border-[var(--primary-base)] focus:ring-4 focus:ring-[var(--primary-base)]/5'}
+            ${error
+              ? 'border-red-500 focus:border-red-600'
+              : 'border-[var(--neutral-3)] focus:border-[2px] focus:border-[var(--primary-base)] focus:ring-2 focus:ring-[var(--primary-light)]'}
             placeholder:text-[var(--neutral-4)]
             placeholder:font-normal
             text-[var(--neutral-7)]
@@ -46,14 +46,14 @@ const Input = ({
           `}
           {...props}
         />
-        
+
         {iconRight && (
           <div className="absolute right-[16px] text-[var(--neutral-4)] flex items-center justify-center cursor-pointer transition-colors hover:text-[var(--neutral-6)]">
             {React.cloneElement(iconRight, { size: 18, strokeWidth: 2 })}
           </div>
         )}
       </div>
-      
+
       {(error || helperText) && (
         <p className={`text-[11px] md:text-[12px] mt-[2px] ${error ? 'text-red-500 font-medium' : 'text-[var(--neutral-5)]'}`}>
           {typeof error === 'string' ? error : helperText}

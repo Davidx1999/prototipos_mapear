@@ -69,10 +69,12 @@ export default function HeatmapSidebar({
                   }
                   if (levelIndex === 5) {
                     const escolaData = devDB[st]?.[mu]?.[re]?.[es] || {};
-                    return Object.keys(escolaData);
+                    // Só mostra avaliações se houver turmas selecionadas
+                    return (tu && tu.length > 0) ? Object.keys(escolaData) : null;
                   }
                   if (levelIndex === 6) {
-                    return testesMock[av] || ['Prova 1', 'Prova 2'];
+                    // Só mostra testes se houver uma avaliação selecionada
+                    return av ? (testesMock[av] || ['Prova 1', 'Prova 2']) : null;
                   }
                 } catch(e) { return null; }
                 return null;

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Blocks, PanelLeftOpen, ChevronRight, ChevronDown, X, Search, Eraser, Check, LayoutList, AlertCircle } from 'lucide-react';
+import Input from './Input';
 
 export default function CascadeSelector({
   db,
@@ -64,10 +65,10 @@ export default function CascadeSelector({
 
     if (isTurmaLevel) {
       const currentTurmas = selections[levelIndex] || [];
-      const newTurmas = Array.isArray(currentTurmas) 
+      const newTurmas = Array.isArray(currentTurmas)
         ? (currentTurmas.includes(value) ? currentTurmas.filter(t => t !== value) : [...currentTurmas, value])
         : [value];
-      
+
       const newSelections = [...selections];
       newSelections[levelIndex] = newTurmas;
       setSelections(newSelections);
@@ -75,7 +76,7 @@ export default function CascadeSelector({
       // Sincronizando Avaliações (next level)
       setSyncingLevel(levelIndex + 1);
       setIsSyncing(true);
-      
+
       if (!isMobile) {
         setTimeout(() => scrollToActive(levelIndex + 1), 50);
       }
@@ -96,13 +97,13 @@ export default function CascadeSelector({
     const newSelections = selections.slice(0, levelIndex);
     newSelections[levelIndex] = objData || value;
     setSelections(newSelections);
-    
+
     if (multiSelectLeaf) {
       // If we change something before the leaf, we might want to keep the leaf selection if it's still valid,
       // but the current logic resets it. We'll keep it simple for now.
-      setSelectedLeafs([]); 
+      setSelectedLeafs([]);
     }
-    
+
     setSearchQuery('');
     setSearchLevel(Math.min(levelIndex + 1, levels.length - 1));
 
@@ -116,7 +117,7 @@ export default function CascadeSelector({
   };
 
   const toggleLeafSelection = (value) => {
-    setSelectedLeafs(prev => 
+    setSelectedLeafs(prev =>
       prev.includes(value) ? prev.filter(t => t !== value) : [...prev, value]
     );
   };
@@ -204,7 +205,7 @@ export default function CascadeSelector({
   const topBar = (
     <div className={`items-center gap-[6px] md:gap-[8px] transition-all flex w-full`}>
       <div
-        className={`flex items-center bg-neutral-0 border ${isOpen ? 'border-primary-base shadow-sm ring-2 ring-[#D9F0FC]' : 'border-neutral-300 shadow-sm'} rounded-[4px] ${variant === 'sidebar' ? 'h-[36px] md:h-[40px] px-[12px] w-full' : 'h-[44px] md:h-[48px] px-[16px] w-fit min-w-[40%] max-w-[calc(100%-56px)]'} cursor-pointer hover:border-primary-base overflow-hidden transition-all`}
+        className={`flex items-center bg-neutral-0 border transition-all ${isOpen ? 'border-[2px] border-[var(--primary-base)] ring-2 ring-[var(--primary-light)]' : 'border-neutral-300 shadow-sm'} rounded-[4px] ${variant === 'sidebar' ? 'h-[36px] md:h-[40px] px-[12px] w-full' : 'h-[44px] md:h-[48px] px-[16px] w-fit min-w-[40%] max-w-[calc(100%-56px)]'} cursor-pointer hover:border-[var(--primary-base)] overflow-hidden`}
         onClick={toggle}
       >
         <Blocks size={variant === 'sidebar' ? 14 : 18} className="text-primary-base shrink-0 mr-[8px] md:mr-[12px]" />
@@ -227,226 +228,340 @@ export default function CascadeSelector({
 
       {isOpen && (
         isMobile ? (
-          /* 📱 MOBILE FULLSCREEN OVERLAY */
-          <div
-            className="fixed inset-0 flex flex-col overflow-hidden"
-            style={{
-              zIndex: 1000,
-              backgroundColor: colors.neutral[0],
-              animation: 'cascadeSlideUp 0.3s ease-out forwards'
-            }}
-          >
-            {/* Header Mobile */}
-            <div className="px-[16px] py-[16px] border-b flex flex-col gap-[12px] shadow-sm" style={{ borderColor: colors.neutral[2], backgroundColor: colors.neutral[0] }}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-[12px]">
-                  {mobileStep > 0 && (
-                    <button onClick={() => setMobileStep(mobileStep - 1)} className="p-[4px] -ml-[4px]" style={{ color: colors.primary.base }}>
-                      <ChevronDown size={24} className="rotate-90" />
-                    </button>
-                  )}
-                  <h2 className="text-[18px] font-bold leading-none" style={{ color: colors.neutral[7] }}>
-                    {levels[mobileStep]?.title}
-                  </h2>
-                </div>
-                <button onClick={() => setIsOpen(false)} className="p-[4px]" style={{ color: colors.neutral[5] }}>
-                  <X size={24} />
-                </button>
+          /* 📱 MOBILE BOTTOM SHEET */
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0"
+              style={{ zIndex: 999, backgroundColor: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(2px)', animation: 'cascadeFadeIn 0.2s ease-out forwards' }}
+              onClick={() => setIsOpen(false)}
+            />
+
+            {/* Bottom Sheet */}
+            <div
+              className="fixed bottom-0 left-0 right-0 flex flex-col overflow-hidden rounded-t-[20px]"
+              style={{
+                zIndex: 1000,
+                backgroundColor: colors.neutral[0],
+                maxHeight: '90vh',
+                animation: 'cascadeSlideUp 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards',
+                boxShadow: '0 -20px 60px rgba(0,0,0,0.2)'
+              }}
+            >
+              {/* Handle */}
+              <div className="flex justify-center pt-[12px] pb-[4px] shrink-0">
+                <div className="w-[40px] h-[4px] rounded-full" style={{ backgroundColor: colors.neutral[3] }} />
               </div>
 
-              {/* Mobile Path / Breadcrumbs */}
-              {selections.length > 0 && (
-                <div className="flex items-center gap-[6px] overflow-x-auto hide-scrollbar text-[11px] font-bold uppercase tracking-wider" style={{ color: colors.neutral[4] }}>
-                  {selections.map((s, i) => {
-                    if (!s) return null;
-                    const isArray = Array.isArray(s);
-                    const label = isArray ? `${s.length} ${levels[i]?.title}` : (typeof s === 'object' ? s.nome : s);
+              {/* Header */}
+              <div className="px-[20px] pt-[8px] pb-[16px] shrink-0">
+                {/* Title row */}
+                <div className="flex items-center justify-between mb-[12px]">
+                  <div className="flex items-center gap-[10px]">
+                    {mobileStep > 0 && (
+                      <button
+                        onClick={() => setMobileStep(mobileStep - 1)}
+                        className="w-[36px] h-[36px] rounded-full flex items-center justify-center transition-colors active:scale-95"
+                        style={{ backgroundColor: `${colors.primary.base}15`, color: colors.primary.base }}
+                      >
+                        <ChevronDown size={20} className="rotate-90" />
+                      </button>
+                    )}
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: colors.neutral[4] }}>
+                        {mobileStep + 1} de {levels.length}
+                      </p>
+                      <h2 className="text-[20px] font-bold leading-tight" style={{ color: colors.neutral[7] }}>
+                        {levels[mobileStep]?.title}
+                      </h2>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="w-[36px] h-[36px] rounded-full flex items-center justify-center transition-colors"
+                    style={{ backgroundColor: colors.neutral[1], color: colors.neutral[5] }}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* Progress dots */}
+                <div className="flex items-center gap-[6px] mb-[12px]">
+                  {levels.map((_, idx) => {
+                    const isDone = idx < mobileStep;
+                    const isCurrent = idx === mobileStep;
+                    const hasSelection = Array.isArray(selections[idx]) ? selections[idx].length > 0 : !!selections[idx];
                     return (
-                      <React.Fragment key={i}>
-                        <span
-                          onClick={() => setMobileStep(i)}
-                          className={`whitespace-nowrap ${i === mobileStep ? '' : ''}`}
-                          style={{ color: i === mobileStep ? colors.primary.base : colors.neutral[4] }}
-                        >
-                          {label}
-                        </span>
-                        {i < selections.length - 1 && <ChevronRight size={10} className="shrink-0" />}
-                      </React.Fragment>
+                      <button
+                        key={idx}
+                        onClick={() => isDone || hasSelection ? setMobileStep(idx) : null}
+                        className="transition-all"
+                        style={{
+                          width: isCurrent ? 24 : 8,
+                          height: 8,
+                          borderRadius: 4,
+                          backgroundColor: isCurrent ? colors.primary.base : (isDone || hasSelection ? `${colors.primary.base}60` : colors.neutral[2])
+                        }}
+                      />
                     );
                   })}
                 </div>
-              )}
 
-              {/* Search Mobile */}
-              <div className="relative">
-                <Search size={16} className="absolute left-[12px] top-1/2 -translate-y-1/2" style={{ color: colors.neutral[4] }} />
-                <input
-                  type="text"
+                {/* Breadcrumb path */}
+                {selections.length > 0 && (
+                  <div
+                    className="flex items-center gap-[4px] overflow-x-auto hide-scrollbar py-[6px] px-[10px] rounded-[8px] mb-[12px]"
+                    style={{ backgroundColor: colors.neutral[1] }}
+                  >
+                    {selections.map((s, i) => {
+                      if (!s) return null;
+                      const isArray = Array.isArray(s);
+                      const label = isArray ? `${s.length} ${levels[i]?.title}` : (typeof s === 'object' ? s.nome : s);
+                      return (
+                        <React.Fragment key={i}>
+                          <button
+                            onClick={() => setMobileStep(i)}
+                            className="text-[11px] font-bold whitespace-nowrap px-[6px] py-[2px] rounded-[4px] transition-colors"
+                            style={{
+                              color: i === mobileStep ? colors.primary.base : colors.neutral[5],
+                              backgroundColor: i === mobileStep ? `${colors.primary.base}15` : 'transparent'
+                            }}
+                          >
+                            {label}
+                          </button>
+                          {i < selections.length - 1 && (
+                            <ChevronRight size={10} style={{ color: colors.neutral[3], flexShrink: 0 }} />
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Search using Input component */}
+                <Input
+                  iconLeft={<Search />}
                   placeholder={`Buscar ${levels[mobileStep]?.title.toLowerCase()}...`}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
-                  className="w-full h-[40px] pl-[36px] pr-[12px] border rounded-[4px] text-[14px] font-medium outline-none transition-all focus:border-primary-base focus:ring-4 focus:ring-primary-base/5"
-                  style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2], color: colors.neutral[7] }}
+                  iconRight={searchQuery ? (
+                    <X onClick={(e) => { e.stopPropagation(); setSearchQuery(''); }} className="cursor-pointer" />
+                  ) : null}
                 />
               </div>
-            </div>
 
-            {/* List Mobile */}
-            <div className="flex-1 overflow-y-auto" style={{ backgroundColor: colors.neutral[0] }}>
-              {(() => {
-                const items = getCascadeDataForLevel(mobileStep) || [];
-                const filtered = searchQuery
-                  ? items.filter(it => (typeof it === 'object' ? it.nome : it).toLowerCase().includes(searchQuery))
-                  : items;
+              {/* List */}
+              <div className="flex-1 overflow-y-auto" style={{ backgroundColor: colors.neutral[0] }}>
+                {(() => {
+                  const rawItems = getCascadeDataForLevel(mobileStep);
+                  const items = rawItems || [];
+                  const filtered = searchQuery
+                    ? items.filter(it => (typeof it === 'object' ? it.nome : it).toLowerCase().includes(searchQuery))
+                    : items;
 
-                if (filtered.length === 0) {
-                  return (
-                    <div className="flex flex-col items-center justify-center p-[48px] text-center gap-[12px]">
-                      <LayoutList size={40} style={{ color: colors.neutral[3] }} />
-                      <span className="text-[14px] font-medium" style={{ color: colors.neutral[4] }}>Nenhum item encontrado</span>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div className="flex flex-col">
-                    {isSyncing && mobileStep === syncingLevel ? (
-                      <div className="flex flex-col gap-3 p-5">
-                        <div className="flex items-center gap-2">
-                          <div className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: colors.primary.dark, borderTopColor: 'transparent' }}></div>
-                          <span className="text-[14px] font-bold" style={{ color: colors.primary.dark }}>Sincronizando...</span>
+                  // Empty state: no data at all (parent not selected)
+                  if (!rawItems || rawItems.length === 0) {
+                    let emptyMsg = 'Nenhum item disponível';
+                    if (mobileStep === 1) emptyMsg = 'Selecione um Estado primeiro';
+                    else if (mobileStep === 2) emptyMsg = 'Selecione um Município primeiro';
+                    else if (mobileStep === 3) emptyMsg = 'Selecione uma Regional primeiro';
+                    else if (mobileStep === 4) emptyMsg = 'Selecione uma Escola primeiro';
+                    else if (mobileStep === 5) emptyMsg = 'Selecione as Turmas primeiro';
+                    else if (mobileStep === 6) emptyMsg = 'Selecione uma Avaliação primeiro';
+                    return (
+                      <div className="flex flex-col items-center justify-center p-[48px] text-center gap-[12px]">
+                        <div className="w-[56px] h-[56px] rounded-full flex items-center justify-center mb-[4px]" style={{ backgroundColor: colors.neutral[1] }}>
+                          <LayoutList size={28} style={{ color: colors.neutral[3] }} />
                         </div>
-                        {[1, 2, 3].map(s => (
-                          <div key={s} className="h-[60px] w-full bg-neutral-100 rounded animate-pulse"></div>
-                        ))}
+                        <span className="text-[15px] font-semibold" style={{ color: colors.neutral[5] }}>{emptyMsg}</span>
+                        <span className="text-[13px]" style={{ color: colors.neutral[4] }}>Complete as etapas anteriores para continuar.</span>
                       </div>
-                    ) : (
-                      filtered.map((item, idx) => {
-                        const isObj = typeof item === 'object';
-                        const label = isObj ? item.nome : item;
-                        const value = isObj ? item.id : item;
-                        
-                        const isLastLevel = mobileStep === levels.length - 1;
-                        const isTurmaLevel = mobileStep === 4;
-                        const isAvaliacaoLevel = mobileStep === 5;
+                    );
+                  }
 
-                        const isSelected = isLastLevel && multiSelectLeaf
-                          ? selectedLeafs.includes(value)
-                          : (isTurmaLevel 
-                             ? (Array.isArray(selections[mobileStep]) && selections[mobileStep].includes(value))
-                             : (isObj ? (selections[mobileStep]?.id === value) : (selections[mobileStep] === value)));
+                  // Empty state: search found nothing
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center p-[48px] text-center gap-[12px]">
+                        <div className="w-[56px] h-[56px] rounded-full flex items-center justify-center mb-[4px]" style={{ backgroundColor: colors.neutral[1] }}>
+                          <Search size={24} style={{ color: colors.neutral[3] }} />
+                        </div>
+                        <span className="text-[15px] font-semibold" style={{ color: colors.neutral[5] }}>Nenhum resultado</span>
+                        <span className="text-[13px]" style={{ color: colors.neutral[4] }}>Tente buscar com termos diferentes.</span>
+                      </div>
+                    );
+                  }
 
-                        // Lógica de sub-linha para Avaliações
-                        let subLine = null;
-                        if (isAvaliacaoLevel) {
-                          const selectedTurmas = selections[4] || [];
-                          if (selectedTurmas.length > 0) {
-                            const participacoes = db(null, null, 'getParticipation', label) || [];
-                            const faltantes = selectedTurmas.filter(t => !participacoes.includes(t));
-                            
-                            if (faltantes.length === 0) {
-                              subLine = <span className="text-[11px] text-green-600 font-bold">Todas as Turmas (100%)</span>;
-                            } else {
-                              subLine = <span className="text-[11px] text-red-500 font-medium">Falta: {faltantes.join(', ')}</span>;
+                  return (
+                    <div className="flex flex-col pb-[8px]">
+                      {isSyncing && mobileStep === syncingLevel ? (
+                        <div className="flex flex-col gap-3 p-5">
+                          <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: colors.primary.dark, borderTopColor: 'transparent' }}></div>
+                            <span className="text-[14px] font-bold" style={{ color: colors.primary.dark }}>Sincronizando...</span>
+                          </div>
+                          {[1, 2, 3].map(s => (
+                            <div key={s} className="h-[60px] w-full bg-neutral-100 rounded animate-pulse"></div>
+                          ))}
+                        </div>
+                      ) : (
+                        filtered.map((item, idx) => {
+                          const isObj = typeof item === 'object';
+                          const label = isObj ? item.nome : item;
+                          const value = isObj ? item.id : item;
+
+                          const isLastLevel = mobileStep === levels.length - 1;
+                          const isTurmaLevel = mobileStep === 4;
+                          const isAvaliacaoLevel = mobileStep === 5;
+
+                          const isSelected = isLastLevel && multiSelectLeaf
+                            ? selectedLeafs.includes(value)
+                            : (isTurmaLevel
+                              ? (Array.isArray(selections[mobileStep]) && selections[mobileStep].includes(value))
+                              : (isObj ? (selections[mobileStep]?.id === value) : (selections[mobileStep] === value)));
+
+                          let subLine = null;
+                          if (isAvaliacaoLevel) {
+                            const selectedTurmas = selections[4] || [];
+                            if (selectedTurmas.length > 0) {
+                              const participacoes = db(null, null, 'getParticipation', label) || [];
+                              const faltantes = selectedTurmas.filter(t => !participacoes.includes(t));
+                              if (faltantes.length === 0) {
+                                subLine = <span className="text-[11px] text-green-600 font-bold">Todas as Turmas (100%)</span>;
+                              } else {
+                                subLine = <span className="text-[11px] text-red-500 font-medium">Falta: {faltantes.join(', ')}</span>;
+                              }
                             }
                           }
-                        }
 
-                        return (
-                          <div
-                            key={idx}
-                            onClick={() => selectItem(mobileStep, value, isObj ? item : null)}
-                            className={`px-[20px] py-[18px] border-b flex items-center justify-between active:opacity-70 transition-colors ${isSelected ? '' : ''}`}
-                            style={{
-                              borderColor: colors.neutral[1],
-                              backgroundColor: isSelected ? `${colors.primary.extraLight}50` : 'transparent'
-                            }}
-                          >
-                            <div className="flex items-center gap-[12px] w-full overflow-hidden">
-                              {(multiSelectLeaf && isLastLevel) || isTurmaLevel ? (
-                                <div 
-                                  className={`w-5 h-5 rounded border flex items-center justify-center transition-colors shrink-0 ${isSelected ? 'bg-[#008BC9] border-[#008BC9] text-white' : 'border-gray-300 bg-white'}`}
-                                  style={{ backgroundColor: isSelected ? colors.primary.base : '', borderColor: isSelected ? colors.primary.base : '' }}
-                                >
-                                  {isSelected && <Check size={14} strokeWidth={3} />}
-                                </div>
-                              ) : (
-                                <div className={`w-[8px] h-[8px] rounded-full shrink-0 ${isSelected ? '' : ''}`} style={{ backgroundColor: isSelected ? colors.primary.base : 'transparent' }} />
-                              )}
-                              <div className="flex flex-col gap-0.5 overflow-hidden">
-                                <span className={`text-[15px] truncate ${isSelected ? 'font-bold' : 'font-medium'}`} style={{ color: isSelected ? colors.primary.base : colors.neutral[6] }}>{label}</span>
-                                {subLine}
-                                {isLastLevel && pendingLeafItems.includes(value) && (
-                                  <span className="text-[10px] text-orange-600 font-bold uppercase tracking-wider">Pendente Avaliação</span>
+                          return (
+                            <div
+                              key={idx}
+                              onClick={() => selectItem(mobileStep, value, isObj ? item : null)}
+                              className="mx-[12px] my-[3px] px-[16px] py-[14px] rounded-[12px] flex items-center justify-between active:scale-[0.98] transition-all"
+                              style={{
+                                backgroundColor: isSelected ? `${colors.primary.base}12` : 'transparent',
+                                border: `1px solid ${isSelected ? `${colors.primary.base}30` : 'transparent'}`
+                              }}
+                            >
+                              <div className="flex items-center gap-[14px] w-full overflow-hidden">
+                                {(multiSelectLeaf && isLastLevel) || isTurmaLevel ? (
+                                  <div
+                                    className="w-[22px] h-[22px] rounded-[6px] border-2 flex items-center justify-center transition-all shrink-0"
+                                    style={{
+                                      backgroundColor: isSelected ? colors.primary.base : 'transparent',
+                                      borderColor: isSelected ? colors.primary.base : colors.neutral[3]
+                                    }}
+                                  >
+                                    {isSelected && <Check size={13} strokeWidth={3} style={{ color: colors.neutral[0] }} />}
+                                  </div>
+                                ) : (
+                                  <div
+                                    className="w-[10px] h-[10px] rounded-full shrink-0 transition-all"
+                                    style={{ backgroundColor: isSelected ? colors.primary.base : colors.neutral[2] }}
+                                  />
                                 )}
+                                <div className="flex flex-col gap-[2px] overflow-hidden flex-1">
+                                  <span
+                                    className={`text-[15px] truncate ${isSelected ? 'font-bold' : 'font-medium'}`}
+                                    style={{ color: isSelected ? colors.primary.base : colors.neutral[7] }}
+                                  >
+                                    {label}
+                                  </span>
+                                  {subLine}
+                                  {isLastLevel && pendingLeafItems.includes(value) && (
+                                    <span className="text-[10px] text-orange-600 font-bold uppercase tracking-wider">Pendente Avaliação</span>
+                                  )}
+                                </div>
                               </div>
+                              {!isLastLevel && !isTurmaLevel && (
+                                <ChevronRight size={18} style={{ color: colors.neutral[3], flexShrink: 0 }} />
+                              )}
                             </div>
-                            {!isLastLevel && !isTurmaLevel && <ChevronRight size={18} style={{ color: colors.neutral[3] }} />}
-                          </div>
-                        );
-                      })
-                    )}
-                  </div>
-                );
-              })()}
-            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
 
-            {/* Action Bar Mobile */}
-            <div className="p-[16px] border-t flex gap-[12px]" style={{ backgroundColor: colors.neutral[0], borderColor: colors.neutral[2] }}>
-              <button
-                onClick={clearAll}
-                className="flex-1 h-[48px] rounded-[8px] border text-[14px] font-bold active:bg-neutral-1 transition-all"
-                style={{ borderColor: colors.neutral[3], color: colors.neutral[5] }}
-              >
-                LIMPAR
-              </button>
-              <button
-                onClick={handleConfirm}
-                disabled={selections.length === 0 || (multiSelectLeaf && selectedLeafs.length === 0)}
-                className={`flex-[2] h-[48px] rounded-[8px] text-[14px] font-bold flex items-center justify-center gap-[8px] transition-all ${selections.length > 0 ? 'shadow-lg active:scale-[0.98]' : ''}`}
+              {/* Action Bar */}
+              <div
+                className="px-[20px] py-[16px] flex gap-[12px] shrink-0"
                 style={{
-                  backgroundColor: (selections.length > 0 && (!multiSelectLeaf || selectedLeafs.length > 0)) ? colors.primary.base : colors.neutral[2],
-                  color: (selections.length > 0 && (!multiSelectLeaf || selectedLeafs.length > 0)) ? colors.neutral[0] : colors.neutral[4]
+                  backgroundColor: colors.neutral[0],
+                  borderTop: `1px solid ${colors.neutral[2]}`,
+                  paddingBottom: 'max(16px, env(safe-area-inset-bottom))'
                 }}
               >
-                CONFIRMAR SELEÇÃO <Check size={18} />
-              </button>
+                <button
+                  onClick={clearAll}
+                  className="h-[52px] px-[20px] rounded-[12px] border text-[14px] font-bold transition-all active:scale-95"
+                  style={{ borderColor: colors.neutral[3], color: colors.neutral[5], backgroundColor: colors.neutral[0] }}
+                >
+                  Limpar
+                </button>
+                <button
+                  onClick={handleConfirm}
+                  disabled={selections.length === 0 || (multiSelectLeaf && selectedLeafs.length === 0)}
+                  className={`flex-1 h-[52px] rounded-[12px] text-[15px] font-bold flex items-center justify-center gap-[8px] transition-all ${selections.length > 0 ? 'active:scale-[0.98]' : ''}`}
+                  style={{
+                    backgroundColor: (selections.length > 0 && (!multiSelectLeaf || selectedLeafs.length > 0)) ? colors.primary.base : colors.neutral[2],
+                    color: (selections.length > 0 && (!multiSelectLeaf || selectedLeafs.length > 0)) ? colors.neutral[0] : colors.neutral[3],
+                    boxShadow: (selections.length > 0 && (!multiSelectLeaf || selectedLeafs.length > 0)) ? `0 4px 16px ${colors.primary.base}40` : 'none'
+                  }}
+                >
+                  Confirmar Seleção <Check size={18} />
+                </button>
+              </div>
             </div>
 
             <style>{`
               @keyframes cascadeSlideUp {
-                from { transform: translateY(100%); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
+                from { transform: translateY(100%); }
+                to { transform: translateY(0); }
+              }
+              @keyframes cascadeFadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
               }
             `}</style>
-          </div>
+          </>
         ) : (
           /* 🖥️ DESKTOP DROPDOWN (Original) */
-          <div className={`absolute top-[calc(100%+12px)] left-0 bg-white rounded-[8px] border border-neutral-300 shadow-[0_20px_50px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col animate-fade-slide ${variant === 'sidebar' ? 'w-[calc(100vw-32px)] md:w-[48vw] min-w-[800px] max-w-[1200px]' : 'w-[calc(100vw-32px)] md:w-[80vw] max-w-[1100px]'} max-h-[500px]`} style={{ zIndex: 81 }}>
+          <div className={`absolute top-[calc(100%+4px)] left-0 bg-white rounded-[8px] border border-neutral-300 shadow-[0_20px_50px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col animate-fade-slide ${variant === 'sidebar' ? 'w-[calc(100vw-32px)] md:w-[48vw] min-w-[800px] max-w-[1200px]' : 'w-[calc(100vw-32px)] md:w-[80vw] max-w-[1100px]'} max-h-[500px]`} style={{ zIndex: 81 }}>
 
-            <div className="flex flex-col md:flex-row border-b border-neutral-200 bg-neutral-0 shrink-0">
-              <div className="w-full md:w-[240px] md:w-[280px] lg:w-[300px] shrink-0 border-b md:border-b-0 md:border-r border-neutral-200 relative">
-                <select
-                  className="w-full h-[48px] px-[16px] text-[13px] font-bold text-neutral-700 outline-none appearance-none cursor-pointer hover:bg-neutral-50 focus:text-primary-base"
-                  value={searchLevel}
-                  onChange={(e) => setSearchLevel(parseInt(e.target.value))}
-                >
-                  {levels.map((lvl, idx) => (
-                    <option key={idx} value={idx}>{lvl.title}</option>
-                  ))}
-                </select>
-                <ChevronDown size={14} className="absolute right-[16px] top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
-              </div>
-              <div className="flex-1 flex items-center relative">
-                <Search size={18} className="absolute left-[16px] text-neutral-400" />
-                <input
-                  type="text"
-                  placeholder="Pesquisar..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
-                  className="w-full h-[48px] pl-[44px] pr-[40px] text-[14px] font-medium outline-none text-neutral-700 placeholder-neutral-400 transition-all focus:bg-neutral-50"
-                />
-                {searchQuery && <X size={18} onClick={() => setSearchQuery('')} className="absolute right-[16px] text-neutral-400 hover:text-red-500 cursor-pointer" />}
+            <div className="p-[8px] border-b border-neutral-200 bg-neutral-0 shrink-0">
+              <div className="flex items-center gap-[8px]">
+                <div className="w-[180px] shrink-0 relative">
+                  <select
+                    className="w-full h-[42px] px-[12px] text-[13px] font-bold text-neutral-700 outline-none appearance-none cursor-pointer hover:bg-neutral-50 disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed rounded-[4px] border border-neutral-300 focus:border-2 focus:border-primary-base focus:ring-2 focus:ring-[var(--primary-light)] transition-all"
+                    value={searchLevel}
+                    onChange={(e) => setSearchLevel(parseInt(e.target.value))}
+                    disabled={selections.length === 0}
+                  >
+                    {levels.map((lvl, idx) => (
+                      <option key={idx} value={idx}>{lvl.title}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={14} className="absolute right-[12px] top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+                </div>
+                <div className="flex-1">
+                  <Input
+                    iconLeft={<Search />}
+                    placeholder="Pesquisar..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
+                    className="!py-[8px] h-[42px]"
+                    iconRight={searchQuery ? (
+                      <X
+                        onClick={(e) => { e.stopPropagation(); setSearchQuery(''); }}
+                        className="cursor-pointer"
+                      />
+                    ) : null}
+                  />
+                </div>
               </div>
             </div>
 
@@ -503,16 +618,16 @@ export default function CascadeSelector({
                         const isObj = typeof item === 'object';
                         const label = isObj ? item.nome : item;
                         const value = isObj ? item.id : item;
-                        
+
                         const isLastLevel = i === levels.length - 1;
                         const isTurmaLevel = i === 4;
                         const isAvaliacaoLevel = i === 5;
 
                         const isSelected = isLastLevel && multiSelectLeaf
                           ? selectedLeafs.includes(value)
-                          : (isTurmaLevel 
-                             ? (Array.isArray(selections[i]) && selections[i].includes(value))
-                             : (isObj ? (selections[i]?.id === value) : (selections[i] === value)));
+                          : (isTurmaLevel
+                            ? (Array.isArray(selections[i]) && selections[i].includes(value))
+                            : (isObj ? (selections[i]?.id === value) : (selections[i] === value)));
 
                         // Lógica de sub-linha para Avaliações
                         let subLine = null;
@@ -523,7 +638,7 @@ export default function CascadeSelector({
                             // We expect item to have participation info or we use a mock helper
                             const participacoes = db(null, null, 'getParticipation', label) || [];
                             const faltantes = selectedTurmas.filter(t => !participacoes.includes(t));
-                            
+
                             if (faltantes.length === 0) {
                               subLine = <span className="text-[10px] text-green-600 font-bold">Todas as Turmas (100%)</span>;
                             } else {
@@ -572,7 +687,7 @@ export default function CascadeSelector({
                         {lvl.title}
                       </button>
                       {i === levels.length - 1 && multiSelectLeaf && rawItems && rawItems.length > 0 && (
-                        <button 
+                        <button
                           onClick={() => toggleAllLeafs(rawItems.map(it => typeof it === 'object' ? it.id : it))}
                           className="text-[10px] font-bold text-neutral-500 hover:text-primary-base flex items-center gap-1.5 transition-colors"
                         >
@@ -607,7 +722,7 @@ export default function CascadeSelector({
               })()
             )}
 
-            <div className="p-[16px] md:px-[24px] md:py-[16px] border-t border-neutral-200 bg-neutral-50 flex justify-end gap-[16px] items-center shrink-0">
+            <div className="p-[16px] md:px-[24px] md:py-[12px] border-t border-neutral-200 bg-neutral-0 flex justify-end gap-[16px] items-center shrink-0">
               <button
                 onClick={clearAll}
                 className="px-[16px] py-[10px] text-[13px] font-bold text-neutral-600 hover:bg-neutral-200 border border-neutral-300 rounded-[4px] transition-colors flex items-center gap-[6px] bg-neutral-0 shadow-sm"
@@ -617,7 +732,7 @@ export default function CascadeSelector({
               <button
                 onClick={handleConfirm}
                 disabled={selections.length === 0 || (multiSelectLeaf && selectedLeafs.length === 0)}
-                className={`px-[24px] py-[10px] text-[13px] font-bold rounded-[4px] transition-colors flex items-center gap-[8px] ${selections.length > 0 ? 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-md' : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'}`}
+                className={`px-[24px] py-[10px] text-[13px] font-bold rounded-[4px] transition-colors flex items-center gap-[8px] ${selections.length > 0 ? 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-md' : 'bg-neutral-200 text-neutral-300 cursor-not-allowed'}`}
               >
                 CONFIRMAR <Check size={16} />
               </button>
