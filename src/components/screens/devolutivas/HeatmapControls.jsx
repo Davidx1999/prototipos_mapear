@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   X, Move, ZoomIn, ZoomOut, Maximize,
-  Columns, Rows, ChevronDown, Map as MapIcon
+  Columns, Rows, ChevronDown, Palette, Map as MapIcon
 } from 'lucide-react';
 
 export default function HeatmapControls({
@@ -12,8 +12,9 @@ export default function HeatmapControls({
   handleZoom, handleFitScreen,
   isColsSeparated, setIsColsSeparated,
   isRowsSeparated, setIsRowsSeparated,
-  activeBottomPanel, setActiveBottomPanel,
-  navLevel, selectedRows, isCombinedView, setIsCombinedView
+  navLevel, selectedRows, isCombinedView, setIsCombinedView,
+  activeBottomMenu, setActiveBottomMenu,
+  colGroupingCriteria, setColGroupingCriteria
 }) {
   return (
     <>
@@ -56,51 +57,105 @@ export default function HeatmapControls({
         </button>
       </div>
 
-      {/* ── BOTTOM CENTER CONTROLS (Floating bar) ── */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-3 z-40">
-        {/* X close button (when in combined view) */}
+      {/* ── BOTTOM CENTER CONTROLS (Floating centralized bar) ── */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 z-50">
+        
+        {/* Combined View Close Button */}
         {isCombinedView && (
           <button
             onClick={() => setIsCombinedView(false)}
-            className="w-10 h-10 flex items-center justify-center text-neutral-5 hover:text-red-500 transition-colors"
+            className="flex items-center justify-center w-[44px] h-[44px] bg-white rounded-lg border border-gray-200 text-gray-500 hover:text-red-500 shadow-sm transition-colors"
           >
             <X size={20} />
           </button>
         )}
 
-        {/* Grid / Columns control */}
-        <div className="flex flex-col border border-neutral-2 rounded-lg overflow-hidden bg-neutral-0 shadow-lg">
-          <button
-            onClick={() => setIsColsSeparated(!isColsSeparated)}
-            className={`p-2.5 border-b border-neutral-2 transition-colors ${isColsSeparated ? 'bg-[#D9F0FC] text-primary-base' : 'hover:bg-neutral-1 text-neutral-5'}`}
+        {/* Botão 1: Agrupar por Turmas (Linhas) */}
+        <button 
+          onClick={() => setIsRowsSeparated(!isRowsSeparated)} 
+          className={`flex items-center justify-center w-[44px] h-[44px] bg-white rounded-lg border shadow-sm transition-colors ${isRowsSeparated ? 'border-[#008BC9] text-[#008BC9] bg-[#D9F0FC]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
+          title="Agrupar por Turmas"
+        >
+          <Rows size={20} />
+        </button>
+
+        {/* Botão 2: Agrupar por Colunas + Chevron */}
+        <div className={`flex items-center bg-white rounded-lg border shadow-sm transition-colors relative ${isColsSeparated || activeBottomMenu === 'cols' ? 'border-[#008BC9]' : 'border-gray-200'}`}>
+          <button 
+            onClick={() => setIsColsSeparated(!isColsSeparated)} 
+            className={`flex items-center justify-center w-[44px] h-[44px] border-r transition-colors rounded-l-lg ${isColsSeparated ? 'text-[#008BC9] bg-[#D9F0FC] border-[#008BC9]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
+            title="Agrupar Matriz"
           >
-            <Columns size={18} />
+            <Columns size={20} />
           </button>
-          <button className="p-1 hover:bg-neutral-1 flex justify-center text-neutral-5">
-            <ChevronDown size={12} />
+          <button 
+            onClick={() => setActiveBottomMenu(activeBottomMenu === 'cols' ? null : 'cols')}
+            className={`flex items-center justify-center w-[36px] h-[44px] transition-colors rounded-r-lg ${activeBottomMenu === 'cols' ? 'text-[#008BC9] bg-gray-50' : 'text-gray-500 hover:bg-gray-50'}`}
+          >
+            <ChevronDown size={16} />
           </button>
+
+          {activeBottomMenu === 'cols' && (
+            <div className="absolute bottom-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fade-slide">
+              <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wide mb-3 block">Agrupar Colunas Por</span>
+              <div className="flex flex-col gap-2">
+                {['Tarefas', 'Domínios Cognitivos', 'Domínios de Repertório', 'Conhecimentos'].map(opt => (
+                  <label key={opt} onClick={() => { setColGroupingCriteria(opt); setActiveBottomMenu(null); setIsColsSeparated(true); }} className="flex items-center gap-3 cursor-pointer group">
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${colGroupingCriteria === opt ? 'border-[#008BC9]' : 'border-gray-300 group-hover:border-[#008BC9]'}`}>
+                      {colGroupingCriteria === opt && <div className="w-2 h-2 bg-[#008BC9] rounded-full"></div>}
+                    </div>
+                    <span className="text-[13px] font-semibold text-gray-700">{opt}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Map / Rows control */}
-        <div className="flex flex-col border border-neutral-2 rounded-lg overflow-hidden bg-neutral-0 shadow-lg">
-          <button
-            onClick={() => setIsRowsSeparated(!isRowsSeparated)}
-            className={`p-2.5 border-b border-neutral-2 transition-colors ${isRowsSeparated ? 'bg-[#D9F0FC] text-primary-base' : 'hover:bg-neutral-1 text-neutral-5'}`}
+        {/* Botão 3: Temas de Cores + Chevron */}
+        <div className={`flex items-center bg-white rounded-lg border shadow-sm transition-colors relative ${isColorsActive || activeBottomMenu === 'colors' ? 'border-[#008BC9]' : 'border-gray-200'}`}>
+          <button 
+            onClick={() => setIsColorsActive(!isColorsActive)} 
+            className={`flex items-center justify-center w-[44px] h-[44px] border-r transition-colors rounded-l-lg ${isColorsActive ? 'text-[#008BC9] bg-[#D9F0FC] border-[#008BC9]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
+            title="Mudar Paleta de Cores"
           >
-            <MapIcon size={18} />
+            <Palette size={20} />
           </button>
-          <button className="p-1 hover:bg-neutral-1 flex justify-center text-neutral-5">
-            <ChevronDown size={12} />
+          <button 
+            onClick={() => setActiveBottomMenu(activeBottomMenu === 'colors' ? null : 'colors')}
+            className={`flex items-center justify-center w-[36px] h-[44px] transition-colors rounded-r-lg ${activeBottomMenu === 'colors' ? 'text-[#008BC9] bg-gray-50' : 'text-gray-500 hover:bg-gray-50'}`}
+          >
+            <ChevronDown size={16} />
           </button>
+
+          {activeBottomMenu === 'colors' && (
+            <div className="absolute bottom-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fade-slide">
+              <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wide mb-3 block">Paleta de Cores</span>
+              <div className="flex flex-col gap-2">
+                {[
+                  { id: 'default', label: 'Padrão FGV' },
+                  { id: 'colorblind', label: 'Acessível (Daltonismo)' },
+                  { id: 'monochromatic', label: 'Monocromático' }
+                ].map(opt => (
+                  <label key={opt.id} onClick={() => { setColorTheme(opt.id); setActiveBottomMenu(null); setIsColorsActive(true); }} className="flex items-center gap-3 cursor-pointer group">
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${colorTheme === opt.id ? 'border-[#008BC9]' : 'border-gray-300 group-hover:border-[#008BC9]'}`}>
+                      {colorTheme === opt.id && <div className="w-2 h-2 bg-[#008BC9] rounded-full"></div>}
+                    </div>
+                    <span className="text-[13px] font-semibold text-gray-700">{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* VISUALIZAR COMBINAÇÃO button */}
         {(selectedRows.size >= 2 || isCombinedView) && (
           <button
             onClick={() => setIsCombinedView(!isCombinedView)}
-            className={`px-8 py-3.5 rounded-lg font-extrabold text-[13px] tracking-wider shadow-xl transition-all whitespace-nowrap ${isCombinedView ? 'bg-neutral-0 text-primary-base border-2 border-primary-base hover:bg-neutral-1' : 'bg-[#008BC9] text-white hover:bg-[#003A79]'}`}
+            className={`px-8 py-3 rounded-lg font-bold text-[13px] tracking-wide shadow-xl transition-all whitespace-nowrap ${isCombinedView ? 'bg-white text-[#008BC9] border-2 border-[#008BC9]' : 'bg-[#008BC9] text-white hover:bg-[#003A79]'}`}
           >
-            {isCombinedView ? 'VOLTAR AO MAPA GERAL' : 'VISUALIZAR COMBINAÇÃO'}
+            {isCombinedView ? 'MAPA GERAL' : 'VISUALIZAR COMBINAÇÃO'}
           </button>
         )}
       </div>

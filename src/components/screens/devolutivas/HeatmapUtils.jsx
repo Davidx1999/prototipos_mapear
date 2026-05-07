@@ -1,14 +1,74 @@
 import React from 'react';
-import { Check, X } from 'lucide-react';
+import { CircleCheck, CircleMinus, CircleX, RouteOff, File } from 'lucide-react';
+import {
+  colGroupsMap,
+  colGroups as realColGroups,
+  mockStudents as realMockStudents,
+  mockCascadeData as realCascadeData
+} from './DadosHeatmap';
 
 // --- CORES DO STATUS DO HEATMAP E VALORES PARA CÁLCULO ---
-export const statusColors = {
-  '2': { bg: '#8CD47E', border: '#6FB963', label: 'Suficiente', val: 2, icon: <Check size={14} className="text-green-900" /> },
-  '1': { bg: '#F8D66D', border: '#E5C055', label: 'Parcialmente Suficiente', val: 1, icon: <div className="w-[10px] h-[2px] bg-yellow-900 rounded-full"></div> },
-  '0': { bg: '#FF6961', border: '#E0554E', label: 'Insuficiente', val: 0, icon: <X size={14} className="text-red-900" /> },
-  '-1': { bg: '#B3E6F5', border: '#92C9D9', label: 'Sem Conteúdo Relevante', val: -1, icon: <div className="w-[8px] h-[8px] border-2 border-cyan-800 rounded-full"></div> },
-  'null': { bg: '#FFFFFF', border: '#E5E7EB', label: 'Em Branco', val: null, icon: <div className="w-[10px] h-[12px] border border-gray-400 rounded-sm"></div> }
+export const getStatusColors = (theme = 'default') => {
+  const base = {
+    '2': { label: 'Suficiente', val: 2, icon: <CircleCheck size={14} className="text-green-900" /> },
+    'suficiente': { label: 'Suficiente', val: 2, icon: <CircleCheck size={14} className="text-green-900" /> },
+    '1': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={14} className="text-yellow-900" /> },
+    'parcialmente': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={14} className="text-yellow-900" /> },
+    '0': { label: 'Insuficiente', val: 0, icon: <CircleX size={14} className="text-red-900" /> },
+    'insuficiente': { label: 'Insuficiente', val: 0, icon: <CircleX size={14} className="text-red-900" /> },
+    '-1': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={14} className="text-cyan-800" /> },
+    'sem_conteudo': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={14} className="text-cyan-800" /> },
+    'null': { label: 'Em Branco', val: null, icon: <File size={14} className="text-gray-500" /> },
+    'branco': { label: 'Em Branco', val: null, icon: <File size={14} className="text-gray-500" /> }
+  };
+
+  if (theme === 'colorblind') {
+    return {
+      ...base,
+      '2': { ...base['2'], bg: '#0072B2', border: '#005a8d' },
+      '1': { ...base['1'], bg: '#F0E442', border: '#d9ce3b' },
+      '0': { ...base['0'], bg: '#D55E00', border: '#b34d00' },
+      '-1': { ...base['-1'], bg: '#D1D1D1', border: '#B8B8B8' },
+      'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' }
+    };
+  } else if (theme === 'monochromatic') {
+    return {
+      ...base,
+      '2': { ...base['2'], bg: '#1D4ED8', border: '#1E40AF' },
+      '1': { ...base['1'], bg: '#60A5FA', border: '#3B82F6' },
+      '0': { ...base['0'], bg: '#DBEAFE', border: '#BFDBFE' },
+      '-1': { ...base['-1'], bg: '#F1F5F9', border: '#E2E8F0' },
+      'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' }
+    };
+  }
+
+  // Default FGV
+  return {
+    ...base,
+    '2': { ...base['2'], bg: '#8CD47E', border: '#6FB963' },
+    'suficiente': { ...base['suficiente'], bg: '#8CD47E', border: '#6FB963' },
+    '1': { ...base['1'], bg: '#F8D66D', border: '#E5C055' },
+    'parcialmente': { ...base['parcialmente'], bg: '#F8D66D', border: '#E5C055' },
+    '0': { ...base['0'], bg: '#FF6961', border: '#E0554E' },
+    'insuficiente': { ...base['insuficiente'], bg: '#FF6961', border: '#E0554E' },
+    '-1': { ...base['-1'], bg: '#B3E6F5', border: '#92C9D9' },
+    'sem_conteudo': { ...base['sem_conteudo'], bg: '#B3E6F5', border: '#92C9D9' },
+    'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
+    'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
+  };
 };
+
+export const getLegendItems = (statusColors) => {
+  return [
+    statusColors['suficiente'],
+    statusColors['parcialmente'],
+    statusColors['insuficiente'],
+    statusColors['sem_conteudo'],
+    statusColors['branco']
+  ];
+};
+
+export const statusColors = getStatusColors(); // Legacy export for static usage
 
 // --- FUNÇÃO PARA DEGRADÊ DE CORES ---
 export const getColorFromGradient = (value, isActive = true, theme = 'default') => {
@@ -51,95 +111,33 @@ export const getColorFromGradient = (value, isActive = true, theme = 'default') 
   return `rgb(${r}, ${g}, ${b})`;
 };
 
-// --- GERAÇÃO DE MOCK DATA MASSIVO ---
-export const colGroups = Array.from({ length: 3 }, (_, gIdx) => ({
-  title: gIdx === 0 ? 'Integrar e Interpretar' : (gIdx === 1 ? 'Raciocínio Analítico' : 'Compreensão'),
-  cols: Array.from({ length: 10 }, (_, cIdx) => ({
-    id: `I${gIdx * 10 + cIdx + 1}`,
-    skills: [`H${(cIdx % 10) + 1}`, `H${((cIdx + 1) % 10) + 1}`]
-  }))
-}));
-
-export const getMockRows = (level, parentName) => {
-  // Mock data implementation adjusted for students only
-  return Array.from({ length: 20 }, (_, i) => {
-    let data = [];
-    if (i < 12) {
-      data = Array.from({ length: 30 }, () => Math.random() > 0.2 ? 2 : 1);
-    } else if (i < 16) {
-      data = Array.from({ length: 30 }, () => {
-        const r = Math.random();
-        return r > 0.3 ? 1 : (r > 0.15 ? 2 : 0);
-      });
-    } else if (i < 18) {
-      data = Array.from({ length: 30 }, () => Math.random() > 0.2 ? 0 : (Math.random() > 0.5 ? 1 : -1));
-    } else {
-      data = Array.from({ length: 30 }, () => null);
-    }
-    
-    if (i < 18) {
-      data = data.map(v => {
-        if (Math.random() < 0.05) return null;
-        if (Math.random() < 0.05) return -1;
-        return v;
-      });
-    }
-
-    const evalName = typeof parentName === 'object' ? parentName.nome : parentName;
-    return {
-      name: `Aluno ${i + 1} ${evalName ? `(${evalName})` : ''}`,
-      data
-    };
-  });
+// --- CATEGORIAS E SUB-CATEGORIAS FICTÍCIAS ---
+export const GROUPING_NAMES = {
+  'Tarefas': ['Interpretação Textual', 'Análise Crítica', 'Resolução de Problemas', 'Produção de Sentido'],
+  'Domínios Cognitivos': ['Conhecimento Base', 'Aplicação Prática', 'Raciocínio Analítico', 'Pensamento Sistêmico'],
+  'Domínios de Repertório': ['Léxico e Semântica', 'Contexto Sociocultural', 'Bagagem Científica', 'Expressão Artística'],
+  'Conhecimentos': ['Linguagens e Códigos', 'Ciências e Lógica', 'Sociedade e Cultura', 'Natureza e Tecnologia']
 };
 
-// --- MOCK DATA: CASCATA INVERTIDA (ESCOLA > AVALIAÇÃO > TURMAS) ---
-export const devDB = {
-  'Ceará': {
-    'Fortaleza': {
-      'Regional 1': {
-        'Liceu do Conjunto Ceará': {
-          'Avaliação 1 Lorem ipsum': ['Turma A', 'Turma B', 'Turma C', 'Turma D'],
-          'Avaliação 2 Diagnóstica': ['Turma A', 'Turma B']
-        },
-        'Colégio da Polícia Militar': {
-          'Avaliação 1 Lorem ipsum': ['Turma Única']
-        }
-      },
-      'Regional 2': {
-        'EEEP Maria José': {
-          'Avaliação Global': ['Turma 1', 'Turma 2']
-        }
-      }
-    },
-    'Caucaia': {
-      'Regional Caucaia Litoral': {
-        'Escola Praia do Cumbuco': {
-          'Avaliação Estadual': ['Turma A']
-        }
-      },
-      'Regional Caucaia Sertão': {} 
-    },
-    'Eusébio': {
-      'Regional Sede Eusébio': {
-        'Escola Profissionalizante Eusébio': {
-          'Avaliação Matemática': ['Turma Tarde', 'Turma Manhã'],
-          'Avaliação Ciências': ['Turma Tarde']
-        },
-        'Colégio Padrão': {} 
-      }
-    }
-  },
-  'São Paulo': {
-    'São Paulo': {
-      'Zona Sul': {
-        'Escola Estadual SP': {
-          'Avaliação SARESP': ['Turma 9A', 'Turma 9B']
-        }
-      }
-    }
-  }
+// --- GERAÇÃO DE MOCK DATA DINÂMICO PARA COLUNAS ---
+// Usa o mapa completo do DadosHeatmap.js — sem undefined!
+export const getDynamicColGroups = (criteria = 'Tarefas') => {
+  return colGroupsMap[criteria] || colGroupsMap['Tarefas'];
 };
+
+export const colGroups = realColGroups;
+
+export const getMockRows = (level, parentName, totalCols = 40) => {
+  // Retorna os dados reais do DadosHeatmap.js adaptados para o número de colunas
+  return realMockStudents.map(student => ({
+    ...student,
+    // Garante que o array de dados tenha o tamanho correto e mapeie os valores para as cores
+    data: student.data.slice(0, totalCols)
+  }));
+};
+
+// --- MOCK DATA: CASCATA INVERTIDA ---
+export const devDB = realCascadeData;
 
 export const CASCADE_LEVELS = [
   { id: 'estado', title: 'Estados' },

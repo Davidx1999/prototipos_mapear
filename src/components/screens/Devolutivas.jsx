@@ -7,9 +7,12 @@ import HeatmapMatrix from './devolutivas/HeatmapMatrix';
 import HeatmapTooltip from './devolutivas/HeatmapTooltip';
 
 import {
-  statusColors,
+  statusColors as staticStatusColors,
+  getStatusColors,
+  getLegendItems,
   getColorFromGradient,
-  colGroups,
+  getDynamicColGroups,
+  GROUPING_NAMES,
   getMockRows,
   devDB,
   CASCADE_LEVELS
@@ -36,6 +39,14 @@ export default function Devolutivas({ colors, navigateTo }) {
   const [isColorsActive, setIsColorsActive] = useState(true);
   const [colorTheme, setColorTheme] = useState('default');
   const [activeBottomPanel, setActiveBottomPanel] = useState(null);
+  const [activeBottomMenu, setActiveBottomMenu] = useState(null);
+  const [colGroupingCriteria, setColGroupingCriteria] = useState('Tarefas');
+
+  const currentStatusColors = useMemo(() => getStatusColors(colorTheme), [colorTheme]);
+  const legendItems = useMemo(() => getLegendItems(currentStatusColors), [currentStatusColors]);
+
+  const dynamicColGroups = useMemo(() => getDynamicColGroups(colGroupingCriteria), [colGroupingCriteria]);
+  const totalColsCount = useMemo(() => dynamicColGroups.reduce((acc, g) => acc + g.cols.length, 0), [dynamicColGroups]);
 
   // --- NAVEGAÇÃO ---
   const [navLevel, setNavLevel] = useState(0);
@@ -79,7 +90,7 @@ export default function Devolutivas({ colors, navigateTo }) {
   // --- SKILLS ---
   const [showSkills, setShowSkills] = useState(false);
   const [activeSkill, setActiveSkill] = useState(null);
-  const [skillsList] = useState(['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10']);
+  const skillsList = useMemo(() => GROUPING_NAMES[colGroupingCriteria] || [], [colGroupingCriteria]);
 
   // --- ESTADOS DO CANVAS ---
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -94,10 +105,10 @@ export default function Devolutivas({ colors, navigateTo }) {
   // --- LÓGICA DE FILTRAGEM E ORDENAÇÃO ---
   const filteredStudents = useMemo(() => {
     // Agora sempre mostramos alunos (mock) no nível final (Turma)
-    let rows = getMockRows(navLevel, navPath[navLevel]);
+    let rows = getMockRows(navLevel, navPath[navLevel], totalColsCount);
 
     if (hideNoParticipation) {
-      rows = rows.filter(student => !student.data.every(val => val === null));
+      rows = rows.filter(student => !student.data.every(val => val === null || val === 'branco'));
     }
 
     rows = [...rows].sort((a, b) => {
@@ -131,7 +142,7 @@ export default function Devolutivas({ colors, navigateTo }) {
 
   // --- LÓGICA DE CÁLCULO DINÂMICO DOS RODAPÉS ---
   const dynamicTotals = useMemo(() => {
-    return Array.from({ length: 30 }, (_, colIdx) => {
+    return Array.from({ length: totalColsCount }, (_, colIdx) => {
       const colValues = filteredStudents
         .map(s => s.data[colIdx])
         .filter(v => v !== null);
@@ -157,15 +168,14 @@ export default function Devolutivas({ colors, navigateTo }) {
         return mode;
       }
     });
-  }, [calcMethod, filteredStudents]);
+  }, [calcMethod, filteredStudents, totalColsCount]);
 
   // --- LÓGICA DE ORDENAÇÃO DE COLUNAS ---
   const displayColGroups = useMemo(() => {
-    if (sortBy !== 'Score') return colGroups;
-
-    const allCols = colGroups.flatMap((g, gIdx) =>
+    if (sortBy !== 'Score') return dynamicColGroups;
+    const allCols = dynamicColGroups.flatMap((g, gIdx) =>
       g.cols.map((c, cIdx) => {
-        const globalIdx = colGroups.slice(0, gIdx).reduce((acc, curr) => acc + curr.cols.length, 0) + cIdx;
+        const globalIdx = dynamicColGroups.slice(0, gIdx).reduce((acc, curr) => acc + curr.cols.length, 0) + cIdx;
         return {
           ...c,
           groupTitle: g.title,
@@ -185,7 +195,7 @@ export default function Devolutivas({ colors, navigateTo }) {
       title: sortOrder === 'Desempenho Crescente' ? 'Itens: Menor para Maior Desempenho' : 'Itens: Maior para Menor Desempenho',
       cols: sortedCols
     }];
-  }, [colGroups, dynamicTotals, sortBy, sortOrder]);
+  }, [dynamicColGroups, dynamicTotals, sortBy, sortOrder]);
 
   // --- HANDLERS DO CANVAS ---
   const handleMouseDown = (e) => {
@@ -324,7 +334,8 @@ export default function Devolutivas({ colors, navigateTo }) {
           setSortOrder={setSortOrder}
           hideNoParticipation={hideNoParticipation}
           setHideNoParticipation={setHideNoParticipation}
-          statusColors={statusColors}
+          statusColors={currentStatusColors}
+          legendItems={legendItems}
           colorTheme={colorTheme}
           isColorsActive={isColorsActive}
           navPath={navPath}
@@ -369,12 +380,14 @@ export default function Devolutivas({ colors, navigateTo }) {
             setIsColsSeparated={setIsColsSeparated}
             isRowsSeparated={isRowsSeparated}
             setIsRowsSeparated={setIsRowsSeparated}
-            activeBottomPanel={activeBottomPanel}
-            setActiveBottomPanel={setActiveBottomPanel}
             navLevel={navLevel}
             selectedRows={selectedRows}
             isCombinedView={isCombinedView}
             setIsCombinedView={setIsCombinedView}
+            activeBottomMenu={activeBottomMenu}
+            setActiveBottomMenu={setActiveBottomMenu}
+            colGroupingCriteria={colGroupingCriteria}
+            setColGroupingCriteria={setColGroupingCriteria}
           />
 
           {/* Matriz / conteúdo principal */}
@@ -389,7 +402,7 @@ export default function Devolutivas({ colors, navigateTo }) {
               mainTab={mainTab}
               showSkills={showSkills}
               zoomLevel={zoomLevel}
-              colGroups={colGroups}
+              colGroups={dynamicColGroups}
               displayColGroups={displayColGroups}
               isColsSeparated={isColsSeparated}
               calcMethod={calcMethod}
@@ -401,7 +414,7 @@ export default function Devolutivas({ colors, navigateTo }) {
               toggleRow={toggleRow}
               drillDown={drillDown}
               isCombinedView={isCombinedView}
-              statusColors={statusColors}
+              statusColors={currentStatusColors}
               colorTheme={colorTheme}
               isColorsActive={isColorsActive}
               getColorFromGradient={getColorFromGradient}
@@ -421,7 +434,7 @@ export default function Devolutivas({ colors, navigateTo }) {
         </div>
       </div>
 
-      <HeatmapTooltip tooltipData={tooltipData} statusColors={statusColors} />
+      <HeatmapTooltip tooltipData={tooltipData} statusColors={currentStatusColors} />
     </div>
   );
 }

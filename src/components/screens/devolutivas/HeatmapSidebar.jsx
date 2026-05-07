@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChevronUp, HelpCircle, Eye, XCircle, Maximize, Grid, CheckCircle2, MinusCircle, XCircle as XCircleIcon, Route, FileText, ChevronDown, ChevronLeft, Settings2 } from 'lucide-react';
 import CascadeSelector from '../../ui/CascadeSelector';
+import Chips from '../../ui/Chips';
 import { devDB, CASCADE_LEVELS, turmasPendentesMock, participacaoAvaliacaoMock, testesMock } from './HeatmapUtils';
 
 export default function HeatmapSidebar({
@@ -15,6 +16,7 @@ export default function HeatmapSidebar({
   hideNoParticipation,
   setHideNoParticipation,
   statusColors,
+  legendItems = [],
   colorTheme,
   isColorsActive,
   navPath,
@@ -22,7 +24,7 @@ export default function HeatmapSidebar({
   handleContextChange
 }) {
   return (
-    <aside 
+    <aside
       className={`absolute top-4 left-4 z-[100] bg-white/95 backdrop-blur-md border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.15)] rounded-2xl flex flex-col transition-all duration-500 ease-in-out ${isContextExpanded ? 'translate-x-0 opacity-100' : '-translate-x-[360px] opacity-0 pointer-events-none'}`}
       style={{ width: '300px', maxHeight: 'calc(100vh - 140px)', overflow: 'visible' }}
     >
@@ -37,7 +39,7 @@ export default function HeatmapSidebar({
               </div>
               <span className="font-bold text-[14px] text-neutral-7">Configurações</span>
             </div>
-            <button 
+            <button
               onClick={() => setIsContextExpanded(false)}
               className="p-1.5 hover:bg-neutral-100 rounded-full transition-colors text-neutral-5"
               title="Fechar painel"
@@ -76,7 +78,7 @@ export default function HeatmapSidebar({
                     // Só mostra testes se houver uma avaliação selecionada
                     return av ? (testesMock[av] || ['Prova 1', 'Prova 2']) : null;
                   }
-                } catch(e) { return null; }
+                } catch (e) { return null; }
                 return null;
               }}
               levels={CASCADE_LEVELS}
@@ -176,17 +178,21 @@ export default function HeatmapSidebar({
               <HelpCircle size={14} className="text-neutral-6" />
             </div>
             <div className="flex flex-col gap-2">
-              {[
-                { bg: '#B8EBAD', border: '#8CD47E', text: 'Suficiente', icon: <CheckCircle2 size={12} className="text-green-700" /> },
-                { bg: '#FEF0C7', border: '#F8D66D', text: 'Parcialmente Suficiente', icon: <MinusCircle size={12} className="text-yellow-700" /> },
-                { bg: '#FFACB7', border: '#FF6961', text: 'Insuficiente', icon: <XCircle size={12} className="text-red-700" /> },
-                { bg: '#B3E6F5', border: '#92C9D9', text: 'Sem Conteúdo Relevante', icon: <Route size={12} className="text-cyan-700" /> },
-                { bg: '#DEE1E8', border: '#CACDD5', text: 'Em Branco', icon: <FileText size={12} className="text-neutral-5" /> },
-              ].map((item, idx) => (
-                <div key={idx} className="px-2.5 py-1.5 rounded-full flex items-center gap-2 w-fit border" style={{ backgroundColor: item.bg, borderColor: `${item.border}40` }}>
-                  {item.icon}
-                  <span className="text-[11px] font-medium text-neutral-6">{item.text}</span>
-                </div>
+              {legendItems.map((status, idx) => (
+                <Chips
+                  key={idx}
+                  label={status.label}
+                  iconLeft={status.icon}
+                  variant="stroked"
+                  className="!px-3 !py-1.5 shadow-sm border"
+                  style={{
+                    backgroundColor: status.bg,
+                    borderColor: status.border,
+                    color: '#1D2432', // Neutral-8
+                    fontWeight: 700,
+                    fontSize: '11px'
+                  }}
+                />
               ))}
             </div>
           </div>
