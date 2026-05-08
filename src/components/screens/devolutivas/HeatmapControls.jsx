@@ -1,8 +1,10 @@
 import React from 'react';
 import {
   X, Move, ZoomIn, ZoomOut, Maximize,
-  Columns, Rows, ChevronDown, Palette, Map as MapIcon
+  Columns, Rows, ChevronDown, Palette, Map as MapIcon, Check
 } from 'lucide-react';
+import SplitButton from '../../ui/SplitButton';
+import Button from '../../ui/Button';
 
 export default function HeatmapControls({
   showLegendPopover, setShowLegendPopover,
@@ -23,8 +25,12 @@ export default function HeatmapControls({
         {/* Move/Pan button */}
         <button
           onClick={() => setIsPanMode(!isPanMode)}
-          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all shadow-lg border ${isPanMode ? 'bg-neutral-0 border-neutral-2 text-neutral-6' : 'bg-neutral-0 border-neutral-2 text-neutral-5 hover:text-primary-base'}`}
-          title="Arrastar/Mover"
+          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all shadow-lg border ${
+            isPanMode 
+              ? 'bg-[#D9F0FC] border-[#008BC9] text-[#003A79] ring-2 ring-[#008BC9]/30' 
+              : 'bg-white border-neutral-200 text-neutral-400 hover:text-neutral-600 hover:border-neutral-300'
+          }`}
+          title={isPanMode ? 'Desativar Modo Arrastar' : 'Ativar Modo Arrastar'}
         >
           <Move size={18} />
         </button>
@@ -32,7 +38,7 @@ export default function HeatmapControls({
         {/* Zoom In */}
         <button
           onClick={() => handleZoom(0.2)}
-          className="w-10 h-10 bg-neutral-0 rounded-lg shadow-lg border border-neutral-2 flex items-center justify-center text-neutral-5 hover:text-primary-base transition-colors"
+          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-neutral-600 hover:border-neutral-300 transition-colors"
           title="Aumentar Zoom"
         >
           <ZoomIn size={18} />
@@ -41,7 +47,7 @@ export default function HeatmapControls({
         {/* Zoom Out */}
         <button
           onClick={() => handleZoom(-0.2)}
-          className="w-10 h-10 bg-neutral-0 rounded-lg shadow-lg border border-neutral-2 flex items-center justify-center text-neutral-5 hover:text-primary-base transition-colors"
+          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-neutral-600 hover:border-neutral-300 transition-colors"
           title="Diminuir Zoom"
         >
           <ZoomOut size={18} />
@@ -50,7 +56,7 @@ export default function HeatmapControls({
         {/* Fit/Reset */}
         <button
           onClick={handleFitScreen}
-          className="w-10 h-10 bg-neutral-0 rounded-lg shadow-lg border border-neutral-2 flex items-center justify-center text-neutral-5 hover:text-primary-base transition-colors"
+          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-neutral-600 hover:border-neutral-300 transition-colors"
           title="Ajustar à Tela"
         >
           <Maximize size={18} />
@@ -62,41 +68,46 @@ export default function HeatmapControls({
         
         {/* Combined View Close Button */}
         {isCombinedView && (
-          <button
+          <Button
+            variant="tertiary"
+            appearance="solid"
+            size="md"
+            iconOnly={true}
+            iconLeft={<X />}
             onClick={() => setIsCombinedView(false)}
-            className="flex items-center justify-center w-[44px] h-[44px] bg-white rounded-lg border border-gray-200 text-gray-500 hover:text-red-500 shadow-sm transition-colors"
-          >
-            <X size={20} />
-          </button>
+            className="!h-[44px] !w-[44px] shadow-sm"
+          />
         )}
 
         {/* Botão 1: Agrupar por Turmas (Linhas) */}
-        <button 
-          onClick={() => setIsRowsSeparated(!isRowsSeparated)} 
-          className={`flex items-center justify-center w-[44px] h-[44px] bg-white rounded-lg border shadow-sm transition-colors ${isRowsSeparated ? 'border-[#008BC9] text-[#008BC9] bg-[#D9F0FC]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
+        <Button
+          variant={isRowsSeparated ? 'secondary' : 'tertiary'}
+          appearance="solid"
+          size="md"
+          iconOnly={true}
+          iconLeft={isRowsSeparated ? <X /> : <Rows />}
+          onClick={() => setIsRowsSeparated(!isRowsSeparated)}
+          className="!h-[44px] !w-[44px] shadow-sm"
           title="Agrupar por Turmas"
-        >
-          <Rows size={20} />
-        </button>
+        />
 
         {/* Botão 2: Agrupar por Colunas + Chevron */}
-        <div className={`flex items-center bg-white rounded-lg border shadow-sm transition-colors relative ${isColsSeparated || activeBottomMenu === 'cols' ? 'border-[#008BC9]' : 'border-gray-200'}`}>
-          <button 
-            onClick={() => setIsColsSeparated(!isColsSeparated)} 
-            className={`flex items-center justify-center w-[44px] h-[44px] border-r transition-colors rounded-l-lg ${isColsSeparated ? 'text-[#008BC9] bg-[#D9F0FC] border-[#008BC9]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
-            title="Agrupar Matriz"
-          >
-            <Columns size={20} />
-          </button>
-          <button 
-            onClick={() => setActiveBottomMenu(activeBottomMenu === 'cols' ? null : 'cols')}
-            className={`flex items-center justify-center w-[36px] h-[44px] transition-colors rounded-r-lg ${activeBottomMenu === 'cols' ? 'text-[#008BC9] bg-gray-50' : 'text-gray-500 hover:bg-gray-50'}`}
-          >
-            <ChevronDown size={16} />
-          </button>
+        <div className="relative">
+          <SplitButton
+            label=""
+            icon={<Columns size={20} />}
+            activeIcon={<X size={20} />}
+            isActive={isColsSeparated}
+            variant="tertiary"
+            onClick={() => setIsColsSeparated(!isColsSeparated)}
+            onChevronClick={() => setActiveBottomMenu(activeBottomMenu === 'cols' ? null : 'cols')}
+            isOpen={activeBottomMenu === 'cols'}
+            size="md"
+            rounded="4px"
+          />
 
           {activeBottomMenu === 'cols' && (
-            <div className="absolute bottom-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fade-slide">
+            <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fade-slide">
               <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wide mb-3 block">Agrupar Colunas Por</span>
               <div className="flex flex-col gap-2">
                 {['Tarefas', 'Domínios Cognitivos', 'Domínios de Repertório', 'Conhecimentos'].map(opt => (
@@ -113,23 +124,30 @@ export default function HeatmapControls({
         </div>
 
         {/* Botão 3: Temas de Cores + Chevron */}
-        <div className={`flex items-center bg-white rounded-lg border shadow-sm transition-colors relative ${isColorsActive || activeBottomMenu === 'colors' ? 'border-[#008BC9]' : 'border-gray-200'}`}>
-          <button 
-            onClick={() => setIsColorsActive(!isColorsActive)} 
-            className={`flex items-center justify-center w-[44px] h-[44px] border-r transition-colors rounded-l-lg ${isColorsActive ? 'text-[#008BC9] bg-[#D9F0FC] border-[#008BC9]' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
-            title="Mudar Paleta de Cores"
-          >
-            <Palette size={20} />
-          </button>
-          <button 
-            onClick={() => setActiveBottomMenu(activeBottomMenu === 'colors' ? null : 'colors')}
-            className={`flex items-center justify-center w-[36px] h-[44px] transition-colors rounded-r-lg ${activeBottomMenu === 'colors' ? 'text-[#008BC9] bg-gray-50' : 'text-gray-500 hover:bg-gray-50'}`}
-          >
-            <ChevronDown size={16} />
-          </button>
+        <div className="relative">
+          <SplitButton
+            label=""
+            icon={<Palette size={20} />}
+            activeIcon={<X size={20} />}
+            isActive={isColorsActive}
+            variant="tertiary"
+            onClick={() => {
+              if (isColorsActive) {
+                setIsColorsActive(false);
+                setColorTheme('default');
+              } else {
+                setIsColorsActive(true);
+                setColorTheme('colorblind');
+              }
+            }}
+            onChevronClick={() => setActiveBottomMenu(activeBottomMenu === 'colors' ? null : 'colors')}
+            isOpen={activeBottomMenu === 'colors'}
+            size="md"
+            rounded="4px"
+          />
 
           {activeBottomMenu === 'colors' && (
-            <div className="absolute bottom-[calc(100%+12px)] left-1/2 -translate-x-1/2 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fade-slide">
+            <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fade-slide">
               <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wide mb-3 block">Paleta de Cores</span>
               <div className="flex flex-col gap-2">
                 {[
@@ -137,7 +155,7 @@ export default function HeatmapControls({
                   { id: 'colorblind', label: 'Acessível (Daltonismo)' },
                   { id: 'monochromatic', label: 'Monocromático' }
                 ].map(opt => (
-                  <label key={opt.id} onClick={() => { setColorTheme(opt.id); setActiveBottomMenu(null); setIsColorsActive(true); }} className="flex items-center gap-3 cursor-pointer group">
+                  <label key={opt.id} onClick={() => { setColorTheme(opt.id); setActiveBottomMenu(null); setIsColorsActive(opt.id !== 'default'); }} className="flex items-center gap-3 cursor-pointer group">
                     <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${colorTheme === opt.id ? 'border-[#008BC9]' : 'border-gray-300 group-hover:border-[#008BC9]'}`}>
                       {colorTheme === opt.id && <div className="w-2 h-2 bg-[#008BC9] rounded-full"></div>}
                     </div>
@@ -151,12 +169,18 @@ export default function HeatmapControls({
 
         {/* VISUALIZAR COMBINAÇÃO button */}
         {(selectedRows.size >= 2 || isCombinedView) && (
-          <button
+          <SplitButton
+            label={isCombinedView ? 'MAPA GERAL' : 'VISUALIZAR COMBINAÇÃO'}
+            icon={isCombinedView ? <MapIcon size={18} /> : <Check size={18} />}
+            activeIcon={<X size={18} />}
+            isActive={isCombinedView}
+            variant="tertiary"
             onClick={() => setIsCombinedView(!isCombinedView)}
-            className={`px-8 py-3 rounded-lg font-bold text-[13px] tracking-wide shadow-xl transition-all whitespace-nowrap ${isCombinedView ? 'bg-white text-[#008BC9] border-2 border-[#008BC9]' : 'bg-[#008BC9] text-white hover:bg-[#003A79]'}`}
-          >
-            {isCombinedView ? 'MAPA GERAL' : 'VISUALIZAR COMBINAÇÃO'}
-          </button>
+            onChevronClick={() => {}} // Placeholder for options
+            isOpen={false}
+            size="md"
+            rounded="4px"
+          />
         )}
       </div>
     </>

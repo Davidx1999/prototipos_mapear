@@ -80,6 +80,11 @@ export const getColorFromGradient = (value, isActive = true, theme = 'default') 
     { val: 0, r: 213, g: 94, b: 0 },    // Vermilion (Insuficiente)
     { val: 1, r: 240, g: 228, b: 66 },  // Yellow (Parcialmente)
     { val: 2, r: 0, g: 114, b: 178 }   // Blue (Suficiente)
+  ] : theme === 'monochromatic' ? [
+    { val: -1, r: 241, g: 245, b: 249 }, // Slate (#F1F5F9)
+    { val: 0, r: 219, g: 234, b: 254 },  // Light Blue (#DBEAFE)
+    { val: 1, r: 96, g: 165, b: 250 },   // Mid Blue (#60A5FA)
+    { val: 2, r: 29, g: 78, b: 216 }     // Deep Blue (#1D4ED8)
   ] : [
     { val: -1, r: 179, g: 230, b: 245 },  // Azul (#B3E6F5)
     { val: 0, r: 255, g: 105, b: 97 },   // Vermelho (#FF6961)

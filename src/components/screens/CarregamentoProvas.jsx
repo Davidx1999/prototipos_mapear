@@ -11,6 +11,7 @@ import Input from '../ui/Input';
 import Breadcrumb from '../ui/Breadcrumb';
 import Chips from '../ui/Chips';
 import Tabs from '../ui/Tabs';
+import Callout from '../ui/Callout';
 
 const mockUploads = [
   { id: 1, name: 'Ana Júlia da Silva', file: '124894.pdf', date: '18 Dez, 2025', status: 'Em processamento' },
@@ -217,7 +218,43 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
 
         <div className="mb-[32px] animate-fade-slide">
           <h1 className="text-[28px] md:text-[36px] font-black text-neutral-7 leading-tight mb-[8px]">Carregamento de Provas</h1>
-          <p className="text-[15px] text-neutral-5 max-w-[700px]">Selecione o contexto da turma e realize o upload dos arquivos PDF para processamento e correção automática via HTR.</p>
+          <p className="text-[15px] text-neutral-5 max-w-[700px] mb-[24px]">Selecione o contexto da turma e realize o upload dos arquivos PDF para processamento e correção automática via HTR.</p>
+          
+          <div className="flex flex-col gap-[16px] max-w-[800px]">
+            <Callout 
+              colors={colors}
+              type="caution"
+              title="Atenção aos Arquivos PDF"
+              description="Certifique-se de que as digitalizações estão nítidas e com todas as bordas visíveis para garantir a precisão da leitura automática."
+              actionText="Ver guia de digitalização"
+              onAction={() => console.log('Action!')}
+              onClose={() => console.log('Close!')}
+            />
+            
+            <Callout 
+              colors={colors}
+              type="informative"
+              title="Novidade: Processamento HTR"
+              actionText="Saiba mais sobre a nova IA"
+            >
+              Agora você pode validar as transcrições em tempo real. <a href="#learn-more">Clique aqui para ver como funciona.</a>
+            </Callout>
+
+            <Callout 
+              colors={colors}
+              type="successful"
+              title="Upload Concluído"
+              description="Os arquivos foram carregados com sucesso e entraram na fila de processamento."
+              onClose={() => console.log('Closed success')}
+            />
+
+            <Callout 
+              colors={colors}
+              type="neutral"
+              title="Dica de Organização"
+              description="Você pode filtrar a lista por status para agilizar a validação das provas pendentes."
+            />
+          </div>
         </div>
 
         {/* Context Selector (Cascade) */}

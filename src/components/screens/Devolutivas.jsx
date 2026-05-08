@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { LayoutDashboard, Grid, BarChart2, ChevronRight, X, Settings2 } from 'lucide-react';
+import { LayoutDashboard, Grid, BarChart2, ChevronRight, ChevronDown, X, Settings2, MousePointer2, ArrowLeft } from 'lucide-react';
 
 import HeatmapSidebar from './devolutivas/HeatmapSidebar';
 import HeatmapControls from './devolutivas/HeatmapControls';
@@ -36,7 +36,7 @@ export default function Devolutivas({ colors, navigateTo }) {
   const [isRowsSeparated, setIsRowsSeparated] = useState(false);
   const [showLegendPopover, setShowLegendPopover] = useState(false);
   const [isCombinedView, setIsCombinedView] = useState(false);
-  const [isColorsActive, setIsColorsActive] = useState(true);
+  const [isColorsActive, setIsColorsActive] = useState(false);
   const [colorTheme, setColorTheme] = useState('default');
   const [activeBottomPanel, setActiveBottomPanel] = useState(null);
   const [activeBottomMenu, setActiveBottomMenu] = useState(null);
@@ -49,10 +49,11 @@ export default function Devolutivas({ colors, navigateTo }) {
   const totalColsCount = useMemo(() => dynamicColGroups.reduce((acc, g) => acc + g.cols.length, 0), [dynamicColGroups]);
 
   // --- NAVEGAÇÃO ---
-  const [navLevel, setNavLevel] = useState(0);
-  const [navPath, setNavPath] = useState(['Ceará']);
+  const [navLevel, setNavLevel] = useState(-1);
+  const [navPath, setNavPath] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const levelLabels = ['Estado', 'Município', 'Regional', 'Escola', 'Avaliação', 'Turma'];
+  const levelLabels = ['Estado', 'Município', 'Regional', 'Escola', 'Turma', 'Avaliação', 'Teste'];
 
   const drillDown = (name) => {
     if (navLevel < 5) {
@@ -84,6 +85,7 @@ export default function Devolutivas({ colors, navigateTo }) {
       setNavPath(validSelections);
       setSelectedTurmas(turmas);
       setSelectedRows(new Set());
+      setIsLoaded(true);
     }
   };
 
@@ -250,6 +252,51 @@ export default function Devolutivas({ colors, navigateTo }) {
   };
   const handleCellMouseLeave = () => setTooltipData(null);
 
+  const renderEmptyState = () => (
+    <div className="flex-1 h-full flex flex-col items-center justify-center p-8 text-center bg-neutral-1/50 relative overflow-hidden">
+      {/* Background Grid */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(${colors.neutral[2]} 1px, transparent 1px), linear-gradient(90deg, ${colors.neutral[2]} 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+          backgroundPosition: 'center center',
+          opacity: 0.40
+        }}
+      />
+      <div className="flex flex-col items-center justify-center max-w-2xl relative z-10">
+        <div className="relative mb-8">
+          {/* Círculos decorativos pulsantes */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-primary-base/5 rounded-full animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary-base/10 rounded-full animate-pulse delay-700" />
+
+          <img
+            src={`${import.meta.env.BASE_URL}assets/Figure/colored/noHeatmap.png`}
+            alt="Aguardando Seleção"
+            className="relative z-10 w-80 h-auto drop-shadow-xl"
+          />
+        </div>
+
+        <h2 className="text-[24px] font-bold text-neutral-8 mb-4 tracking-tight">
+          Aguardando Seleção de Dados
+        </h2>
+        <p className="text-[14px] text-neutral-5 max-w-[440px] leading-relaxed mb-8">
+          Para visualizar o Mapa de Calor, utilize o <span className="font-bold text-primary-base">Filtro em Cascata</span> no painel lateral e selecione o contexto desejado.
+        </p>
+
+        {!isContextExpanded && (
+          <button
+            onClick={() => setIsContextExpanded(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-primary-base text-white rounded-xl font-bold text-[14px] shadow-lg shadow-primary-base/20 hover:bg-primary-dark transition-all active:scale-95 group"
+          >
+            <Settings2 size={18} className="group-hover:rotate-45 transition-transform" />
+            Abrir Configurações
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     // Ocupa exatamente o espaço restante abaixo do header global — sem overflow
     <div
@@ -257,70 +304,59 @@ export default function Devolutivas({ colors, navigateTo }) {
       style={{ height: `calc(100vh - ${GLOBAL_HEADER_H}px)` }}
     >
       {/* ── HEADER INTERNO (tabs + breadcrumb + skills btn) ── */}
-      <div className="bg-neutral-0 border-b border-neutral-2 flex items-center justify-between px-6 shrink-0 z-40 h-[48px]">
-        {/* Left: Tabs */}
-        <div className="flex items-center h-full">
+      <div className="bg-neutral-0 border-b border-neutral-2 flex flex-wrap md:flex-nowrap items-stretch shrink-0 z-40 min-h-[48px]">
+        <div className="w-full md:w-[344px] flex items-end h-[48px] md:h-full border-b md:border-b-0 md:border-r border-gray-200 shrink-0 px-4 md:px-6 gap-6 overflow-x-auto hide-scrollbar bg-white">
           <button
             onClick={() => setMainTab('heatmap')}
-            className={`px-4 h-full text-[13px] font-semibold transition-all border-b-2 flex items-center ${mainTab === 'heatmap' ? 'border-primary-base text-primary-base' : 'border-transparent text-neutral-6 hover:text-primary-base'}`}
+            className={`text-[13px] md:text-[14px] font-bold h-full whitespace-nowrap pt-[2px] ${mainTab === 'heatmap' ? 'text-[#008BC9] border-b-[3px] border-[#008BC9]' : 'text-gray-500 hover:text-gray-800'}`}
           >
             Mapa de Calor
           </button>
           <button
             onClick={() => setMainTab('detalhes')}
-            className={`px-4 h-full text-[13px] font-semibold transition-all border-b-2 flex items-center ${mainTab === 'detalhes' ? 'border-primary-base text-primary-base' : 'border-transparent text-neutral-6 hover:text-primary-base'}`}
+            className={`text-[13px] md:text-[14px] font-bold h-full whitespace-nowrap pt-[2px] ${mainTab === 'detalhes' ? 'text-[#008BC9] border-b-[3px] border-[#008BC9]' : 'text-gray-500 hover:text-gray-800'}`}
           >
             Detalhes da Resposta
           </button>
         </div>
 
-        {/* Center: Breadcrumb */}
-        <div className="flex items-center gap-1 text-[12px] font-semibold">
-          {navPath.map((path, idx) => (
-            <React.Fragment key={idx}>
-              <button
-                onClick={() => goBack(idx)}
-                className={`transition-colors ${idx === navLevel ? 'text-neutral-5' : 'text-primary-base hover:underline cursor-pointer'}`}
-              >
-                {typeof path === 'object' ? path.nome : path}
-              </button>
-              {idx < navPath.length - 1 && <span className="text-neutral-4">/</span>}
-            </React.Fragment>
-          ))}
-          {navPath.length > 0 && navPath.length < levelLabels.length && (
+        <div className="flex-1 px-4 md:px-6 py-2 md:py-0 truncate text-[12px] md:text-[13px] font-semibold text-[#008BC9] w-full bg-white flex items-center">
+          {navPath.length > 0 ? (
             <>
-              <span className="text-neutral-4">/</span>
-              <span className="text-neutral-5">{levelLabels[navPath.length]}s</span>
+              <span className="truncate">
+                {navPath.map((path, idx) => {
+                  const label = Array.isArray(path) ? `${path.length} ${levelLabels[idx]}s` : (typeof path === 'object' ? path.nome : path);
+                  return idx < navPath.length - 1 ? (
+                    <React.Fragment key={idx}>
+                      <button onClick={() => goBack(idx)} className="hover:underline">{label}</button>
+                      <span className="text-gray-400"> / </span>
+                    </React.Fragment>
+                  ) : (
+                    <button key={idx} onClick={() => goBack(idx)} className="hover:underline">{label}</button>
+                  );
+                })}
+              </span>
+              {navPath.length < levelLabels.length && (
+                <span className="text-gray-400 font-medium ml-1">/ {levelLabels[navPath.length]}s</span>
+              )}
             </>
+          ) : (
+            <span className="text-gray-400 font-medium">Selecione um contexto...</span>
           )}
         </div>
 
-        {/* Right: Destacar Habilidades button */}
-        <button
-          onClick={() => setShowSkills(!showSkills)}
-          className={`flex items-center gap-2 px-4 py-1.5 text-[12px] font-semibold transition-all ${showSkills ? 'text-primary-base' : 'text-primary-base hover:underline'}`}
-        >
-          Destacar Habilidades
-          {showSkills && <X size={14} className="text-primary-base" />}
-        </button>
+        <div className="w-full md:w-auto border-t md:border-t-0 md:border-l border-gray-200 h-full flex items-center px-4 md:px-6 py-2 md:py-0 shrink-0 bg-white justify-end">
+          <button
+            onClick={() => { setShowSkills(!showSkills); if (showSkills) setActiveSkill(null); }}
+            className={`flex items-center gap-2 px-4 py-1.5 md:py-2 rounded-md font-bold text-[12px] md:text-[13px] transition-colors w-full md:w-auto justify-center ${showSkills ? 'bg-[#008BC9] text-white' : 'bg-[#D9F0FC] text-[#008BC9] hover:bg-[#bae6fd]'}`}
+          >
+            Destacar Habilidades {showSkills ? <X size={16} /> : <ChevronDown size={16} />}
+          </button>
+        </div>
       </div>
 
       {/* ── CORPO PRINCIPAL (sidebar + área de conteúdo) ── */}
       <div className="flex flex-1 overflow-hidden relative">
-
-        {/* Trigger Sidebar (quando oculta) */}
-        {!isContextExpanded && (
-          <button
-            onClick={() => setIsContextExpanded(true)}
-            className="absolute top-4 left-4 z-[90] w-12 h-12 bg-white border border-neutral-200 shadow-xl rounded-xl flex items-center justify-center text-primary-base hover:bg-neutral-50 transition-all active:scale-95 group animate-in fade-in slide-in-from-left-4 duration-300"
-            title="Abrir configurações"
-          >
-            <Settings2 size={24} />
-            <div className="absolute left-14 bg-neutral-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap transition-opacity">
-              Configurações
-            </div>
-          </button>
-        )}
 
         {/* Sidebar */}
         <HeatmapSidebar
@@ -344,7 +380,7 @@ export default function Devolutivas({ colors, navigateTo }) {
         />
 
         {/* Área de conteúdo (skills bar + matrix + controles flutuantes) */}
-        <div className="flex-1 relative overflow-hidden">
+        <div className="flex-1 relative overflow-hidden flex flex-col">
 
           {/* Barra de Skills */}
           {showSkills && (
@@ -391,7 +427,9 @@ export default function Devolutivas({ colors, navigateTo }) {
           />
 
           {/* Matriz / conteúdo principal */}
-          {mainTab === 'heatmap' ? (
+          {!isLoaded ? (
+            renderEmptyState()
+          ) : mainTab === 'heatmap' ? (
             <HeatmapMatrix
               containerRef={containerRef}
               isPanMode={isPanMode}
