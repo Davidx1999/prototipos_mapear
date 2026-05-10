@@ -150,7 +150,7 @@ export const mockCascadeData = {
       'Regional 1': {
         'Liceu do Conjunto Ceará': {
           '9º Ano A': {
-            'Brasil em Foco: Cultura, Sociedade, Ciência e Cotidiano': ['Prova 1', 'Prova 2'],
+            'Brasil em Foco: Cultura, Sociedade, Ciência e Cotidiano': ['Cultura, Linguagem e Cotidiano Brasileiro', 'Folclore, Lendas Urbanas Brasileiras'],
             'Avaliação formativa 2 - Mato Grosso do Sul - quarto e quinto anos': ['Caderno MS'],
             'Avaliação formativa - Piauí - Agosto de 2025': ['Prova PI'],
             'Avaliação teste interno Avaliação teste interno Avaliação teste interno Avaliação teste interno Avaliação teste interno Avaliação teste interno Avaliação teste interno Avaliação teste interno Avaliação teste interno Avaliação teste interno Avaliação teste': ['Teste'],
@@ -158,7 +158,7 @@ export const mockCascadeData = {
             'Simulado SPAECE': ['Prova Única']
           },
           '9º Ano B': {
-            'Brasil em Foco: Cultura, Sociedade, Ciência e Cotidiano': ['Prova 1'],
+            'Brasil em Foco: Cultura, Sociedade, Ciência e Cotidiano': ['Cultura, Linguagem e Cotidiano Brasileiro'],
             'Avaliação Diagnóstica 2026.1': ['Caderno 1 - Linguagens', 'Caderno 2 - Matemática'],
             'Simulado SPAECE': ['Prova Única']
           },
@@ -167,7 +167,7 @@ export const mockCascadeData = {
             'Simulado SPAECE': ['Prova Única']
           },
           '7º Ano A': {
-            'Brasil em Foco: Cultura, Sociedade, Ciência e Cotidiano': ['Prova 1'],
+            'Brasil em Foco: Cultura, Sociedade, Ciência e Cotidiano': ['Cultura, Linguagem e Cotidiano Brasileiro'],
             'Avaliação formativa 2 - Mato Grosso do Sul - quarto e quinto anos': ['Caderno MS'],
             'Avaliação Diagnóstica 2026.1': ['Caderno 1', 'Caderno 2'],
             'Simulado SPAECE': ['Português']
@@ -189,7 +189,7 @@ export const mockCascadeData = {
       'Regional 2': {
         'EEEP Maria José': {
           '1ª Série Informática': {
-             'Avaliação Global': ['Ciências da Natureza']
+            'Avaliação Global': ['Ciências da Natureza']
           }
         },
         'Escola Municipal Rachel Viana': {} // Sem turmas cadastradas
@@ -211,7 +211,7 @@ export const mockCascadeData = {
           'Turma Tarde': { 'Avaliação de Nivelamento': ['Prova de Exatas'] },
           'Turma Manhã': { 'Avaliação de Nivelamento': ['Prova de Exatas'] }
         },
-        'Colégio Padrão': {} 
+        'Colégio Padrão': {}
       }
     }
   },

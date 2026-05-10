@@ -1,13 +1,14 @@
 import React from 'react';
 import {
   X, Move, ZoomIn, ZoomOut, Maximize,
-  Columns, Rows, ChevronDown, Palette, Map as MapIcon, Check
+  Columns, Rows, ChevronDown, Palette, Map as MapIcon, Check, BarChart2, HelpCircle
 } from 'lucide-react';
 import SplitButton from '../../ui/SplitButton';
 import Button from '../../ui/Button';
 
 export default function HeatmapControls({
   showLegendPopover, setShowLegendPopover,
+  showScalePopover, setShowScalePopover,
   colorTheme, setColorTheme,
   isColorsActive, setIsColorsActive,
   isPanMode, setIsPanMode,
@@ -16,56 +17,117 @@ export default function HeatmapControls({
   isRowsSeparated, setIsRowsSeparated,
   navLevel, selectedRows, isCombinedView, setIsCombinedView,
   activeBottomMenu, setActiveBottomMenu,
-  colGroupingCriteria, setColGroupingCriteria
+  colGroupingCriteria, setColGroupingCriteria,
+  sortBy,
+  isTestSelected = false
 }) {
   return (
     <>
       {/* ── RIGHT SIDE CONTROLS (Move/Zoom/Fit) ── */}
       <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-40">
         {/* Move/Pan button */}
-        <button
+        <Button
+          variant={isPanMode ? 'secondary' : 'tertiary'}
+          appearance="solid"
+          size="md"
+          tertiaryTone="high"
+          iconOnly={true}
+          iconLeft={<Move />}
           onClick={() => setIsPanMode(!isPanMode)}
-          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all shadow-lg border ${
-            isPanMode 
-              ? 'bg-[#D9F0FC] border-[#008BC9] text-[#003A79] ring-2 ring-[#008BC9]/30' 
-              : 'bg-white border-neutral-200 text-neutral-400 hover:text-neutral-600 hover:border-neutral-300'
-          }`}
+          disabled={!isTestSelected}
+          className={`shadow-lg ${!isTestSelected ? 'opacity-50 grayscale !cursor-not-allowed' : ''}`}
           title={isPanMode ? 'Desativar Modo Arrastar' : 'Ativar Modo Arrastar'}
-        >
-          <Move size={18} />
-        </button>
+        />
 
         {/* Zoom In */}
-        <button
+        <Button
+          variant="tertiary"
+          appearance="solid"
+          size="md"
+          tertiaryTone="high"
+          iconOnly={true}
+          iconLeft={<ZoomIn />}
           onClick={() => handleZoom(0.2)}
-          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-neutral-600 hover:border-neutral-300 transition-colors"
+          disabled={!isTestSelected}
+          className={`shadow-lg ${!isTestSelected ? 'opacity-50 grayscale !cursor-not-allowed' : ''}`}
           title="Aumentar Zoom"
-        >
-          <ZoomIn size={18} />
-        </button>
+        />
 
         {/* Zoom Out */}
-        <button
+        <Button
+          variant="tertiary"
+          appearance="solid"
+          size="md"
+          tertiaryTone="high"
+          iconOnly={true}
+          iconLeft={<ZoomOut />}
           onClick={() => handleZoom(-0.2)}
-          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-neutral-600 hover:border-neutral-300 transition-colors"
+          disabled={!isTestSelected}
+          className={`shadow-lg ${!isTestSelected ? 'opacity-50 grayscale !cursor-not-allowed' : ''}`}
           title="Diminuir Zoom"
-        >
-          <ZoomOut size={18} />
-        </button>
+        />
 
         {/* Fit/Reset */}
-        <button
+        <Button
+          variant="tertiary"
+          appearance="solid"
+          size="md"
+          tertiaryTone="high"
+          iconOnly={true}
+          iconLeft={<Maximize />}
           onClick={handleFitScreen}
-          className="w-10 h-10 bg-white rounded-lg shadow-lg border border-neutral-200 flex items-center justify-center text-neutral-400 hover:text-neutral-600 hover:border-neutral-300 transition-colors"
+          disabled={!isTestSelected}
+          className={`shadow-lg ${!isTestSelected ? 'opacity-50 grayscale !cursor-not-allowed' : ''}`}
           title="Ajustar à Tela"
-        >
-          <Maximize size={18} />
-        </button>
+        />
+
+        {/* Scale/Legend popover button */}
+        <div className="relative mt-2">
+          <Button
+            variant={showScalePopover ? 'secondary' : 'tertiary'}
+            appearance="solid"
+            size="md"
+            tertiaryTone="high"
+            iconOnly={true}
+            iconLeft={<BarChart2 />}
+            onClick={() => setShowScalePopover(!showScalePopover)}
+            disabled={!isTestSelected}
+            className={`shadow-lg ${!isTestSelected ? 'opacity-50 grayscale !cursor-not-allowed' : ''}`}
+            title="Escala de Desempenho"
+          />
+
+          {showScalePopover && (
+            <div className="absolute right-[calc(100%+4px)] top-0 w-[240px] bg-white border border-gray-200 rounded-[4px] shadow-xl p-4 animate-fade-slide">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-bold text-[13px] text-[#1D2432]">Escala de Desempenho</h3>
+                <Button
+                  variant="tertiary"
+                  appearance="ghost"
+                  size="xs"
+                  tertiaryTone="low"
+                  iconOnly={true}
+                  iconLeft={<HelpCircle />}
+                  title="Cores para a escala de desempenho médio."
+                />
+              </div>
+              <div className="flex flex-col gap-1 mt-2">
+                <div className="w-full h-3 rounded-full shadow-inner border border-gray-200" style={{ background: 'linear-gradient(to right, #FFFFFF 5%, #B3E6F5 25%, #FF6961 50%, #F8D66D 75%, #8CD47E 95%)' }}></div>
+                <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 mt-1">
+                  <span>0%</span>
+                  <span>25%</span>
+                  <span>50%</span>
+                  <span>75%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ── BOTTOM CENTER CONTROLS (Floating centralized bar) ── */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 z-50">
-        
+
         {/* Combined View Close Button */}
         {isCombinedView && (
           <Button
@@ -73,7 +135,7 @@ export default function HeatmapControls({
             appearance="solid"
             size="md"
             iconOnly={true}
-            iconLeft={<X />}
+            iconLeft={<X size={20} />}
             onClick={() => setIsCombinedView(false)}
             className="!h-[44px] !w-[44px] shadow-sm"
           />
@@ -85,10 +147,12 @@ export default function HeatmapControls({
           appearance="solid"
           size="md"
           iconOnly={true}
-          iconLeft={isRowsSeparated ? <X /> : <Rows />}
+          iconLeft={isRowsSeparated ? <X size={20} /> : <Rows size={20} />}
           onClick={() => setIsRowsSeparated(!isRowsSeparated)}
-          className="!h-[44px] !w-[44px] shadow-sm"
-          title="Agrupar por Turmas"
+          className={`!h-[44px] !w-[44px] shadow-sm ${!isTestSelected ? '!bg-neutral-200 !text-neutral-400 cursor-not-allowed opacity-100' : (sortBy === 'Itens' ? 'opacity-50 cursor-not-allowed' : '')}`}
+          title={!isTestSelected ? "Selecione um teste primeiro" : (sortBy === 'Itens' ? "Desabilitado em ordenação por Itens" : "Agrupar por Turmas")}
+          disabled={!isTestSelected || sortBy === 'Itens'}
+          showRing={false}
         />
 
         {/* Botão 2: Agrupar por Colunas + Chevron */}
@@ -104,6 +168,9 @@ export default function HeatmapControls({
             isOpen={activeBottomMenu === 'cols'}
             size="md"
             rounded="4px"
+            disabled={!isTestSelected || sortBy === 'Alunos'}
+            showRing={false}
+            className={!isTestSelected ? 'cursor-not-allowed !opacity-100' : ''}
           />
 
           {activeBottomMenu === 'cols' && (
@@ -144,6 +211,9 @@ export default function HeatmapControls({
             isOpen={activeBottomMenu === 'colors'}
             size="md"
             rounded="4px"
+            disabled={!isTestSelected}
+            showRing={false}
+            className={!isTestSelected ? 'cursor-not-allowed !opacity-100' : ''}
           />
 
           {activeBottomMenu === 'colors' && (
@@ -171,15 +241,17 @@ export default function HeatmapControls({
         {(selectedRows.size >= 2 || isCombinedView) && (
           <SplitButton
             label={isCombinedView ? 'MAPA GERAL' : 'VISUALIZAR COMBINAÇÃO'}
-            icon={isCombinedView ? <MapIcon size={18} /> : <Check size={18} />}
-            activeIcon={<X size={18} />}
+            icon={isCombinedView ? <MapIcon size={20} /> : <Check size={20} />}
+            activeIcon={<X size={20} />}
             isActive={isCombinedView}
             variant="tertiary"
             onClick={() => setIsCombinedView(!isCombinedView)}
-            onChevronClick={() => {}} // Placeholder for options
+            onChevronClick={() => { }} // Placeholder for options
             isOpen={false}
             size="md"
             rounded="4px"
+            showRing={false}
+            disabled={!isTestSelected}
           />
         )}
       </div>

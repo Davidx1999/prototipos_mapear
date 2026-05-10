@@ -31,7 +31,7 @@ const Header = ({
   openGripDrawer
 }) => {
   return (
-    <header className="sticky top-0 z-[1000] px-[16px] md:px-[32px] py-[10px] md:py-[16px] border-b flex justify-between items-center transition-colors duration-500" style={{ borderColor: colors.neutral[2], backgroundColor: colors.neutral[0] }}>
+    <header className="sticky top-0 z-[1000] px-[16px] md:px-[24px] py-[10px] md:py-[16px] border-b flex justify-between items-center transition-colors duration-500" style={{ borderColor: colors.neutral[2], backgroundColor: colors.neutral[0] }}>
       {/* ══ ESQUERDA: MENU E LOGO ══════════════════════════════════════════ */}
       <div className="flex items-center gap-[12px] md:gap-[24px]">
         <div className="flex items-center gap-[12px] cursor-pointer" onClick={() => navigateTo('dashboard')}>

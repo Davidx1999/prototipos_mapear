@@ -157,25 +157,45 @@ export default function CascadeSelector({
     </span>
   ) : (
     <div className={`flex items-center gap-[8px] flex-1 min-w-0 pr-[16px] overflow-hidden whitespace-nowrap ${variant === 'sidebar' ? 'text-[11px] md:text-[12px]' : 'text-[13px] md:text-[14px]'}`}>
-      {selections.map((s, i) => {
-        if (!s) return null;
-        const isArray = Array.isArray(s);
-        const fullLabel = isArray ? `${s.length} ${levels[i]?.title}` : (typeof s === 'object' ? s.nome : s);
-        const label = fullLabel.length > 16 ? fullLabel.substring(0, 13) + '...' : fullLabel;
-        const isLast = i === selections.length - 1;
-        return (
-          <React.Fragment key={i}>
+      {isOpen ? (
+        // MODO ABERTO: Mostra o caminho completo para permitir navegação retroativa
+        selections.map((s, i) => {
+          if (!s) return null;
+          const isArray = Array.isArray(s);
+          const fullLabel = isArray ? `${s.length} ${levels[i]?.title}` : (typeof s === 'object' ? s.nome : s);
+          const label = fullLabel.length > 16 ? fullLabel.substring(0, 13) + '...' : fullLabel;
+          const isLast = i === selections.length - 1;
+          return (
+            <React.Fragment key={i}>
+              <span
+                onClick={(e) => { e.stopPropagation(); setSelections(selections.slice(0, i)); setSearchLevel(i); }}
+                className={`font-semibold shrink-0 cursor-pointer hover:underline transition-colors ${isLast ? '' : 'hidden md:block'}`}
+                style={{ color: isLast ? (colors?.neutral?.[7] || '#1D2432') : (colors?.neutral?.[5] || '#64748B') }}
+              >
+                {label}
+              </span>
+              {(!isLast || (multiSelectLeaf && selectedLeafs.length > 0)) && <ChevronRight size={20} className="text-neutral-400 shrink-0 hidden md:block" />}
+            </React.Fragment>
+          );
+        })
+      ) : (
+        // MODO FECHADO: Mostra apenas o último item selecionado (ex: o Teste) com truncamento
+        (() => {
+          const lastIdx = selections.length - 1;
+          const s = selections[lastIdx];
+          const isArray = Array.isArray(s);
+          const fullLabel = isArray ? `${s.length} ${levels[lastIdx]?.title}` : (typeof s === 'object' ? s.nome : s);
+          return (
             <span
-              onClick={(e) => { e.stopPropagation(); setSelections(selections.slice(0, i)); setSearchLevel(i); setIsOpen(true); }}
-              className={`font-semibold shrink-0 cursor-pointer hover:underline transition-colors ${isLast ? '' : 'hidden md:block'}`}
-              style={{ color: isLast ? (colors?.neutral?.[7] || '#1D2432') : (colors?.neutral?.[5] || '#64748B') }}
+              className="font-bold truncate w-full"
+              style={{ color: colors?.neutral?.[7] || '#1D2432' }}
+              title={fullLabel}
             >
-              {label}
+              {fullLabel}
             </span>
-            {(!isLast || (multiSelectLeaf && selectedLeafs.length > 0)) && <ChevronRight size={variant === 'sidebar' ? 12 : 14} className="text-neutral-400 shrink-0 hidden md:block" />}
-          </React.Fragment>
-        );
-      })}
+          );
+        })()
+      )}
       {multiSelectLeaf && selectedLeafs.length > 0 && (
         <span className="font-bold whitespace-nowrap" style={{ color: colors?.primary?.base }}>
           ({selectedLeafs.length}) {levels[levels.length - 1]?.title}

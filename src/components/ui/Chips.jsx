@@ -121,6 +121,12 @@ const Chips = ({
       dark: '#FFD744 text-neutral-7 border-transparent', // Yellow is also bright, using neutral-7
       stroked: 'bg-transparent text-[#FFD744] border-[#FFD744]',
       none: 'bg-transparent text-[#FFD744] border-transparent px-0'
+    },
+    info: {
+      light: 'bg-[#B3E6F5] text-neutral-7 border-transparent',
+      dark: '#008BC9 text-white border-transparent',
+      stroked: 'bg-transparent text-[#008BC9] border-[#008BC9]',
+      none: 'bg-transparent text-[#008BC9] border-transparent px-0'
     }
   };
 

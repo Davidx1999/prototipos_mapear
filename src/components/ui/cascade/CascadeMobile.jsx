@@ -3,7 +3,7 @@ import { X, ChevronDown, ChevronRight, Search, LayoutList } from 'lucide-react';
 import Input from '../Input';
 import Callout from '../Callout';
 import CascadeItem from './CascadeItem';
-import SplitButton from '../SplitButton';
+import Button from '../Button';
 
 const CascadeMobile = ({
   levels,
@@ -262,16 +262,15 @@ const CascadeMobile = ({
           >
             Limpar
           </button>
-          <SplitButton
-            label="Confirmar Seleção"
-            icon={<Check size={18} />}
+          <Button
             onClick={onConfirm}
-            onChevronClick={() => {}} // Placeholder
             disabled={selections.length === 0 || (multiSelectLeaf && selectedLeafs.length === 0)}
-            size="xl"
-            rounded="12px"
+            size="md"
             className="flex-1"
-          />
+            iconRight={<Check size={18} />}
+          >
+            CONFIRMAR SELEÇÃO
+          </Button>
         </div>
       </div>
 

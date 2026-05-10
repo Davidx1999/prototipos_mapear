@@ -124,7 +124,7 @@ const CascadeColumn = ({
               }}
             >
               {isAllSelected ? (
-                <Check size={12} strokeWidth={3} style={{ color: colors.neutral[0] }} />
+                <Check size={20} strokeWidth={3} style={{ color: colors.neutral[0] }} />
               ) : (
                 isPartialSelected && <div className="w-2 h-[2px] rounded-full" style={{ backgroundColor: colors.primary.base }}></div>
               )}

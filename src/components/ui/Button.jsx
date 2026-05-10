@@ -22,6 +22,7 @@ const Button = ({
   tertiaryTone = 'high', // high, low
   selected = false,
   iconSize,
+  showRing = true,
   ...props
 }) => {
   // ══ VARIANT & APPEARANCE CONFIG ══════════════════════════════════════════
@@ -36,7 +37,7 @@ const Button = ({
              active:text-[var(--primary-extra-dark)]`
     },
     secondary: {
-      solid: 'bg-[var(--primary-light)] text-[var(--primary-dark)] border-transparent hover:bg-opacity-80 active:bg-[var(--primary-base)]',
+      solid: `bg-[var(--primary-extra-light)] text-[#008BC9] border-[#008BC9] hover:bg-[var(--primary-light)] shadow-md ${showRing ? 'ring-2 ring-[#003A79]' : ''}`,
       ghost: `bg-transparent text-[var(--primary-base)] border-transparent
               hover:bg-[var(--primary-light)] hover:bg-opacity-[0.48]
               active:bg-[var(--primary-base)] active:text-[var(--primary-dark)]`,
@@ -71,7 +72,7 @@ const Button = ({
       padding: iconOnly ? 'px-0 w-[40px]' : 'px-[16px]',
       fontSize: 'text-[14px]',
       lineHeight: 'leading-[20px]',
-      iconSize: 18,
+      iconSize: 20,
       gap: 'gap-[8px]'
     },
     sm: {
@@ -79,7 +80,7 @@ const Button = ({
       padding: iconOnly ? 'px-0 w-[32px]' : 'px-[12px]',
       fontSize: 'text-[14px]',
       lineHeight: 'leading-[20px]',
-      iconSize: 16,
+      iconSize: 20,
       gap: 'gap-[6px]'
     },
     xs: {
@@ -87,7 +88,7 @@ const Button = ({
       padding: iconOnly ? 'px-0 w-[28px]' : 'px-[8px]',
       fontSize: 'text-[14px]',
       lineHeight: 'leading-[18px]',
-      iconSize: 14,
+      iconSize: 20,
       gap: 'gap-[6px]'
     }
   };
@@ -115,7 +116,7 @@ const Button = ({
   };
 
   const activeAppearanceStyles = getAppearanceStyles();
-  
+
   const selectionStyles = selected ? ({
     primary: '!bg-[var(--primary-light)] !text-[var(--primary-dark)]',
     secondary: '!bg-[var(--primary-base)] !text-[var(--primary-dark)]',
@@ -177,7 +178,7 @@ const Button = ({
               {React.cloneElement(iconLeft, { size: activeIconSize, stroke: 'currentColor' })}
             </span>
           )}
-          
+
           {iconOnly ? (
             <span className="shrink-0 flex items-center justify-center">
               {React.cloneElement(iconLeft || iconRight, { size: activeIconSize, stroke: 'currentColor' })}

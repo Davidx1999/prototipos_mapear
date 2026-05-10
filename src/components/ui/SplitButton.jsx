@@ -6,31 +6,32 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
  * Supports primary, secondary, and tertiary variants.
  * Features Material Design 3 inspired rounding logic for the open state.
  */
-const SplitButton = ({ 
-  label, 
-  onClick, 
-  onChevronClick, 
-  isOpen = false, 
-  disabled = false, 
+const SplitButton = ({
+  label,
+  onClick,
+  onChevronClick,
+  isOpen = false,
+  disabled = false,
   icon,
   activeIcon,
   variant = 'primary', // primary, secondary, tertiary
   size = 'md',
   className = '',
   rounded = '4px',
-  isActive = false
+  isActive = false,
+  showRing = true
 }) => {
   // Styles based on variant
   const getStyles = () => {
-    if (disabled) return 'bg-neutral-200 text-neutral-400 cursor-not-allowed';
-    
+    if (disabled) return 'bg-neutral-200 text-neutral-400 border-neutral-200 cursor-not-allowed';
+
     // Active/Selected state (Secondary)
     if (isActive) {
-      return 'bg-[#D9F0FC] text-[#003A79] hover:bg-[#bae6fd] shadow-md';
+      return `bg-[var(--primary-extra-light)] text-[#008BC9] border border-[#008BC9] hover:bg-[var(--primary-light)] shadow-md ${showRing ? 'ring-2 ring-[#003A79]' : ''}`;
     }
 
     if (variant === 'tertiary') {
-      return 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 shadow-sm';
+      return 'bg-white text-gray-700 border border-[var(--neutral-3)] hover:bg-[var(--neutral-2)] shadow-sm';
     }
 
     // Default Primary
@@ -39,18 +40,18 @@ const SplitButton = ({
   };
 
   const currentStyles = getStyles();
-  
+
   const sizeConfig = {
-    xl: { height: 'h-[52px]', fontSize: 'text-[15px]', iconSize: 18, chevronWidth: 'w-[52px]' },
-    lg: { height: 'h-[48px]', fontSize: 'text-[13px]', iconSize: 16, chevronWidth: 'w-[48px]' },
-    md: { height: 'h-[44px]', fontSize: 'text-[13px]', iconSize: 16, chevronWidth: 'w-[44px]' } // Square chevron
+    xl: { height: 'h-[52px]', fontSize: 'text-[15px]', iconSize: 20, chevronWidth: 'w-[52px]' },
+    lg: { height: 'h-[48px]', fontSize: 'text-[13px]', iconSize: 20, chevronWidth: 'w-[48px]' },
+    md: { height: 'h-[44px]', fontSize: 'text-[13px]', iconSize: 20, chevronWidth: 'w-[44px]' } // Square chevron
   }[size] || sizeConfig.md;
 
   const leftRounded = rounded;
   // MD3 Logic: If open, the chevron part becomes a perfect ellipse (fully rounded)
   const rightRounded = isOpen ? '9999px' : rounded;
   const rightLeftRounded = isOpen ? '9999px' : '0px';
-  
+
   return (
     <div className={`flex items-center gap-[1px] shrink-0 ${className}`}>
       {/* Main Action Part */}
@@ -76,8 +77,8 @@ const SplitButton = ({
       <button
         onClick={onChevronClick}
         disabled={disabled}
-        style={{ 
-          borderTopRightRadius: rightRounded, 
+        style={{
+          borderTopRightRadius: rightRounded,
           borderBottomRightRadius: rightRounded,
           borderTopLeftRadius: rightLeftRounded,
           borderBottomLeftRadius: rightLeftRounded

@@ -127,10 +127,12 @@ export default function MapearApp() {
   };
 
   const cssVars = {
+    '--primary-ultra-dark': colors.primary.ultraDark,
+    '--primary-extra-dark': colors.primary.extraDark,
+    '--primary-dark': colors.primary.dark,
     '--primary-base': colors.primary.base,
     '--primary-light': colors.primary.light,
-    '--primary-dark': colors.primary.dark,
-    '--primary-extra-dark': colors.primary.extraDark,
+    '--primary-extra-light': colors.primary.extraLight,
     '--neutral-7': colors.neutral[7],
     '--neutral-6': colors.neutral[6],
     '--neutral-5': colors.neutral[5],

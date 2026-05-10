@@ -10,16 +10,16 @@ import {
 // --- CORES DO STATUS DO HEATMAP E VALORES PARA CÁLCULO ---
 export const getStatusColors = (theme = 'default') => {
   const base = {
-    '2': { label: 'Suficiente', val: 2, icon: <CircleCheck size={14} className="text-green-900" /> },
-    'suficiente': { label: 'Suficiente', val: 2, icon: <CircleCheck size={14} className="text-green-900" /> },
-    '1': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={14} className="text-yellow-900" /> },
-    'parcialmente': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={14} className="text-yellow-900" /> },
-    '0': { label: 'Insuficiente', val: 0, icon: <CircleX size={14} className="text-red-900" /> },
-    'insuficiente': { label: 'Insuficiente', val: 0, icon: <CircleX size={14} className="text-red-900" /> },
-    '-1': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={14} className="text-cyan-800" /> },
-    'sem_conteudo': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={14} className="text-cyan-800" /> },
-    'null': { label: 'Em Branco', val: null, icon: <File size={14} className="text-gray-500" /> },
-    'branco': { label: 'Em Branco', val: null, icon: <File size={14} className="text-gray-500" /> }
+    '2': { label: 'Suficiente', val: 2, icon: <CircleCheck size={20} className="text-green-900" /> },
+    'suficiente': { label: 'Suficiente', val: 2, icon: <CircleCheck size={20} className="text-green-900" /> },
+    '1': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={20} className="text-yellow-900" /> },
+    'parcialmente': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={20} className="text-yellow-900" /> },
+    '0': { label: 'Insuficiente', val: 0, icon: <CircleX size={20} className="text-red-900" /> },
+    'insuficiente': { label: 'Insuficiente', val: 0, icon: <CircleX size={20} className="text-red-900" /> },
+    '-1': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={20} className="text-cyan-800" /> },
+    'sem_conteudo': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={20} className="text-cyan-800" /> },
+    'null': { label: 'Em Branco', val: null, icon: <File size={20} className="text-gray-500" /> },
+    'branco': { label: 'Em Branco', val: null, icon: <File size={20} className="text-gray-500" /> }
   };
 
   if (theme === 'colorblind') {
@@ -88,8 +88,8 @@ export const getColorFromGradient = (value, isActive = true, theme = 'default') 
   ] : [
     { val: -1, r: 179, g: 230, b: 245 },  // Azul (#B3E6F5)
     { val: 0, r: 255, g: 105, b: 97 },   // Vermelho (#FF6961)
-    { val: 1, r: 248, g: 214, b: 109 },  // Amarelo (#F8D66D)
-    { val: 2, r: 140, g: 212, b: 126 }  // Verde (#8CD47E)
+    { val: 50, r: 248, g: 214, b: 109 },  // Amarelo (#F8D66D)
+    { val: 100, r: 140, g: 212, b: 126 }  // Verde (#8CD47E)
   ];
 
   // Restringe os valores ao range mínimo e máximo
@@ -114,6 +114,25 @@ export const getColorFromGradient = (value, isActive = true, theme = 'default') 
   const b = Math.round(lower.b + (upper.b - lower.b) * fraction);
 
   return `rgb(${r}, ${g}, ${b})`;
+};
+
+export const SKILL_DETAILS = {
+  'Interpretação Textual': { code: 'H1', description: 'Capacidade de compreender o sentido global de textos de diferentes gêneros.' },
+  'Análise Crítica': { code: 'H2', description: 'Avaliação de argumentos e posicionamentos presentes no discurso.' },
+  'Resolução de Problemas': { code: 'H3', description: 'Aplicação de estratégias lógicas para solucionar desafios complexos.' },
+  'Produção de Sentido': { code: 'H4', description: 'Construção de significados a partir da relação entre texto e contexto.' },
+  'Conhecimento Base': { code: 'C1', description: 'Domínio dos conceitos fundamentais da área de conhecimento.' },
+  'Aplicação Prática': { code: 'C2', description: 'Uso de conhecimentos teóricos em situações do cotidiano.' },
+  'Raciocínio Analítico': { code: 'C3', description: 'Decomposição de problemas em partes menores para análise detalhada.' },
+  'Pensamento Sistêmico': { code: 'C4', description: 'Visão holística das interrelações entre diferentes elementos.' },
+  'Léxico e Semântica': { code: 'R1', description: 'Uso adequado do vocabulário e compreensão de significados.' },
+  'Contexto Sociocultural': { code: 'R2', description: 'Conhecimento das influências sociais e culturais na comunicação.' },
+  'Bagagem Científica': { code: 'R3', description: 'Fundamentação técnica e científica aplicada ao raciocínio.' },
+  'Expressão Artística': { code: 'R4', description: 'Criatividade e domínio de linguagens estéticas e simbólicas.' },
+  'Linguagens e Códigos': { code: 'K1', description: 'Sistemas de comunicação e suas regras de funcionamento.' },
+  'Ciências e Lógica': { code: 'K2', description: 'Método científico e estruturação do pensamento lógico.' },
+  'Sociedade e Cultura': { code: 'K3', description: 'Organização social e manifestações culturais humanas.' },
+  'Natureza e Tecnologia': { code: 'K4', description: 'Interação humana com o meio ambiente e ferramentas tecnológicas.' }
 };
 
 // --- CATEGORIAS E SUB-CATEGORIAS FICTÍCIAS ---

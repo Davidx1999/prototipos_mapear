@@ -43,7 +43,7 @@ const CascadeItem = ({
               borderColor: isSelected ? colors.primary.base : colors.neutral[3]
             }}
           >
-            {isSelected && <Check size={isMobile ? 13 : 12} strokeWidth={3} style={{ color: colors.neutral[0] }} />}
+            {isSelected && <Check size={20} strokeWidth={3} style={{ color: colors.neutral[0] }} />}
           </div>
         ) : null}
         
@@ -64,7 +64,7 @@ const CascadeItem = ({
       </div>
       
       {!isLastLevel && !isTurmaLevel && (
-        <ChevronRight size={isMobile ? 18 : 16} className={`shrink-0 ${isMobile ? '' : (isSelected ? 'text-white' : 'opacity-50 group-hover:text-primary-base')}`} style={isMobile ? { color: colors.neutral[3] } : {}} />
+        <ChevronRight size={20} className={`shrink-0 ${isMobile ? '' : (isSelected ? 'text-white' : 'opacity-50 group-hover:text-primary-base')}`} style={isMobile ? { color: colors.neutral[3] } : {}} />
       )}
     </div>
   );

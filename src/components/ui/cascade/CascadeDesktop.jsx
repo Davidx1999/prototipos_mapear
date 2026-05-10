@@ -1,9 +1,9 @@
 import React from 'react';
-import { Search, X, ChevronDown, Eraser, Check, AlertCircle, LayoutList } from 'lucide-react';
+import { Search, X, ChevronDown, Eraser, Check, AlertCircle, LayoutList, Info, Map as MapIcon } from 'lucide-react';
 import Input from '../Input';
 import Callout from '../Callout';
 import CascadeColumn from './CascadeColumn';
-import SplitButton from '../SplitButton';
+import Button from '../Button';
 
 const CascadeDesktop = ({
   levels,
@@ -44,17 +44,17 @@ const CascadeDesktop = ({
                 <option key={idx} value={idx}>{lvl.title}</option>
               ))}
             </select>
-            <ChevronDown size={14} className="absolute right-[12px] top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+            <ChevronDown size={20} className="absolute right-[12px] top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
           </div>
           <div className="flex-1">
             <Input
-              iconLeft={<Search />}
+              iconLeft={<Search size={20} />}
               placeholder="Pesquisar..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
               className="!py-[8px] h-[42px]"
               iconRight={searchQuery ? (
-                <X onClick={(e) => { e.stopPropagation(); setSearchQuery(''); }} className="cursor-pointer" />
+                <X size={20} onClick={(e) => { e.stopPropagation(); setSearchQuery(''); }} className="cursor-pointer" />
               ) : null}
             />
           </div>
@@ -100,7 +100,7 @@ const CascadeDesktop = ({
           className="p-[16px] flex items-center gap-[16px] border-t shrink-0"
           style={{ backgroundColor: colors.semantic?.info?.extraLight || '#DFF8FF', borderColor: colors.semantic?.info?.base || '#489EEA' }}
         >
-          <AlertCircle size={18} style={{ color: colors.semantic?.info?.dark || '#155274', flexShrink: 0 }} />
+          <AlertCircle size={20} style={{ color: colors.semantic?.info?.dark || '#155274', flexShrink: 0 }} />
           <span className="text-[14px] leading-snug" style={{ color: colors.neutral[7] }}>
             Exibindo <strong>somente</strong> avaliações <strong>realizadas por ambas</strong> as turmas. Alguns registros podem estar <strong>ocultos</strong>.
           </span>
@@ -114,7 +114,7 @@ const CascadeDesktop = ({
         if (missing.length > 0) {
           return (
             <div className="bg-orange-50 border-t border-orange-200 p-3 px-4 flex items-start gap-3 text-orange-800 text-[12px] font-medium shrink-0">
-              <AlertCircle size={16} className="shrink-0 mt-[1px] text-orange-600" />
+              <AlertCircle size={20} className="shrink-0 mt-[1px] text-orange-600" />
               <span>Aviso: Algumas {levels[levels.length - 1]?.title.toLowerCase()} ainda não concluíram a avaliação selecionada.</span>
             </div>
           );
@@ -128,15 +128,15 @@ const CascadeDesktop = ({
           onClick={onClearAll}
           className="px-[16px] py-[10px] text-[13px] font-bold text-neutral-600 hover:bg-neutral-200 border border-neutral-300 rounded-[4px] transition-colors flex items-center gap-[6px] bg-neutral-0 shadow-sm"
         >
-          LIMPAR SELEÇÃO <Eraser size={16} />
+          LIMPAR SELEÇÃO <Eraser size={20} />
         </button>
-        <SplitButton
-          label="CONFIRMAR"
-          icon={<Check size={16} />}
+        <Button
           onClick={onConfirm}
-          onChevronClick={() => {}} // Placeholder for now
           disabled={selections.length === 0 || (multiSelectLeaf && selectedLeafs.length === 0)}
-        />
+          iconRight={<Check size={20} />}
+        >
+          CONFIRMAR
+        </Button>
       </div>
     </div>
   );
