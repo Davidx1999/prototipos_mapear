@@ -11,6 +11,7 @@ import HeatmapFloatingHeaders from './devolutivas/HeatmapFloatingHeaders';
 import HeatmapModals from './devolutivas/HeatmapModals';
 import SkillTooltip from './devolutivas/SkillTooltip';
 import Tooltip from '../ui/Tooltip';
+import TutorialOverlay from '../ui/TutorialOverlay';
 
 import {
   statusColors as staticStatusColors,
@@ -63,12 +64,12 @@ const calculateResult = (values, method) => {
   }
 };
 
-export default function Devolutivas({ colors, navigateTo }) {
+export default function Devolutivas({ colors, navigateTo, isDarkMode }) {
   // --- ESTADOS GERAIS E LAYOUT ---
   const [mainTab, setMainTab] = useState('heatmap');
   const [calcMethod, setCalcMethod] = useState('Média');
   const [sortBy, setSortBy] = useState('Nenhuma');
-  const [sortOrder, setSortOrder] = useState('Desempenho Crescente');
+  const [sortOrder, setSortOrder] = useState('Sem ordem');
   const [hideNoParticipation, setHideNoParticipation] = useState(false);
   const [isContextExpanded, setIsContextExpanded] = useState(true);
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -109,6 +110,38 @@ export default function Devolutivas({ colors, navigateTo }) {
   const [navLevel, setNavLevel] = useState(-1);
   const [navPath, setNavPath] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  const handleStartTutorial = () => {
+    console.log("Iniciando Tutorial...");
+    setIsContextExpanded(true);
+    setTimeout(() => {
+      setShowTutorial(true);
+    }, 300);
+  };
+
+  const tutorialSteps = [
+    {
+      selector: '#sidebar-context-section',
+      title: 'Seleção de Contexto',
+      content: 'Neste painel você define o escopo da sua análise, escolhendo desde o Estado até o Teste específico que deseja visualizar.'
+    },
+    {
+      selector: '#heatmap-matrix-container',
+      title: 'Matriz de Desempenho',
+      content: 'Visualize o desempenho individual de cada aluno. As cores indicam o nível de proficiência em cada item do teste.'
+    },
+    {
+      selector: '#bottom-controls-bar',
+      title: 'Controles de Visualização',
+      content: 'Use estas ferramentas para agrupar dados por turmas, mudar temas de cores ou aplicar zoom para detalhes.'
+    },
+    {
+      selector: '#skills-highlight-btn',
+      title: 'Destaque de Habilidades',
+      content: 'Filtre o mapa para mostrar apenas os itens que avaliam competências específicas que você deseja trabalhar.'
+    }
+  ];
 
   const levelLabels = ['Estado', 'Município', 'Regional', 'Escola', 'Turma', 'Avaliação', 'Teste'];
 
@@ -148,6 +181,14 @@ export default function Devolutivas({ colors, navigateTo }) {
       setFocalTurma('Todas');
       setSelectedRows(new Set());
       setIsLoaded(true);
+    } else {
+      // Retorna ao Empty State
+      setNavLevel(-1);
+      setNavPath([]);
+      setSelectedTurmas([]);
+      setFocalTurma('Todas');
+      setSelectedRows(new Set());
+      setIsLoaded(false);
     }
   };
 
@@ -273,7 +314,7 @@ export default function Devolutivas({ colors, navigateTo }) {
 
   const sortedStudentsList = useMemo(() => {
     let list = [...filteredStudents];
-    if (sortBy === 'Alunos' || sortBy === 'Alunos X Itens') {
+    if ((sortBy === 'Alunos' || sortBy === 'Alunos X Itens') && sortOrder !== 'Sem ordem') {
       list.sort((a, b) => {
         let scoreA = studentTotals[a.name] === '-' ? -1 : studentTotals[a.name];
         let scoreB = studentTotals[b.name] === '-' ? -1 : studentTotals[b.name];
@@ -389,27 +430,39 @@ export default function Devolutivas({ colors, navigateTo }) {
 
   return (
     <div
-      className="flex flex-col overflow-hidden bg-neutral-1"
-      style={{ height: `calc(100vh - ${GLOBAL_HEADER_H}px)` }}
+      className="flex flex-col overflow-hidden transition-colors duration-300"
+      style={{
+        height: `calc(100vh - ${GLOBAL_HEADER_H}px)`,
+        backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[1]
+      }}
     >
       {/* ── HEADER INTERNO (tabs + breadcrumb + skills btn) ── */}
-      <div className="bg-neutral-0 border-b border-neutral-2 flex flex-wrap md:flex-nowrap items-stretch shrink-0 z-40 min-h-[48px]">
-        <div className="w-full md:w-[344px] flex items-end h-[48px] md:h-full border-b md:border-b-0 md:border-r border-gray-200 shrink-0 px-4 md:px-6 gap-6 overflow-x-auto hide-scrollbar bg-white">
+      <div
+        className="border-b flex flex-wrap md:flex-nowrap items-stretch shrink-0 z-40 min-h-[48px]"
+        style={{
+          backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0],
+          borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2]
+        }}
+      >
+        <div
+          className="w-full md:w-[344px] flex items-end h-[48px] md:h-full border-b md:border-b-0 md:border-r shrink-0 px-4 md:px-6 gap-6 overflow-x-auto hide-scrollbar"
+          style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2] }}
+        >
           <button
             onClick={() => setMainTab('heatmap')}
-            className={`text-[13px] md:text-[14px] font-bold h-full whitespace-nowrap pt-[2px] ${mainTab === 'heatmap' ? 'text-[#008BC9] border-b-[3px] border-[#008BC9]' : 'text-gray-500 hover:text-gray-800'}`}
+            className={`text-[14px] md:text-[14px] font-bold h-full whitespace-nowrap pt-[2px] ${mainTab === 'heatmap' ? 'text-[#008BC9] border-b-[3px] border-[#008BC9]' : (isDarkMode ? 'text-neutral-300 hover:text-white' : 'text-gray-500 hover:text-gray-800')}`}
           >
             Mapa de Calor
           </button>
           <button
             onClick={() => setMainTab('detalhes')}
-            className={`text-[13px] md:text-[14px] font-bold h-full whitespace-nowrap pt-[2px] ${mainTab === 'detalhes' ? 'text-[#008BC9] border-b-[3px] border-[#008BC9]' : 'text-gray-500 hover:text-gray-800'}`}
+            className={`text-[14px] md:text-[14px] font-bold h-full whitespace-nowrap pt-[2px] ${mainTab === 'detalhes' ? 'text-[#008BC9] border-b-[3px] border-[#008BC9]' : (isDarkMode ? 'text-neutral-300 hover:text-white' : 'text-gray-500 hover:text-gray-800')}`}
           >
             Detalhes da Resposta
           </button>
         </div>
 
-        <div className="flex-1 px-4 md:px-6 py-2 md:py-0 truncate text-[12px] md:text-[13px] font-semibold text-[#008BC9] w-full bg-white flex items-center">
+        <div className="flex-1 px-4 md:px-6 py-2 md:py-0 truncate text-[12px] md:text-[14px] font-semibold text-[#008BC9] w-full flex items-center">
           {navPath.length > 0 ? (
             <>
               <span className="truncate">
@@ -417,28 +470,32 @@ export default function Devolutivas({ colors, navigateTo }) {
                   const label = Array.isArray(path) ? `${path.length} ${levelLabels[idx]}s` : (typeof path === 'object' ? path.nome : path);
                   return idx < navPath.length - 1 ? (
                     <React.Fragment key={idx}>
-                      <button onClick={() => goBack(idx)} className="hover:underline">{label}</button>
-                      <span className="text-gray-400"> / </span>
+                      <button onClick={() => goBack(idx)} className="hover:underline" style={{ color: isDarkMode ? colors.primary.light : colors.primary.base }}>{label}</button>
+                      <span style={{ color: isDarkMode ? colors.neutral[4] : colors.neutral[4] }} className="mx-1"> / </span>
                     </React.Fragment>
                   ) : (
-                    <button key={idx} onClick={() => goBack(idx)} className="hover:underline">{label}</button>
+                    <button key={idx} onClick={() => goBack(idx)} className="hover:underline" style={{ color: isDarkMode ? colors.primary.light : colors.primary.base }}>{label}</button>
                   );
                 })}
               </span>
               {navPath.length < levelLabels.length && (
-                <span className="text-gray-400 font-medium ml-1">/ {levelLabels[navPath.length]}s</span>
+                <span className="font-medium ml-1" style={{ color: isDarkMode ? colors.neutral[4] : colors.neutral[4] }}>/ {levelLabels[navPath.length]}s</span>
               )}
             </>
           ) : (
-            <span className="text-gray-400 font-medium">Selecione um contexto...</span>
+            <span className="font-medium" style={{ color: isDarkMode ? colors.neutral[4] : colors.neutral[4] }}>Selecione um contexto...</span>
           )}
         </div>
 
-        <div className="w-full md:w-auto border-t md:border-t-0 md:border-l border-gray-200 h-full flex items-center px-4 md:px-6 py-2 md:py-0 shrink-0 bg-white justify-end">
+        <div
+          className="w-full md:w-auto border-t md:border-t-0 md:border-l h-full flex items-center px-4 md:px-6 py-2 md:py-0 shrink-0 justify-end"
+          style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2] }}
+        >
           <button
-            disabled={!isTestSelected}
-            onClick={() => { setShowSkills(!showSkills); if (showSkills) setActiveSkill(null); }}
-            className={`flex items-center gap-2 px-4 py-1.5 md:py-2 rounded-md font-bold text-[12px] md:text-[12px] transition-colors w-full md:w-auto justify-center ${!isTestSelected ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : (showSkills ? 'bg-[#008BC9] text-white' : 'bg-[#D9F0FC] text-[#008BC9] hover:bg-[#bae6fd]')}`}
+            id="skills-highlight-btn"
+            disabled={!isTestSelected || mainTab === 'detalhes'}
+            onClick={() => { if (mainTab !== 'detalhes') { setShowSkills(!showSkills); if (showSkills) setActiveSkill(null); } }}
+            className={`flex items-center gap-2 px-4 py-1.5 md:py-2 rounded-md font-bold text-[12px] md:text-[12px] transition-colors w-full md:w-auto justify-center ${(!isTestSelected || mainTab === 'detalhes') ? (isDarkMode ? 'bg-neutral-500 text-neutral-300 cursor-not-allowed' : 'bg-gray-100 text-gray-400 cursor-not-allowed') : (showSkills ? 'bg-[#008BC9] text-white' : (isDarkMode ? 'bg-[#003A79] text-[#94CFEF] hover:bg-[#0C63AA]' : 'bg-[#D9F0FC] text-[#008BC9] hover:bg-[#bae6fd]'))}`}
           >
             Destacar Habilidades {showSkills ? <CircleX size={20} /> : <ChevronDown size={20} />}
           </button>
@@ -450,27 +507,33 @@ export default function Devolutivas({ colors, navigateTo }) {
 
         {/* Sidebar */}
         {mainTab === 'heatmap' && (
-          <HeatmapSidebar
-            isContextExpanded={isContextExpanded}
-            setIsContextExpanded={setIsContextExpanded}
-            calcMethod={calcMethod}
-            setCalcMethod={setCalcMethod}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            sortOrder={sortOrder}
-            setSortOrder={setSortOrder}
-            hideNoParticipation={hideNoParticipation}
-            setHideNoParticipation={setHideNoParticipation}
-            statusColors={currentStatusColors}
-            legendItems={legendItems}
-            colorTheme={colorTheme}
-            isColorsActive={isColorsActive}
-            navPath={navPath}
-            selectedTurmas={selectedTurmas}
-            handleContextChange={handleContextChange}
-            rowEntityLabel={navLevel < 4 ? levelLabels[navLevel + 1] : 'Alunos'}
-            isTestSelected={isTestSelected}
-          />
+          <div id="sidebar-container">
+            <HeatmapSidebar
+              isContextExpanded={isContextExpanded}
+              setIsContextExpanded={setIsContextExpanded}
+              calcMethod={calcMethod}
+              setCalcMethod={setCalcMethod}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+              hideNoParticipation={hideNoParticipation}
+              setHideNoParticipation={setHideNoParticipation}
+              statusColors={currentStatusColors}
+              legendItems={legendItems}
+              colorTheme={colorTheme}
+              isColorsActive={isColorsActive}
+              navPath={navPath}
+              selectedTurmas={selectedTurmas}
+              handleContextChange={handleContextChange}
+              isSidebarOpenMobile={false}
+              rowEntityLabel={navLevel < 4 ? levelLabels[navLevel + 1] : 'Alunos'}
+              isTestSelected={isTestSelected}
+              onStartTutorial={handleStartTutorial}
+              isDarkMode={isDarkMode}
+              colors={colors}
+            />
+          </div>
         )}
 
         {/* Área de conteúdo (skills bar + matrix + controles flutuantes) */}
@@ -495,47 +558,54 @@ export default function Devolutivas({ colors, navigateTo }) {
               availableTurmas={availableTurmas}
               focalTurma={focalTurma}
               setFocalTurma={setFocalTurma}
+              isDarkMode={isDarkMode}
+              colors={colors}
             />
           )}
 
           {/* Controles flutuantes (direita + inferior) */}
           {mainTab === 'heatmap' && (
-            <HeatmapControls
-              isTestSelected={isTestSelected}
-              showLegendPopover={showLegendPopover}
-              setShowLegendPopover={setShowLegendPopover}
-              showScalePopover={showScalePopover}
-              setShowScalePopover={setShowScalePopover}
-              colorTheme={colorTheme}
-              setColorTheme={setColorTheme}
-              isColorsActive={isColorsActive}
-              setIsColorsActive={setIsColorsActive}
-              isPanMode={isPanMode}
-              setIsPanMode={setIsPanMode}
-              handleZoom={handleZoom}
-              handleFitScreen={handleFitScreen}
-              isColsSeparated={isColsSeparated}
-              setIsColsSeparated={setIsColsSeparated}
-              isRowsSeparated={isRowsSeparated}
-              setIsRowsSeparated={setIsRowsSeparated}
-              navLevel={navLevel}
-              selectedRows={selectedRows}
-              isCombinedView={isCombinedView}
-              setIsCombinedView={setIsCombinedView}
-              activeBottomMenu={activeBottomMenu}
-              setActiveBottomMenu={setActiveBottomMenu}
-              colGroupingCriteria={colGroupingCriteria}
-              setColGroupingCriteria={setColGroupingCriteria}
-              sortBy={sortBy}
-            />
+            <div id="bottom-controls-bar">
+              <HeatmapControls
+                isTestSelected={isTestSelected}
+                showLegendPopover={showLegendPopover}
+                setShowLegendPopover={setShowLegendPopover}
+                showScalePopover={showScalePopover}
+                setShowScalePopover={setShowScalePopover}
+                colorTheme={colorTheme}
+                setColorTheme={setColorTheme}
+                isColorsActive={isColorsActive}
+                setIsColorsActive={setIsColorsActive}
+                isPanMode={isPanMode}
+                setIsPanMode={setIsPanMode}
+                handleZoom={handleZoom}
+                handleFitScreen={handleFitScreen}
+                isColsSeparated={isColsSeparated}
+                setIsColsSeparated={setIsColsSeparated}
+                isRowsSeparated={isRowsSeparated}
+                setIsRowsSeparated={setIsRowsSeparated}
+                navLevel={navLevel}
+                selectedRows={selectedRows}
+                isCombinedView={isCombinedView}
+                setIsCombinedView={setIsCombinedView}
+                activeBottomMenu={activeBottomMenu}
+                setActiveBottomMenu={setActiveBottomMenu}
+                colGroupingCriteria={colGroupingCriteria}
+                setColGroupingCriteria={setColGroupingCriteria}
+                sortBy={sortBy}
+                isDarkMode={isDarkMode}
+                colors={colors}
+              />
+            </div>
           )}
 
           {/* Matriz / conteúdo principal */}
           {!isLoaded ? (
-            <HeatmapEmptyState 
-              isContextExpanded={isContextExpanded} 
-              setIsContextExpanded={setIsContextExpanded} 
-              colors={colors} 
+            <HeatmapEmptyState
+              isContextExpanded={isContextExpanded}
+              setIsContextExpanded={setIsContextExpanded}
+              colors={colors}
+              isDarkMode={isDarkMode}
             />
           ) : mainTab === 'heatmap' ? (
             <HeatmapMatrix
@@ -573,6 +643,8 @@ export default function Devolutivas({ colors, navigateTo }) {
               rowEntityLabel={navLevel < 4 ? levelLabels[navLevel + 1] : 'Aluno'}
               colGroupingCriteria={colGroupingCriteria}
               sortBy={sortBy}
+              isDarkMode={isDarkMode}
+              colors={colors}
               onOpenModal={(type, data) => {
                 if (type === 'details') {
                   setSelectionForDetails({
@@ -587,7 +659,7 @@ export default function Devolutivas({ colors, navigateTo }) {
               }}
             />
           ) : (
-            <ResponseDetails 
+            <ResponseDetails
               navPath={navPath}
               handleContextChange={handleContextChange}
               colors={colors}
@@ -598,14 +670,22 @@ export default function Devolutivas({ colors, navigateTo }) {
               colGroups={dynamicColGroups}
               statusColors={currentStatusColors}
               initialSelection={selectionForDetails}
+              isDarkMode={isDarkMode}
             />
           )}
 
         </div>
 
         <HeatmapTooltip tooltipData={tooltipData} statusColors={currentStatusColors} />
-        <HeatmapModals modalData={modalData} setModalData={setModalData} />
+        <HeatmapModals modalType={modalData?.type} modalData={modalData} setModalType={setModalData} statusColors={currentStatusColors} isDarkMode={isDarkMode} colors={colors} />
         <SkillTooltip skillTooltip={skillTooltip} />
+
+        {showTutorial && (
+          <TutorialOverlay
+            steps={tutorialSteps}
+            onFinish={() => setShowTutorial(false)}
+          />
+        )}
 
       </div>
     </div>

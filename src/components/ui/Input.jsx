@@ -12,27 +12,30 @@ const Input = ({
   helperText,
   className = '',
   fullWidth = true,
+  height = '40px',
+  iconSize = 18,
   ...props
 }) => {
   return (
     <div className={`flex flex-col gap-[6px] ${fullWidth ? 'w-full' : ''}`}>
       {label && (
-        <label className="text-[13px] md:text-[14px] font-semibold text-[var(--neutral-6)]">
+        <label className="text-[14px] md:text-[14px] font-semibold text-[var(--neutral-6)]">
           {label}
         </label>
       )}
 
       <div className="relative flex items-center">
         {iconLeft && (
-          <div className="absolute left-[16px] text-[var(--neutral-4)] flex items-center justify-center pointer-events-none transition-colors group-focus-within:text-[var(--primary-base)]">
-            {React.cloneElement(iconLeft, { size: 18, strokeWidth: 2 })}
+          <div className="absolute left-[16px] inset-y-0 text-[var(--neutral-4)] flex items-center justify-center pointer-events-none transition-colors group-focus-within:text-[var(--primary-base)]">
+            {React.cloneElement(iconLeft, { size: iconSize, strokeWidth: 2 })}
           </div>
         )}
 
         <input
+          style={{ height }}
           className={`
-            w-full bg-[var(--neutral-0)] border text-[13px] md:text-[14px] outline-none transition-all
-            rounded-[4px] px-[16px] py-[10px] md:py-[12px]
+            w-full bg-[var(--neutral-0)] border text-[14px] md:text-[14px] outline-none transition-all
+            rounded-[4px] px-[16px]
             ${iconLeft ? 'pl-[44px]' : ''}
             ${iconRight ? 'pr-[44px]' : ''}
             ${error
@@ -48,8 +51,8 @@ const Input = ({
         />
 
         {iconRight && (
-          <div className="absolute right-[16px] text-[var(--neutral-4)] flex items-center justify-center cursor-pointer transition-colors hover:text-[var(--neutral-6)]">
-            {React.cloneElement(iconRight, { size: 18, strokeWidth: 2 })}
+          <div className="absolute right-[16px] inset-y-0 text-[var(--neutral-4)] flex items-center justify-center cursor-pointer transition-colors hover:text-[var(--neutral-6)]">
+            {React.cloneElement(iconRight, { size: iconSize, strokeWidth: 2 })}
           </div>
         )}
       </div>

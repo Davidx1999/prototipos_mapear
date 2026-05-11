@@ -16,20 +16,20 @@ export default function HeatmapTooltip({ tooltipData, statusColors }) {
       </div>
       <div className="flex justify-between items-center mb-2 gap-4">
         <span className="text-neutral-4 font-medium text-[12px]">Aluno</span>
-        <span className="font-bold text-[13px] truncate text-right">{tooltipData.aluno}</span>
+        <span className="font-bold text-[14px] truncate text-right">{tooltipData.aluno}</span>
       </div>
       <div className="flex justify-between items-center mb-4 gap-4">
         <span className="text-neutral-4 font-medium text-[12px]">Item Curricular</span>
-        <span className="font-bold text-[13px]">{tooltipData.questao}</span>
+        <span className="font-bold text-[14px]">{tooltipData.questao}</span>
       </div>
-      
+
       <div className="w-full flex justify-center mt-1">
-        <Chips 
+        <Chips
           label={statusColors[tooltipData.statusKey]?.label}
           status={
             tooltipData.statusKey === 'suficiente' || tooltipData.statusKey === '2' ? 'success' :
-            tooltipData.statusKey === 'parcialmente' || tooltipData.statusKey === '1' ? 'warning' :
-            tooltipData.statusKey === 'insuficiente' || tooltipData.statusKey === '0' ? 'error' : 'neutral'
+              tooltipData.statusKey === 'parcialmente' || tooltipData.statusKey === '1' ? 'warning' :
+                tooltipData.statusKey === 'insuficiente' || tooltipData.statusKey === '0' ? 'error' : 'neutral'
           }
           variant="light"
           iconLeft={statusColors[tooltipData.statusKey]?.icon}

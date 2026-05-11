@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   X, Move, ZoomIn, ZoomOut, Maximize,
-  Columns, Rows, ChevronDown, Palette, Map as MapIcon, Check, BarChart2, HelpCircle
+  TableColumnsSplit, TableRowsSplit, ChevronDown, SwatchBook, Map as MapIcon, Check, BarChart2, HelpCircle
 } from 'lucide-react';
 import SplitButton from '../../ui/SplitButton';
 import Button from '../../ui/Button';
@@ -19,7 +19,9 @@ export default function HeatmapControls({
   activeBottomMenu, setActiveBottomMenu,
   colGroupingCriteria, setColGroupingCriteria,
   sortBy,
-  isTestSelected = false
+  isTestSelected = false,
+  isDarkMode = false,
+  colors
 }) {
   return (
     <>
@@ -35,6 +37,7 @@ export default function HeatmapControls({
           iconLeft={<Move />}
           onClick={() => setIsPanMode(!isPanMode)}
           disabled={!isTestSelected}
+          showRing={isPanMode}
           className={`shadow-lg ${!isTestSelected ? 'opacity-50 grayscale !cursor-not-allowed' : ''}`}
           title={isPanMode ? 'Desativar Modo Arrastar' : 'Ativar Modo Arrastar'}
         />
@@ -92,14 +95,18 @@ export default function HeatmapControls({
             iconLeft={<BarChart2 />}
             onClick={() => setShowScalePopover(!showScalePopover)}
             disabled={!isTestSelected}
+            showRing={showScalePopover}
             className={`shadow-lg ${!isTestSelected ? 'opacity-50 grayscale !cursor-not-allowed' : ''}`}
             title="Escala de Desempenho"
           />
 
           {showScalePopover && (
-            <div className="absolute right-[calc(100%+4px)] top-0 w-[240px] bg-white border border-gray-200 rounded-[4px] shadow-xl p-4 animate-fade-slide">
+            <div 
+              className="absolute right-[calc(100%+4px)] top-0 w-[240px] border rounded-[4px] shadow-xl p-4 animate-fade-slide"
+              style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
+            >
               <div className="flex justify-between items-center mb-2">
-                <h3 className="font-bold text-[13px] text-[#1D2432]">Escala de Desempenho</h3>
+                <h3 className="font-bold text-[14px]" style={{ color: isDarkMode ? colors.neutral[0] : '#1D2432' }}>Escala de Desempenho</h3>
                 <Button
                   variant="tertiary"
                   appearance="ghost"
@@ -112,7 +119,7 @@ export default function HeatmapControls({
               </div>
               <div className="flex flex-col gap-1 mt-2">
                 <div className="w-full h-3 rounded-full shadow-inner border border-gray-200" style={{ background: 'linear-gradient(to right, #FFFFFF 5%, #B3E6F5 25%, #FF6961 50%, #F8D66D 75%, #8CD47E 95%)' }}></div>
-                <div className="flex justify-between items-center text-[10px] font-bold text-gray-500 mt-1">
+                <div className="flex justify-between items-center text-[12px] font-bold text-gray-500 mt-1">
                   <span>0%</span>
                   <span>25%</span>
                   <span>50%</span>
@@ -147,7 +154,7 @@ export default function HeatmapControls({
           appearance="solid"
           size="md"
           iconOnly={true}
-          iconLeft={isRowsSeparated ? <X size={20} /> : <Rows size={20} />}
+          iconLeft={isRowsSeparated ? <X size={20} /> : <TableRowsSplit size={20} />}
           onClick={() => setIsRowsSeparated(!isRowsSeparated)}
           className={`!h-[44px] !w-[44px] shadow-sm ${!isTestSelected ? '!bg-neutral-200 !text-neutral-400 cursor-not-allowed opacity-100' : (sortBy === 'Itens' ? 'opacity-50 cursor-not-allowed' : '')}`}
           title={!isTestSelected ? "Selecione um teste primeiro" : (sortBy === 'Itens' ? "Desabilitado em ordenação por Itens" : "Agrupar por Turmas")}
@@ -159,7 +166,7 @@ export default function HeatmapControls({
         <div className="relative">
           <SplitButton
             label=""
-            icon={<Columns size={20} />}
+            icon={<TableColumnsSplit size={20} />}
             activeIcon={<X size={20} />}
             isActive={isColsSeparated}
             variant="tertiary"
@@ -174,15 +181,18 @@ export default function HeatmapControls({
           />
 
           {activeBottomMenu === 'cols' && (
-            <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fade-slide">
-              <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wide mb-3 block">Agrupar Colunas Por</span>
+            <div 
+              className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[240px] border rounded-xl shadow-xl p-4 animate-fade-slide"
+              style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
+            >
+              <span className="text-[12px] font-bold uppercase tracking-wide mb-3 block" style={{ color: isDarkMode ? colors.neutral[3] : '#6B7280' }}>Agrupar Colunas Por</span>
               <div className="flex flex-col gap-2">
                 {['Tarefas', 'Domínios Cognitivos', 'Domínios de Repertório', 'Conhecimentos'].map(opt => (
                   <label key={opt} onClick={() => { setColGroupingCriteria(opt); setActiveBottomMenu(null); setIsColsSeparated(true); }} className="flex items-center gap-3 cursor-pointer group">
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${colGroupingCriteria === opt ? 'border-[#008BC9]' : 'border-gray-300 group-hover:border-[#008BC9]'}`}>
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${colGroupingCriteria === opt ? 'border-[#008BC9]' : 'group-hover:border-[#008BC9]'}`} style={{ borderColor: colGroupingCriteria === opt ? '#008BC9' : (isDarkMode ? colors.neutral[4] : '#D1D5DB') }}>
                       {colGroupingCriteria === opt && <div className="w-2 h-2 bg-[#008BC9] rounded-full"></div>}
                     </div>
-                    <span className="text-[13px] font-semibold text-gray-700">{opt}</span>
+                    <span className="text-[14px] font-semibold" style={{ color: isDarkMode ? colors.neutral[1] : '#374151' }}>{opt}</span>
                   </label>
                 ))}
               </div>
@@ -194,7 +204,7 @@ export default function HeatmapControls({
         <div className="relative">
           <SplitButton
             label=""
-            icon={<Palette size={20} />}
+            icon={<SwatchBook size={20} />}
             activeIcon={<X size={20} />}
             isActive={isColorsActive}
             variant="tertiary"
@@ -217,8 +227,11 @@ export default function HeatmapControls({
           />
 
           {activeBottomMenu === 'colors' && (
-            <div className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[240px] bg-white border border-gray-200 rounded-xl shadow-xl p-4 animate-fade-slide">
-              <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wide mb-3 block">Paleta de Cores</span>
+            <div 
+              className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[240px] border rounded-xl shadow-xl p-4 animate-fade-slide"
+              style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
+            >
+              <span className="text-[12px] font-bold uppercase tracking-wide mb-3 block" style={{ color: isDarkMode ? colors.neutral[3] : '#6B7280' }}>Paleta de Cores</span>
               <div className="flex flex-col gap-2">
                 {[
                   { id: 'default', label: 'Padrão FGV' },
@@ -226,10 +239,10 @@ export default function HeatmapControls({
                   { id: 'monochromatic', label: 'Monocromático' }
                 ].map(opt => (
                   <label key={opt.id} onClick={() => { setColorTheme(opt.id); setActiveBottomMenu(null); setIsColorsActive(opt.id !== 'default'); }} className="flex items-center gap-3 cursor-pointer group">
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${colorTheme === opt.id ? 'border-[#008BC9]' : 'border-gray-300 group-hover:border-[#008BC9]'}`}>
+                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${colorTheme === opt.id ? 'border-[#008BC9]' : 'group-hover:border-[#008BC9]'}`} style={{ borderColor: colorTheme === opt.id ? '#008BC9' : (isDarkMode ? colors.neutral[4] : '#D1D5DB') }}>
                       {colorTheme === opt.id && <div className="w-2 h-2 bg-[#008BC9] rounded-full"></div>}
                     </div>
-                    <span className="text-[13px] font-semibold text-gray-700">{opt.label}</span>
+                    <span className="text-[14px] font-semibold" style={{ color: isDarkMode ? colors.neutral[1] : '#374151' }}>{opt.label}</span>
                   </label>
                 ))}
               </div>

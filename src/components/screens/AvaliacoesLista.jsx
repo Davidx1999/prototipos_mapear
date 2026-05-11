@@ -31,7 +31,7 @@ const AvaliacoesLista = ({ colors, navigateTo }) => {
             </div>
             <span className="text-[11px] md:text-[12px] font-bold mb-[4px] truncate" title={item.id} style={{ color: colors.primary.base }}>{item.id}</span>
             <h3 className="text-[14px] md:text-[15px] font-bold leading-tight mb-[16px] line-clamp-2 h-[38px]" title={item.title} style={{ color: colors.neutral[7] }}>{item.title}</h3>
-            <div className="mt-auto pt-[16px] border-t flex justify-between items-center" style={{ borderColor: colors.neutral[2] }}><div className="flex items-center gap-[6px] font-bold text-[12px] md:text-[13px] cursor-pointer hover:underline" style={{ color: colors.primary.base }}><BookOpen size={16} /> Ver Conteúdo</div><span className="text-[11px] md:text-[12px] font-semibold" style={{ color: colors.neutral[5] }}><BookCheck size={14} className="inline mr-[4px]" /> {item.tests} Teste(s)</span></div>
+            <div className="mt-auto pt-[16px] border-t flex justify-between items-center" style={{ borderColor: colors.neutral[2] }}><div className="flex items-center gap-[6px] font-bold text-[12px] md:text-[14px] cursor-pointer hover:underline" style={{ color: colors.primary.base }}><BookOpen size={16} /> Ver Conteúdo</div><span className="text-[11px] md:text-[12px] font-semibold" style={{ color: colors.neutral[5] }}><BookCheck size={14} className="inline mr-[4px]" /> {item.tests} Teste(s)</span></div>
           </div>
         ))}
       </div>

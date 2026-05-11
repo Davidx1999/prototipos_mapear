@@ -66,7 +66,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
             />
             <div>
               <h2 className="text-[16px] md:text-[18px] font-bold text-neutral-7 leading-tight">Validação do Teste</h2>
-              <div className="text-[12px] md:text-[13px] text-neutral-5 mt-[2px]">
+              <div className="text-[12px] md:text-[14px] text-neutral-5 mt-[2px]">
                 Aluno(a): <span className="font-bold text-neutral-7">{selectedStudent?.name}</span> &nbsp;|&nbsp;
                 ID: <span className="font-bold text-neutral-7">123456</span>
               </div>
@@ -110,7 +110,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
                 <div className="mt-[16px] border-t pt-[16px]" style={{ borderColor: colors.neutral[1] }}>
                   <div className="flex items-center gap-[8px] mb-[8px]">
                     <span className="text-[11px] font-bold text-primary-base">ITEM 1.</span>
-                    <span className="text-[13px] font-bold text-neutral-7">Diversidade Cultural</span>
+                    <span className="text-[14px] font-bold text-neutral-7">Diversidade Cultural</span>
                   </div>
                   <div className="w-full h-[140px] bg-neutral-1 rounded overflow-hidden mb-[16px] border" style={{ borderColor: colors.neutral[2] }}>
                     <img src="https://images.unsplash.com/photo-1543888365-1d0339d1b09d?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover opacity-80" alt="Cultural" />
@@ -219,9 +219,9 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
         <div className="mb-[32px] animate-fade-slide">
           <h1 className="text-[28px] md:text-[36px] font-black text-neutral-7 leading-tight mb-[8px]">Carregamento de Provas</h1>
           <p className="text-[15px] text-neutral-5 max-w-[700px] mb-[24px]">Selecione o contexto da turma e realize o upload dos arquivos PDF para processamento e correção automática via HTR.</p>
-          
+
           <div className="flex flex-col gap-[16px] max-w-[800px]">
-            <Callout 
+            <Callout
               colors={colors}
               type="caution"
               title="Atenção aos Arquivos PDF"
@@ -230,8 +230,8 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
               onAction={() => console.log('Action!')}
               onClose={() => console.log('Close!')}
             />
-            
-            <Callout 
+
+            <Callout
               colors={colors}
               type="informative"
               title="Novidade: Processamento HTR"
@@ -240,7 +240,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
               Agora você pode validar as transcrições em tempo real. <a href="#learn-more">Clique aqui para ver como funciona.</a>
             </Callout>
 
-            <Callout 
+            <Callout
               colors={colors}
               type="successful"
               title="Upload Concluído"
@@ -248,7 +248,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
               onClose={() => console.log('Closed success')}
             />
 
-            <Callout 
+            <Callout
               colors={colors}
               type="neutral"
               title="Dica de Organização"

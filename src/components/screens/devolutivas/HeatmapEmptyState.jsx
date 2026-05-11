@@ -1,17 +1,20 @@
 import React from 'react';
 import { Settings2 } from 'lucide-react';
 
-export default function HeatmapEmptyState({ isContextExpanded, setIsContextExpanded, colors }) {
+export default function HeatmapEmptyState({ isContextExpanded, setIsContextExpanded, colors, isDarkMode = false }) {
   return (
-    <div className="flex-1 h-full flex flex-col items-center justify-center p-8 text-center bg-neutral-1/50 relative overflow-hidden">
+    <div 
+      className="flex-1 h-full flex flex-col items-center justify-center p-8 text-center relative overflow-hidden"
+      style={{ backgroundColor: isDarkMode ? colors.neutral[6] : 'rgba(243, 244, 246, 0.5)' }}
+    >
       {/* Background Grid */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
-          backgroundImage: `linear-gradient(${colors.neutral[2]} 1px, transparent 1px), linear-gradient(90deg, ${colors.neutral[2]} 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(${isDarkMode ? colors.neutral[5] : colors.neutral[2]} 1px, transparent 1px), linear-gradient(90deg, ${isDarkMode ? colors.neutral[5] : colors.neutral[2]} 1px, transparent 1px)`,
           backgroundSize: '40px 40px',
           backgroundPosition: 'center center',
-          opacity: 0.40
+          opacity: isDarkMode ? 0.2 : 0.40
         }}
       />
       <div className="flex flex-col items-center justify-center max-w-2xl relative z-10">
@@ -27,11 +30,17 @@ export default function HeatmapEmptyState({ isContextExpanded, setIsContextExpan
           />
         </div>
 
-        <h2 className="text-[24px] font-bold text-neutral-8 mb-4 tracking-tight">
+        <h2 
+          className="text-[24px] font-bold mb-4 tracking-tight"
+          style={{ color: isDarkMode ? colors.neutral[0] : '#1D2432' }}
+        >
           Aguardando Seleção de Dados
         </h2>
-        <p className="text-[14px] text-neutral-5 max-w-[440px] leading-relaxed mb-8">
-          Para visualizar o Mapa de Calor, utilize o <span className="font-bold text-primary-base">Seleção de Contexto</span> no painel lateral e selecione o contexto desejado.
+        <p 
+          className="text-[14px] max-w-[440px] leading-relaxed mb-8"
+          style={{ color: isDarkMode ? colors.neutral[3] : '#6B7280' }}
+        >
+          Para visualizar o Mapa de Calor, utilize o <span className="font-bold text-primary-base" style={{ color: isDarkMode ? colors.primary.light : '' }}>Seleção de Contexto</span> no painel lateral e selecione o contexto desejado.
         </p>
 
         {!isContextExpanded && (

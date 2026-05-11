@@ -22,7 +22,7 @@ const Button = ({
   tertiaryTone = 'high', // high, low
   selected = false,
   iconSize,
-  showRing = true,
+  showRing = false,
   ...props
 }) => {
   // ══ VARIANT & APPEARANCE CONFIG ══════════════════════════════════════════
@@ -119,7 +119,7 @@ const Button = ({
 
   const selectionStyles = selected ? ({
     primary: '!bg-[var(--primary-light)] !text-[var(--primary-dark)]',
-    secondary: '!bg-[var(--primary-base)] !text-[var(--primary-dark)]',
+    secondary: `!bg-[var(--primary-base)] !text-[var(--primary-dark)] ${showRing ? 'ring-2 ring-[#003A79] ring-offset-1' : ''}`,
     tertiary: '!bg-[var(--neutral-2)] !text-[var(--neutral-7)]'
   }[variant] || '') : '';
 
@@ -181,7 +181,9 @@ const Button = ({
 
           {iconOnly ? (
             <span className="shrink-0 flex items-center justify-center">
-              {React.cloneElement(iconLeft || iconRight, { size: activeIconSize, stroke: 'currentColor' })}
+              {React.isValidElement(iconLeft || iconRight || children) 
+                ? React.cloneElement(iconLeft || iconRight || children, { size: activeIconSize, stroke: 'currentColor' })
+                : (iconLeft || iconRight || children)}
             </span>
           ) : (
             <span className="truncate">{children}</span>

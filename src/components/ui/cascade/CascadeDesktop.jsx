@@ -35,7 +35,7 @@ const CascadeDesktop = ({
         <div className="flex items-center gap-[8px]">
           <div className="w-[180px] shrink-0 relative">
             <select
-              className="w-full h-[42px] px-[12px] text-[13px] font-bold text-neutral-700 outline-none appearance-none cursor-pointer hover:bg-neutral-50 disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed rounded-[4px] border border-neutral-300 focus:border-2 focus:border-primary-base focus:ring-2 focus:ring-[var(--primary-light)] transition-all"
+              className="w-full h-[42px] px-[12px] text-[14px] font-bold text-neutral-700 outline-none appearance-none cursor-pointer hover:bg-neutral-50 disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed rounded-[4px] border border-neutral-300 focus:border-2 focus:border-primary-base focus:ring-2 focus:ring-[var(--primary-light)] transition-all"
               value={searchLevel}
               onChange={(e) => setSearchLevel(parseInt(e.target.value))}
               disabled={selections.length === 0}
@@ -98,7 +98,7 @@ const CascadeDesktop = ({
       {Array.isArray(selections[4]) && selections[4].length > 1 && (
         <div
           className="p-[16px] flex items-center gap-[16px] border-t shrink-0"
-          style={{ backgroundColor: colors.semantic?.info?.extraLight || '#DFF8FF', borderColor: colors.semantic?.info?.base || '#489EEA' }}
+          style={{ backgroundColor: colors.semantic?.info?.extraLight || '#DFF8FF', borderColor: colors.neutral[2] || '#E5E7EB' }}
         >
           <AlertCircle size={20} style={{ color: colors.semantic?.info?.dark || '#155274', flexShrink: 0 }} />
           <span className="text-[14px] leading-snug" style={{ color: colors.neutral[7] }}>
@@ -126,7 +126,7 @@ const CascadeDesktop = ({
       <div className="p-[16px] md:px-[24px] md:py-[12px] border-t border-neutral-200 bg-neutral-0 flex justify-end gap-[16px] items-center shrink-0">
         <button
           onClick={onClearAll}
-          className="px-[16px] py-[10px] text-[13px] font-bold text-neutral-600 hover:bg-neutral-200 border border-neutral-300 rounded-[4px] transition-colors flex items-center gap-[6px] bg-neutral-0 shadow-sm"
+          className="px-[16px] py-[10px] text-[14px] font-bold text-neutral-600 hover:bg-neutral-200 border border-neutral-300 rounded-[4px] transition-colors flex items-center gap-[6px] bg-neutral-0 shadow-sm"
         >
           LIMPAR SELEÇÃO <Eraser size={20} />
         </button>

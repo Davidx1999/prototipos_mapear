@@ -239,7 +239,7 @@ const CascadeMobile = ({
         {mobileStep >= 4 && Array.isArray(selections[4]) && selections[4].length > 1 && (
           <div
             className="mx-[16px] mb-[12px] p-[16px] flex items-center gap-[16px] rounded-[8px] border"
-            style={{ backgroundColor: colors.semantic?.info?.extraLight || '#DFF8FF', borderColor: colors.semantic?.info?.base || '#489EEA' }}
+            style={{ backgroundColor: colors.semantic?.info?.extraLight || '#DFF8FF', borderColor: colors.neutral[2] || '#E5E7EB' }}
           >
             <AlertCircle size={18} style={{ color: colors.semantic?.info?.dark || '#155274', flexShrink: 0 }} />
             <span className="text-[14px] leading-snug" style={{ color: colors.neutral[7] }}>

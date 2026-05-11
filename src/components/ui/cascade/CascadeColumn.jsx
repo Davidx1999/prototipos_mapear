@@ -40,12 +40,12 @@ const CascadeColumn = ({
     const emptyMsg = emptyMessages[index] || emptyMessages[0];
 
     innerContent = (
-      <div className="p-[16px] text-[13px] text-neutral-400 text-center font-medium h-full flex flex-col items-center justify-center gap-[12px] opacity-60">
+      <div className="p-[16px] text-[14px] text-neutral-400 text-center font-medium h-full flex flex-col items-center justify-center gap-[12px] opacity-60">
         {emptyMsg}
       </div>
     );
   } else if (filteredItems.length === 0) {
-    innerContent = <div className="p-[16px] text-[13px] text-neutral-400 text-center font-medium">Nenhum resultado encontrado.</div>;
+    innerContent = <div className="p-[16px] text-[14px] text-neutral-400 text-center font-medium">Nenhum resultado encontrado.</div>;
   } else if (isSyncing && index === syncingLevel) {
     innerContent = (
       <div className="flex items-center justify-center h-full gap-2 py-12">

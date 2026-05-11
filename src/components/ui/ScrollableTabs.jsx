@@ -29,19 +29,19 @@ const ScrollableTabs = ({ tabs, activeTab, onTabClick, colors }) => {
     <div className="relative flex items-center border-b w-full" style={{ borderColor: colors.neutral[2] }}>
       {canScrollLeft && (
         <div className="absolute left-0 w-[40px] h-full flex items-center justify-start z-10" style={{ background: `linear-gradient(to right, ${colors.neutral[0]} 40%, transparent)` }}>
-          <div className="cursor-pointer hover:text-primary-base text-neutral-5 rounded-full shadow-sm p-[4px] border bg-neutral-0" style={{ borderColor: colors.neutral[2] }} onClick={() => scroll('left')}><ChevronLeft size={16}/></div>
+          <div className="cursor-pointer hover:text-primary-base text-neutral-5 rounded-full shadow-sm p-[4px] border bg-neutral-0" style={{ borderColor: colors.neutral[2] }} onClick={() => scroll('left')}><ChevronLeft size={16} /></div>
         </div>
       )}
       <div ref={scrollRef} onScroll={checkScroll} className="flex items-center overflow-x-auto hide-scrollbar px-[16px] md:px-[40px] w-full scroll-smooth">
         {tabs.map((tab, idx) => (
-          <div key={tab} onClick={() => onTabClick(idx)} className={`px-[16px] md:px-[24px] py-[12px] font-bold text-[13px] md:text-[14px] cursor-pointer whitespace-nowrap border-b-2 transition-colors ${activeTab === idx ? 'border-primary-base text-primary-base' : 'border-transparent text-neutral-5 hover:text-primary-base'}`}>
+          <div key={tab} onClick={() => onTabClick(idx)} className={`px-[16px] md:px-[24px] py-[12px] font-bold text-[14px] md:text-[14px] cursor-pointer whitespace-nowrap border-b-2 transition-colors ${activeTab === idx ? 'border-primary-base text-primary-base' : 'border-transparent text-neutral-5 hover:text-primary-base'}`}>
             {tab}
           </div>
         ))}
       </div>
       {canScrollRight && (
         <div className="absolute right-0 w-[40px] h-full flex items-center justify-end z-10" style={{ background: `linear-gradient(to left, ${colors.neutral[0]} 40%, transparent)` }}>
-          <div className="cursor-pointer hover:text-primary-base text-neutral-5 rounded-full shadow-sm p-[4px] border bg-neutral-0" style={{ borderColor: colors.neutral[2] }} onClick={() => scroll('right')}><ChevronRight size={16}/></div>
+          <div className="cursor-pointer hover:text-primary-base text-neutral-5 rounded-full shadow-sm p-[4px] border bg-neutral-0" style={{ borderColor: colors.neutral[2] }} onClick={() => scroll('right')}><ChevronRight size={16} /></div>
         </div>
       )}
     </div>

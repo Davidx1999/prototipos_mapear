@@ -61,7 +61,7 @@ const Tabs = ({
   const baseStyles = `relative flex items-center justify-center transition-all duration-200 cursor-pointer whitespace-nowrap select-none ${fullWidth ? 'flex-1' : 'shrink-0'}`;
 
   const sizeStyles = {
-    sm: "px-[12px] py-[8px] text-[13px] gap-[8px]",
+    sm: "px-[12px] py-[8px] text-[14px] gap-[8px]",
     md: "px-[20px] py-[16px] text-[14px] gap-[10px]"
   };
 
@@ -85,9 +85,9 @@ const Tabs = ({
           style={{ borderColor: colors?.neutral?.[2] || '#DEE1E8' }}
         >
           <div className="flex items-center gap-3">
-            {activeIcon && React.cloneElement(activeIcon, { 
-              size: 18, 
-              style: { color: colors?.primary?.base || '#008BC9' } 
+            {activeIcon && React.cloneElement(activeIcon, {
+              size: 18,
+              style: { color: colors?.primary?.base || '#008BC9' }
             })}
             <span>{activeLabel}</span>
           </div>
@@ -146,11 +146,10 @@ const Tabs = ({
             <button
               key={id}
               onClick={() => onChange && onChange(id)}
-              className={`px-[16px] py-[10px] rounded-[8px] border text-[13px] whitespace-nowrap transition-all flex items-center justify-center gap-[8px] shrink-0 basis-[42%] ${
-                isActive 
-                  ? 'font-bold shadow-sm' 
+              className={`px-[16px] py-[10px] rounded-[8px] border text-[14px] whitespace-nowrap transition-all flex items-center justify-center gap-[8px] shrink-0 basis-[42%] ${isActive
+                  ? 'font-bold shadow-sm'
                   : 'font-medium'
-              }`}
+                }`}
               style={{
                 backgroundColor: isActive ? '#EFF6FF' : (colors?.neutral?.[0] || '#FFFFFF'),
                 borderColor: isActive ? (colors?.primary?.base || '#008BC9') : (colors?.neutral?.[2] || '#DEE1E8'),

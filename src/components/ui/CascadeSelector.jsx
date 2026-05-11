@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Blocks, PanelLeftOpen, ChevronRight, X } from 'lucide-react';
 import CascadeMobile from './cascade/CascadeMobile';
 import CascadeDesktop from './cascade/CascadeDesktop';
@@ -28,6 +29,7 @@ export default function CascadeSelector({
   const [mobileStep, setMobileStep] = useState(0);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncingLevel, setSyncingLevel] = useState(null);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const containerRef = useRef(null);
   const columnsRef = useRef(null);
@@ -133,6 +135,18 @@ export default function CascadeSelector({
     setTimeout(() => scrollToActive(0), 50);
   };
 
+  const handleClearRequest = () => {
+    if (selections.length === 0 && selectedLeafs.length === 0) return;
+    setShowClearConfirm(true);
+  };
+
+  const confirmClear = () => {
+    clearAll();
+    setShowClearConfirm(false);
+    onConfirm([], []);
+    setIsOpen(false);
+  };
+
   const handleConfirm = () => {
     onConfirm(selections, multiSelectLeaf ? selectedLeafs : undefined);
     setIsOpen(false);
@@ -152,11 +166,11 @@ export default function CascadeSelector({
 
   // ══ RENDERING HELPERS ════════════════════════════════════════════════════
   const breadcrumbHtml = selections.length === 0 ? (
-    <span className={`text-neutral-500 font-medium truncate ${variant === 'sidebar' ? 'text-[11px] md:text-[12px]' : 'text-[13px] md:text-[14px]'}`}>
+    <span className={`text-neutral-500 font-medium truncate ${variant === 'sidebar' ? 'text-[11px] md:text-[12px]' : 'text-[14px] md:text-[14px]'}`}>
       Escolha uma avaliação para aplicar...
     </span>
   ) : (
-    <div className={`flex items-center gap-[8px] flex-1 min-w-0 pr-[16px] overflow-hidden whitespace-nowrap ${variant === 'sidebar' ? 'text-[11px] md:text-[12px]' : 'text-[13px] md:text-[14px]'}`}>
+    <div className={`flex items-center gap-[8px] flex-1 min-w-0 pr-[16px] overflow-hidden whitespace-nowrap ${variant === 'sidebar' ? 'text-[11px] md:text-[12px]' : 'text-[14px] md:text-[14px]'}`}>
       {isOpen ? (
         // MODO ABERTO: Mostra o caminho completo para permitir navegação retroativa
         selections.map((s, i) => {
@@ -241,7 +255,7 @@ export default function CascadeSelector({
             isSyncing={isSyncing}
             syncingLevel={syncingLevel}
             onSelectItem={selectItem}
-            onClearAll={clearAll}
+            onClearAll={handleClearRequest}
             onConfirm={handleConfirm}
             onToggleAll={toggleAllForLevel}
             getCascadeDataForLevel={getCascadeDataForLevel}
@@ -264,13 +278,46 @@ export default function CascadeSelector({
             onSelectItem={selectItem}
             onSelectLevel={(idx) => { setSelections(selections.slice(0, idx)); setSearchLevel(idx); }}
             onToggleAll={toggleAllForLevel}
-            onClearAll={clearAll}
+            onClearAll={handleClearRequest}
             onConfirm={handleConfirm}
             getCascadeDataForLevel={getCascadeDataForLevel}
             pendingLeafItems={pendingLeafItems}
             variant={variant}
           />
         )
+      )}
+
+      {/* Confirmation Overlay for Clear All - Rendered via Portal to cover full screen */}
+      {showClearConfirm && createPortal(
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setShowClearConfirm(false)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-sm border border-gray-200 animate-scale-up"
+            onClick={e => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Limpar Seleção?</h3>
+            <p className="text-gray-600 text-sm mb-6 leading-relaxed">
+              Esta ação irá remover todo o contexto selecionado e retornar o mapa ao estado inicial. Deseja continuar?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowClearConfirm(false)}
+                className="flex-1 py-2.5 rounded-lg border border-gray-300 font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                CANCELAR
+              </button>
+              <button
+                onClick={confirmClear}
+                className="flex-1 py-2.5 rounded-lg bg-red-600 text-white font-bold hover:bg-red-700 transition-all shadow-md active:scale-95"
+              >
+                LIMPAR TUDO
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );

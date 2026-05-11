@@ -12,6 +12,7 @@ import {
 import CascadeSelector from '../../ui/CascadeSelector';
 import Chips from '../../ui/Chips';
 import Button from '../../ui/Button';
+import RichTooltip from '../../ui/RichTooltip';
 import { devDB, CASCADE_LEVELS, turmasPendentesMock, participacaoAvaliacaoMock } from './HeatmapUtils';
 
 export default function HeatmapSidebar({
@@ -31,7 +32,10 @@ export default function HeatmapSidebar({
   handleContextChange,
   isSidebarOpenMobile = false,
   rowEntityLabel = 'Alunos',
-  isTestSelected = false
+  isTestSelected = false,
+  onStartTutorial = () => { },
+  isDarkMode = false,
+  colors
 }) {
   const sidebarScrollRef = useRef(null);
   const [showScrollButtons, setShowScrollButtons] = useState(false);
@@ -61,14 +65,22 @@ export default function HeatmapSidebar({
   return (
     <aside
       className={`
-        absolute top-2 left-4 md:left-4 w-[328px] min-w-[328px] bg-white/95 backdrop-blur-md rounded-xl shadow-[0_4px_25px_rgba(0,0,0,0.1)] border border-gray-200 flex flex-col z-[45] transition-all duration-300
+        absolute top-2 left-4 md:left-4 w-[328px] min-w-[328px] backdrop-blur-md rounded-[8px] shadow-[0_4px_25px_rgba(0,0,0,0.1)] border flex flex-col z-[45] transition-all duration-300
         max-h-[calc(100%-16px)] h-fit
       `}
-      style={{ overflow: 'visible' }}
+      style={{
+        overflow: 'visible',
+        backgroundColor: isDarkMode ? `${colors.neutral[7]}F2` : 'rgba(255, 255, 255, 0.95)',
+        borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[2]
+      }}
     >
       {/* Header */}
       <div
-        className={`p-4 flex justify-between items-center bg-white z-20 shrink-0 ${isContextExpanded ? 'border-b border-gray-100 rounded-t-xl' : 'rounded-xl'}`}
+        className={`p-4 flex justify-between items-center z-20 shrink-0 ${isContextExpanded ? 'border-b rounded-t-[8px]' : 'rounded-[8px]'}`}
+        style={{
+          backgroundColor: isDarkMode ? colors.neutral[7] : colors.neutral[0],
+          borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1]
+        }}
       >
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => setIsContextExpanded(!isContextExpanded)}>
           <Button
@@ -79,7 +91,7 @@ export default function HeatmapSidebar({
             iconOnly={true}
             iconLeft={isContextExpanded ? <ChevronUp /> : <ChevronDown />}
           />
-          <h3 className="font-bold text-[14px] text-[#1D2432]">
+          <h3 className="font-bold text-[14px]" style={{ color: isDarkMode ? colors.neutral[0] : '#1D2432' }}>
             Seleção de Contexto
           </h3>
         </div>
@@ -88,6 +100,7 @@ export default function HeatmapSidebar({
             <>
               <Button
                 variant="secondary"
+                showRing={true}
                 appearance="ghost"
                 size="xs"
                 iconSize={16}
@@ -99,6 +112,7 @@ export default function HeatmapSidebar({
               />
               <Button
                 variant="secondary"
+                showRing={true}
                 appearance="ghost"
                 size="xs"
                 iconSize={16}
@@ -129,9 +143,9 @@ export default function HeatmapSidebar({
       {isContextExpanded && (
         <>
           {/* Seleção de Contexto - Movido para fora do scroll para evitar clipping */}
-          <div className="p-4 border-b border-gray-100 bg-gray-50/50 shrink-0">
+          <div id="sidebar-context-section" className="p-4 border-b shrink-0" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1], backgroundColor: isDarkMode ? colors.neutral[6] : 'rgba(249, 250, 251, 0.5)' }}>
             <div className="flex flex-col gap-1">
-              <span className="text-[11px] font-bold text-neutral-7 tracking-wider">Seleção de Contexto</span>
+              <span className="text-[14px] font-bold tracking-wider" style={{ color: isDarkMode ? colors.neutral[3] : colors.neutral[7] }}>Seleção de Contexto</span>
               <CascadeSelector
                 db={(levelIndex, selections, action, params) => {
                   if (action === 'getParticipation') {
@@ -185,21 +199,29 @@ export default function HeatmapSidebar({
           >
 
             {/* Cálculo das Interseções */}
-            <div className="p-4 border-b border-gray-100">
+            <div className="p-4 border-b" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1] }}>
               <div className="flex justify-between items-center mb-1">
-                <h3 className="font-bold text-[13px] text-[#1D2432]">Cálculo das Interseções</h3>
-                <Button
-                  variant="tertiary"
-                  appearance="ghost"
-                  size="xs"
-                  tertiaryTone="low"
-                  iconOnly={true}
-                  iconLeft={<HelpCircle />}
-                  title="Define como as interseções são calculadas."
-                />
+                <h3 className="font-bold text-[14px]" style={{ color: isDarkMode ? colors.neutral[0] : '#1D2432' }}>Cálculo das Interseções</h3>
+                <RichTooltip
+                  title="Cálculo das Interseções"
+                  description="Escolha o método estatístico para consolidar os resultados das células agrupadas (por turmas ou itens)."
+                  position="right"
+                >
+                  {({ isVisible }) => (
+                    <Button
+                      variant="tertiary"
+                      appearance="ghost"
+                      size="xs"
+                      tertiaryTone="low"
+                      iconOnly={true}
+                      iconLeft={<HelpCircle />}
+                      className={isVisible ? "!bg-gray-100" : ""}
+                    />
+                  )}
+                </RichTooltip>
               </div>
               {/* Segmented Button Pattern with Reverted Background and Refined Design */}
-              <div className={`flex p-1 rounded-[6px] gap-[1px] ${!isTestSelected ? 'bg-gray-50 opacity-60' : 'bg-gray-100'}`}>
+              <div className={`flex p-1 rounded-[6px] gap-[1px] ${!isTestSelected ? 'opacity-60' : ''}`} style={{ backgroundColor: isDarkMode ? colors.neutral[6] : (isTestSelected ? '#F3F4F6' : '#F9FAFB') }}>
                 {methods.map((m, idx) => {
                   let roundedClass = 'rounded-none';
                   if (idx === 0) roundedClass = 'rounded-l-[4px] rounded-r-none';
@@ -211,10 +233,10 @@ export default function HeatmapSidebar({
                       disabled={!isTestSelected}
                       onClick={() => setCalcMethod(m)}
                       className={`
-                      flex-1 py-1.5 text-[11px] font-bold transition-all
+                      flex-1 py-1.5 text-[12px] font-bold transition-all
                       ${calcMethod === m
-                          ? (isTestSelected ? 'bg-white text-[#008BC9] shadow-sm z-10' : 'bg-gray-200 text-gray-400')
-                          : 'bg-transparent text-neutral-700 hover:bg-white/50'}
+                          ? (isTestSelected ? (isDarkMode ? 'bg-[#003A79] text-white shadow-sm z-10' : 'bg-white text-[#008BC9] shadow-sm z-10') : (isDarkMode ? 'bg-neutral-500 text-neutral-300' : 'bg-gray-200 text-gray-400'))
+                          : (isDarkMode ? 'bg-transparent text-neutral-300 hover:bg-neutral-500/50' : 'bg-transparent text-neutral-700 hover:bg-white/50')}
                       ${roundedClass}
                       ${!isTestSelected ? 'cursor-not-allowed' : ''}
                     `}
@@ -227,30 +249,43 @@ export default function HeatmapSidebar({
             </div>
 
             {/* Ajustes de Exibição (Novo Padrão de Ordenação) */}
-            <div className="p-4 border-b border-gray-100">
+            <div className="p-4 border-b" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1] }}>
               <div className="flex justify-between items-center mb-3">
-                <h3 className="font-bold text-[13px] text-[#1D2432]">Ajustes de Exibição</h3>
-                <Button
-                  variant="tertiary"
-                  appearance="ghost"
-                  size="xs"
-                  tertiaryTone="low"
-                  iconOnly={true}
-                  iconLeft={<HelpCircle />}
-                  title="Configurações de ordenação e filtros visuais."
-                />
+                <h3 className="font-bold text-[14px]" style={{ color: isDarkMode ? colors.neutral[0] : '#1D2432' }}>Ajustes de Exibição</h3>
+                <RichTooltip
+                  title="Ajustes de Exibição"
+                  description="Configure como os dados são organizados no mapa. Você pode ordenar por alunos ou itens, e aplicar filtros de participação."
+                  position="right"
+                >
+                  {({ isVisible }) => (
+                    <Button
+                      variant="tertiary"
+                      appearance="ghost"
+                      size="xs"
+                      tertiaryTone="low"
+                      iconOnly={true}
+                      iconLeft={<HelpCircle />}
+                      className={isVisible ? "!bg-gray-100" : ""}
+                    />
+                  )}
+                </RichTooltip>
               </div>
 
               <div className="flex flex-col gap-4">
                 {/* Ordenar por */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-[11px] font-bold text-neutral-7 tracking-wider">Ordenar por</label>
+                  <label className="text-[12px] font-bold tracking-wider" style={{ color: isDarkMode ? colors.neutral[3] : colors.neutral[7] }}>Ordenar por</label>
                   <div className="relative">
                     <select
                       disabled={!isTestSelected}
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className={`w-full px-3 h-9 bg-white border border-gray-300 rounded-md text-[12px] font-semibold text-gray-700 outline-none appearance-none focus:border-[#008BC9] shadow-sm ${!isTestSelected ? 'bg-gray-50 text-gray-400 cursor-not-allowed' : 'cursor-pointer'}`}
+                      className={`w-full px-3 h-9 border rounded-md text-[12px] font-semibold outline-none appearance-none focus:border-[#008BC9] shadow-sm ${!isTestSelected ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                      style={{
+                        backgroundColor: isDarkMode ? colors.neutral[6] : (isTestSelected ? colors.neutral[0] : colors.neutral[1]),
+                        color: isDarkMode ? colors.neutral[1] : (isTestSelected ? colors.neutral[7] : colors.neutral[4]),
+                        borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[3]
+                      }}
                     >
                       <option value="Nenhuma">Sem ordenação (Padrão)</option>
                       <option value="Alunos">Apenas {rowEntityLabel}</option>
@@ -260,7 +295,7 @@ export default function HeatmapSidebar({
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
                       {isTestSelected && sortBy !== 'Nenhuma' && (
                         <button
-                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSortBy('Nenhuma'); }}
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSortBy('Nenhuma'); setSortOrder('Sem ordem'); }}
                           className="pointer-events-auto text-neutral-7 hover:text-red-500 transition-colors"
                           title="Limpar ordenação"
                         >
@@ -274,21 +309,27 @@ export default function HeatmapSidebar({
 
                 {/* Ordem */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-[11px] font-bold text-neutral-7 tracking-wider">Ordem</label>
+                  <label className="text-[12px] font-bold tracking-wider" style={{ color: isDarkMode ? colors.neutral[3] : colors.neutral[7] }}>Ordem</label>
                   <div className="relative">
                     <select
-                      disabled={!isTestSelected}
+                      disabled={!isTestSelected || sortBy === 'Nenhuma'}
                       value={sortOrder}
                       onChange={(e) => setSortOrder(e.target.value)}
-                      className={`w-full px-3 h-9 bg-white border border-gray-300 rounded-md text-[12px] font-semibold text-gray-700 outline-none appearance-none focus:border-[#008BC9] shadow-sm ${!isTestSelected ? 'bg-gray-50 text-gray-400 cursor-not-allowed' : 'cursor-pointer'}`}
+                      className={`w-full px-3 h-9 border rounded-md text-[12px] font-semibold outline-none appearance-none focus:border-[#008BC9] shadow-sm ${(!isTestSelected || sortBy === 'Nenhuma') ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                      style={{
+                        backgroundColor: isDarkMode ? colors.neutral[6] : ((!isTestSelected || sortBy === 'Nenhuma') ? colors.neutral[1] : colors.neutral[0]),
+                        color: isDarkMode ? colors.neutral[1] : ((!isTestSelected || sortBy === 'Nenhuma') ? colors.neutral[4] : colors.neutral[7]),
+                        borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[3]
+                      }}
                     >
+                      <option value="Sem ordem">Sem ordem</option>
                       <option value="Desempenho Crescente">Desempenho Crescente</option>
                       <option value="Desempenho Decrescente">Desempenho Decrescente</option>
                     </select>
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
-                      {isTestSelected && sortOrder !== 'Desempenho Crescente' && (
+                      {isTestSelected && sortBy !== 'Nenhuma' && sortOrder !== 'Sem ordem' && (
                         <button
-                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSortOrder('Desempenho Crescente'); }}
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSortOrder('Sem ordem'); }}
                           className="pointer-events-auto text-neutral-7 hover:text-red-500 transition-colors"
                           title="Limpar ordem"
                         >
@@ -301,12 +342,13 @@ export default function HeatmapSidebar({
                 </div>
 
                 {/* Ocultar Sem Participação */}
-                <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100 -mx-4 px-4">
-                  <span className={`text-[12px] font-bold ${!isTestSelected ? 'text-gray-400' : 'text-gray-700'}`}>Ocultar Sem Participação</span>
+                <div className="flex items-center justify-between mt-2 pt-2 border-t -mx-4 px-4" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1] }}>
+                  <span className="text-[14px] font-bold" style={{ color: isDarkMode ? (!isTestSelected ? colors.neutral[5] : colors.neutral[1]) : (!isTestSelected ? colors.neutral[4] : colors.neutral[7]) }}>Ocultar Sem Participação</span>
                   <button
                     disabled={!isTestSelected}
                     onClick={() => setHideNoParticipation(!hideNoParticipation)}
-                    className={`w-10 h-5 rounded-full relative transition-colors ${!isTestSelected ? 'bg-gray-100 cursor-not-allowed' : (hideNoParticipation ? 'bg-[#008BC9]' : 'bg-gray-300')}`}
+                    className={`w-10 h-5 rounded-full relative transition-colors ${!isTestSelected ? 'cursor-not-allowed' : ''}`}
+                    style={{ backgroundColor: !isTestSelected ? (isDarkMode ? colors.neutral[6] : colors.neutral[1]) : (hideNoParticipation ? colors.primary.base : (isDarkMode ? colors.neutral[5] : colors.neutral[3])) }}
                   >
                     <div className={`absolute top-[2px] w-4 h-4 rounded-full bg-white transition-all shadow-sm ${hideNoParticipation ? 'right-[2px]' : 'left-[2px]'}`}></div>
                   </button>
@@ -317,16 +359,24 @@ export default function HeatmapSidebar({
             {/* Legenda dos Centroides */}
             <div className="p-4 mb-4">
               <div className="flex justify-between items-center mb-1">
-                <h3 className="font-bold text-[13px] text-[#1D2432]">Legenda dos Centroides</h3>
-                <Button
-                  variant="tertiary"
-                  appearance="ghost"
-                  size="xs"
-                  tertiaryTone="low"
-                  iconOnly={true}
-                  iconLeft={<HelpCircle />}
-                  title="Significado de cada status nos centroides."
-                />
+                <h3 className="font-bold text-[14px]" style={{ color: isDarkMode ? colors.neutral[0] : '#1D2432' }}>Legenda dos Centroides</h3>
+                <RichTooltip
+                  title="Legenda dos Centroides"
+                  description="Os ícones e cores representam o nível de proficiência consolidado de cada grupo na matriz."
+                  position="right"
+                >
+                  {({ isVisible }) => (
+                    <Button
+                      variant="tertiary"
+                      appearance="ghost"
+                      size="xs"
+                      tertiaryTone="low"
+                      iconOnly={true}
+                      iconLeft={<HelpCircle />}
+                      className={isVisible ? "!bg-gray-100" : ""}
+                    />
+                  )}
+                </RichTooltip>
               </div>
               <div className="flex flex-wrap gap-2">
                 {legendItems.map((status, idx) => {

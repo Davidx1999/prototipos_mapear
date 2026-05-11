@@ -14,7 +14,9 @@ export default function HeatmapMatrix({
   activeSkill, dynamicTotals, studentTotals, overallTotal,
   rowEntityLabel, colGroupingCriteria, isGroupColsActive, isGroupRowsActive,
   sortBy,
-  onOpenModal
+  onOpenModal,
+  isDarkMode = false,
+  colors
 }) {
 
   const isColOpacated = (col) => {
@@ -39,19 +41,19 @@ export default function HeatmapMatrix({
       onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUpOrLeave} onMouseLeave={handleMouseUpOrLeave}
     >
       <div className={`pt-[100px] pb-[300px] pl-[50px] md:pl-[400px] pr-[400px] w-max h-max ${showSkills ? 'mt-[60px] md:mt-[80px]' : ''}`}>
-        <div className="inline-block transition-transform duration-200 origin-top-left" style={{ transform: `scale(${zoomLevel})` }}>
+        <div id="heatmap-matrix-container" className="inline-block transition-transform duration-200 origin-top-left" style={{ transform: `scale(${zoomLevel})` }}>
           
           <div className="flex mb-3">
             <div className="w-[220px] shrink-0"></div>
-            <div className={`flex ${isGroupColsActive ? 'gap-[80px]' : 'gap-3'} ml-3`}>
+            <div className={`flex ${isGroupColsActive ? 'gap-[80px]' : 'gap-1'} ml-3`}>
               {displayColGroups.map((group, gIdx) => (
                 <div key={gIdx} className="flex flex-col">
                   {isGroupColsActive && (
-                    <div className="border border-gray-300 rounded-[6px] bg-white mb-2 py-1 px-2 flex items-center justify-center gap-1.5 shadow-sm relative group">
-                      <span className="text-[10px] font-bold text-gray-700 truncate max-w-[120px] select-none">
+                    <div className="border rounded-[6px] mb-2 py-1 px-2 flex items-center justify-center gap-1.5 shadow-sm relative group" style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[5] : '#D1D5DB' }}>
+                      <span className="text-[10px] font-bold truncate max-w-[120px] select-none" style={{ color: isDarkMode ? colors.neutral[2] : '#374151' }}>
                         {colGroupingCriteria} {gIdx + 1}
                       </span>
-                      <Info size={20} className="text-gray-400 cursor-pointer hover:text-[#008BC9]"/>
+                      <Info size={20} className="cursor-pointer hover:text-[#008BC9]" style={{ color: isDarkMode ? colors.neutral[4] : '#9CA3AF' }}/>
                     </div>
                   )}
                   <div className="flex gap-1">
@@ -63,7 +65,12 @@ export default function HeatmapMatrix({
                         <button 
                           key={cIdx} 
                           onClick={() => onOpenModal('item', `Item ${col.id}`)}
-                          className={`w-[32px] h-[32px] bg-white border rounded-[6px] flex items-center justify-center text-[10px] font-bold transition-all duration-300 shadow-sm select-none hover:border-[#008BC9] hover:text-[#008BC9] hover:shadow-md active:scale-95 ${faded ? 'opacity-30 border-gray-200 text-gray-400' : 'border-gray-300 text-[#1D2432]'}`}
+                          className={`w-[32px] h-[32px] border rounded-[6px] flex items-center justify-center text-[10px] font-bold transition-all duration-300 shadow-sm select-none hover:border-[#008BC9] hover:text-[#008BC9] hover:shadow-md active:scale-95 ${faded ? 'opacity-30' : ''}`}
+                          style={{ 
+                            backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', 
+                            borderColor: isDarkMode ? (faded ? colors.neutral[6] : colors.neutral[5]) : (faded ? '#E5E7EB' : '#D1D5DB'),
+                            color: isDarkMode ? (faded ? colors.neutral[4] : colors.neutral[1]) : (faded ? '#9CA3AF' : '#1D2432')
+                          }}
                         >
                           {col.id}
                         </button>
@@ -76,7 +83,10 @@ export default function HeatmapMatrix({
             {/* CABEÇALHO DA COLUNA EXTREMA DIREITA (ENTIDADES) */}
             {sortBy !== 'Itens' && (
               <div className="flex flex-col ml-6 shrink-0 justify-end">
-                 <div className="w-[48px] h-[32px] bg-white border border-gray-300 rounded-[6px] flex items-center justify-center text-[9px] font-bold shadow-sm text-gray-500 uppercase tracking-wider text-center leading-[1.1] select-none">
+                 <div 
+                   className="w-[48px] h-[32px] border rounded-[6px] flex items-center justify-center text-[9px] font-bold shadow-sm uppercase tracking-wider text-center leading-[1.1] select-none"
+                   style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[5] : '#D1D5DB', color: isDarkMode ? colors.neutral[3] : '#6B7280' }}
+                 >
                    {calcMethod}<br/>{rowEntityLabel}
                  </div>
               </div>
@@ -88,7 +98,10 @@ export default function HeatmapMatrix({
               <React.Fragment key={tIdx}>
                 {isGroupRowsActive && (
                   <div className="flex items-center mt-6 mb-2 sticky left-0 z-40 w-max">
-                    <span className="bg-gray-100 text-gray-600 font-bold px-3 py-1 rounded-md text-[12px] uppercase tracking-wider shadow-sm border border-gray-200">{turmaName}</span>
+                    <span 
+                      className="font-bold px-3 py-1 rounded-md text-[12px] uppercase tracking-wider shadow-sm border"
+                      style={{ backgroundColor: isDarkMode ? colors.neutral[5] : '#F3F4F6', borderColor: isDarkMode ? colors.neutral[4] : '#E5E7EB', color: isDarkMode ? colors.neutral[1] : '#4B5563' }}
+                    >{turmaName}</span>
                   </div>
                 )}
                 <div className="flex flex-col gap-1.5">
@@ -100,7 +113,8 @@ export default function HeatmapMatrix({
                         ) : (
                           <button 
                             onClick={() => onOpenModal('student', student.name)}
-                            className="w-[220px] shrink-0 bg-white border border-gray-300 rounded-[6px] py-1.5 px-3 text-[11px] font-bold text-[#1D2432] shadow-sm truncate flex items-center gap-2 select-none group hover:border-[#008BC9] hover:text-[#008BC9] hover:shadow-md transition-all active:scale-[0.98]" 
+                            className="w-[220px] shrink-0 border rounded-[6px] py-1.5 px-3 text-[11px] font-bold shadow-sm truncate flex items-center gap-2 select-none group hover:border-[#008BC9] hover:text-[#008BC9] hover:shadow-md transition-all active:scale-[0.98]" 
+                            style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[5] : '#D1D5DB', color: isDarkMode ? colors.neutral[1] : '#1D2432' }}
                             title={student.name}
                           >
                             <span className="truncate flex-1 text-left">
@@ -109,7 +123,7 @@ export default function HeatmapMatrix({
                           </button>
                         )}
                         
-                        <div className={`flex ${isGroupColsActive ? 'gap-[80px]' : 'gap-3'} ml-3`}>
+                        <div className={`flex ${isGroupColsActive ? 'gap-[80px]' : 'gap-1'} ml-3`}>
                           {displayColGroups.map((group, gIdx) => {
                             return (
                               <div key={gIdx} className="flex gap-1">
@@ -144,8 +158,8 @@ export default function HeatmapMatrix({
                               
                               return (
                                 <div 
-                                  className="w-[48px] h-[32px] rounded-[6px] border border-black/10 flex items-center justify-center text-[11px] font-bold text-[#1D2432] shadow-sm transition-all duration-300 select-none"
-                                  style={{ backgroundColor: bg }}
+                                  className="w-[48px] h-[32px] rounded-[6px] border flex items-center justify-center text-[11px] font-bold shadow-sm transition-all duration-300 select-none"
+                                  style={{ backgroundColor: bg, borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', color: isDarkMode ? '#1D2432' : '#1D2432' }}
                                 >
                                   {val}{val !== '-' ? '%' : ''}
                                 </div>
@@ -166,11 +180,14 @@ export default function HeatmapMatrix({
           </div>
 
           {sortBy !== 'Alunos' && (
-            <div className="flex items-center mt-2 border-t border-gray-200 pt-3">
-              <div className="w-[220px] shrink-0 text-[11px] font-bold text-gray-500 text-right pr-4 uppercase select-none">
+            <div className="flex items-center mt-2 border-t pt-3" style={{ borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}>
+              <div 
+                className="w-[220px] shrink-0 text-[11px] font-bold text-right pr-4 uppercase select-none"
+                style={{ color: isDarkMode ? colors.neutral[3] : '#6B7280' }}
+              >
                 {calcMethod} Geral
               </div>
-              <div className={`flex ${isGroupColsActive ? 'gap-[80px]' : 'gap-3'} ml-3`}>
+              <div className={`flex ${isGroupColsActive ? 'gap-[80px]' : 'gap-1'} ml-3`}>
                 {displayColGroups.map((group, gIdx) => {
                   return (
                     <div key={gIdx} className="flex gap-1">
@@ -187,8 +204,8 @@ export default function HeatmapMatrix({
                         return (
                           <div 
                             key={cIdx} 
-                            className={`w-[32px] h-[28px] rounded-[4px] flex items-center justify-center text-[10px] font-bold text-[#1D2432] transition-all duration-300 border border-black/10 select-none ${faded ? 'opacity-30 border-transparent text-gray-400' : 'shadow-sm'}`}
-                            style={{ backgroundColor: bg }}
+                            className={`w-[32px] h-[28px] rounded-[4px] flex items-center justify-center text-[10px] font-bold transition-all duration-300 border select-none ${faded ? 'opacity-30 border-transparent text-gray-400' : 'shadow-sm'}`}
+                            style={{ backgroundColor: bg, borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', color: '#1D2432' }}
                           >
                             {totalVal}{totalVal !== '-' ? '%' : ''}
                           </div>
@@ -208,8 +225,8 @@ export default function HeatmapMatrix({
                   
                   return (
                     <div 
-                      className="w-[48px] h-[28px] rounded-[4px] border border-black/10 flex items-center justify-center text-[11px] font-bold text-[#1D2432] shadow-sm transition-all duration-300 select-none ring-2 ring-white"
-                      style={{ backgroundColor: bg }}
+                      className="w-[48px] h-[28px] rounded-[4px] border flex items-center justify-center text-[11px] font-bold shadow-sm transition-all duration-300 select-none ring-2"
+                      style={{ backgroundColor: bg, borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)', color: '#1D2432', ringColor: isDarkMode ? colors.neutral[6] : '#FFFFFF' }}
                       title={`${calcMethod} de toda a matriz`}
                     >
                       {val}{val !== '-' ? '%' : ''}

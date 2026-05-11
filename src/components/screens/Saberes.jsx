@@ -84,7 +84,7 @@ const Saberes = ({
 
           {showAlert && (
             <div className="flex justify-between items-start md:items-center px-[16px] md:px-[24px] py-[12px] md:py-[16px] rounded-[8px] mt-[16px] animate-fade-slide" style={{ backgroundColor: '#FEE2E2', border: '1px solid #FCA5A5' }}>
-              <div className="flex items-start md:items-center gap-[12px] text-[#DC2626] font-medium text-[13px] md:text-[8px]">
+              <div className="flex items-start md:items-center gap-[12px] text-[#DC2626] font-medium text-[14px] md:text-[8px]">
                 <AlertCircle size={20} className="shrink-0 mt-[2px] md:mt-0" />
                 <span>Não é possível excluir o item de código <strong>"REC"</strong>, pois existem vínculos a ele.</span>
               </div>

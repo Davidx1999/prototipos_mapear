@@ -43,8 +43,8 @@ const SplitButton = ({
 
   const sizeConfig = {
     xl: { height: 'h-[52px]', fontSize: 'text-[15px]', iconSize: 20, chevronWidth: 'w-[52px]' },
-    lg: { height: 'h-[48px]', fontSize: 'text-[13px]', iconSize: 20, chevronWidth: 'w-[48px]' },
-    md: { height: 'h-[44px]', fontSize: 'text-[13px]', iconSize: 20, chevronWidth: 'w-[44px]' } // Square chevron
+    lg: { height: 'h-[48px]', fontSize: 'text-[14px]', iconSize: 20, chevronWidth: 'w-[48px]' },
+    md: { height: 'h-[44px]', fontSize: 'text-[14px]', iconSize: 20, chevronWidth: 'w-[44px]' } // Square chevron
   }[size] || sizeConfig.md;
 
   const leftRounded = rounded;

@@ -1,8 +1,8 @@
 
 import React from 'react';
 
-const LogoFgv = ({ isFooter = false, stacked = false, onClick, isHighContrast, colors }) => {
-  const imgFilter = (isFooter || isHighContrast) ? 'brightness(0) invert(1)' : 'none';
+const LogoFgv = ({ isFooter = false, stacked = false, onClick, isHighContrast, isDarkMode, colors }) => {
+  const imgFilter = (isFooter || isHighContrast || isDarkMode) ? 'brightness(0) invert(1)' : 'none';
   const baseClass = onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : '';
 
   if (stacked) {

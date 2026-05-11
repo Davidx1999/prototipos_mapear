@@ -127,7 +127,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
         />
 
         <div className="mb-[24px] md:mb-[32px] animate-fade-slide">
-          <span className="text-[12px] md:text-[13px] font-bold text-primary-base tracking-widest uppercase">Aplicação em Andamento</span>
+          <span className="text-[12px] md:text-[14px] font-bold text-primary-base tracking-widest uppercase">Aplicação em Andamento</span>
           <h1 className="text-[24px] md:text-[32px] font-black text-neutral-6 mt-[4px] md:mt-[8px] leading-tight font-montserrat">Registro de Presença</h1>
         </div>
 
@@ -166,7 +166,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
                   <h2 className="text-[18px] md:text-[20px] font-bold text-neutral-6 flex items-center gap-[8px]">
                     <Users className="text-primary-base w-[22px] h-[22px]" /> Lista de Chamada
                   </h2>
-                  <p className="text-[13px] text-neutral-5 mt-[6px] leading-tight">Alocados para: <strong className="text-[#003A79]">{filters.avaliacaoNome}</strong></p>
+                  <p className="text-[14px] text-neutral-5 mt-[6px] leading-tight">Alocados para: <strong className="text-[#003A79]">{filters.avaliacaoNome}</strong></p>
                 </div>
 
                 <div className="flex items-center gap-[12px] w-full md:w-auto">
@@ -188,7 +188,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
                     <div key={aluno.id} className="flex flex-col lg:flex-row lg:items-center justify-between p-[16px] md:p-[20px] gap-[12px] md:gap-[16px] hover:bg-neutral-1 transition-colors">
                       <div className="flex items-center gap-[12px] md:gap-[16px]">
                         <div className="font-bold text-neutral-4 text-[12px] md:text-[14px] w-[24px] text-center">{String(index + 1).padStart(2, '0')}</div>
-                        <div className="w-[36px] h-[36px] md:w-[40px] md:h-[40px] rounded-full bg-neutral-2 flex items-center justify-center text-[13px] md:text-[14px] font-bold text-neutral-5 shrink-0">
+                        <div className="w-[36px] h-[36px] md:w-[40px] md:h-[40px] rounded-full bg-neutral-2 flex items-center justify-center text-[14px] md:text-[14px] font-bold text-neutral-5 shrink-0">
                           {aluno.nome.charAt(0)}
                         </div>
                         <div className="flex flex-col">
@@ -207,7 +207,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
                             checked={status === 'ausente'}
                             onChange={() => setPresence(aluno.id, 'ausente')}
                           />
-                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'ausente' ? 'bg-red-500 text-white border-red-500 shadow-md' : 'bg-neutral-0 border-neutral-3 text-neutral-5 hover:bg-neutral-1'}`}>
+                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[14px] md:text-[14px] transition-all ${status === 'ausente' ? 'bg-red-500 text-white border-red-500 shadow-md' : 'bg-neutral-0 border-neutral-3 text-neutral-5 hover:bg-neutral-1'}`}>
                             <XCircle size={18} /> Falta
                           </div>
                         </label>
@@ -220,7 +220,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
                             checked={status === 'presente'}
                             onChange={() => setPresence(aluno.id, 'presente')}
                           />
-                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[13px] md:text-[14px] transition-all ${status === 'presente' ? 'bg-green-500 text-white border-green-500 shadow-md' : 'bg-neutral-0 border-neutral-3 text-neutral-5 hover:bg-neutral-1'}`}>
+                          <div className={`flex items-center justify-center gap-[6px] h-[48px] md:h-[40px] rounded-[4px] border font-bold text-[14px] md:text-[14px] transition-all ${status === 'presente' ? 'bg-green-500 text-white border-green-500 shadow-md' : 'bg-neutral-0 border-neutral-3 text-neutral-5 hover:bg-neutral-1'}`}>
                             <CheckCircle2 size={18} /> Presente
                           </div>
                         </label>
@@ -240,12 +240,12 @@ export default function RegistroPresenca({ colors, navigateTo }) {
           {allMarked ? (
             <div className="flex items-center gap-[8px] text-green-700 bg-green-50 px-[16px] py-[10px] md:py-[8px] rounded-[8px] md:rounded-full border border-green-200 w-full md:w-auto justify-center">
               <CheckCircle size={18} />
-              <span className="text-[13px] md:text-[14px] font-bold">Todos os alunos verificados</span>
+              <span className="text-[14px] md:text-[14px] font-bold">Todos os alunos verificados</span>
             </div>
           ) : (
             <div className="flex items-center gap-[8px] text-amber-700 bg-amber-50 px-[16px] py-[10px] md:py-[8px] rounded-[8px] md:rounded-full border border-amber-200 w-full md:w-auto justify-center">
               <AlertTriangle size={18} />
-              <span className="text-[13px] md:text-[14px] font-bold truncate">Pendências na lista de chamada</span>
+              <span className="text-[14px] md:text-[14px] font-bold truncate">Pendências na lista de chamada</span>
             </div>
           )}
         </div>

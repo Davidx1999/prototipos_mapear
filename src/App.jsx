@@ -12,8 +12,8 @@ import Footer from './components/layout/Footer';
 // Screens
 import Login from './components/screens/Login';
 import Dashboard from './components/screens/Dashboard';
-import Saberes from './components/screens/Saberes';
-import Curriculos from './components/screens/Curriculos';
+import Saberes from './components/screens/Saberes.jsx';
+import Curriculos from './components/screens/Curriculos.jsx';
 import AvaliacoesLista from './components/screens/AvaliacoesLista';
 import Usuarios from './components/screens/Usuarios';
 import Acompanhamento from './components/screens/Acompanhamento';
@@ -23,9 +23,51 @@ import CarregamentoProvas from './components/screens/CarregamentoProvas';
 import GenericModulePage from './components/screens/GenericModulePage';
 import EmptyStatePage from './components/screens/EmptyStatePage';
 
+// UI
+import Toast from './components/ui/Toast';
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null, errorInfo: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("ErrorBoundary caught an error", error, errorInfo);
+    this.setState({ error, errorInfo });
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '20px', backgroundColor: '#FEE2E2', color: '#991B1B', margin: '20px', borderRadius: '8px' }}>
+          <h2>Algo deu errado na renderização desta tela.</h2>
+          <details style={{ whiteSpace: 'pre-wrap', marginTop: '10px' }}>
+            {this.state.error && this.state.error.toString()}
+            <br />
+            {this.state.errorInfo && this.state.errorInfo.componentStack}
+          </details>
+          <button 
+            onClick={() => { this.setState({ hasError: false }); window.location.hash = '#/dashboard'; }}
+            style={{ marginTop: '20px', padding: '8px 16px', backgroundColor: '#991B1B', color: 'white', borderRadius: '4px' }}
+          >
+            Voltar ao Dashboard
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function MapearApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('dashboard');
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeModuleName, setActiveModuleName] = useState('');
 
   const [activeMenu, setActiveMenu] = useState('curriculos');
@@ -56,6 +98,7 @@ export default function MapearApp() {
   const [showAlert, setShowAlert] = useState(false);
 
   const [favorites, setFavorites] = useState(['card-saberes', 'card-relatorios']);
+  const [toast, setToast] = useState(null);
 
   const toggleFavorite = (cardId) => {
     setFavorites(prev => {
@@ -68,25 +111,61 @@ export default function MapearApp() {
 
   const colors = isHighContrast ? highContrastColors : defaultColors;
 
+  // Carregamento de fontes (apenas uma vez)
   useEffect(() => {
     const link = document.createElement('link');
     link.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
     return () => {
-      try {
-        document.head.removeChild(link);
-      } catch (e) { }
+      try { document.head.removeChild(link); } catch (e) { }
     };
   }, []);
+
+  // Sincronização de Roteamento via Hash
+  useEffect(() => {
+    const handleHashSync = () => {
+      // Se não estiver logado, limpa o hash (atendendo ao pedido de reset no refresh)
+      if (!isLoggedIn) {
+        if (window.location.hash && window.location.hash !== '#/') {
+          window.location.hash = '#/';
+        }
+        setCurrentScreen('dashboard');
+        return;
+      }
+
+      const hash = window.location.hash.replace('#/', '').replace('#', '');
+      if (hash) {
+        setCurrentScreen(hash);
+      } else {
+        setCurrentScreen('dashboard');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashSync);
+    handleHashSync(); // Sync inicial
+    
+    return () => window.removeEventListener('hashchange', handleHashSync);
+  }, [isLoggedIn]);
 
   const handleLogin = (e) => {
     e.preventDefault();
     if (username === 'user.test' && password === 'User@123') {
       setLoginError('');
       setIsLoggedIn(true);
+      // Ao logar, se não houver hash, define como dashboard
+      if (!window.location.hash || window.location.hash === '#') {
+        window.location.hash = '#/dashboard';
+      }
     } else {
       setLoginError('Usuário ou senha incorretos.');
+      setToast({
+        type: 'warning',
+        title: 'Falha no Login',
+        message: 'Usuário ou senha incorretos. Verifique seus dados e tente novamente.',
+        actionLabel: 'Recuperar Senha',
+        onAction: () => console.log('Recuperar senha')
+      });
     }
   };
 
@@ -99,6 +178,9 @@ export default function MapearApp() {
   const navigateTo = (screen, moduleName = '') => {
     setActiveModuleName(moduleName);
     setCurrentScreen(screen);
+    // Atualiza a URL para refletir a página atual
+    window.location.hash = `#/${screen}`;
+    
     setShowAlert(false);
     setExpandedItem(null);
     closeAllDropdowns();
@@ -145,7 +227,7 @@ export default function MapearApp() {
   };
 
   const appStyle = {
-    backgroundColor: colors.neutral[0],
+    backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0],
     fontFamily: 'Montserrat, sans-serif',
     zoom: 1 + (fontScale - 3) * 0.1,
     ...cssVars
@@ -168,13 +250,14 @@ export default function MapearApp() {
           handleLogin={handleLogin}
           setIsLoggedIn={setIsLoggedIn}
           setCurrentScreen={setCurrentScreen}
+          isDarkMode={isDarkMode}
         />
       </div>
     );
   }
 
   return (
-    <div className={`flex flex-col transition-all duration-500 ${currentScreen === 'devolutivas' ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
+    <div className={`flex flex-col transition-all duration-500 ${isDarkMode ? 'dark-mode' : ''} ${currentScreen === 'devolutivas' ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
       <Header
         colors={colors}
         isHighContrast={isHighContrast}
@@ -191,6 +274,8 @@ export default function MapearApp() {
         setIsProfileOpen={setIsProfileOpen}
         fontScale={fontScale}
         setFontScale={setFontScale}
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}
         setIsLoggedIn={setIsLoggedIn}
         setUsername={setUsername}
         setPassword={setPassword}
@@ -201,7 +286,8 @@ export default function MapearApp() {
       />
 
       <div className={`flex-1 flex flex-col transition-all duration-300 ${currentScreen === 'devolutivas' ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
-        {currentScreen === 'dashboard' && (
+        <ErrorBoundary>
+          {currentScreen === 'dashboard' && (
           <Dashboard
             colors={colors}
             isHighContrast={isHighContrast}
@@ -214,6 +300,7 @@ export default function MapearApp() {
             navigateTo={navigateTo}
             favorites={favorites}
             toggleFavorite={toggleFavorite}
+            isDarkMode={isDarkMode}
           />
         )}
         {currentScreen === 'acompanhamento' && (
@@ -228,6 +315,7 @@ export default function MapearApp() {
           <Devolutivas
             colors={colors}
             navigateTo={navigateTo}
+            isDarkMode={isDarkMode}
           />
         )}
         {currentScreen === 'saberes' && (
@@ -296,13 +384,24 @@ export default function MapearApp() {
             title={activeModuleName}
           />
         )}
+        </ErrorBoundary>
       </div>
 
       {currentScreen === 'dashboard' && (
         <Footer
           colors={colors}
           isHighContrast={isHighContrast}
+          isDarkMode={isDarkMode}
         />
+      )}
+      {toast && (
+        <div className="fixed top-6 right-6 z-[9999] w-full max-w-[400px]">
+          <Toast 
+            {...toast} 
+            colors={colors} 
+            onClose={() => setToast(null)} 
+          />
+        </div>
       )}
     </div>
   );

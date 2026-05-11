@@ -51,14 +51,14 @@ const AccessibilityMenu = ({
             >
               VL
             </div>
-            <span className="text-[13px] md:text-[14px] font-semibold">Tradutor de VLibras</span>
+            <span className="text-[14px] md:text-[14px] font-semibold">Tradutor de VLibras</span>
           </div>
 
           <hr style={{ borderColor: isHighContrast ? colors.neutral[2] : 'rgba(255,255,255,0.2)' }} />
 
           {/* Tamanho da fonte */}
           <div className="flex flex-col gap-[12px] px-[8px]">
-            <span className="text-[12px] md:text-[13px] font-medium">Tamanho da fonte</span>
+            <span className="text-[12px] md:text-[14px] font-medium">Tamanho da fonte</span>
             <div className="flex items-center justify-between gap-[12px]">
               <button
                 onClick={() => setFontScale(Math.max(1, fontScale - 1))}
@@ -134,7 +134,7 @@ const AccessibilityMenu = ({
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             <Contrast size={20} />
-            <span className="text-[13px] md:text-[14px] font-semibold">
+            <span className="text-[14px] md:text-[14px] font-semibold">
               {isHighContrast ? 'Desativar Alto Contraste' : 'Ativar Alto Contraste'}
             </span>
           </div>

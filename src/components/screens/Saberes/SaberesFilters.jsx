@@ -74,7 +74,7 @@ const SaberesFilters = ({
         <div
           key={i}
           onClick={() => selectFilterOption(type, opt)}
-          className="px-[12px] py-[8px] text-[13px] hover:bg-neutral-1 cursor-pointer transition-colors flex items-center justify-between group"
+          className="px-[12px] py-[8px] text-[14px] hover:bg-neutral-1 cursor-pointer transition-colors flex items-center justify-between group"
           style={{ color: colors.neutral[7] }}
         >
           {opt}
@@ -214,13 +214,13 @@ const SaberesFilters = ({
         <div className="flex gap-[16px] w-full flex-col md:flex-row animate-fade-slide">
           <div className="flex-1 flex flex-col gap-[8px]">
             <label className="text-[12px] font-bold" style={{ color: colors.neutral[7] }}>Filtrar por Habilidade Origem</label>
-            <select className="w-full px-[16px] py-[10px] rounded-[8px] border text-[13px] outline-none bg-neutral-0 focus:border-primary-base transition-colors" style={{ borderColor: colors.neutral[3] }}>
+            <select className="w-full px-[16px] py-[10px] rounded-[8px] border text-[14px] outline-none bg-neutral-0 focus:border-primary-base transition-colors" style={{ borderColor: colors.neutral[3] }}>
               <option>Selecione</option>
             </select>
           </div>
           <div className="flex-1 flex flex-col gap-[8px]">
             <label className="text-[12px] font-bold" style={{ color: colors.neutral[7] }}>Filtrar por Habilidade Destino</label>
-            <select className="w-full px-[16px] py-[10px] rounded-[8px] border text-[13px] outline-none bg-neutral-0 focus:border-primary-base transition-colors" style={{ borderColor: colors.neutral[3] }}>
+            <select className="w-full px-[16px] py-[10px] rounded-[8px] border text-[14px] outline-none bg-neutral-0 focus:border-primary-base transition-colors" style={{ borderColor: colors.neutral[3] }}>
               <option>Selecione</option>
             </select>
           </div>
