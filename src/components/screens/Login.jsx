@@ -49,6 +49,7 @@ const Login = ({
               onChange={(e) => setUsername(e.target.value)}
               error={loginError ? true : false}
               iconSize={20}
+              height="40px"
             />
 
             <Input
@@ -60,6 +61,7 @@ const Login = ({
               onChange={(e) => setPassword(e.target.value)}
               error={loginError}
               iconSize={20}
+              height="40px"
               iconRight={
                 <div onClick={() => setShowPassword(!showPassword)} className="flex items-center justify-center">
                   {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}

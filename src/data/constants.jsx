@@ -61,7 +61,7 @@ export const sidebarMenus = [
     icon: <Edit3 size={24} />, // Note: Edit3 was in the original imports but might need checking
     cards: [
       { id: 'card-editor-av', title: 'Editor de Avaliações', route: 'avaliacoes', keywords: ['prova', 'teste', 'exame', 'criar', 'caderno'], desc: 'Estruture cadernos, blocos de itens e defina todos os parâmetros para aplicação de novas provas.', icon: <PenTool size={20} /> },
-      { id: 'card-banco', title: 'Banco de Tarefas', keywords: ['questões', 'itens', 'perguntas', 'banco', 'repositório'], desc: 'Acesse e colabore em tarefas educacionais mantendo uma curadoria técnica de excelência pedagógica.', icon: <Database size={20} /> },
+      { id: 'card-banco', title: 'Banco de Tarefas', keywords: ['questões', 'itens', 'perguntas', 'banco', 'repositório'], desc: 'Acesse e colabore em tarefas educacionais mantendo uma curadoria técnica pedagógica.', icon: <Database size={20} /> },
       { id: 'card-alocacao', title: 'Alocação de Avaliações', keywords: ['alunos', 'professores', 'turmas', 'enviar prova', 'distribuir'], desc: 'Distribua as provas criadas associando os testes a turmas ou grupos específicos de estudantes.', icon: <Users size={20} /> },
       { id: 'card-correcao', title: 'Correção de Avaliações', keywords: ['corrigir', 'ia', 'respostas', 'alunos', 'inteligência artificial'], desc: 'Utilize inteligência artificial para agrupar respostas e otimizar a velocidade de correção manual.', icon: <CheckSquare size={20} /> },
       { id: 'card-metricas', title: 'Métricas', keywords: ['desempenho', 'notas', 'alunos', 'escolas', 'indicadores'], desc: 'Acompanhe métricas gerais de correção e tenha a visão do status atual de estudantes e turmas.', icon: <TrendingUp size={20} /> },
@@ -93,7 +93,7 @@ export const sidebarMenus = [
   {
     id: 'administracao',
     label: 'Controle Institucional',
-    shortDesc: 'Usuários, escolas e turmas',
+    shortDesc: 'Registro de usuários e turmas e turmas',
     icon: <UserCog size={24} />,
     cards: [
       { id: 'card-usuarios', title: 'Usuários', route: 'usuarios', keywords: ['acesso', 'professores', 'diretores', 'senha', 'perfil', 'cargo'], desc: 'Adicione perfis e gerencie as permissões de acesso baseadas nos cargos das entidades escolares.', icon: <UserCog size={20} /> },

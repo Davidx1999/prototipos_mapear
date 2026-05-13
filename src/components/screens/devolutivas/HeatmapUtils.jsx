@@ -1,5 +1,6 @@
 import React from 'react';
 import { CircleCheck, CircleMinus, CircleX, RouteOff, File } from 'lucide-react';
+import { defaultColors } from '../../../data/constants';
 import {
   colGroupsMap,
   colGroups as realColGroups,
@@ -7,7 +8,13 @@ import {
   mockCascadeData as realCascadeData
 } from './DadosHeatmap';
 
-// --- CORES DO STATUS DO HEATMAP E VALORES PARA CÁLCULO ---
+// --- CORES DO STATUS DO HEATMAP ---
+// Forçando o uso dos hexadecimais específicos em todas as referências
+const POSITIVE_COLOR = '#8CD47E';
+const NEUTRAL_COLOR = '#F8D66D';
+const NEGATIVE_COLOR = '#FF6961';
+const INFO_COLOR = '#B3E6F5';
+
 export const getStatusColors = (theme = 'default') => {
   const base = {
     '2': { label: 'Suficiente', val: 2, icon: <CircleCheck size={20} className="text-green-900" /> },
@@ -42,17 +49,17 @@ export const getStatusColors = (theme = 'default') => {
     };
   }
 
-  // Default FGV
+  // Default FGV - Usando as cores específicas solicitadas pelo usuário
   return {
     ...base,
-    '2': { ...base['2'], bg: '#8CD47E', border: '#6FB963' },
-    'suficiente': { ...base['suficiente'], bg: '#8CD47E', border: '#6FB963' },
-    '1': { ...base['1'], bg: '#F8D66D', border: '#E5C055' },
-    'parcialmente': { ...base['parcialmente'], bg: '#F8D66D', border: '#E5C055' },
-    '0': { ...base['0'], bg: '#FF6961', border: '#E0554E' },
-    'insuficiente': { ...base['insuficiente'], bg: '#FF6961', border: '#E0554E' },
-    '-1': { ...base['-1'], bg: '#B3E6F5', border: '#92C9D9' },
-    'sem_conteudo': { ...base['sem_conteudo'], bg: '#B3E6F5', border: '#92C9D9' },
+    '2': { ...base['2'], bg: POSITIVE_COLOR, border: 'rgba(0,0,0,0.1)' },
+    'suficiente': { ...base['suficiente'], bg: POSITIVE_COLOR, border: 'rgba(0,0,0,0.1)' },
+    '1': { ...base['1'], bg: NEUTRAL_COLOR, border: 'rgba(0,0,0,0.1)' },
+    'parcialmente': { ...base['parcialmente'], bg: NEUTRAL_COLOR, border: 'rgba(0,0,0,0.1)' },
+    '0': { ...base['0'], bg: NEGATIVE_COLOR, border: 'rgba(0,0,0,0.1)' },
+    'insuficiente': { ...base['insuficiente'], bg: NEGATIVE_COLOR, border: 'rgba(0,0,0,0.1)' },
+    '-1': { ...base['-1'], bg: INFO_COLOR, border: 'rgba(0,0,0,0.1)' },
+    'sem_conteudo': { ...base['sem_conteudo'], bg: INFO_COLOR, border: 'rgba(0,0,0,0.1)' },
     'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
     'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
   };
@@ -68,31 +75,43 @@ export const getLegendItems = (statusColors) => {
   ];
 };
 
-export const statusColors = getStatusColors(); // Legacy export for static usage
+export const statusColors = getStatusColors();
+
+// Helper function to convert hex to rgb object for the gradient points
+const hexToRgb = (hex) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return { r, g, b };
+};
 
 // --- FUNÇÃO PARA DEGRADÊ DE CORES ---
 export const getColorFromGradient = (value, isActive = true, theme = 'default') => {
   if (!isActive) return '#E5E7EB';
   if (value === '-' || value === null || isNaN(value)) return '#FFFFFF';
 
+  const posRgb = hexToRgb(POSITIVE_COLOR);
+  const neuRgb = hexToRgb(NEUTRAL_COLOR);
+  const negRgb = hexToRgb(NEGATIVE_COLOR);
+  const infoRgb = hexToRgb(INFO_COLOR);
+
   const points = theme === 'colorblind' ? [
-    { val: -1, r: 200, g: 200, b: 200 }, // Cinza (Sem Conteúdo)
-    { val: 0, r: 213, g: 94, b: 0 },    // Vermilion (Insuficiente)
-    { val: 1, r: 240, g: 228, b: 66 },  // Yellow (Parcialmente)
-    { val: 2, r: 0, g: 114, b: 178 }   // Blue (Suficiente)
+    { val: -1, r: 200, g: 200, b: 200 },
+    { val: 0, r: 213, g: 94, b: 0 },
+    { val: 1, r: 240, g: 228, b: 66 },
+    { val: 2, r: 0, g: 114, b: 178 }
   ] : theme === 'monochromatic' ? [
-    { val: -1, r: 241, g: 245, b: 249 }, // Slate (#F1F5F9)
-    { val: 0, r: 219, g: 234, b: 254 },  // Light Blue (#DBEAFE)
-    { val: 1, r: 96, g: 165, b: 250 },   // Mid Blue (#60A5FA)
-    { val: 2, r: 29, g: 78, b: 216 }     // Deep Blue (#1D4ED8)
+    { val: -1, r: 241, g: 245, b: 249 },
+    { val: 0, r: 219, g: 234, b: 254 },
+    { val: 1, r: 96, g: 165, b: 250 },
+    { val: 2, r: 29, g: 78, b: 216 }
   ] : [
-    { val: -1, r: 179, g: 230, b: 245 },  // Azul (#B3E6F5)
-    { val: 0, r: 255, g: 105, b: 97 },   // Vermelho (#FF6961)
-    { val: 50, r: 248, g: 214, b: 109 },  // Amarelo (#F8D66D)
-    { val: 100, r: 140, g: 212, b: 126 }  // Verde (#8CD47E)
+    { val: -1, ...infoRgb },
+    { val: 0, ...negRgb },
+    { val: 50, ...neuRgb },
+    { val: 100, ...posRgb }
   ];
 
-  // Restringe os valores ao range mínimo e máximo
   const clampedValue = Math.max(points[0].val, Math.min(points[points.length - 1].val, value));
 
   let lower = points[0];
@@ -135,7 +154,6 @@ export const SKILL_DETAILS = {
   'Natureza e Tecnologia': { code: 'K4', description: 'Interação humana com o meio ambiente e ferramentas tecnológicas.' }
 };
 
-// --- CATEGORIAS E SUB-CATEGORIAS FICTÍCIAS ---
 export const GROUPING_NAMES = {
   'Tarefas': ['Interpretação Textual', 'Análise Crítica', 'Resolução de Problemas', 'Produção de Sentido'],
   'Domínios Cognitivos': ['Conhecimento Base', 'Aplicação Prática', 'Raciocínio Analítico', 'Pensamento Sistêmico'],
@@ -143,8 +161,6 @@ export const GROUPING_NAMES = {
   'Conhecimentos': ['Linguagens e Códigos', 'Ciências e Lógica', 'Sociedade e Cultura', 'Natureza e Tecnologia']
 };
 
-// --- GERAÇÃO DE MOCK DATA DINÂMICO PARA COLUNAS ---
-// Usa o mapa completo do DadosHeatmap.js — sem undefined!
 export const getDynamicColGroups = (criteria = 'Tarefas') => {
   return colGroupsMap[criteria] || colGroupsMap['Tarefas'];
 };
@@ -152,15 +168,12 @@ export const getDynamicColGroups = (criteria = 'Tarefas') => {
 export const colGroups = realColGroups;
 
 export const getMockRows = (level, parentName, totalCols = 40) => {
-  // Retorna os dados reais do DadosHeatmap.js adaptados para o número de colunas
   return realMockStudents.map(student => ({
     ...student,
-    // Garante que o array de dados tenha o tamanho correto e mapeie os valores para as cores
     data: student.data.slice(0, totalCols)
   }));
 };
 
-// --- MOCK DATA: CASCATA INVERTIDA ---
 export const devDB = realCascadeData;
 
 export const CASCADE_LEVELS = [
@@ -173,7 +186,6 @@ export const CASCADE_LEVELS = [
   { id: 'teste', title: 'Teste' }
 ];
 
-// Mock de participações para simulação do CascadeSelector
 export const participacaoAvaliacaoMock = {
   'Avaliação 1 Lorem ipsum': ['Turma A', 'Turma B', 'Turma C', 'Turma D'],
   'Avaliação 2 Diagnóstica': ['Turma A'],
@@ -194,5 +206,4 @@ export const testesMock = {
   'Avaliação SARESP': ['Matemática SP', 'Português SP']
 };
 
-// Mock das turmas que não realizaram a avaliação
 export const turmasPendentesMock = ['Turma B', 'Turma C', 'Turma 2', 'Turma Manhã'];

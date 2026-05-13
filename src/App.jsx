@@ -14,7 +14,7 @@ import Login from './components/screens/Login';
 import Dashboard from './components/screens/Dashboard';
 import Saberes from './components/screens/Saberes.jsx';
 import Curriculos from './components/screens/Curriculos.jsx';
-import AvaliacoesLista from './components/screens/AvaliacoesLista';
+import AvaliacoesEdicao from './components/screens/AvaliacoesEdicao';
 import Usuarios from './components/screens/Usuarios';
 import Acompanhamento from './components/screens/Acompanhamento';
 import Devolutivas from './components/screens/Devolutivas';
@@ -346,9 +346,10 @@ export default function MapearApp() {
           />
         )}
         {currentScreen === 'avaliacoes' && (
-          <AvaliacoesLista
+          <AvaliacoesEdicao
             colors={colors}
             navigateTo={navigateTo}
+            isDarkMode={isDarkMode}
           />
         )}
         {currentScreen === 'usuarios' && (

@@ -5,7 +5,7 @@ import React from 'react';
  * 
  * @param {string} label - The text inside the chip
  * @param {string} variant - 'light' | 'dark' | 'stroked' | 'none'
- * @param {string} status - 'primary' | 'success' | 'warning' | 'error' | 'neutral'
+ * @param {string} status - 'primary' | 'success' | 'warning' | 'error' | 'neutral' | 'graphPositive' | 'graphNeutral' | 'graphNegative'
  * @param {React.ReactNode} iconLeft - Optional icon at the beginning
  * @param {string} className - Additional CSS classes
  */
@@ -49,6 +49,25 @@ const Chips = ({
       dark: 'bg-[#1D2432] text-white border-transparent',
       stroked: 'bg-[#FFFFFF] text-[#1D2432] border-[#1D2432] hover:bg-[#DEE1E8] shadow-none',
       none: 'bg-transparent text-[#677080] border-transparent px-0'
+    },
+    // Graph palette for Heatmap - Cores específicas solicitadas: #8CD47E, #F8D66D, #FF6961
+    graphPositive: {
+      light: 'bg-[#8CD47E] text-neutral-7 border-transparent',
+      dark: 'bg-[#8CD47E] text-neutral-7 border-transparent',
+      stroked: 'bg-transparent text-[#8CD47E] border-[#8CD47E]',
+      none: 'bg-transparent text-[#8CD47E] border-transparent px-0'
+    },
+    graphNeutral: {
+      light: 'bg-[#F8D66D] text-neutral-7 border-transparent',
+      dark: 'bg-[#F8D66D] text-neutral-7 border-transparent',
+      stroked: 'bg-transparent text-[#F8D66D] border-[#F8D66D]',
+      none: 'bg-transparent text-[#F8D66D] border-transparent px-0'
+    },
+    graphNegative: {
+      light: 'bg-[#FF6961] text-neutral-7 border-transparent',
+      dark: 'bg-[#FF6961] text-neutral-7 border-transparent',
+      stroked: 'bg-transparent text-[#FF6961] border-[#FF6961]',
+      none: 'bg-transparent text-[#FF6961] border-transparent px-0'
     },
     lavender: {
       light: 'bg-[#D9BBFF] text-neutral-7 border-transparent',
@@ -118,7 +137,7 @@ const Chips = ({
     },
     yellowAlt: {
       light: 'bg-[#FFE596] text-neutral-7 border-transparent',
-      dark: '#FFD744 text-neutral-7 border-transparent', // Yellow is also bright, using neutral-7
+      dark: '#FFD744 text-neutral-7 border-transparent',
       stroked: 'bg-transparent text-[#FFD744] border-[#FFD744]',
       none: 'bg-transparent text-[#FFD744] border-transparent px-0'
     },

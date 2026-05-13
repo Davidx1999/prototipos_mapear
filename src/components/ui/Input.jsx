@@ -14,6 +14,7 @@ const Input = ({
   fullWidth = true,
   height = '40px',
   iconSize = 18,
+  style,
   ...props
 }) => {
   return (
@@ -32,7 +33,7 @@ const Input = ({
         )}
 
         <input
-          style={{ height }}
+          style={{ height, ...style }}
           className={`
             w-full bg-[var(--neutral-0)] border text-[14px] md:text-[14px] outline-none transition-all
             rounded-[4px] px-[16px]

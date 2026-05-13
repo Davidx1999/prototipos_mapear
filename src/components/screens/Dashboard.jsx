@@ -37,31 +37,61 @@ const Dashboard = ({
   return (
     <main className="flex-1 w-full max-w-[1440px] mx-auto px-[16px] md:px-[32px] py-[24px] md:py-[32px] transition-all duration-500" style={{ backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0] }}>
 
-      {/* ══ ESTILOS DAS ANIMAÇÕES (FIRULAS DE CONEXÃO) ════════════════════════════════ */}
+      {/* ══ ESTILOS DAS ANIMAÇÕES E RESPONSIVIDADE ════════════════════════════════ */}
       <style>{`
         /* O Segredo do UX: Aba Contínua que quebra a fronteira visual */
         .menu-tab-active {
           background-color: ${isDarkMode ? colors.neutral[7] : colors.neutral[0]};
-          border-top: 1px solid ${isDarkMode ? colors.neutral[5] : colors.neutral[2]};
-          border-bottom: 1px solid ${isDarkMode ? colors.neutral[5] : colors.neutral[2]};
-          border-left: 4px solid ${colors.primary.base};
-          /* O +1px faz com que o botão cubra exatamente a linha de separação! */
-          width: calc(100% + 1px);
           z-index: 20;
-          box-shadow: ${isDarkMode ? 'none' : '-4px 4px 10px rgba(0,0,0,0.02)'};
+          transition: all 0.3s ease;
         }
         .menu-tab-inactive {
           background-color: transparent;
-          border-top: 1px solid transparent;
-          border-bottom: 1px solid transparent;
-          border-left: 4px solid transparent;
-          width: 100%;
           z-index: 10;
           color: ${isDarkMode ? colors.neutral[2] : colors.neutral[6]};
+          transition: all 0.3s ease;
         }
         .menu-tab-inactive:hover {
           background-color: ${isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'};
           color: ${colors.primary.base};
+        }
+
+        /* Desktop (lg e acima) */
+        @media (min-width: 1024px) {
+          .menu-tab-active {
+            border-top: 1px solid ${isDarkMode ? colors.neutral[5] : colors.neutral[2]};
+            border-bottom: 1px solid ${isDarkMode ? colors.neutral[5] : colors.neutral[2]};
+            border-left: 4px solid ${colors.primary.base};
+            /* O +1px faz com que o botão cubra exatamente a linha de separação! */
+            width: calc(100% + 1px);
+            box-shadow: ${isDarkMode ? 'none' : '-4px 4px 10px rgba(0,0,0,0.02)'};
+          }
+          .menu-tab-inactive {
+            border-top: 1px solid transparent;
+            border-bottom: 1px solid transparent;
+            border-left: 4px solid transparent;
+            width: 100%;
+          }
+        }
+
+        /* Mobile (abaixo de lg) */
+        @media (max-width: 1023px) {
+          .menu-tab-active {
+            border-top: 1px solid ${isDarkMode ? colors.neutral[5] : colors.neutral[2]};
+            border-left: 1px solid ${isDarkMode ? colors.neutral[5] : colors.neutral[2]};
+            border-right: 1px solid ${isDarkMode ? colors.neutral[5] : colors.neutral[2]};
+            border-bottom: 4px solid ${colors.primary.base};
+            /* Faz com que a aba desça um pixel para cobrir a borda inferior do container */
+            transform: translateY(1px);
+            border-radius: 8px 8px 0 0;
+            box-shadow: ${isDarkMode ? 'none' : '0 -4px 10px rgba(0,0,0,0.02)'};
+          }
+          .menu-tab-inactive {
+            border-top: 1px solid transparent;
+            border-left: 1px solid transparent;
+            border-right: 1px solid transparent;
+            border-bottom: 4px solid transparent;
+          }
         }
 
         /* Animação: Cascata vindo da Esquerda (Simula nascer do menu) */
@@ -152,14 +182,14 @@ const Dashboard = ({
       </div>
 
       {/* ══ PAINEL MASTER-DETAIL COM CONEXÃO FÍSICA (ABA CONTÍNUA) ══════════════ */}
-      <div className="w-full flex flex-col md:flex-row overflow-hidden min-h-[500px] rounded-[8px] border shadow-sm" style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2] }}>
+      <div className="w-full flex flex-col lg:flex-row overflow-hidden min-h-[500px] rounded-[8px] border shadow-sm" style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2] }}>
 
         {/* LADO ESQUERDO: MASTER (MENU DE MÓDULOS) */}
         <div
-          className={`shrink-0 flex flex-col overflow-visible transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSearching ? 'h-0 opacity-0 lg:w-0 border-r-0' : 'w-full lg:w-[360px] opacity-100 border-r'} relative z-10`}
+          className={`shrink-0 flex flex-col overflow-visible transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isSearching ? 'h-0 opacity-0 lg:w-0 border-r-0 border-b-0' : 'w-full lg:w-[300px] xl:w-[360px] opacity-100 border-b lg:border-b-0 lg:border-r'} relative z-10`}
           style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2], backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[1] }}
         >
-          <div className="flex lg:flex-col overflow-x-auto lg:overflow-visible hide-scrollbar py-[24px]">
+          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible hide-scrollbar pt-[16px] lg:pt-[24px] pb-[0px] lg:pb-[24px] px-[8px] lg:px-[0px] items-end lg:items-stretch">
 
             <h3 className="hidden lg:block text-[20px] font-bold tracking-wider mb-[16px] px-[24px]" style={{ color: isDarkMode ? colors.neutral[0] : colors.neutral[7] }}>
               Ferramentas do Mapear
@@ -180,10 +210,10 @@ const Dashboard = ({
                   onClick={() => setActiveMenu(menu.id)}
                   onMouseEnter={() => setHoveredMenu(menu.id)}
                   onMouseLeave={() => setHoveredMenu(null)}
-                  className={`relative flex items-center gap-[12px] md:gap-[16px] px-[24px] py-[16px] text-left transition-colors overflow-visible group ${isActive ? 'menu-tab-active' : 'menu-tab-inactive'}`}
+                  className={`relative flex items-center gap-[12px] md:gap-[16px] px-[16px] lg:px-[24px] py-[12px] lg:py-[16px] text-left transition-colors overflow-visible group shrink-0 lg:shrink whitespace-nowrap lg:whitespace-normal ${isActive ? 'menu-tab-active' : 'menu-tab-inactive'}`}
                 >
-                  <div className={`w-[40px] h-[40px] shrink-0 flex items-center justify-center rounded-[4px] transition-colors ${isActive ? 'shadow-md' : ''}`} style={{ backgroundColor: iconBg, color: iconColor }}>
-                    {menu.icon}
+                  <div className={`w-[32px] h-[32px] lg:w-[40px] lg:h-[40px] shrink-0 flex items-center justify-center rounded-[4px] transition-colors ${isActive ? 'shadow-md' : ''}`} style={{ backgroundColor: iconBg, color: iconColor }}>
+                    {React.cloneElement(menu.icon, { size: 18, className: "lg:w-6 lg:h-6" })}
                   </div>
                   <div className="flex flex-col justify-center overflow-hidden flex-1">
                     <span className="font-semibold text-[14px] md:text-[16px] truncate transition-colors" style={{ color: labelColor }}>
