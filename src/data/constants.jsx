@@ -86,7 +86,7 @@ export const sidebarMenus = [
     shortDesc: 'Ambiente dedicado aos estudantes',
     icon: <GraduationCap size={24} />,
     cards: [
-      { id: 'card-realizacao', title: 'Realização de Testes', keywords: ['alunos', 'estudantes', 'fazer prova', 'responder', 'teste'], desc: 'Acesse o ambiente exclusivo de estudantes para a resolution segura de testes e simulados.', icon: <GraduationCap size={20} /> },
+      { id: 'card-realizacao', title: 'Realização de Testes', route: 'realizacao-testes', keywords: ['alunos', 'estudantes', 'fazer prova', 'responder', 'teste'], desc: 'Acesse o ambiente exclusivo de estudantes para a resolution segura de testes e simulados.', icon: <GraduationCap size={20} /> },
       { id: 'card-presenca', title: 'Registro de Presença', route: 'registro-presenca', keywords: ['chamada', 'faltas', 'presença', 'alunos', 'aplicação'], desc: 'Realize o registro de presença dos alunos para as avaliações alocadas em cada turma.', icon: <CheckSquare size={20} /> }
     ]
   },

@@ -22,6 +22,7 @@ import RegistroPresenca from './components/screens/RegistroPresenca';
 import CarregamentoProvas from './components/screens/CarregamentoProvas';
 import GenericModulePage from './components/screens/GenericModulePage';
 import EmptyStatePage from './components/screens/EmptyStatePage';
+import RealizacaoTestes from './components/screens/RealizacaoTestes';
 
 // UI
 import Toast from './components/ui/Toast';
@@ -369,6 +370,13 @@ export default function MapearApp() {
         {currentScreen === 'carregamento-provas' && (
           <CarregamentoProvas
             colors={colors}
+            navigateTo={navigateTo}
+          />
+        )}
+        {currentScreen === 'realizacao-testes' && (
+          <RealizacaoTestes
+            colors={colors}
+            isDarkMode={isDarkMode}
             navigateTo={navigateTo}
           />
         )}
