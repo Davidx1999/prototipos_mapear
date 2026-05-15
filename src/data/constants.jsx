@@ -86,8 +86,7 @@ export const sidebarMenus = [
     shortDesc: 'Ambiente dedicado aos estudantes',
     icon: <GraduationCap size={24} />,
     cards: [
-      { id: 'card-realizacao', title: 'Realização de Testes', route: 'realizacao-testes', keywords: ['alunos', 'estudantes', 'fazer prova', 'responder', 'teste'], desc: 'Acesse o ambiente exclusivo de estudantes para a resolution segura de testes e simulados.', icon: <GraduationCap size={20} /> },
-      { id: 'card-presenca', title: 'Registro de Presença', route: 'registro-presenca', keywords: ['chamada', 'faltas', 'presença', 'alunos', 'aplicação'], desc: 'Realize o registro de presença dos alunos para as avaliações alocadas em cada turma.', icon: <CheckSquare size={20} /> }
+      { id: 'card-realizacao', title: 'Realização de Testes', route: 'realizacao-testes', keywords: ['alunos', 'estudantes', 'fazer prova', 'responder', 'teste'], desc: 'Acesse o environment exclusivo de estudantes para a resolution segura de testes e simulados.', icon: <GraduationCap size={20} /> }
     ]
   },
   {
@@ -98,7 +97,8 @@ export const sidebarMenus = [
     cards: [
       { id: 'card-usuarios', title: 'Usuários', route: 'usuarios', keywords: ['acesso', 'professores', 'diretores', 'senha', 'perfil', 'cargo'], desc: 'Adicione perfis e gerencie as permissões de acesso baseadas nos cargos das entidades escolares.', icon: <UserCog size={20} /> },
       { id: 'card-escolas', title: 'Escolas', keywords: ['colégios', 'instituições', 'rede', 'município', 'dados'], desc: 'Atualize cadastros institucionais e administre as informações da rede de escolas ativas.', icon: <Building2 size={20} /> },
-      { id: 'card-turmas', title: 'Turmas', keywords: ['alunos', 'classes', 'estudantes', 'agrupamento', 'transferência'], desc: 'Organize o ensalamento, realize remanejamentos de alunos e vincule turmas às avaliações.', icon: <Users size={20} /> }
+      { id: 'card-turmas', title: 'Turmas', keywords: ['alunos', 'classes', 'estudantes', 'agrupamento', 'transferência'], desc: 'Organize o ensalamento, realize remanejamentos de alunos e vincule turmas às avaliações.', icon: <Users size={20} /> },
+      { id: 'card-presenca', title: 'Registro de Presença', route: 'registro-presenca', keywords: ['chamada', 'faltas', 'presença', 'alunos', 'aplicação'], desc: 'Realize o registro de presença dos alunos para as avaliações alocadas em cada turma.', icon: <CheckSquare size={20} /> }
     ]
   }
 ];

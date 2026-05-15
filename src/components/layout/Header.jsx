@@ -31,6 +31,19 @@ const Header = ({
   isDarkMode,
   setIsDarkMode
 }) => {
+  const [showLogoutModal, setShowLogoutModal] = React.useState(false);
+
+  const handleLogout = () => {
+    closeAllDropdowns();
+    setIsLoggedIn(false);
+    setUsername('');
+    setPassword('');
+    setSearchQuery('');
+    setFontScale(3);
+    setIsHighContrast(false);
+    setShowLogoutModal(false);
+  };
+
   return (
     <header className="sticky top-0 z-[1000] px-[16px] md:px-[24px] py-[10px] md:py-[16px] border-b flex justify-between items-center transition-colors duration-500" style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2], backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0] }}>
       {/* ══ ESQUERDA: MENU E LOGO ══════════════════════════════════════════ */}
@@ -152,7 +165,7 @@ const Header = ({
               <div className="border-t py-[6px]" style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2] }}>
                 <button
                   className="mx-[4px] w-[calc(100%-8px)] flex items-center gap-[12px] px-[16px] py-[10px] text-[14px] font-bold transition-colors rounded-[8px] hover:bg-red-50 text-red-600"
-                  onClick={() => { closeAllDropdowns(); setIsLoggedIn(false); setUsername(''); setPassword(''); setSearchQuery(''); setFontScale(3); setIsHighContrast(false); }}
+                  onClick={() => { setIsProfileOpen(false); setShowLogoutModal(true); }}
                 >
                   <LogOut size={18} /> Sair da conta
                 </button>
@@ -160,6 +173,46 @@ const Header = ({
             </div>
           )}
         </div>
+
+        {/* Modal de Confirmação de Logout */}
+        {showLogoutModal && (
+          <div className="fixed inset-0 z-[2000] flex items-center justify-center p-[16px]">
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowLogoutModal(false)}></div>
+            <div className="relative bg-white rounded-[16px] shadow-2xl w-full max-w-[400px] overflow-hidden animate-in zoom-in-95 duration-200" style={{ backgroundColor: isDarkMode ? colors.neutral[7] : colors.neutral[0], border: `1px solid ${isDarkMode ? colors.neutral[5] : colors.neutral[2]}` }}>
+              <div className="p-[24px] md:p-[32px] flex flex-col items-center text-center">
+                <div className="w-[64px] h-[64px] rounded-full bg-red-50 flex items-center justify-center mb-[20px]" style={{ backgroundColor: isDarkMode ? 'rgba(224, 1, 32, 0.1)' : 'rgba(224, 1, 32, 0.05)' }}>
+                  <LogOut size={32} className="text-red-600" />
+                </div>
+                <h3 className="text-[20px] font-bold mb-[12px]" style={{ color: isDarkMode ? colors.neutral[0] : colors.neutral[7] }}>Sair da conta</h3>
+                <p className="text-[14px] mb-[32px] leading-relaxed" style={{ color: isDarkMode ? colors.neutral[2] : colors.neutral[5] }}>
+                  Você tem certeza que deseja encerrar sua sessão? Suas alterações não salvas poderão ser perdidas.
+                </p>
+                <div className="flex flex-col w-full gap-[8px]">
+                  <Button
+                    variant="primary"
+                    size="md"
+                    justify="center"
+                    className="w-full !bg-red-600 hover:!bg-red-700 !border-red-600"
+                    onClick={handleLogout}
+                  >
+                    Sim, sair agora
+                  </Button>
+                  <Button
+                    variant="tertiary"
+                    appearance="ghost"
+                    size="md"
+                    justify="center"
+                    className="w-full"
+                    onClick={() => setShowLogoutModal(false)}
+                    style={{ color: isDarkMode ? colors.neutral[0] : colors.neutral[6] }}
+                  >
+                    Cancelar
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {(isA11yOpen || isProfileOpen) && isGripOpen && (
