@@ -317,6 +317,7 @@ export default function MapearApp() {
             colors={colors}
             navigateTo={navigateTo}
             isDarkMode={isDarkMode}
+            setToast={setToast}
           />
         )}
         {currentScreen === 'saberes' && (

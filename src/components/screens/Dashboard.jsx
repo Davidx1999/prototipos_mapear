@@ -161,13 +161,14 @@ const Dashboard = ({
       </div>
 
       {/* ══ SEARCH BAR ══════════════════════════════════════════════════════ */}
-      <div className="mt-[24px] md:mt-[32px] mb-[24px]">
+      <div className="mt-[24px] md:mt-[24px] mb-[24px]">
         <Input
           iconLeft={<Search />}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Pesquise pela plataforma (ex: alunos, notas, avaliações)..."
           className="focus:shadow-md"
+          height="48px"
           style={{
             backgroundColor: isDarkMode ? colors.neutral[7] : colors.neutral[0],
             borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2],

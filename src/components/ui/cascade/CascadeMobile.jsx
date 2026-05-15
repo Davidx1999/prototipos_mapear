@@ -204,32 +204,76 @@ const CascadeMobile = ({
                   <span className="text-[14px] font-bold" style={{ color: colors.primary?.dark || '#003A79' }}>Sincronizando...</span>
                 </div>
               ) : (
-                filtered.map((item, idx) => {
-                  const isLastLevel = mobileStep === levels.length - 1;
-                  const isTurmaLevel = mobileStep === 4;
-                  const value = typeof item === 'object' ? item.id : item;
-                  const isSelected = isLastLevel && multiSelectLeaf
-                    ? selectedLeafs.includes(value)
-                    : (isTurmaLevel
-                      ? (Array.isArray(selections[mobileStep]) && selections[mobileStep].includes(value))
-                      : (typeof item === 'object' ? (selections[mobileStep]?.id === value) : (selections[mobileStep] === value)));
+                (() => {
+                  const renderItem = (item, idx, customKeyPrefix = "") => {
+                    const isLastLevel = mobileStep === levels.length - 1;
+                    const isTurmaLevel = mobileStep === 4;
+                    const value = typeof item === 'object' ? item.id : item;
+                    const isSelected = isLastLevel && multiSelectLeaf
+                      ? selectedLeafs.includes(value)
+                      : (isTurmaLevel
+                        ? (Array.isArray(selections[mobileStep]) && selections[mobileStep].includes(value))
+                        : (typeof item === 'object' ? (selections[mobileStep]?.id === value) : (selections[mobileStep] === value)));
 
-                  return (
-                    <CascadeItem
-                      key={idx}
-                      item={item}
-                      levelIndex={mobileStep}
-                      isLastLevel={isLastLevel}
-                      isTurmaLevel={isTurmaLevel}
-                      isSelected={isSelected}
-                      multiSelectLeaf={multiSelectLeaf}
-                      onClick={onSelectItem}
-                      colors={colors}
-                      pendingLeafItems={pendingLeafItems}
-                      isMobile={true}
-                    />
-                  );
-                })
+                    return (
+                      <CascadeItem
+                        key={`${customKeyPrefix}${idx}`}
+                        item={item}
+                        levelIndex={mobileStep}
+                        isLastLevel={isLastLevel}
+                        isTurmaLevel={isTurmaLevel}
+                        isSelected={isSelected}
+                        multiSelectLeaf={multiSelectLeaf}
+                        onClick={onSelectItem}
+                        colors={colors}
+                        pendingLeafItems={pendingLeafItems}
+                        isMobile={true}
+                      />
+                    );
+                  };
+
+                  if (searchQuery) {
+                    const allSelectedItems = items.filter(item => {
+                      const isLastLevel = mobileStep === levels.length - 1;
+                      const isTurmaLevel = mobileStep === 4;
+                      const value = typeof item === 'object' ? item.id : item;
+                      return isLastLevel && multiSelectLeaf
+                        ? selectedLeafs.includes(value)
+                        : (isTurmaLevel
+                          ? (Array.isArray(selections[mobileStep]) && selections[mobileStep].includes(value))
+                          : (typeof item === 'object' ? (selections[mobileStep]?.id === value) : (selections[mobileStep] === value)));
+                    });
+
+                    const filteredIds = new Set(filtered.map(it => typeof it === 'object' ? it.id : it));
+                    const selectedNotInSearch = allSelectedItems.filter(it => !filteredIds.has(typeof it === 'object' ? it.id : it));
+
+                    return (
+                      <>
+                        {selectedNotInSearch.length > 0 && (
+                          <div className="flex flex-col">
+                            {selectedNotInSearch.map((item, idx) => renderItem(item, idx, "sel-"))}
+                          </div>
+                        )}
+
+                        <div className="px-[20px] mt-[8px] mb-[4px] shrink-0">
+                          <span className="text-[12px] font-normal tracking-wide text-neutral-400">Resultados Pesquisado</span>
+                        </div>
+
+                        {filtered.length > 0 ? (
+                          <div className="flex flex-col">
+                            {filtered.map((item, idx) => renderItem(item, idx, "res-"))}
+                          </div>
+                        ) : (
+                          <div className="px-[20px] py-[24px] text-[14px] text-neutral-400 font-medium italic text-center">
+                            Nenhum resultado encontrado para a pesquisa.
+                          </div>
+                        )}
+                      </>
+                    );
+                  }
+
+                  return filtered.map((item, idx) => renderItem(item, idx));
+                })()
               )}
             </div>
           )}

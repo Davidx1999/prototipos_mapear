@@ -19,7 +19,9 @@ const CascadeColumn = ({
   onSelectItem,
   onSelectLevel,
   onToggleAll,
-  pendingLeafItems
+  pendingLeafItems,
+  isSearchLevel,
+  searchQuery
 }) => {
   const isLastLevel = index === levels.length - 1;
   const isTurmaLevel = index === 4;
@@ -44,7 +46,7 @@ const CascadeColumn = ({
         {emptyMsg}
       </div>
     );
-  } else if (filteredItems.length === 0) {
+  } else if (filteredItems.length === 0 && !searchQuery) {
     innerContent = <div className="p-[16px] text-[14px] text-neutral-400 text-center font-medium">Nenhum resultado encontrado.</div>;
   } else if (isSyncing && index === syncingLevel) {
     innerContent = (
@@ -54,7 +56,7 @@ const CascadeColumn = ({
       </div>
     );
   } else {
-    innerContent = filteredItems.map((item, idx) => {
+    const renderItem = (item, idx, customKeyPrefix = "") => {
       const value = typeof item === 'object' ? item.id : item;
       const isSelected = isLastLevel && multiSelectLeaf
         ? selectedLeafs.includes(value)
@@ -64,7 +66,7 @@ const CascadeColumn = ({
 
       return (
         <CascadeItem
-          key={idx}
+          key={`${customKeyPrefix}${idx}`}
           item={item}
           levelIndex={index}
           isLastLevel={isLastLevel}
@@ -77,7 +79,50 @@ const CascadeColumn = ({
           isMobile={false}
         />
       );
-    });
+    };
+
+    if (isSearchLevel && searchQuery) {
+      // Get all selected items in this level
+      const allSelectedItems = rawItems.filter(item => {
+        const value = typeof item === 'object' ? item.id : item;
+        return isLastLevel && multiSelectLeaf
+          ? selectedLeafs.includes(value)
+          : (isTurmaLevel
+            ? (Array.isArray(selections[index]) && selections[index].includes(value))
+            : (typeof item === 'object' ? (selections[index]?.id === value) : (selections[index] === value)));
+      });
+
+      const filteredIds = new Set(filteredItems.map(it => typeof it === 'object' ? it.id : it));
+
+      // Selected items that are NOT in the search results
+      const selectedNotInSearch = allSelectedItems.filter(it => !filteredIds.has(typeof it === 'object' ? it.id : it));
+
+      innerContent = (
+        <>
+          {selectedNotInSearch.length > 0 && (
+            <div className="flex flex-col gap-[2px]">
+              {selectedNotInSearch.map((item, idx) => renderItem(item, idx, "sel-"))}
+            </div>
+          )}
+
+          <div className="px-[8px] mt-[16px] mb-[2px] shrink-0">
+            <span className="text-[12px] font-normal tracking-wide text-neutral-400">Resultados Pesquisado</span>
+          </div>
+
+          {filteredItems.length > 0 ? (
+            <div className="flex flex-col gap-[2px]">
+              {filteredItems.map((item, idx) => renderItem(item, idx, "res-"))}
+            </div>
+          ) : (
+            <div className="px-[8px] py-[8px] text-[13px] text-neutral-400 font-medium italic">
+              Nenhum resultado encontrado para a pesquisa.
+            </div>
+          )}
+        </>
+      );
+    } else {
+      innerContent = filteredItems.map((item, idx) => renderItem(item, idx));
+    }
   }
 
   const getSelectionCount = () => {

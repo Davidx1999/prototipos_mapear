@@ -90,6 +90,8 @@ const CascadeDesktop = ({
             onSelectLevel={onSelectLevel}
             onToggleAll={onToggleAll}
             pendingLeafItems={pendingLeafItems}
+            isSearchLevel={i === searchLevel}
+            searchQuery={searchQuery}
           />
         ))}
       </div>

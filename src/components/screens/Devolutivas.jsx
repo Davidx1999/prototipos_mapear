@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
-import { LayoutDashboard, Grid, BarChart2, ChevronRight, ChevronLeft, ChevronDown, X, Settings2, MousePointer2, ArrowLeft, Info, CircleX } from 'lucide-react';
+import { LayoutDashboard, Grid, BarChart2, ChevronRight, ChevronLeft, ChevronDown, X, Settings2, MousePointer2, ArrowLeft, Info, CircleX, Loader2, AlertCircle } from 'lucide-react';
 
 import HeatmapSidebar from './devolutivas/HeatmapSidebar';
 import HeatmapControls from './devolutivas/HeatmapControls';
@@ -64,7 +64,7 @@ const calculateResult = (values, method) => {
   }
 };
 
-export default function Devolutivas({ colors, navigateTo, isDarkMode }) {
+export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }) {
   // --- ESTADOS GERAIS E LAYOUT ---
   const [mainTab, setMainTab] = useState('heatmap');
   const [calcMethod, setCalcMethod] = useState('Média');
@@ -168,6 +168,9 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode }) {
     });
   };
 
+  const [isLoadingMatrix, setIsLoadingMatrix] = useState(false);
+  const [matrixError, setMatrixError] = useState(null);
+
   const handleContextChange = (path, leafItems) => {
     const validSelections = path.filter(s => s !== null && s !== undefined);
     if (validSelections.length > 0) {
@@ -180,7 +183,35 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode }) {
 
       setFocalTurma('Todas');
       setSelectedRows(new Set());
-      setIsLoaded(true);
+      
+      const lastSelected = validSelections[validSelections.length - 1];
+      const isCultura = typeof lastSelected === 'object' ? lastSelected.nome === 'Cultura, Linguagem e Cotidiano Brasileiro' : lastSelected === 'Cultura, Linguagem e Cotidiano Brasileiro';
+      const isFolclore = typeof lastSelected === 'object' ? lastSelected.nome === 'Folclore, Lendas Urbanas Brasileiras' : lastSelected === 'Folclore, Lendas Urbanas Brasileiras';
+
+      if (isCultura) {
+        setIsLoadingMatrix(true);
+        setMatrixError(null);
+        setIsLoaded(true);
+        setTimeout(() => {
+          setIsLoadingMatrix(false);
+        }, 2000); // 2 segundos de simulação
+      } else if (isFolclore) {
+        setIsLoadingMatrix(false);
+        const errorMsg = 'Ocorreu um erro ao carregar os dados desta avaliação. Por favor, tente novamente mais tarde.';
+        setMatrixError(errorMsg);
+        setIsLoaded(true);
+        if (setToast) {
+          setToast({
+            type: 'caution',
+            title: 'Erro de Carregamento',
+            message: errorMsg
+          });
+        }
+      } else {
+        setIsLoadingMatrix(false);
+        setMatrixError(null);
+        setIsLoaded(true);
+      }
     } else {
       // Retorna ao Empty State
       setNavLevel(-1);
@@ -189,6 +220,8 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode }) {
       setFocalTurma('Todas');
       setSelectedRows(new Set());
       setIsLoaded(false);
+      setIsLoadingMatrix(false);
+      setMatrixError(null);
     }
   };
 
@@ -607,6 +640,47 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode }) {
               colors={colors}
               isDarkMode={isDarkMode}
             />
+          ) : isLoadingMatrix ? (
+            <div className="flex-1 flex flex-col items-center justify-center gap-4 relative overflow-hidden">
+              {/* Background Grid */}
+              <div
+                className="absolute inset-0 z-0 pointer-events-none"
+                style={{
+                  backgroundImage: `linear-gradient(${isDarkMode ? colors?.neutral[5] : colors?.neutral[2]} 1px, transparent 1px), linear-gradient(90deg, ${isDarkMode ? colors?.neutral[5] : colors?.neutral[2]} 1px, transparent 1px)`,
+                  backgroundSize: '40px 40px',
+                  backgroundPosition: 'center center',
+                  opacity: isDarkMode ? 0.2 : 0.40
+                }}
+              />
+              <div className="relative z-10 flex flex-col items-center justify-center gap-4">
+                <Loader2 size={48} className="animate-spin" style={{ color: colors?.primary?.base || '#008BC9' }} />
+                <div className="text-lg font-semibold" style={{ color: isDarkMode ? colors?.neutral[2] : colors?.neutral[6] }}>
+                  Carregando matriz...
+                </div>
+              </div>
+            </div>
+          ) : matrixError ? (
+            <div className="flex-1 flex flex-col items-center justify-center gap-4 p-8 text-center relative overflow-hidden">
+              {/* Background Grid */}
+              <div
+                className="absolute inset-0 z-0 pointer-events-none"
+                style={{
+                  backgroundImage: `linear-gradient(${isDarkMode ? colors?.neutral[5] : colors?.neutral[2]} 1px, transparent 1px), linear-gradient(90deg, ${isDarkMode ? colors?.neutral[5] : colors?.neutral[2]} 1px, transparent 1px)`,
+                  backgroundSize: '40px 40px',
+                  backgroundPosition: 'center center',
+                  opacity: isDarkMode ? 0.2 : 0.40
+                }}
+              />
+              <div className="relative z-10 flex flex-col items-center justify-center gap-4">
+                <AlertCircle size={64} style={{ color: '#ef4444' }} />
+                <div className="text-xl font-bold" style={{ color: isDarkMode ? colors?.neutral[2] : colors?.neutral[7] }}>
+                  Erro no carregamento
+                </div>
+                <div className="text-base max-w-md" style={{ color: isDarkMode ? colors?.neutral[4] : colors?.neutral[5] }}>
+                  {matrixError}
+                </div>
+              </div>
+            </div>
           ) : mainTab === 'heatmap' ? (
             <HeatmapMatrix
               containerRef={containerRef}
