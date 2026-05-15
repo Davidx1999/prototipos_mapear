@@ -143,7 +143,7 @@ export default function HeatmapSidebar({
       {isContextExpanded && (
         <>
           {/* Seleção de Contexto - Movido para fora do scroll para evitar clipping */}
-          <div id="sidebar-context-section" className="p-4 border-b shrink-0" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1], backgroundColor: isDarkMode ? colors.neutral[6] : 'rgba(249, 250, 251, 0.5)' }}>
+          <div id="sidebar-context-section" className="p-4 border-b shrink-0" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1], backgroundColor: isDarkMode ? colors.neutral[7] : colors.neutral[0] }}>
             <div className="flex flex-col gap-1">
               <span className="text-[14px] font-bold tracking-wider" style={{ color: isDarkMode ? colors.neutral[3] : colors.neutral[7] }}>Seleção de Contexto</span>
               <CascadeSelector

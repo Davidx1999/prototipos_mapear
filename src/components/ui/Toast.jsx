@@ -27,9 +27,10 @@ const Toast = ({
   colors 
 }) => {
   const [progress, setProgress] = useState(100);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    if (duration > 0) {
+    if (duration > 0 && !isPaused) {
       const timer = setInterval(() => {
         setProgress((prev) => {
           if (prev <= 0) {
@@ -42,7 +43,7 @@ const Toast = ({
       }, 100);
       return () => clearInterval(timer);
     }
-  }, [duration, onClose]);
+  }, [duration, onClose, isPaused]);
 
   const typeConfig = {
     success: {
@@ -64,13 +65,16 @@ const Toast = ({
   };
 
   const config = typeConfig[type] || typeConfig.info;
+  const isDarkCaution = type === 'caution';
 
   return (
     <div 
       className="relative flex flex-col rounded-lg overflow-hidden border shadow-lg animate-in slide-in-from-top-4 duration-300"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
       style={{ 
-        backgroundColor: config.semantic.extraLight, // Using extraLight for background as it's more standard for toasts, or light if requested
-        borderColor: config.semantic.base,
+        backgroundColor: isDarkCaution ? colors.neutral[6] : config.semantic.extraLight,
+        borderColor: isDarkCaution ? colors.neutral[5] : config.semantic.base,
         borderWidth: '1px'
       }}
     >
@@ -89,7 +93,7 @@ const Toast = ({
         </div>
 
         {/* Text Content */}
-        <div className="flex flex-col gap-0.5 ml-4 flex-1 min-w-0" style={{ color: colors.neutral[6] }}>
+        <div className="flex flex-col gap-0.5 ml-4 flex-1 min-w-0" style={{ color: isDarkCaution ? colors.neutral[0] : colors.neutral[6] }}>
           <h4 className="text-[14px] font-bold truncate leading-tight">{title}</h4>
           <p className="text-[12px] leading-relaxed opacity-90">{message}</p>
         </div>
@@ -117,6 +121,7 @@ const Toast = ({
             iconOnly 
             iconLeft={<X size={18} />}
             onClick={onClose}
+            className={isDarkCaution ? "text-white hover:bg-white/10" : ""}
           />
         </div>
       </div>

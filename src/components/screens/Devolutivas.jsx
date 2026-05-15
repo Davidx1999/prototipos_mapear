@@ -183,7 +183,7 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
 
       setFocalTurma('Todas');
       setSelectedRows(new Set());
-      
+
       const lastSelected = validSelections[validSelections.length - 1];
       const isCultura = typeof lastSelected === 'object' ? lastSelected.nome === 'Cultura, Linguagem e Cotidiano Brasileiro' : lastSelected === 'Cultura, Linguagem e Cotidiano Brasileiro';
       const isFolclore = typeof lastSelected === 'object' ? lastSelected.nome === 'Folclore, Lendas Urbanas Brasileiras' : lastSelected === 'Folclore, Lendas Urbanas Brasileiras';
@@ -672,7 +672,11 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
                 }}
               />
               <div className="relative z-10 flex flex-col items-center justify-center gap-4">
-                <AlertCircle size={64} style={{ color: '#ef4444' }} />
+                <img
+                  src={`${import.meta.env.BASE_URL}assets/Figure/colored/somethingWentWrong.png`}
+                  alt="Erro no carregamento"
+                  className="w-64 h-auto"
+                />
                 <div className="text-xl font-bold" style={{ color: isDarkMode ? colors?.neutral[2] : colors?.neutral[7] }}>
                   Erro no carregamento
                 </div>

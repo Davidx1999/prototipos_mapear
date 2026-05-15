@@ -37,7 +37,14 @@ const CascadeDesktop = ({
             <select
               className="w-full h-[42px] px-[12px] text-[14px] font-bold text-neutral-700 outline-none appearance-none cursor-pointer hover:bg-neutral-50 disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed rounded-[4px] border border-neutral-300 focus:border-2 focus:border-primary-base focus:ring-2 focus:ring-[var(--primary-light)] transition-all"
               value={searchLevel}
-              onChange={(e) => setSearchLevel(parseInt(e.target.value))}
+              onChange={(e) => {
+                const val = parseInt(e.target.value);
+                setSearchLevel(val);
+                if (columnsRef.current) {
+                  const colWidth = window.innerWidth < 768 ? 240 : (window.innerWidth < 1024 ? 280 : 300);
+                  columnsRef.current.scrollTo({ left: val * colWidth, behavior: 'smooth' });
+                }
+              }}
               disabled={selections.length === 0}
             >
               {levels.map((lvl, idx) => (
