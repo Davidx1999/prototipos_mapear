@@ -466,7 +466,7 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
       className="flex flex-col overflow-hidden transition-colors duration-300"
       style={{
         height: `calc(100vh - ${GLOBAL_HEADER_H}px)`,
-        backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[1]
+        backgroundColor: isDarkMode ? colors.neutral[7] : colors.neutral[1]
       }}
     >
       {/* ── HEADER INTERNO (tabs + breadcrumb + skills btn) ── */}

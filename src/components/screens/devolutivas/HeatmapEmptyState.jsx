@@ -5,7 +5,7 @@ export default function HeatmapEmptyState({ isContextExpanded, setIsContextExpan
   return (
     <div 
       className="flex-1 h-full flex flex-col items-center justify-center p-8 text-center relative overflow-hidden"
-      style={{ backgroundColor: isDarkMode ? colors.neutral[6] : 'rgba(243, 244, 246, 0.5)' }}
+      style={{ backgroundColor: isDarkMode ? colors.neutral[7] : 'rgba(243, 244, 246, 0.5)' }}
     >
       {/* Background Grid */}
       <div
