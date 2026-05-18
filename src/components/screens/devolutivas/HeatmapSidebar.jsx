@@ -171,16 +171,16 @@ export default function HeatmapSidebar({
       `}
       style={{
         overflow: 'visible',
-        backgroundColor: isDarkMode ? `${colors.neutral[7]}F2` : 'rgba(255, 255, 255, 0.95)',
-        borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[2]
+        backgroundColor: isDarkMode ? `${colors.neutral[6]}F2` : 'rgba(255, 255, 255, 0.95)',
+        borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : colors.neutral[2]
       }}
     >
       {/* Header */}
       <div
         className={`py-4 px-4 flex justify-between items-center z-20 shrink-0 ${isContextExpanded ? 'border-b rounded-t-[8px]' : 'rounded-[8px]'}`}
         style={{
-          backgroundColor: isDarkMode ? colors.neutral[7] : colors.neutral[0],
-          borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1]
+          backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0],
+          borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : colors.neutral[1]
         }}
       >
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => setIsContextExpanded(!isContextExpanded)}>
@@ -244,7 +244,7 @@ export default function HeatmapSidebar({
       {isContextExpanded && (
         <>
           {/* Seleção de Contexto */}
-          <div id="sidebar-context-section" className="pt-2 px-4 pb-2 border-b shrink-0" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1], backgroundColor: isDarkMode ? colors.neutral[7] : colors.neutral[0] }}>
+          <div id="sidebar-context-section" className="pt-2 px-4 pb-2 border-b shrink-0" style={{ borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : colors.neutral[1], backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0] }}>
             <div className="flex flex-col gap-1">
               <CascadeSelector
                 key={cascadeKey}
@@ -269,7 +269,7 @@ export default function HeatmapSidebar({
           >
 
             {/* Cálculo das Interseções */}
-            <div className="p-4 border-b" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1] }}>
+            <div className="p-4 border-b" style={{ borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : colors.neutral[1] }}>
               <div className="flex justify-between items-center mb-1">
                 <h3 className="font-bold text-[14px]" style={{ color: isDarkMode ? colors.neutral[0] : '#1D2432' }}>Cálculo das Interseções</h3>
                 <RichTooltip
@@ -319,7 +319,7 @@ export default function HeatmapSidebar({
             </div>
 
             {/* Ajustes de Exibição (Novo Padrão de Ordenação) */}
-            <div className="p-4 border-b" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1] }}>
+            <div className="p-4 border-b" style={{ borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : colors.neutral[1] }}>
               <div className="flex justify-between items-center mb-3">
                 <h3 className="font-bold text-[14px]" style={{ color: isDarkMode ? colors.neutral[0] : '#1D2432' }}>Ajustes de Exibição</h3>
                 <RichTooltip
@@ -412,7 +412,7 @@ export default function HeatmapSidebar({
                 </div>
 
                 {/* Ocultar Sem Participação */}
-                <div className="flex items-center justify-between mt-2 pt-2 border-t -mx-4 px-4" style={{ borderColor: isDarkMode ? colors.neutral[6] : colors.neutral[1] }}>
+                <div className="flex items-center justify-between mt-2 pt-2 border-t -mx-4 px-4" style={{ borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : colors.neutral[1] }}>
                   <span className="text-[14px] font-bold" style={{ color: isDarkMode ? (!isTestSelected ? colors.neutral[5] : colors.neutral[1]) : (!isTestSelected ? colors.neutral[4] : colors.neutral[7]) }}>Ocultar Sem Participação</span>
                   <button
                     disabled={!isTestSelected}
