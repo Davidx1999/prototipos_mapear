@@ -38,7 +38,7 @@ export default function HeatmapModals({ modalType, modalData, setModalType, stat
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 rounded-xl border" style={{ backgroundColor: isDarkMode ? colors.neutral[7] : '#F9FAFB', borderColor: isDarkMode ? colors.neutral[5] : '#F3F4F6' }}>
               <span className="text-[11px] font-bold uppercase block mb-1" style={{ color: isDarkMode ? colors.neutral[3] : '#6B7280' }}>Status Geral</span>
-              <div className="flex items-center gap-2 font-bold" style={{ color: isDarkMode ? '#8CD47E' : '#16A34A' }}>
+              <div className="flex items-center gap-2 font-bold" style={{ color: isDarkMode ? '#94CFEF' : '#004488' }}>
                 <CircleCheck size={18} />
                 <span>Suficiente</span>
               </div>

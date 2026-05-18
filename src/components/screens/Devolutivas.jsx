@@ -540,7 +540,7 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
 
         {/* Sidebar */}
         {mainTab === 'heatmap' && (
-          <div id="sidebar-container">
+          <div id="sidebar-container" className="absolute inset-0 pointer-events-none z-[45]">
             <HeatmapSidebar
               isContextExpanded={isContextExpanded}
               setIsContextExpanded={setIsContextExpanded}
@@ -711,7 +711,7 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
               statusColors={currentStatusColors}
               colorTheme={colorTheme}
               isColorsActive={isColorsActive}
-              getGradientColor={getColorFromGradient}
+              getGradientColor={(val) => getColorFromGradient(val, true, colorTheme)}
               handleCellMouseEnter={handleCellMouseEnter}
               handleCellMouseLeave={handleCellMouseLeave}
               activeSkill={activeSkill}
@@ -749,12 +749,13 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
               statusColors={currentStatusColors}
               initialSelection={selectionForDetails}
               isDarkMode={isDarkMode}
+              colorTheme={colorTheme}
             />
           )}
 
         </div>
 
-        <HeatmapTooltip tooltipData={tooltipData} statusColors={currentStatusColors} />
+        <HeatmapTooltip tooltipData={tooltipData} statusColors={currentStatusColors} colorTheme={colorTheme} />
         <HeatmapModals modalType={modalData?.type} modalData={modalData} setModalType={setModalData} statusColors={currentStatusColors} isDarkMode={isDarkMode} colors={colors} />
         <SkillTooltip skillTooltip={skillTooltip} />
 

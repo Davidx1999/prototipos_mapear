@@ -2,8 +2,23 @@ import React from 'react';
 import { Users } from 'lucide-react';
 import Chips from '../../ui/Chips';
 
-export default function HeatmapTooltip({ tooltipData, statusColors }) {
+export default function HeatmapTooltip({ tooltipData, statusColors, colorTheme = 'default' }) {
   if (!tooltipData) return null;
+
+  const chipBg = statusColors[tooltipData.statusKey]?.bg;
+  const isMonochromatic = colorTheme === 'monochromatic';
+  
+  let textColor = '#0F1113';
+  if (chipBg === '#FFFFFF') {
+    textColor = '#0F1113';
+  } else if (isMonochromatic) {
+    const statusKey = tooltipData.statusKey;
+    const isSuficienteOrParcialmente = statusKey === 'suficiente' || statusKey === 'parcialmente' || statusKey === '2' || statusKey === '1';
+    textColor = isSuficienteOrParcialmente ? '#0F1113' : '#FFFFFF';
+  } else {
+    const isDarkBg = chipBg === '#004488' || chipBg === '#BB5566' || chipBg === '#F45F74' || chipBg === '#E35759' || chipBg === '#0B81A2' || chipBg === '#36B802';
+    textColor = isDarkBg ? '#FFFFFF' : '#0F1113';
+  }
 
   return (
     <div
@@ -26,14 +41,15 @@ export default function HeatmapTooltip({ tooltipData, statusColors }) {
       <div className="w-full flex justify-center mt-1">
         <Chips
           label={statusColors[tooltipData.statusKey]?.label}
-          status={
-            tooltipData.statusKey === 'suficiente' || tooltipData.statusKey === '2' ? 'success' :
-              tooltipData.statusKey === 'parcialmente' || tooltipData.statusKey === '1' ? 'warning' :
-                tooltipData.statusKey === 'insuficiente' || tooltipData.statusKey === '0' ? 'error' : 'neutral'
-          }
+          status="neutral"
           variant="light"
-          iconLeft={statusColors[tooltipData.statusKey]?.icon}
-          className="w-full h-8"
+          iconLeft={statusColors[tooltipData.statusKey]?.icon ? React.cloneElement(statusColors[tooltipData.statusKey].icon, { className: '', style: { color: textColor } }) : null}
+          className="w-full h-8 font-semibold"
+          style={{
+            backgroundColor: chipBg,
+            borderColor: statusColors[tooltipData.statusKey]?.border || 'rgba(0,0,0,0.1)',
+            color: textColor
+          }}
         />
       </div>
 

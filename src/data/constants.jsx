@@ -24,9 +24,9 @@ export const defaultColors = {
     yellowAlt: { dark: "#C2A32E", base: "#FFD744", light: "#FFE596" }
   },
   graph: {
-    positive: "#8CD47E",
-    neutral: "#F8D66D",
-    negative: "#FF6961"
+    positive: "#004488",
+    neutral: "#DDAA33",
+    negative: "#BB5566"
   }
 };
 

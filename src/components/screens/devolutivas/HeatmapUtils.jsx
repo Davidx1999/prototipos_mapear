@@ -8,23 +8,34 @@ import {
   mockCascadeData as realCascadeData
 } from './DadosHeatmap';
 
-// --- CORES DO STATUS DO HEATMAP ---
-// Forçando o uso dos hexadecimais específicos em todas as referências
-const POSITIVE_COLOR = '#8CD47E';
-const NEUTRAL_COLOR = '#F8D66D';
-const NEGATIVE_COLOR = '#FF6961';
-const INFO_COLOR = '#B3E6F5';
-
 export const getStatusColors = (theme = 'default') => {
+  // Cores dinâmicas por tema para os ícones e fundos
+  const themeColors = theme === 'colorblind' ? {
+    positive: '#004488',
+    neutral: '#DDAA33',
+    negative: '#BB5566',
+    info: '#A0A0A0'
+  } : theme === 'monochromatic' ? {
+    positive: '#D4D4D4',
+    neutral: '#a1a1a1',
+    negative: '#595959',
+    info: '#262626'
+  } : {
+    positive: '#36B802',
+    neutral: '#F0C571',
+    negative: '#E35759',
+    info: '#0B81A2'
+  };
+
   const base = {
-    '2': { label: 'Suficiente', val: 2, icon: <CircleCheck size={20} className="text-green-900" /> },
-    'suficiente': { label: 'Suficiente', val: 2, icon: <CircleCheck size={20} className="text-green-900" /> },
-    '1': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={20} className="text-yellow-900" /> },
-    'parcialmente': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={20} className="text-yellow-900" /> },
-    '0': { label: 'Insuficiente', val: 0, icon: <CircleX size={20} className="text-red-900" /> },
-    'insuficiente': { label: 'Insuficiente', val: 0, icon: <CircleX size={20} className="text-red-900" /> },
-    '-1': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={20} className="text-cyan-800" /> },
-    'sem_conteudo': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={20} className="text-cyan-800" /> },
+    '2': { label: 'Suficiente', val: 2, icon: <CircleCheck size={20} style={{ color: themeColors.positive }} /> },
+    'suficiente': { label: 'Suficiente', val: 2, icon: <CircleCheck size={20} style={{ color: themeColors.positive }} /> },
+    '1': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={20} style={{ color: themeColors.neutral }} /> },
+    'parcialmente': { label: 'Parcialmente Suficiente', val: 1, icon: <CircleMinus size={20} style={{ color: themeColors.neutral }} /> },
+    '0': { label: 'Insuficiente', val: 0, icon: <CircleX size={20} style={{ color: themeColors.negative }} /> },
+    'insuficiente': { label: 'Insuficiente', val: 0, icon: <CircleX size={20} style={{ color: themeColors.negative }} /> },
+    '-1': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={20} style={{ color: themeColors.info }} /> },
+    'sem_conteudo': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={20} style={{ color: themeColors.info }} /> },
     'null': { label: 'Em Branco', val: null, icon: <File size={20} className="text-gray-500" /> },
     'branco': { label: 'Em Branco', val: null, icon: <File size={20} className="text-gray-500" /> }
   };
@@ -32,34 +43,44 @@ export const getStatusColors = (theme = 'default') => {
   if (theme === 'colorblind') {
     return {
       ...base,
-      '2': { ...base['2'], bg: '#0072B2', border: '#005a8d' },
-      '1': { ...base['1'], bg: '#F0E442', border: '#d9ce3b' },
-      '0': { ...base['0'], bg: '#D55E00', border: '#b34d00' },
-      '-1': { ...base['-1'], bg: '#D1D1D1', border: '#B8B8B8' },
-      'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' }
+      '2': { ...base['2'], bg: '#004488', border: 'rgba(0,0,0,0.1)' },
+      'suficiente': { ...base['suficiente'], bg: '#004488', border: 'rgba(0,0,0,0.1)' },
+      '1': { ...base['1'], bg: '#DDAA33', border: 'rgba(0,0,0,0.1)' },
+      'parcialmente': { ...base['parcialmente'], bg: '#DDAA33', border: 'rgba(0,0,0,0.1)' },
+      '0': { ...base['0'], bg: '#BB5566', border: 'rgba(0,0,0,0.1)' },
+      'insuficiente': { ...base['insuficiente'], bg: '#BB5566', border: 'rgba(0,0,0,0.1)' },
+      '-1': { ...base['-1'], bg: '#A0A0A0', border: 'rgba(0,0,0,0.1)' },
+      'sem_conteudo': { ...base['sem_conteudo'], bg: '#A0A0A0', border: 'rgba(0,0,0,0.1)' },
+      'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
+      'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
     };
   } else if (theme === 'monochromatic') {
     return {
       ...base,
-      '2': { ...base['2'], bg: '#1D4ED8', border: '#1E40AF' },
-      '1': { ...base['1'], bg: '#60A5FA', border: '#3B82F6' },
-      '0': { ...base['0'], bg: '#DBEAFE', border: '#BFDBFE' },
-      '-1': { ...base['-1'], bg: '#F1F5F9', border: '#E2E8F0' },
-      'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' }
+      '2': { ...base['2'], bg: '#D4D4D4', border: 'rgba(0,0,0,0.1)' },
+      'suficiente': { ...base['suficiente'], bg: '#D4D4D4', border: 'rgba(0,0,0,0.1)' },
+      '1': { ...base['1'], bg: '#a1a1a1', border: 'rgba(0,0,0,0.1)' },
+      'parcialmente': { ...base['parcialmente'], bg: '#a1a1a1', border: 'rgba(0,0,0,0.1)' },
+      '0': { ...base['0'], bg: '#595959', border: 'rgba(0,0,0,0.1)' },
+      'insuficiente': { ...base['insuficiente'], bg: '#595959', border: 'rgba(0,0,0,0.1)' },
+      '-1': { ...base['-1'], bg: '#262626', border: 'rgba(0,0,0,0.1)' },
+      'sem_conteudo': { ...base['sem_conteudo'], bg: '#262626', border: 'rgba(0,0,0,0.1)' },
+      'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
+      'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
     };
   }
 
-  // Default FGV - Usando as cores específicas solicitadas pelo usuário
+  // Default FGV - Usando as novas cores padrão (Suficiente: #36B802, Parcialmente: #F0C571, Insuficiente: #E35759, Sem Conteúdo: #0B81A2)
   return {
     ...base,
-    '2': { ...base['2'], bg: POSITIVE_COLOR, border: 'rgba(0,0,0,0.1)' },
-    'suficiente': { ...base['suficiente'], bg: POSITIVE_COLOR, border: 'rgba(0,0,0,0.1)' },
-    '1': { ...base['1'], bg: NEUTRAL_COLOR, border: 'rgba(0,0,0,0.1)' },
-    'parcialmente': { ...base['parcialmente'], bg: NEUTRAL_COLOR, border: 'rgba(0,0,0,0.1)' },
-    '0': { ...base['0'], bg: NEGATIVE_COLOR, border: 'rgba(0,0,0,0.1)' },
-    'insuficiente': { ...base['insuficiente'], bg: NEGATIVE_COLOR, border: 'rgba(0,0,0,0.1)' },
-    '-1': { ...base['-1'], bg: INFO_COLOR, border: 'rgba(0,0,0,0.1)' },
-    'sem_conteudo': { ...base['sem_conteudo'], bg: INFO_COLOR, border: 'rgba(0,0,0,0.1)' },
+    '2': { ...base['2'], bg: '#36B802', border: 'rgba(0,0,0,0.1)' },
+    'suficiente': { ...base['suficiente'], bg: '#36B802', border: 'rgba(0,0,0,0.1)' },
+    '1': { ...base['1'], bg: '#F0C571', border: 'rgba(0,0,0,0.1)' },
+    'parcialmente': { ...base['parcialmente'], bg: '#F0C571', border: 'rgba(0,0,0,0.1)' },
+    '0': { ...base['0'], bg: '#E35759', border: 'rgba(0,0,0,0.1)' },
+    'insuficiente': { ...base['insuficiente'], bg: '#E35759', border: 'rgba(0,0,0,0.1)' },
+    '-1': { ...base['-1'], bg: '#0B81A2', border: 'rgba(0,0,0,0.1)' },
+    'sem_conteudo': { ...base['sem_conteudo'], bg: '#0B81A2', border: 'rgba(0,0,0,0.1)' },
     'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
     'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
   };
@@ -90,17 +111,30 @@ export const getColorFromGradient = (value, isActive = true, theme = 'default') 
   if (!isActive) return '#E5E7EB';
   if (value === '-' || value === null || isNaN(value)) return '#FFFFFF';
 
-  const posRgb = hexToRgb(POSITIVE_COLOR);
-  const neuRgb = hexToRgb(NEUTRAL_COLOR);
-  const negRgb = hexToRgb(NEGATIVE_COLOR);
-  const infoRgb = hexToRgb(INFO_COLOR);
+  // Cores dinâmicas por tema para o degradê
+  const themeColors = theme === 'colorblind' ? {
+    positive: '#004488',
+    neutral: '#DDAA33',
+    negative: '#BB5566',
+    info: '#A0A0A0'
+  } : theme === 'monochromatic' ? {
+    positive: '#D4D4D4',
+    neutral: '#a1a1a1',
+    negative: '#595959',
+    info: '#262626'
+  } : {
+    positive: '#36B802',
+    neutral: '#F0C571',
+    negative: '#E35759',
+    info: '#0B81A2'
+  };
 
-  const points = theme === 'colorblind' ? [
-    { val: -1, r: 200, g: 200, b: 200 },
-    { val: 0, r: 213, g: 94, b: 0 },
-    { val: 1, r: 240, g: 228, b: 66 },
-    { val: 2, r: 0, g: 114, b: 178 }
-  ] : theme === 'monochromatic' ? [
+  const posRgb = hexToRgb(themeColors.positive);
+  const neuRgb = hexToRgb(themeColors.neutral);
+  const negRgb = hexToRgb(themeColors.negative);
+  const infoRgb = hexToRgb(themeColors.info);
+
+  const points = theme === 'monochromatic' ? [
     { val: -1, r: 241, g: 245, b: 249 },
     { val: 0, r: 219, g: 234, b: 254 },
     { val: 1, r: 96, g: 165, b: 250 },

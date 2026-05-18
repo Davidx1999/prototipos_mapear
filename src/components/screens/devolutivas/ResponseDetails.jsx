@@ -22,7 +22,8 @@ export default function ResponseDetails({
   colGroups = [],
   statusColors = {},
   initialSelection = null,
-  isDarkMode = false
+  isDarkMode = false,
+  colorTheme = 'default'
 }) {
   // --- ESTADOS DA VISÃO DE DETALHES ---
   const [detTurma, setDetTurma] = useState(initialSelection?.turma || navPath[4] || '');
@@ -72,6 +73,23 @@ export default function ResponseDetails({
   };
 
   const studentStatus = getSelectedStudentStatus();
+
+  const isMonochromatic = colorTheme === 'monochromatic';
+
+  const chipBg1 = statusColors.parcialmente?.bg;
+  const textColor1 = chipBg1 === '#FFFFFF' ? '#0F1113' : (isMonochromatic ? '#0F1113' : (chipBg1 === '#004488' || chipBg1 === '#BB5566' || chipBg1 === '#F45F74' || chipBg1 === '#E35759' || chipBg1 === '#0B81A2' || chipBg1 === '#36B802' ? '#FFFFFF' : '#0F1113'));
+
+  const chipBg2 = studentStatus?.bg;
+  let textColor2 = '#0F1113';
+  if (chipBg2 === '#FFFFFF') {
+    textColor2 = '#0F1113';
+  } else if (isMonochromatic) {
+    const isSuficienteOrParcialmente = studentStatus?.label?.includes('Suficiente') || studentStatus?.label?.includes('Parcialmente');
+    textColor2 = isSuficienteOrParcialmente ? '#0F1113' : '#FFFFFF';
+  } else {
+    const isDarkBg2 = chipBg2 === '#004488' || chipBg2 === '#BB5566' || chipBg2 === '#F45F74' || chipBg2 === '#E35759' || chipBg2 === '#0B81A2' || chipBg2 === '#36B802';
+    textColor2 = isDarkBg2 ? '#FFFFFF' : '#0F1113';
+  }
 
   return (
     <main className="flex-1 overflow-y-auto custom-scrollbar transition-colors duration-300" style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF' }}>
@@ -253,9 +271,15 @@ export default function ResponseDetails({
                   <div className="absolute top-4 right-4">
                     <Chips
                       label={statusColors.parcialmente?.label || 'Parcialmente'}
-                      status="warning"
+                      status="neutral"
                       variant="light"
-                      iconLeft={statusColors.parcialmente?.icon}
+                      iconLeft={statusColors.parcialmente?.icon ? React.cloneElement(statusColors.parcialmente.icon, { className: '', style: { color: textColor1 } }) : null}
+                      className="font-semibold"
+                      style={{
+                        backgroundColor: chipBg1,
+                        borderColor: statusColors.parcialmente?.border || 'rgba(0,0,0,0.1)',
+                        color: textColor1
+                      }}
                     />
                   </div>
                 </>
@@ -279,13 +303,15 @@ export default function ResponseDetails({
                     <div className="absolute top-4 right-4">
                       <Chips
                         label={studentStatus.label}
-                        status={
-                          studentStatus.label.includes('Suficiente') && !studentStatus.label.includes('Parcialmente') ? 'success' :
-                            studentStatus.label.includes('Parcialmente') ? 'warning' :
-                              studentStatus.label.includes('Insuficiente') ? 'error' : 'neutral'
-                        }
+                        status="neutral"
                         variant="light"
-                        iconLeft={studentStatus.icon}
+                        iconLeft={studentStatus.icon ? React.cloneElement(studentStatus.icon, { className: '', style: { color: textColor2 } }) : null}
+                        className="font-semibold"
+                        style={{
+                          backgroundColor: chipBg2,
+                          borderColor: studentStatus.border || 'rgba(0,0,0,0.1)',
+                          color: textColor2
+                        }}
                       />
                     </div>
                   )}
@@ -371,7 +397,7 @@ export default function ResponseDetails({
                   "Propor a análise de resoluções incorretas para identificar erros."
                 ].map((sug, i) => (
                   <div key={i} className="flex items-start gap-3 p-4 rounded-xl transition-colors hover:opacity-80" style={{ backgroundColor: isDarkMode ? colors.neutral[5] : '#F9FAFB' }}>
-                    <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: isDarkMode ? '#1B4D3E' : '#DCFCE7', color: isDarkMode ? '#8CD47E' : '#15803D' }}>
+                    <div className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: isDarkMode ? '#003A79' : '#D9F0FC', color: isDarkMode ? '#94CFEF' : '#008BC9' }}>
                       <ChevronRight size={14} />
                     </div>
                     <p className="text-[14px] font-medium leading-relaxed" style={{ color: isDarkMode ? colors.neutral[1] : '#374151' }}>{sug}</p>

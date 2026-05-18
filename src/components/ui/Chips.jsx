@@ -50,24 +50,30 @@ const Chips = ({
       stroked: 'bg-[#FFFFFF] text-[#1D2432] border-[#1D2432] hover:bg-[#DEE1E8] shadow-none',
       none: 'bg-transparent text-[#677080] border-transparent px-0'
     },
-    // Graph palette for Heatmap - Cores específicas solicitadas: #8CD47E, #F8D66D, #FF6961
+    // Graph palette for Heatmap - Cores específicas solicitadas: #004488, #DDAA33, #BB5566, #E8E8E8
     graphPositive: {
-      light: 'bg-[#8CD47E] text-neutral-7 border-transparent',
-      dark: 'bg-[#8CD47E] text-neutral-7 border-transparent',
-      stroked: 'bg-transparent text-[#8CD47E] border-[#8CD47E]',
-      none: 'bg-transparent text-[#8CD47E] border-transparent px-0'
+      light: 'bg-[#004488] text-white border-transparent',
+      dark: 'bg-[#004488] text-white border-transparent',
+      stroked: 'bg-transparent text-[#004488] border-[#004488]',
+      none: 'bg-transparent text-[#004488] border-transparent px-0'
     },
     graphNeutral: {
-      light: 'bg-[#F8D66D] text-neutral-7 border-transparent',
-      dark: 'bg-[#F8D66D] text-neutral-7 border-transparent',
-      stroked: 'bg-transparent text-[#F8D66D] border-[#F8D66D]',
-      none: 'bg-transparent text-[#F8D66D] border-transparent px-0'
+      light: 'bg-[#DDAA33] text-neutral-7 border-transparent',
+      dark: 'bg-[#DDAA33] text-neutral-7 border-transparent',
+      stroked: 'bg-transparent text-[#DDAA33] border-[#DDAA33]',
+      none: 'bg-transparent text-[#DDAA33] border-transparent px-0'
     },
     graphNegative: {
-      light: 'bg-[#FF6961] text-neutral-7 border-transparent',
-      dark: 'bg-[#FF6961] text-neutral-7 border-transparent',
-      stroked: 'bg-transparent text-[#FF6961] border-[#FF6961]',
-      none: 'bg-transparent text-[#FF6961] border-transparent px-0'
+      light: 'bg-[#BB5566] text-white border-transparent',
+      dark: 'bg-[#BB5566] text-white border-transparent',
+      stroked: 'bg-transparent text-[#BB5566] border-[#BB5566]',
+      none: 'bg-transparent text-[#BB5566] border-transparent px-0'
+    },
+    graphInfo: {
+      light: 'bg-[#E8E8E8] text-neutral-7 border-transparent',
+      dark: 'bg-[#E8E8E8] text-neutral-7 border-transparent',
+      stroked: 'bg-transparent text-[#E8E8E8] border-[#E8E8E8]',
+      none: 'bg-transparent text-[#E8E8E8] border-transparent px-0'
     },
     lavender: {
       light: 'bg-[#D9BBFF] text-neutral-7 border-transparent',

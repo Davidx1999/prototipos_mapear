@@ -83,7 +83,7 @@ export default function CascadeSelector({
       setSyncingLevel(levelIndex + 1);
       setIsSyncing(true);
       if (!isMobile) setTimeout(() => scrollToActive(levelIndex + 1), 50);
-      setTimeout(() => { setIsSyncing(false); setSyncingLevel(null); }, 4000);
+      setTimeout(() => { setIsSyncing(false); setSyncingLevel(null); }, 1000);
       return;
     }
 
@@ -122,7 +122,7 @@ export default function CascadeSelector({
         setSyncingLevel(levelIndex + 1);
         setIsSyncing(true);
         if (!isMobile) setTimeout(() => scrollToActive(levelIndex + 1), 50);
-        setTimeout(() => { setIsSyncing(false); setSyncingLevel(null); }, 4000);
+        setTimeout(() => { setIsSyncing(false); setSyncingLevel(null); }, 1000);
       }
     }
   };

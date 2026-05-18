@@ -23,6 +23,12 @@ export default function HeatmapControls({
   isDarkMode = false,
   colors
 }) {
+  const gradientBg = colorTheme === 'colorblind'
+    ? 'linear-gradient(to right, #FFFFFF 5%, #A0A0A0 25%, #BB5566 50%, #DDAA33 75%, #004488 95%)'
+    : colorTheme === 'monochromatic'
+      ? 'linear-gradient(to right, #FFFFFF 5%, #262626 25%, #595959 50%, #a1a1a1 75%, #D4D4D4 95%)'
+      : 'linear-gradient(to right, #FFFFFF 5%, #0B81A2 25%, #E35759 50%, #F0C571 75%, #36B802 95%)';
+
   return (
     <>
       {/* ── RIGHT SIDE CONTROLS (Move/Zoom/Fit) ── */}
@@ -118,7 +124,7 @@ export default function HeatmapControls({
                 />
               </div>
               <div className="flex flex-col gap-1 mt-2">
-                <div className="w-full h-3 rounded-full shadow-inner border border-gray-200" style={{ background: 'linear-gradient(to right, #FFFFFF 5%, #B3E6F5 25%, #FF6961 50%, #F8D66D 75%, #8CD47E 95%)' }}></div>
+                <div className="w-full h-3 rounded-full shadow-inner border border-gray-200" style={{ background: gradientBg }}></div>
                 <div className="flex justify-between items-center text-[12px] font-bold text-gray-500 mt-1">
                   <span>0%</span>
                   <span>25%</span>
