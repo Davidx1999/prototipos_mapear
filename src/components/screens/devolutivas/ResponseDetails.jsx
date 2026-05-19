@@ -77,7 +77,7 @@ export default function ResponseDetails({
   const isMonochromatic = colorTheme === 'monochromatic';
 
   const chipBg1 = statusColors.parcialmente?.bg;
-  const textColor1 = chipBg1 === '#FFFFFF' ? '#0F1113' : (isMonochromatic ? '#0F1113' : (chipBg1 === '#004488' || chipBg1 === '#BB5566' || chipBg1 === '#F45F74' || chipBg1 === '#E35759' || chipBg1 === '#0B81A2' || chipBg1 === '#36B802' ? '#FFFFFF' : '#0F1113'));
+  const textColor1 = chipBg1 === '#FFFFFF' ? '#0F1113' : (isMonochromatic ? '#0F1113' : (chipBg1 === '#004488' || chipBg1 === '#BB5566' || chipBg1 === '#F45F74' || chipBg1 === '#E35759' || chipBg1 === '#0B81A2' || chipBg1 === '#36B802' || chipBg1 === '#0D7E87' || chipBg1 === '#FF5A5D' || chipBg1 === '#6F9338' || chipBg1 === '#CA5041' || chipBg1 === '#635153' ? '#FFFFFF' : '#0F1113'));
 
   const chipBg2 = studentStatus?.bg;
   let textColor2 = '#0F1113';
@@ -87,7 +87,7 @@ export default function ResponseDetails({
     const isSuficienteOrParcialmente = studentStatus?.label?.includes('Suficiente') || studentStatus?.label?.includes('Parcialmente');
     textColor2 = isSuficienteOrParcialmente ? '#0F1113' : '#FFFFFF';
   } else {
-    const isDarkBg2 = chipBg2 === '#004488' || chipBg2 === '#BB5566' || chipBg2 === '#F45F74' || chipBg2 === '#E35759' || chipBg2 === '#0B81A2' || chipBg2 === '#36B802';
+    const isDarkBg2 = chipBg2 === '#004488' || chipBg2 === '#BB5566' || chipBg2 === '#F45F74' || chipBg2 === '#E35759' || chipBg2 === '#0B81A2' || chipBg2 === '#36B802' || chipBg2 === '#0D7E87' || chipBg2 === '#FF5A5D' || chipBg2 === '#6F9338' || chipBg2 === '#CA5041' || chipBg2 === '#635153';
     textColor2 = isDarkBg2 ? '#FFFFFF' : '#0F1113';
   }
 

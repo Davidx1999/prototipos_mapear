@@ -16,7 +16,7 @@ export default function HeatmapTooltip({ tooltipData, statusColors, colorTheme =
     const isSuficienteOrParcialmente = statusKey === 'suficiente' || statusKey === 'parcialmente' || statusKey === '2' || statusKey === '1';
     textColor = isSuficienteOrParcialmente ? '#0F1113' : '#FFFFFF';
   } else {
-    const isDarkBg = chipBg === '#004488' || chipBg === '#BB5566' || chipBg === '#F45F74' || chipBg === '#E35759' || chipBg === '#0B81A2' || chipBg === '#36B802';
+    const isDarkBg = chipBg === '#004488' || chipBg === '#BB5566' || chipBg === '#F45F74' || chipBg === '#E35759' || chipBg === '#0B81A2' || chipBg === '#36B802' || chipBg === '#0D7E87' || chipBg === '#FF5A5D' || chipBg === '#6F9338' || chipBg === '#CA5041' || chipBg === '#635153';
     textColor = isDarkBg ? '#FFFFFF' : '#0F1113';
   }
 

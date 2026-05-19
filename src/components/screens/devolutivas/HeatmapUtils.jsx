@@ -21,10 +21,10 @@ export const getStatusColors = (theme = 'default') => {
     negative: '#595959',
     info: '#262626'
   } : {
-    positive: '#36B802',
-    neutral: '#F0C571',
-    negative: '#E35759',
-    info: '#0B81A2'
+    positive: '#6F9338',
+    neutral: '#DAB734',
+    negative: '#CA5041',
+    info: '#635153'
   };
 
   const base = {
@@ -70,17 +70,17 @@ export const getStatusColors = (theme = 'default') => {
     };
   }
 
-  // Default FGV - Usando as novas cores padrão (Suficiente: #36B802, Parcialmente: #F0C571, Insuficiente: #E35759, Sem Conteúdo: #0B81A2)
+  // Default FGV - Usando as novas cores padrão (Suficiente: #6F9338, Parcialmente: #DAB734, Insuficiente: #CA5041, Sem Conteúdo: #635153)
   return {
     ...base,
-    '2': { ...base['2'], bg: '#36B802', border: 'rgba(0,0,0,0.1)' },
-    'suficiente': { ...base['suficiente'], bg: '#36B802', border: 'rgba(0,0,0,0.1)' },
-    '1': { ...base['1'], bg: '#F0C571', border: 'rgba(0,0,0,0.1)' },
-    'parcialmente': { ...base['parcialmente'], bg: '#F0C571', border: 'rgba(0,0,0,0.1)' },
-    '0': { ...base['0'], bg: '#E35759', border: 'rgba(0,0,0,0.1)' },
-    'insuficiente': { ...base['insuficiente'], bg: '#E35759', border: 'rgba(0,0,0,0.1)' },
-    '-1': { ...base['-1'], bg: '#0B81A2', border: 'rgba(0,0,0,0.1)' },
-    'sem_conteudo': { ...base['sem_conteudo'], bg: '#0B81A2', border: 'rgba(0,0,0,0.1)' },
+    '2': { ...base['2'], bg: '#6F9338', border: 'rgba(0,0,0,0.1)' },
+    'suficiente': { ...base['suficiente'], bg: '#6F9338', border: 'rgba(0,0,0,0.1)' },
+    '1': { ...base['1'], bg: '#DAB734', border: 'rgba(0,0,0,0.1)' },
+    'parcialmente': { ...base['parcialmente'], bg: '#DAB734', border: 'rgba(0,0,0,0.1)' },
+    '0': { ...base['0'], bg: '#CA5041', border: 'rgba(0,0,0,0.1)' },
+    'insuficiente': { ...base['insuficiente'], bg: '#CA5041', border: 'rgba(0,0,0,0.1)' },
+    '-1': { ...base['-1'], bg: '#635153', border: 'rgba(0,0,0,0.1)' },
+    'sem_conteudo': { ...base['sem_conteudo'], bg: '#635153', border: 'rgba(0,0,0,0.1)' },
     'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
     'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
   };
@@ -123,10 +123,10 @@ export const getColorFromGradient = (value, isActive = true, theme = 'default') 
     negative: '#595959',
     info: '#262626'
   } : {
-    positive: '#36B802',
-    neutral: '#F0C571',
-    negative: '#E35759',
-    info: '#0B81A2'
+    positive: '#6F9338',
+    neutral: '#DAB734',
+    negative: '#CA5041',
+    info: '#635153'
   };
 
   const posRgb = hexToRgb(themeColors.positive);

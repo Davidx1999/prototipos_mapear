@@ -458,7 +458,7 @@ export default function HeatmapSidebar({
                     const isSuficienteOrParcialmente = status.label.includes('Suficiente') || status.label.includes('Parcialmente');
                     textColor = isSuficienteOrParcialmente ? '#0F1113' : '#FFFFFF';
                   } else {
-                    const isDarkBg = status.bg === '#004488' || status.bg === '#BB5566' || status.bg === '#F45F74' || status.bg === '#E35759' || status.bg === '#0B81A2' || status.bg === '#36B802';
+                    const isDarkBg = status.bg === '#004488' || status.bg === '#BB5566' || status.bg === '#F45F74' || status.bg === '#E35759' || status.bg === '#0B81A2' || status.bg === '#36B802' || status.bg === '#0D7E87' || status.bg === '#FF5A5D' || status.bg === '#6F9338' || status.bg === '#CA5041' || status.bg === '#635153';
                     textColor = isDarkBg ? '#FFFFFF' : '#0F1113';
                   }
 

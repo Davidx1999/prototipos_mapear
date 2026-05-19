@@ -27,7 +27,7 @@ export default function HeatmapControls({
     ? 'linear-gradient(to right, #FFFFFF 5%, #A0A0A0 25%, #BB5566 50%, #DDAA33 75%, #004488 95%)'
     : colorTheme === 'monochromatic'
       ? 'linear-gradient(to right, #FFFFFF 5%, #262626 25%, #595959 50%, #a1a1a1 75%, #D4D4D4 95%)'
-      : 'linear-gradient(to right, #FFFFFF 5%, #0B81A2 25%, #E35759 50%, #F0C571 75%, #36B802 95%)';
+      : 'linear-gradient(to right, #FFFFFF 5%, #635153 25%, #CA5041 50%, #DAB734 75%, #6F9338 95%)';
 
   return (
     <>
