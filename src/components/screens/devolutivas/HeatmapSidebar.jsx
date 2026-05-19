@@ -291,7 +291,7 @@ export default function HeatmapSidebar({
                 </RichTooltip>
               </div>
               {/* Segmented Button Pattern with Reverted Background and Refined Design */}
-              <div className={`flex p-1 rounded-[6px] gap-[1px] ${!isTestSelected ? 'opacity-60' : ''}`} style={{ backgroundColor: isDarkMode ? colors.neutral[6] : (isTestSelected ? '#F3F4F6' : '#F9FAFB') }}>
+              <div className={`flex p-1 rounded-[6px] gap-[1px] ${!isTestSelected ? 'opacity-60' : ''}`} style={{ backgroundColor: colors.neutral[7] }}>
                 {methods.map((m, idx) => {
                   let roundedClass = 'rounded-none';
                   if (idx === 0) roundedClass = 'rounded-l-[4px] rounded-r-none';
@@ -306,7 +306,7 @@ export default function HeatmapSidebar({
                       flex-1 py-1.5 text-[12px] font-bold transition-all
                       ${calcMethod === m
                           ? (isTestSelected ? (isDarkMode ? 'bg-[#003A79] text-white shadow-sm z-10' : 'bg-white text-[#008BC9] shadow-sm z-10') : (isDarkMode ? 'bg-neutral-500 text-neutral-300' : 'bg-gray-200 text-gray-400'))
-                          : (isDarkMode ? 'bg-transparent text-neutral-300 hover:bg-neutral-500/50' : 'bg-transparent text-neutral-700 hover:bg-white/50')}
+                          : (isDarkMode ? 'bg-transparent text-neutral-300 hover:bg-neutral-500/50' : 'bg-transparent text-neutral-300 hover:bg-white/10')}
                       ${roundedClass}
                       ${!isTestSelected ? 'cursor-not-allowed' : ''}
                     `}
