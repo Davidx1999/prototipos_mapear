@@ -43,64 +43,32 @@ export const mockAssessments = [
 // GERADOR DINÂMICO PARA ITENS
 export const generateMockTest = (totalItems = 56) => {
   const tasks = [];
-  const tasksCount = 4;
+  const tasksCount = 3;
   const itemsPerTask = Math.ceil(totalItems / tasksCount);
 
   let currentItemNumber = 1;
 
   for (let t = 0; t < tasksCount; t++) {
     const elements = [];
-    let itemsInThisTask = 0;
-
-    // 1. Adicionar 2 itens isolados iniciais
-    for (let i = 0; i < 2; i++) {
-      if (currentItemNumber <= totalItems) {
-        elements.push({
-          type: 'item',
-          data: {
-            id: `I${currentItemNumber}`, number: currentItemNumber, title: `Questão Isolada ${currentItemNumber}`, type: 'single_choice',
-            text: 'Leia atentamente o enunciado desta questão isolada. Qual das alternativas abaixo apresenta o raciocínio correto para a resolução do problema apresentado?',
-            options: [{ id: 'A', text: 'A premissa está correta e a conclusão é válida.' }, { id: 'B', text: 'A premissa é falsa, logo a conclusão é inválida.' }, { id: 'C', text: 'Faltam dados para determinar o resultado.' }, { id: 'D', text: 'A resolução depende de uma variável externa não mencionada.' }]
-          }
-        });
-        currentItemNumber++;
-        itemsInThisTask++;
-      }
-    }
-
-    // 2. Adicionar um Bloco longo (Contexto comum para 6 itens)
-    const blockItems = [];
-    for (let b = 0; b < 6; b++) {
-      if (currentItemNumber <= totalItems && itemsInThisTask < itemsPerTask) {
-        blockItems.push({
-          id: `I${currentItemNumber}`, number: currentItemNumber, title: `Análise do Texto ${currentItemNumber}`,
-          type: currentItemNumber % 5 === 0 ? 'hybrid' : 'single_choice',
-          text: currentItemNumber % 5 === 0 ? `Com base no texto base, explique e justifique o fenômeno abordado na questão ${currentItemNumber}.` : `De acordo com o segundo parágrafo do texto base, o que se pode inferir sobre o item ${currentItemNumber}?`,
-          options: currentItemNumber % 5 === 0 ? [{ id: 'A', text: 'Fenômeno A' }, { id: 'B', text: 'Fenômeno B' }] : [{ id: 'A', text: 'A inferência é positiva.' }, { id: 'B', text: 'A inferência é neutra.' }, { id: 'C', text: 'O autor não deixa claro.' }, { id: 'D', text: 'A resposta requer análise do contexto global.' }]
-        });
-        currentItemNumber++;
-        itemsInThisTask++;
-      }
-    }
-    if (blockItems.length > 0) {
-      elements.push({
-        type: 'block',
-        context: { text: `Este é o TEXTO BASE para um longo bloco de análise interpretativa. As questões a seguir exigirão que você retorne a este texto para fundamentar suas respostas. O tema central aborda a complexidade das relações socioeconômicas no Brasil contemporâneo, focando na desigualdade de renda e no acesso a tecnologias essenciais no século XXI. É vital observar as entrelinhas e os dados implícitos fornecidos neste parágrafo para a resolução dos itens de ${blockItems[0].number} a ${blockItems[blockItems.length - 1].number}.` },
-        items: blockItems
-      });
-    }
-
-    // 3. Adicionar o restante como itens subjetivos/isolados
-    while (itemsInThisTask < itemsPerTask && currentItemNumber <= totalItems) {
+    // Always create 4 items per task
+    for (let i = 0; i < 4; i++) {
       elements.push({
         type: 'item',
         data: {
-          id: `I${currentItemNumber}`, number: currentItemNumber, title: `Questão Final da Tarefa ${currentItemNumber}`, type: 'subjective',
-          text: `Escreva um parágrafo argumentativo defendendo o seu ponto de vista sobre o tópico abordado no módulo ${t + 1}.`,
+          id: `I${currentItemNumber}`,
+          number: currentItemNumber,
+          title: `Questão ${currentItemNumber} (Tarefa ${t + 1})`,
+          type: 'single_choice',
+          text: `Leia a questão ${currentItemNumber}. Qual a alternativa correta?`,
+          options: [
+            { id: 'A', text: 'Alternativa A' },
+            { id: 'B', text: 'Alternativa B' },
+            { id: 'C', text: 'Alternativa C' },
+            { id: 'D', text: 'Alternativa D' }
+          ]
         }
       });
       currentItemNumber++;
-      itemsInThisTask++;
     }
 
     tasks.push({
