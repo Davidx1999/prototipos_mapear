@@ -13,7 +13,7 @@ import CascadeSelector from '../../ui/CascadeSelector';
 import Chips from '../../ui/Chips';
 import Button from '../../ui/Button';
 import RichTooltip from '../../ui/RichTooltip';
-import { devDB, CASCADE_LEVELS, turmasPendentesMock, participacaoAvaliacaoMock, testesMock } from './HeatmapUtils';
+import { devDB, CASCADE_LEVELS, turmasPendentesMock, participacaoAvaliacaoMock, testesMock, HEATMAP_PALETTES } from './HeatmapUtils';
 
 // Hierarquia A: começar por Avaliações → Turmas → Teste
 const CASCADE_LEVELS_BY_AVAL = [
@@ -21,6 +21,34 @@ const CASCADE_LEVELS_BY_AVAL = [
   { id: 'turma', title: 'Turmas' },
   { id: 'teste', title: 'Teste' }
 ];
+
+const ChartIndicatorSVG = ({ startColor, endColor, isStraight }) => (
+  <svg className="w-full h-full" viewBox="0 -2 68 17" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {isStraight ? (
+      <line
+        x1="0"
+        y1="6.5"
+        x2="68"
+        y2="6.5"
+        stroke="url(#paint0_linear_side_indicator)"
+        strokeWidth="4"
+      />
+    ) : (
+      <path
+        d="M68 8.92896C59.3092 8.92896 60.3317 5.47584 50.1072 5.47584C39.8828 5.47584 42.4389 11.9524 33.7481 11.9524C25.0574 11.9524 23.1545 6.92896 16.3666 6.92896C9.77834 6.92896 8.69077 1 -1.3113e-06 1"
+        stroke="url(#paint0_linear_side_indicator)"
+        strokeWidth="4"
+        strokeLinejoin="round"
+      />
+    )}
+    <defs>
+      <linearGradient id="paint0_linear_side_indicator" x1="0" y1="6.4762" x2="68" y2="6.4762" gradientUnits="userSpaceOnUse">
+        <stop stopColor={startColor} />
+        <stop offset="1" stopColor={endColor} />
+      </linearGradient>
+    </defs>
+  </svg>
+);
 
 export default function HeatmapSidebar({
   isContextExpanded,
@@ -163,6 +191,11 @@ export default function HeatmapSidebar({
     }
   };
 
+  const activePalette = HEATMAP_PALETTES[colorTheme] || HEATMAP_PALETTES['default'];
+  const isCrescente = sortOrder === 'Desempenho Crescente';
+  const startColor = isCrescente ? activePalette.negative : activePalette.positive;
+  const endColor = isCrescente ? activePalette.positive : activePalette.negative;
+
   return (
     <aside
       className={`
@@ -199,7 +232,7 @@ export default function HeatmapSidebar({
         <div className="flex items-center gap-1">
           {isContextExpanded && showScrollButtons && (
             <>
-               <Button
+              <Button
                 variant="secondary"
                 showRing={true}
                 appearance="ghost"
@@ -413,6 +446,34 @@ export default function HeatmapSidebar({
                   </div>
                 </div>
 
+                {/* Ordenação Figurativa */}
+                <div className="flex items-center justify-between mt-1">
+                  <span className="text-[12px] font-bold tracking-wider" style={{ color: isDarkMode ? colors.neutral[3] : colors.neutral[7] }}>
+                    Ordenação Figurativa
+                  </span>
+                  <div className="relative w-[68px] h-[22px] flex items-center justify-center">
+                    {/* 4 squares of neutral 6 */}
+                    <div className="absolute inset-0 flex gap-[2px] w-full h-full pointer-events-none">
+                      <div className="flex-1 h-full rounded-[2px]" style={{ backgroundColor: colors.neutral[6] }} />
+                      <div className="flex-1 h-full rounded-[2px]" style={{ backgroundColor: colors.neutral[6] }} />
+                      <div className="flex-1 h-full rounded-[2px]" style={{ backgroundColor: colors.neutral[6] }} />
+                      <div className="flex-1 h-full rounded-[2px]" style={{ backgroundColor: colors.neutral[6] }} />
+                    </div>
+                    {/* Centered dynamic SVG or empty line */}
+                    <div className="relative z-10 w-full flex items-center justify-center">
+                      {!isTestSelected ? (
+                        <div className="w-full h-[2px] rounded-[1px]" style={{ backgroundColor: colors.neutral[3] }} />
+                      ) : (
+                        <ChartIndicatorSVG 
+                          startColor={startColor} 
+                          endColor={endColor} 
+                          isStraight={sortOrder === 'Sem ordem' || sortBy === 'Nenhuma'} 
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 {/* Ocultar Sem Participação */}
                 <div className="flex items-center justify-between mt-2 pt-2 border-t -mx-4 px-4" style={{ borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : colors.neutral[1] }}>
                   <span className="text-[14px] font-bold" style={{ color: isDarkMode ? (!isTestSelected ? colors.neutral[5] : colors.neutral[1]) : (!isTestSelected ? colors.neutral[4] : colors.neutral[7]) }}>Ocultar Sem Participação</span>
@@ -460,7 +521,7 @@ export default function HeatmapSidebar({
                     const isSuficienteOrParcialmente = status.label.includes('Suficiente') || status.label.includes('Parcialmente');
                     textColor = isSuficienteOrParcialmente ? '#0F1113' : '#FFFFFF';
                   } else {
-                    const isDarkBg = status.bg === '#004488' || status.bg === '#BB5566' || status.bg === '#F45F74' || status.bg === '#E35759' || status.bg === '#0B81A2' || status.bg === '#36B802' || status.bg === '#0D7E87' || status.bg === '#FF5A5D' || status.bg === '#6F9338' || status.bg === '#CA5041' || status.bg === '#635153';
+                    const isDarkBg = status.bg === '#004488' || status.bg === '#BB5566' || status.bg === '#F45F74' || status.bg === '#E35759' || status.bg === '#0B81A2' || status.bg === '#36B802' || status.bg === '#0D7E87' || status.bg === '#FF5A5D' || status.bg === '#6B8E23' || status.bg === '#C74A3A' || status.bg === '#5E4B4E';
                     textColor = isDarkBg ? '#FFFFFF' : '#0F1113';
                   }
 

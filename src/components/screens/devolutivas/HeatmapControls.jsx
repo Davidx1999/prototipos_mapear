@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import SplitButton from '../../ui/SplitButton';
 import Button from '../../ui/Button';
+import { HEATMAP_PALETTES } from './HeatmapUtils';
 
 export default function HeatmapControls({
   showLegendPopover, setShowLegendPopover,
@@ -23,11 +24,10 @@ export default function HeatmapControls({
   isDarkMode = false,
   colors
 }) {
-  const gradientBg = colorTheme === 'colorblind'
-    ? 'linear-gradient(to right, #FFFFFF 5%, #A0A0A0 25%, #BB5566 50%, #DDAA33 75%, #004488 95%)'
-    : colorTheme === 'monochromatic'
-      ? 'linear-gradient(to right, #FFFFFF 5%, #262626 25%, #595959 50%, #a1a1a1 75%, #D4D4D4 95%)'
-      : 'linear-gradient(to right, #FFFFFF 5%, #635153 25%, #CA5041 50%, #DAB734 75%, #6F9338 95%)';
+  const currentPalette = HEATMAP_PALETTES[colorTheme] || HEATMAP_PALETTES['default'];
+  const gradientBg = (colorTheme === 'achromatopsia' || colorTheme === 'blue_cone_monochromacy') 
+      ? `linear-gradient(to right, #FFFFFF 5%, ${currentPalette.info} 25%, ${currentPalette.negative} 50%, ${currentPalette.neutral} 75%, ${currentPalette.positive} 95%)`
+      : `linear-gradient(to right, #FFFFFF 5%, ${currentPalette.info} 25%, ${currentPalette.negative} 50%, ${currentPalette.neutral} 75%, ${currentPalette.positive} 95%)`;
 
   return (
     <>
@@ -107,7 +107,7 @@ export default function HeatmapControls({
           />
 
           {showScalePopover && (
-            <div 
+            <div
               className="absolute right-[calc(100%+4px)] top-0 w-[240px] border rounded-[4px] shadow-xl p-4 animate-fade-slide"
               style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
             >
@@ -187,7 +187,7 @@ export default function HeatmapControls({
           />
 
           {activeBottomMenu === 'cols' && (
-            <div 
+            <div
               className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[240px] border rounded-xl shadow-xl p-4 animate-fade-slide"
               style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
             >
@@ -233,22 +233,28 @@ export default function HeatmapControls({
           />
 
           {activeBottomMenu === 'colors' && (
-            <div 
+            <div
               className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[240px] border rounded-xl shadow-xl p-4 animate-fade-slide"
               style={{ backgroundColor: isDarkMode ? colors.neutral[6] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
             >
               <span className="text-[12px] font-bold uppercase tracking-wide mb-3 block" style={{ color: isDarkMode ? colors.neutral[3] : '#6B7280' }}>Paleta de Cores</span>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-2">
                 {[
-                  { id: 'default', label: 'Padrão FGV' },
-                  { id: 'colorblind', label: 'Acessível (Daltonismo)' },
-                  { id: 'monochromatic', label: 'Monocromático' }
+                  { id: 'default', label: 'Normal' },
+                  { id: 'protanomaly', label: 'Red-Weak / Protanomaly' },
+                  { id: 'deuteranomaly', label: 'Green-Weak / Deuteranomaly' },
+                  { id: 'tritanomaly', label: 'Blue-Weak / Tritanomaly' },
+                  { id: 'protanopia', label: 'Red-Blind / Protanopia' },
+                  { id: 'deuteranopia', label: 'Green-Blind / Deuteranopia' },
+                  { id: 'tritanopia', label: 'Blue-Blind / Tritanopia' },
+                  { id: 'achromatopsia', label: 'Monochromacy / Achromatopsia' },
+                  { id: 'blue_cone_monochromacy', label: 'Blue Cone Monochromacy' }
                 ].map(opt => (
                   <label key={opt.id} onClick={() => { setColorTheme(opt.id); setActiveBottomMenu(null); setIsColorsActive(opt.id !== 'default'); }} className="flex items-center gap-3 cursor-pointer group">
-                    <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${colorTheme === opt.id ? 'border-[#008BC9]' : 'group-hover:border-[#008BC9]'}`} style={{ borderColor: colorTheme === opt.id ? '#008BC9' : (isDarkMode ? colors.neutral[4] : '#D1D5DB') }}>
+                    <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${colorTheme === opt.id ? 'border-[#008BC9]' : 'group-hover:border-[#008BC9]'}`} style={{ borderColor: colorTheme === opt.id ? '#008BC9' : (isDarkMode ? colors.neutral[4] : '#D1D5DB') }}>
                       {colorTheme === opt.id && <div className="w-2 h-2 bg-[#008BC9] rounded-full"></div>}
                     </div>
-                    <span className="text-[14px] font-semibold" style={{ color: isDarkMode ? colors.neutral[1] : '#374151' }}>{opt.label}</span>
+                    <span className="text-[13px] font-semibold leading-tight" style={{ color: isDarkMode ? colors.neutral[1] : '#374151' }}>{opt.label}</span>
                   </label>
                 ))}
               </div>

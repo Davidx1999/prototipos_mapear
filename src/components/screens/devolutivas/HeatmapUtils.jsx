@@ -8,24 +8,22 @@ import {
   mockCascadeData as realCascadeData
 } from './DadosHeatmap';
 
+export const HEATMAP_PALETTES = {
+  'default': { label: 'Normal', positive: '#6B8E23', neutral: '#D9B52D', negative: '#C74A3A', info: '#5E4B4E' },
+  'protanomaly': { label: 'Red-Weak/Protanomaly', positive: '#0072B2', neutral: '#F0E442', negative: '#CC79A7', info: '#5E4B4E' },
+  'deuteranomaly': { label: 'Green-Weak/Deuteranomaly', positive: '#0072B2', neutral: '#F0E442', negative: '#D55E00', info: '#5E4B4E' },
+  'tritanomaly': { label: 'Blue-Weak/Tritanomaly', positive: '#009E73', neutral: '#E69F00', negative: '#CC3311', info: '#5E4B4E' },
+  'protanopia': { label: 'Red-Blind/Protanopia', positive: '#0072B2', neutral: '#F0E442', negative: '#CC79A7', info: '#5E4B4E' },
+  'deuteranopia': { label: 'Green-Blind/Deuteranopia', positive: '#0072B2', neutral: '#F0E442', negative: '#D55E00', info: '#5E4B4E' },
+  'tritanopia': { label: 'Blue-Blind/Tritanopia', positive: '#009E73', neutral: '#E69F00', negative: '#CC3311', info: '#5E4B4E' },
+  'achromatopsia': { label: 'Monochromacy/Achromatopsia', positive: '#D4D4D4', neutral: '#a1a1a1', negative: '#595959', info: '#262626' },
+  'blue_cone_monochromacy': { label: 'Blue Cone Monochromacy', positive: '#DEEBF7', neutral: '#9ECAE1', negative: '#3182BD', info: '#08519C' }
+};
+
 export const getStatusColors = (theme = 'default') => {
   // Cores dinâmicas por tema para os ícones e fundos
-  const themeColors = theme === 'colorblind' ? {
-    positive: '#004488',
-    neutral: '#DDAA33',
-    negative: '#BB5566',
-    info: '#A0A0A0'
-  } : theme === 'monochromatic' ? {
-    positive: '#D4D4D4',
-    neutral: '#a1a1a1',
-    negative: '#595959',
-    info: '#262626'
-  } : {
-    positive: '#6F9338',
-    neutral: '#DAB734',
-    negative: '#CA5041',
-    info: '#635153'
-  };
+  const themeColors = HEATMAP_PALETTES[theme] || HEATMAP_PALETTES['default'];
+
 
   const base = {
     '2': { label: 'Suficiente', val: 2, icon: <CircleCheck size={20} style={{ color: themeColors.positive }} /> },
@@ -40,47 +38,16 @@ export const getStatusColors = (theme = 'default') => {
     'branco': { label: 'Em Branco', val: null, icon: <File size={20} className="text-gray-500" /> }
   };
 
-  if (theme === 'colorblind') {
-    return {
-      ...base,
-      '2': { ...base['2'], bg: '#004488', border: 'rgba(0,0,0,0.1)' },
-      'suficiente': { ...base['suficiente'], bg: '#004488', border: 'rgba(0,0,0,0.1)' },
-      '1': { ...base['1'], bg: '#DDAA33', border: 'rgba(0,0,0,0.1)' },
-      'parcialmente': { ...base['parcialmente'], bg: '#DDAA33', border: 'rgba(0,0,0,0.1)' },
-      '0': { ...base['0'], bg: '#BB5566', border: 'rgba(0,0,0,0.1)' },
-      'insuficiente': { ...base['insuficiente'], bg: '#BB5566', border: 'rgba(0,0,0,0.1)' },
-      '-1': { ...base['-1'], bg: '#A0A0A0', border: 'rgba(0,0,0,0.1)' },
-      'sem_conteudo': { ...base['sem_conteudo'], bg: '#A0A0A0', border: 'rgba(0,0,0,0.1)' },
-      'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
-      'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
-    };
-  } else if (theme === 'monochromatic') {
-    return {
-      ...base,
-      '2': { ...base['2'], bg: '#D4D4D4', border: 'rgba(0,0,0,0.1)' },
-      'suficiente': { ...base['suficiente'], bg: '#D4D4D4', border: 'rgba(0,0,0,0.1)' },
-      '1': { ...base['1'], bg: '#a1a1a1', border: 'rgba(0,0,0,0.1)' },
-      'parcialmente': { ...base['parcialmente'], bg: '#a1a1a1', border: 'rgba(0,0,0,0.1)' },
-      '0': { ...base['0'], bg: '#595959', border: 'rgba(0,0,0,0.1)' },
-      'insuficiente': { ...base['insuficiente'], bg: '#595959', border: 'rgba(0,0,0,0.1)' },
-      '-1': { ...base['-1'], bg: '#262626', border: 'rgba(0,0,0,0.1)' },
-      'sem_conteudo': { ...base['sem_conteudo'], bg: '#262626', border: 'rgba(0,0,0,0.1)' },
-      'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
-      'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
-    };
-  }
-
-  // Default FGV - Usando as novas cores padrão (Suficiente: #6F9338, Parcialmente: #DAB734, Insuficiente: #CA5041, Sem Conteúdo: #635153)
   return {
     ...base,
-    '2': { ...base['2'], bg: '#6F9338', border: 'rgba(0,0,0,0.1)' },
-    'suficiente': { ...base['suficiente'], bg: '#6F9338', border: 'rgba(0,0,0,0.1)' },
-    '1': { ...base['1'], bg: '#DAB734', border: 'rgba(0,0,0,0.1)' },
-    'parcialmente': { ...base['parcialmente'], bg: '#DAB734', border: 'rgba(0,0,0,0.1)' },
-    '0': { ...base['0'], bg: '#CA5041', border: 'rgba(0,0,0,0.1)' },
-    'insuficiente': { ...base['insuficiente'], bg: '#CA5041', border: 'rgba(0,0,0,0.1)' },
-    '-1': { ...base['-1'], bg: '#635153', border: 'rgba(0,0,0,0.1)' },
-    'sem_conteudo': { ...base['sem_conteudo'], bg: '#635153', border: 'rgba(0,0,0,0.1)' },
+    '2': { ...base['2'], bg: themeColors.positive, border: 'rgba(0,0,0,0.1)' },
+    'suficiente': { ...base['suficiente'], bg: themeColors.positive, border: 'rgba(0,0,0,0.1)' },
+    '1': { ...base['1'], bg: themeColors.neutral, border: 'rgba(0,0,0,0.1)' },
+    'parcialmente': { ...base['parcialmente'], bg: themeColors.neutral, border: 'rgba(0,0,0,0.1)' },
+    '0': { ...base['0'], bg: themeColors.negative, border: 'rgba(0,0,0,0.1)' },
+    'insuficiente': { ...base['insuficiente'], bg: themeColors.negative, border: 'rgba(0,0,0,0.1)' },
+    '-1': { ...base['-1'], bg: themeColors.info, border: 'rgba(0,0,0,0.1)' },
+    'sem_conteudo': { ...base['sem_conteudo'], bg: themeColors.info, border: 'rgba(0,0,0,0.1)' },
     'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
     'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
   };
@@ -112,29 +79,14 @@ export const getColorFromGradient = (value, isActive = true, theme = 'default') 
   if (value === '-' || value === null || isNaN(value)) return '#FFFFFF';
 
   // Cores dinâmicas por tema para o degradê
-  const themeColors = theme === 'colorblind' ? {
-    positive: '#004488',
-    neutral: '#DDAA33',
-    negative: '#BB5566',
-    info: '#A0A0A0'
-  } : theme === 'monochromatic' ? {
-    positive: '#D4D4D4',
-    neutral: '#a1a1a1',
-    negative: '#595959',
-    info: '#262626'
-  } : {
-    positive: '#6F9338',
-    neutral: '#DAB734',
-    negative: '#CA5041',
-    info: '#635153'
-  };
+  const themeColors = HEATMAP_PALETTES[theme] || HEATMAP_PALETTES['default'];
 
   const posRgb = hexToRgb(themeColors.positive);
   const neuRgb = hexToRgb(themeColors.neutral);
   const negRgb = hexToRgb(themeColors.negative);
   const infoRgb = hexToRgb(themeColors.info);
 
-  const points = theme === 'monochromatic' ? [
+  const points = (theme === 'achromatopsia' || theme === 'blue_cone_monochromacy') ? [
     { val: -1, r: 241, g: 245, b: 249 },
     { val: 0, r: 219, g: 234, b: 254 },
     { val: 1, r: 96, g: 165, b: 250 },

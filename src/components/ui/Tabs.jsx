@@ -147,8 +147,8 @@ const Tabs = ({
               key={id}
               onClick={() => onChange && onChange(id)}
               className={`px-[16px] py-[10px] rounded-[8px] border text-[14px] whitespace-nowrap transition-all flex items-center justify-center gap-[8px] shrink-0 basis-[42%] ${isActive
-                  ? 'font-bold shadow-sm'
-                  : 'font-medium'
+                ? 'font-bold shadow-sm'
+                : 'font-medium'
                 }`}
               style={{
                 backgroundColor: isActive ? '#EFF6FF' : (colors?.neutral?.[0] || '#FFFFFF'),

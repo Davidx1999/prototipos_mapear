@@ -51,18 +51,74 @@
       }
     },
     "extended": {
-      "lavender": { "dark": "#5B358A", "base": "#B070F0", "light": "#D9BBFF", "extraLight": "#EEE0FF" },
-      "orange": { "dark": "#96580D", "base": "#E17A00", "light": "#FBBE77", "extraLight": "#FFE3C2" },
-      "oliva": { "dark": "#52712A", "base": "#88A94A", "light": "#ADCE6D", "extraLight": "#CDED90" },
-      "terracota": { "dark": "#8B6245", "base": "#AC7F5E", "light": "#CFA88A", "extraLight": "#E7CBB3" },
-      "wine": { "dark": "#6E1836", "base": "#A41450", "light": "#CE7E8F", "extraLight": "#F49EB0" },
-      "cherry": { "dark": "#95102B", "base": "#D9265C", "light": "#F5A3BC" },
-      "clay": { "dark": "#992400", "base": "#FF6333", "light": "#FAB49E", "extraLight": "#FFE0D7" },
-      "wheat": { "dark": "#915208", "base": "#F2890D", "light": "#F7C8A1" },
-      "aqua": { "dark": "#0B645F", "base": "#259E96", "light": "#7ED4CD", "extraLight": "#D1FBF9" },
-      "storm": { "dark": "#16449C", "base": "#0D5BF2", "light": "#9EC4FA" },
-      "purple": { "dark": "#7B387A", "base": "#9F579E", "light": "#C693C2", "extraLight": "#EEE0FF" },
-      "yellowAlt": { "dark": "#C2A32E", "base": "#FFD744", "light": "#FFE596" }
+      "lavender": {
+        "dark": "#5B358A",
+        "base": "#B070F0",
+        "light": "#D9BBFF",
+        "extraLight": "#EEE0FF"
+      },
+      "orange": {
+        "dark": "#96580D",
+        "base": "#E17A00",
+        "light": "#FBBE77",
+        "extraLight": "#FFE3C2"
+      },
+      "oliva": {
+        "dark": "#52712A",
+        "base": "#88A94A",
+        "light": "#ADCE6D",
+        "extraLight": "#CDED90"
+      },
+      "terracota": {
+        "dark": "#8B6245",
+        "base": "#AC7F5E",
+        "light": "#CFA88A",
+        "extraLight": "#E7CBB3"
+      },
+      "wine": {
+        "dark": "#6E1836",
+        "base": "#A41450",
+        "light": "#CE7E8F",
+        "extraLight": "#F49EB0"
+      },
+      "cherry": {
+        "dark": "#95102B",
+        "base": "#D9265C",
+        "light": "#F5A3BC"
+      },
+      "clay": {
+        "dark": "#992400",
+        "base": "#FF6333",
+        "light": "#FAB49E",
+        "extraLight": "#FFE0D7"
+      },
+      "wheat": {
+        "dark": "#915208",
+        "base": "#F2890D",
+        "light": "#F7C8A1"
+      },
+      "aqua": {
+        "dark": "#0B645F",
+        "base": "#259E96",
+        "light": "#7ED4CD",
+        "extraLight": "#D1FBF9"
+      },
+      "storm": {
+        "dark": "#16449C",
+        "base": "#0D5BF2",
+        "light": "#9EC4FA"
+      },
+      "purple": {
+        "dark": "#7B387A",
+        "base": "#9F579E",
+        "light": "#C693C2",
+        "extraLight": "#EEE0FF"
+      },
+      "yellowAlt": {
+        "dark": "#C2A32E",
+        "base": "#FFD744",
+        "light": "#FFE596"
+      }
     },
     "graph": {
       "positive": "#004488",
