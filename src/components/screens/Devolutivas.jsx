@@ -277,6 +277,7 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
 
   const [tooltipData, setTooltipData] = useState(null);
   const containerRef = useRef(null);
+  const hasDraggedRef = useRef(false);
 
   // --- SHORTCUTS (Spacebar for Pan Mode) ---
   useEffect(() => {
@@ -411,6 +412,7 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
   const handleMouseDown = (e) => {
     if (!isPanMode || !containerRef.current) return;
     setIsDragging(true);
+    hasDraggedRef.current = false;
     setStartPos({
       x: e.pageX - containerRef.current.offsetLeft,
       y: e.pageY - containerRef.current.offsetTop
@@ -426,13 +428,20 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
     e.preventDefault();
     const x = e.pageX - containerRef.current.offsetLeft;
     const y = e.pageY - containerRef.current.offsetTop;
-    const walkX = (x - startPos.x) * 1.5;
-    const walkY = (y - startPos.y) * 1.5;
+    const dx = x - startPos.x;
+    const dy = y - startPos.y;
+    if (Math.sqrt(dx * dx + dy * dy) > 5) {
+      hasDraggedRef.current = true;
+    }
+    const walkX = dx * 1.5;
+    const walkY = dy * 1.5;
     containerRef.current.scrollLeft = scrollPos.left - walkX;
     containerRef.current.scrollTop = scrollPos.top - walkY;
   };
 
-  const handleMouseUpOrLeave = () => setIsDragging(false);
+  const handleMouseUpOrLeave = () => {
+    setIsDragging(false);
+  };
 
   const handleZoom = (delta) => {
     setZoomLevel(prev => Math.min(Math.max(0.4, prev + delta), 2));
@@ -724,6 +733,7 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
               isDarkMode={isDarkMode}
               colors={colors}
               onOpenModal={(type, data) => {
+                if (hasDraggedRef.current) return;
                 if (type === 'details') {
                   setSelectionForDetails({
                     studentName: data.student.name,

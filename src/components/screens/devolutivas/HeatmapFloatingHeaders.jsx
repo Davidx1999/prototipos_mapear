@@ -28,7 +28,7 @@ export default function HeatmapFloatingHeaders({
       {showSkills && (
         <div 
           className="absolute top-2 left-4 right-4 md:left-[352px] md:right-6 backdrop-blur-md rounded-[8px] border flex items-center px-4 py-3 gap-2 z-40 shadow-[0_8px_30px_rgb(0,0,0,0.12)] animate-fade-slide"
-          style={{ backgroundColor: isDarkMode ? 'rgba(43,43,43,0.95)' : 'rgba(255,255,255,0.95)', borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
+          style={{ backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0], borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
         >
           <span className="font-bold text-[12px] whitespace-nowrap shrink-0" style={{ color: isDarkMode ? colors.neutral[0] : '#374151' }}>Destacar Habilidade:</span>
 
@@ -36,7 +36,7 @@ export default function HeatmapFloatingHeaders({
             {canScrollSkillsLeft && (
               <div 
                 className="absolute left-0 top-0 bottom-0 z-10 pr-8 flex items-center transition-opacity"
-                style={{ background: isDarkMode ? `linear-gradient(to right, ${colors.neutral[6]}, rgba(43,43,43,0.9), transparent)` : 'linear-gradient(to right, #FFFFFF, rgba(255,255,255,0.9), transparent)' }}
+                style={{ background: `linear-gradient(to right, ${isDarkMode ? colors.neutral[6] : colors.neutral[0]} 0%, ${isDarkMode ? colors.neutral[6] : colors.neutral[0]}E6 60%, transparent 100%)` }}
               >
                 <button onClick={() => scrollSkills('left')} className="p-1 rounded-full shadow-md border transition-colors" style={{ backgroundColor: isDarkMode ? colors.neutral[5] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[4] : '#E5E7EB', color: isDarkMode ? colors.neutral[1] : '#4B5563' }}><ChevronLeft size={20} /></button>
               </div>
@@ -72,7 +72,7 @@ export default function HeatmapFloatingHeaders({
             {canScrollSkillsRight && (
               <div 
                 className="absolute right-0 top-0 bottom-0 z-10 pl-8 flex items-center transition-opacity"
-                style={{ background: isDarkMode ? `linear-gradient(to left, ${colors.neutral[6]}, rgba(43,43,43,0.9), transparent)` : 'linear-gradient(to left, #FFFFFF, rgba(255,255,255,0.9), transparent)' }}
+                style={{ background: `linear-gradient(to left, ${isDarkMode ? colors.neutral[6] : colors.neutral[0]} 0%, ${isDarkMode ? colors.neutral[6] : colors.neutral[0]}E6 60%, transparent 100%)` }}
               >
                 <button onClick={() => scrollSkills('right')} className="p-1 rounded-full shadow-md border transition-colors" style={{ backgroundColor: isDarkMode ? colors.neutral[5] : '#FFFFFF', borderColor: isDarkMode ? colors.neutral[4] : '#E5E7EB', color: isDarkMode ? colors.neutral[1] : '#4B5563' }}><ChevronRight size={20} /></button>
               </div>
@@ -85,7 +85,7 @@ export default function HeatmapFloatingHeaders({
       {isTestSelected && availableTurmas.length > 1 && (
         <div
           className="absolute left-4 md:left-[352px] z-40 transition-all duration-300 flex items-center backdrop-blur-sm px-2 py-2 rounded-[8px] border shadow-lg"
-          style={{ top: showSkills ? '74px' : '8px', backgroundColor: isDarkMode ? 'rgba(43,43,43,0.9)' : 'rgba(255,255,255,0.9)', borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
+          style={{ top: showSkills ? '74px' : '8px', backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0], borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
         >
           {(() => {
             const limit = 5;
