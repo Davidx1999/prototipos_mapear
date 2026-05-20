@@ -1,3 +1,5 @@
+import { mockAvaliacaoCultura } from '../../../data/mockAvaliacaoCultura';
+
 // ============================================================================
 // DADOS SIMULADOS (MOCK) - DASHBOARD DE AVALIAÇÕES E TESTE ATIVO
 // ============================================================================
@@ -9,7 +11,7 @@ export const mockAssessments = [
     status: 'active',
     startDate: '09 Dez, 25 - 16h',
     endDate: '18 Dez, 26 - 18h',
-    totalItems: 45,
+    totalItems: 4,
     avgTime: '3 Hora(s)',
     progress: 0,
     message: 'Você pode iniciar esta avaliação!'
@@ -40,8 +42,41 @@ export const mockAssessments = [
   }
 ];
 
+export const getCulturaTest = () => {
+  return {
+    id: 'CG-BR-001/2026',
+    title: 'Cultura, Linguagem e Cotidiano Brasileiro',
+    timeLimitSeconds: 10800, // 3 hours
+    tasks: [
+      {
+        id: 'T1',
+        title: mockAvaliacaoCultura.tarefa,
+        elements: [
+          {
+            type: 'block',
+            context: { text: mockAvaliacaoCultura.descricao },
+            items: mockAvaliacaoCultura.itens.map((item, index) => ({
+              id: item.id,
+              number: index + 1,
+              title: item.titulo,
+              type: item.tipo === 'multipla_escolha_com_justificativa' ? 'hybrid' : (item.tipo === 'subjetiva' ? 'subjective' : 'single_choice'),
+              text: item.descricao,
+              image: item.imagem ? `${import.meta.env.BASE_URL}${item.imagem.replace(/^\//, '')}` : undefined,
+              options: item.alternativas ? item.alternativas.map(opt => ({ id: opt.id, text: opt.texto })) : undefined
+            }))
+          }
+        ]
+      }
+    ]
+  };
+};
+
 // GERADOR DINÂMICO PARA ITENS
-export const generateMockTest = (totalItems = 56) => {
+export const generateMockTest = (totalItems = 56, id = null) => {
+  if (id === 'CG-BR-001/2026' || totalItems === 4) {
+    return getCulturaTest();
+  }
+
   const tasks = [];
   const tasksCount = 3;
   const itemsPerTask = Math.ceil(totalItems / tasksCount);
@@ -86,5 +121,5 @@ export const generateMockTest = (totalItems = 56) => {
   };
 };
 
-export const mockTest = generateMockTest(56);
+export const mockTest = getCulturaTest();
 export const MARKER_COLORS = ['#EF4444', '#FACC15', '#4ADE80', '#3B82F6', '#2DD4BF', '#F472B6'];

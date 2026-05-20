@@ -124,7 +124,7 @@ export default function RealizacaoTestes({ colors, isDarkMode, navigateTo }) {
   const handleStartTest = () => {
     const av = mockAssessments.find(a => a.id === selectedAssessmentId) || mockAssessments[0];
     const generated = {
-      ...generateMockTest(av.totalItems),
+      ...generateMockTest(av.totalItems, av.id),
       id: av.id,
       title: av.title
     };
