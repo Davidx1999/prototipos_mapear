@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 
 import Button from '../../ui/Button';
+import Textarea from '../../ui/Textarea';
+import TestSubHeader from './TestSubHeader';
 
 export default function TestPlayer({
   theme, setTheme,
@@ -46,7 +48,7 @@ export default function TestPlayer({
   };
 
   const t = {
-    bgApp: theme === 'dark' ? 'bg-[#0B121A]' : 'bg-[#F7F8FA]',
+    bgApp: theme === 'dark' ? 'bg-[#0B121A]' : 'bg-[#FFFFFF]',
     bgHeader: theme === 'dark' ? 'bg-[#151E28]' : 'bg-white',
     bgSubHeader: 'bg-brand-ultraDark',
     textMain: theme === 'dark' ? 'text-gray-100' : 'text-[#1D2432]',
@@ -117,15 +119,14 @@ export default function TestPlayer({
       </div>
 
       <main className="flex-1 overflow-y-auto custom-scrollbar flex flex-col items-center pt-6 md:pt-10 pb-16 px-4 md:px-8 scroll-smooth relative">
-        <div className={`w-full max-w-[800px] flex flex-col gap-6 md:gap-8 transition-all duration-300`} style={{ fontSize: `${fontSize}px` }}>
-          <h2 className={`text-[20px] md:text-[24px] font-black ${t.textMain} mb-2 flex items-center gap-3 pb-4 border-b ${t.border} animate-fade-slide`}>
-            <div className="bg-[#008BC9] text-white w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-[16px] md:text-[18px] shadow-sm shrink-0">
-              {currentTaskIndex + 1}
-            </div>
-            <span className="leading-tight">{currentTask.title}</span>
-          </h2>
+        <div className={`w-full max-w-[800px] flex flex-col transition-all duration-300`} style={{ fontSize: `${fontSize}px` }}>
+          <TestSubHeader
+            title={currentTask.title}
+            description={currentTask.description}
+            theme={theme}
+          />
 
-          <div className="flex flex-col gap-10 mt-4 mb-8">
+          <div className="flex flex-col gap-10 mt-[24px] mb-8">
             {currentTask.elements.map((el, idx) => {
               const renderItem = (item, uniqueKey) => {
                 const itemComplete = isItemComplete(item);
@@ -134,33 +135,92 @@ export default function TestPlayer({
                 let cardClass = itemComplete ? cardBgComplete : `${t.cardBg} ${t.cardBorder}`;
 
                 if (isCurrentFocus && !itemComplete) {
-                  cardClass = `${t.cardBg} border-[#008BC9] shadow-md ring-2 ring-[#D9F0FC] dark:ring-[#003A79]`;
+                  cardClass = `${t.cardBg} border-[#008BC9] shadow-md ring-2 ${theme === 'dark' ? 'ring-[#003A79]' : 'ring-[#D9F0FC]'}`;
                 }
 
                 return (
-                  <div id={`question-${item.id}`} key={uniqueKey} className={`question-item flex flex-col gap-6 p-6 md:p-8 rounded-2xl border-2 shadow-sm transition-all duration-300 ${cardClass} animate-fade-slide`}>
-                    <div className="flex justify-between items-start gap-4">
-                      <h3 className={`font-bold ${t.textMain} leading-snug flex-1`} style={{ fontSize: '1.15em' }}>
-                        <span className="text-[#008BC9] mr-2">Questão {item.number}.</span>
-                        {item.title}
+                  <div id={`question-${item.id}`} key={uniqueKey} className={`question-item flex flex-col p-6 md:p-8 rounded-[8px] border-2 shadow-sm transition-all duration-300 ${cardClass} animate-fade-slide`}>
+                    <div className="flex justify-between items-end gap-4 pb-2 border-b-2 border-[#008BC9] w-full">
+                      <h3 className={`font-bold ${t.textMain} leading-tight flex-1 flex flex-wrap items-baseline gap-2`} style={{ fontSize: '1.1em' }}>
+                        <span className={`font-semibold ${theme === 'dark' ? 'text-[#94CFEF]' : 'text-[#0C63AA]'}`}>Item {item.number}.</span>
+                        <span className="font-medium">{item.title}</span>
                       </h3>
                       {itemComplete && (
-                        <div className="flex items-center gap-1.5 px-3 py-1 bg-[#10B981] text-white rounded-full text-[12px] font-bold shadow-sm shrink-0 animate-fade-slide">
+                        <div className="flex items-center gap-1.5 px-3 py-1 bg-[#10B981] text-white rounded-full text-[12px] font-bold shadow-sm shrink-0 animate-fade-slide mb-0.5">
                           <CheckCircle2 size={14} /> <span className="hidden sm:inline">Respondida</span>
                         </div>
                       )}
                     </div>
 
                     {item.image && (
-                      <div className={`w-full rounded-xl overflow-hidden border ${t.cardBorder} shadow-sm`}>
-                        <img src={item.image} alt="Imagem da questão" className="w-full max-h-[400px] object-contain bg-white" />
+                      <div className="w-full overflow-hidden mt-[8px]">
+                        <img src={item.image} alt="Imagem da questão" className="w-full max-h-[400px] object-contain" />
                       </div>
                     )}
 
-                    <p className={`${t.textMain} leading-relaxed whitespace-pre-line`} style={{ fontSize: '1em' }}>{item.text}</p>
+                    <p className={`${t.textMain} leading-relaxed whitespace-pre-line mt-[8px]`} style={{ fontSize: '1em' }}>{item.text}</p>
+
+                    {item.table && (
+                      <div className={`w-full overflow-x-auto mt-[8px] border rounded-xl shadow-inner ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className={`border-b ${theme === 'dark' ? 'bg-gray-900/50 border-gray-800' : 'bg-gray-50 border-gray-200'}`}>
+                              {item.table.headers.map((header, hIdx) => (
+                                <th key={hIdx} className={`px-5 py-3 text-[13px] font-bold uppercase tracking-wider ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                                  {header}
+                                </th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {item.table.rows.map((row, rIdx) => (
+                              <tr key={rIdx} className={`border-b last:border-0 transition-colors ${theme === 'dark' ? 'border-gray-800 hover:bg-gray-800/20' : 'border-gray-150 hover:bg-gray-50/55'}`}>
+                                {row.map((cell, cIdx) => (
+                                  <td key={cIdx} className={`px-5 py-3 text-[14px] font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                                    {cell}
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+
+                    {item.notice && (
+                      <div className={`w-full border-l-4 border-[#008BC9] p-5 rounded-r-xl mt-[8px] flex flex-col gap-4 ${theme === 'dark' ? 'bg-[#003A79]/15' : 'bg-[#F0F9FF]'}`}>
+                        <p className={`text-[14px] font-semibold leading-relaxed ${theme === 'dark' ? 'text-[#94CFEF]' : 'text-[#003A79]'}`}>
+                          {item.notice.text}
+                        </p>
+                        {item.notice.videoUrl && (
+                          <div className={`w-full aspect-video rounded-lg overflow-hidden border shadow-sm bg-black ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                            <iframe
+                              src={item.notice.videoUrl}
+                              title="YouTube video player"
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                              allowFullScreen
+                              className="w-full h-full"
+                            ></iframe>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {item.warningBox && (
+                      <div className={`w-full flex items-start gap-3 p-4 rounded-lg mt-[8px] shadow-inner border ${theme === 'dark'
+                        ? 'bg-yellow-950/10 border-yellow-900/30'
+                        : 'bg-yellow-50 border-yellow-250'
+                        }`}>
+                        <AlertTriangle className={`shrink-0 mt-0.5 ${theme === 'dark' ? 'text-yellow-400' : 'text-yellow-600'}`} size={18} />
+                        <p className={`text-[14px] font-medium leading-normal ${theme === 'dark' ? 'text-yellow-300' : 'text-yellow-800'}`}>
+                          {item.warningBox}
+                        </p>
+                      </div>
+                    )}
 
                     {(item.type === 'single_choice' || item.type === 'hybrid') && (
-                      <div className="flex flex-col gap-4 mt-2">
+                      <div className="flex flex-col gap-4 mt-[16px]">
                         {item.options?.map((opt) => {
                           const isSelected = answers[`${item.id}_choice`] === opt.id || answers[item.id] === opt.id;
                           return (
@@ -184,19 +244,27 @@ export default function TestPlayer({
                     )}
 
                     {(item.type === 'subjective' || item.type === 'hybrid') && (
-                      <div className="w-full flex flex-col gap-3 mt-4">
-                        {item.type === 'hybrid' && <span className={`font-bold text-[#008BC9] pt-4 border-t ${t.border}`} style={{ fontSize: '1em' }}>Justifique sua resposta:</span>}
-                        <textarea
+                      <>
+                        {item.type === 'hybrid' && (
+                          <span className={`font-semibold text-[14px] ${theme === 'dark' ? 'text-neutral-1' : 'text-neutral-7'} mt-[16px]`}>
+                            Como você chegou a essa conclusão?
+                          </span>
+                        )}
+                        <Textarea
                           value={item.type === 'hybrid' ? (answers[`${item.id}_text`] || '') : (answers[`${item.id}_text`] || answers[item.id] || '')}
                           onChange={(e) => {
                             if (item.type === 'hybrid') handleAnswer(`${item.id}_text`, e.target.value);
                             else { handleAnswer(`${item.id}_text`, e.target.value); handleAnswer(item.id, e.target.value); }
                           }}
                           placeholder="Digite sua resposta aqui de forma clara..."
-                          className={`w-full p-5 rounded-xl border-2 outline-none transition-all resize-y min-h-[160px] ${t.inputBg} ${t.textMain} focus:border-[#008BC9] focus:ring-4 focus:ring-[#008BC9]/20 shadow-inner`}
-                          style={{ borderColor: (answers[`${item.id}_text`] || answers[item.id]) ? '#008BC9' : (theme === 'dark' ? '#2A3B4C' : '#E5E7EB'), fontSize: '1em' }}
+                          className={`w-full !p-5 focus:!border-[#008BC9] focus:!ring-4 focus:!ring-[#008BC9]/20 ${item.type === 'hybrid' ? 'mt-[4px]' : 'mt-[16px]'}`}
+                          style={{
+                            borderColor: (answers[`${item.id}_text`] || answers[item.id]) ? '#008BC9' : (theme === 'dark' ? '#2A3B4C' : '#E5E7EB'),
+                            fontSize: '1em',
+                            minHeight: '160px'
+                          }}
                         />
-                      </div>
+                      </>
                     )}
                   </div>
                 );
@@ -208,26 +276,42 @@ export default function TestPlayer({
                 const startNumber = el.items[0]?.number;
                 const endNumber = el.items[el.items.length - 1]?.number;
                 return (
-                  <div key={`block-${idx}`} className="flex flex-col gap-8 w-full">
-                    <div className={`flex flex-col gap-4 p-6 md:p-8 rounded-2xl border ${theme === 'dark' ? 'bg-[#003A79]/20 border-[#003A79]' : 'bg-[#F0F9FF] border-[#BAE6FD]'} animate-fade-slide relative overflow-hidden`}>
-                      <div className="absolute left-0 top-0 bottom-0 w-2 bg-[#008BC9]"></div>
-                      <div className={`flex items-center gap-2 ${theme === 'dark' ? 'text-[#94CFEF]' : 'text-[#008BC9]'} mb-1`}>
-                        <BookOpen size={22} className="shrink-0" />
-                        <span className="font-bold text-[14px] md:text-[16px] uppercase tracking-wide">
-                          TEXTO BASE PARA AS QUESTÕES {startNumber} A {endNumber}
+                  <div key={`block-${idx}`} className="flex flex-col gap-5 w-full mt-4 animate-fade-slide">
+                    <div className="flex flex-col w-full">
+                      {/* Header: Textos para os itens de X a Y */}
+                      <div className="flex flex-col w-full">
+                        <span className={`font-bold text-[14px] md:text-[15px] tracking-wide ${theme === 'dark' ? 'text-[#94CFEF]' : 'text-[#003A79]'}`}>
+                          Textos para os Itens de {startNumber} a {endNumber}
                         </span>
+                        {/* Divider line 2px thick primary.dark */}
+                        <div className={`h-[2px] w-full mt-2 ${theme === 'dark' ? 'bg-[#0C63AA]' : 'bg-[#003A79]'}`}></div>
                       </div>
-                      <p className={`${t.textMain} leading-relaxed text-justify`} style={{ fontSize: '1em' }}>
-                        {el.context.text}
-                      </p>
-                      {el.context.image && (
-                        <div className={`w-full rounded-xl overflow-hidden mt-3 border ${t.cardBorder} shadow-sm`}>
-                          <img src={el.context.image} alt="Contexto" className="w-full h-auto object-cover bg-white" />
-                        </div>
+
+                      {/* Title of block of items (gap of 8px from header) */}
+                      {el.title && (
+                        <h4 className={`text-[16px] md:text-[18px] font-bold ${t.textMain} leading-tight mt-[8px]`}>
+                          {el.title}
+                        </h4>
                       )}
+
+                      {/* Box (gap of 16px from title or header) */}
+                      <div className={`flex flex-col gap-4 px-[20px] pt-[16px] pb-[24px] rounded-[8px] border shadow-sm relative overflow-hidden mt-[16px] ${theme === 'dark'
+                        ? 'bg-neutral-6 border-neutral-2'
+                        : 'bg-neutral-1 border-neutral-2'
+                        }`}>
+                        {el.context.image && (
+                          <div className="w-full overflow-hidden mb-2">
+                            <img src={el.context.image} alt="Contexto" className="w-full h-auto max-h-[300px] object-contain mx-auto" />
+                          </div>
+                        )}
+                        <p className={`text-[14px] md:text-[15px] leading-relaxed text-justify ${theme === 'dark' ? 'text-neutral-1' : 'text-neutral-7'}`}>
+                          {el.context.text}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="flex flex-col gap-10 border-l-4 pl-4 md:pl-8 border-[#008BC9]/30 ml-2">
+                    {/* Items inside the block (no left border line) */}
+                    <div className="flex flex-col gap-10 mt-2">
                       {el.items.map((bItem, bIdx) => renderItem(bItem, `bItem-${idx}-${bIdx}`))}
                     </div>
                   </div>
@@ -342,14 +426,14 @@ export default function TestPlayer({
               </div>
             </div>
 
-            <div className="px-6 md:px-8 py-4 bg-gray-50 dark:bg-[#0B121A] border-b border-gray-200 dark:border-gray-800 flex flex-wrap gap-4 md:gap-8 justify-center shrink-0">
-              <div className="flex items-center gap-2 text-[13px] font-semibold text-gray-600 dark:text-gray-300">
+            <div className={`px-6 md:px-8 py-4 border-b flex flex-wrap gap-4 md:gap-8 justify-center shrink-0 ${theme === 'dark' ? 'bg-[#0B121A] border-gray-800' : 'bg-gray-50 border-gray-200'}`}>
+              <div className={`flex items-center gap-2 text-[13px] font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                 <div className="w-5 h-5 rounded border-2 border-[#008BC9] bg-[#008BC9] flex items-center justify-center text-white"><CheckCircle2 size={12} /></div> Respondida
               </div>
-              <div className="flex items-center gap-2 text-[13px] font-semibold text-gray-600 dark:text-gray-300">
-                <div className="w-5 h-5 rounded border-2 border-gray-300 bg-white dark:bg-gray-800"></div> Em Branco
+              <div className={`flex items-center gap-2 text-[13px] font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <div className={`w-5 h-5 rounded border-2 border-gray-300 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}></div> Em Branco
               </div>
-              <div className="flex items-center gap-2 text-[13px] font-semibold text-gray-600 dark:text-gray-300">
+              <div className={`flex items-center gap-2 text-[13px] font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
                 <div className="w-5 h-5 rounded border-2 border-[#008BC9] bg-white relative"><div className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-yellow-400"></div></div> Marcada para revisar
               </div>
             </div>
@@ -366,7 +450,7 @@ export default function TestPlayer({
                       {flatItems.map((item) => {
                         const isAnswered = isItemComplete(item);
                         const flagColor = flags[item.id];
-                        let btnClass = `${t.bgApp} ${t.textMuted} hover:border-[#008BC9] border-gray-300 dark:border-gray-700`;
+                        let btnClass = `${t.bgApp} ${t.textMuted} hover:border-[#008BC9] ${theme === 'dark' ? 'border-gray-700' : 'border-gray-300'}`;
                         if (isAnswered) btnClass = 'bg-[#008BC9] border-[#008BC9] text-white shadow-md';
 
                         return (
@@ -387,7 +471,7 @@ export default function TestPlayer({
               })}
             </div>
 
-            <div className="px-6 py-5 border-t flex justify-end bg-gray-50 dark:bg-[#0B121A] dark:border-gray-800 shrink-0">
+            <div className={`px-6 py-5 border-t flex justify-end shrink-0 ${theme === 'dark' ? 'bg-[#0B121A] border-gray-800' : 'bg-gray-50 border-gray-200'}`}>
               <button onClick={() => setShowMapModal(false)} className="bg-[#008BC9] text-white px-8 py-3 rounded-xl font-bold text-[14px] shadow-md hover:bg-[#003A79] transition-colors">VOLTAR À PROVA</button>
             </div>
           </div>
@@ -417,7 +501,7 @@ export default function TestPlayer({
               <AlertTriangle size={40} />
             </div>
             <h3 className={`text-[22px] font-black ${t.textMain} leading-tight mb-2`}>Atenção!</h3>
-            <p className="text-[15px] text-gray-500 mb-8 font-medium">Você possui <strong className="text-[#1D2432] dark:text-white">{getTotalItems() - getTotalAnswered()} questão(ões)</strong> em branco. Tem certeza que deseja enviar a prova agora?</p>
+            <p className="text-[15px] text-gray-500 mb-8 font-medium">Você possui <strong className={theme === 'dark' ? 'text-white' : 'text-[#1D2432]'}>{getTotalItems() - getTotalAnswered()} questão(ões)</strong> em branco. Tem certeza que deseja enviar a prova agora?</p>
             <div className="flex flex-col gap-3">
               <button onClick={() => setShowIncompleteWarning(false)} className="w-full py-4 bg-[#008BC9] text-white font-bold rounded-xl shadow-md hover:bg-[#003A79] transition-colors text-[15px]">
                 Voltar e Responder
@@ -432,8 +516,8 @@ export default function TestPlayer({
       {showExitWarning && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center animate-fade-slide p-4">
           <div className={`w-full max-w-[440px] ${t.cardBg} rounded-2xl shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#EF4444] relative`}>
-            <button onClick={() => setShowExitWarning(false)} className={`absolute top-4 right-4 p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-gray-500`}><X size={20} /></button>
-            <div className="w-20 h-20 bg-red-100 dark:bg-red-950/50 rounded-full flex items-center justify-center mx-auto mb-6 text-red-500">
+            <button onClick={() => setShowExitWarning(false)} className={`absolute top-4 right-4 p-2 rounded-full text-gray-500 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'}`}><X size={20} /></button>
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-red-500 ${theme === 'dark' ? 'bg-red-950/50' : 'bg-red-100'}`}>
               <DoorOpen size={40} />
             </div>
             <h3 className={`text-[22px] font-black ${t.textMain} leading-tight mb-2`}>Sair da Avaliação?</h3>
@@ -444,7 +528,7 @@ export default function TestPlayer({
               <button onClick={() => setShowExitWarning(false)} className="w-full py-4 bg-[#008BC9] text-white font-bold rounded-xl shadow-md hover:bg-[#003A79] transition-colors text-[15px]">
                 Continuar Avaliação
               </button>
-              <button onClick={() => setCurrentScreen('dashboard')} className="w-full py-4 bg-transparent border-2 border-red-500 text-red-500 font-bold rounded-xl hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors text-[15px]">
+              <button onClick={() => setCurrentScreen('dashboard')} className={`w-full py-4 bg-transparent border-2 border-red-500 text-red-500 font-bold rounded-xl transition-colors text-[15px] ${theme === 'dark' ? 'hover:bg-red-950/20' : 'hover:bg-red-50'}`}>
                 Sim, Sair da Prova
               </button>
             </div>
@@ -455,8 +539,8 @@ export default function TestPlayer({
       {showSubmitWarning && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center animate-fade-slide p-4">
           <div className={`w-full max-w-[440px] ${t.cardBg} rounded-2xl shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#008BC9] relative`}>
-            <button onClick={() => setShowSubmitWarning(false)} className={`absolute top-4 right-4 p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-gray-500`}><X size={20} /></button>
-            <div className="w-20 h-20 bg-[#D9F0FC] dark:bg-[#003A79]/30 rounded-full flex items-center justify-center mx-auto mb-6 text-[#008BC9]">
+            <button onClick={() => setShowSubmitWarning(false)} className={`absolute top-4 right-4 p-2 rounded-full text-gray-500 ${theme === 'dark' ? 'hover:bg-white/5' : 'hover:bg-black/5'}`}><X size={20} /></button>
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-[#008BC9] ${theme === 'dark' ? 'bg-[#003A79]/30' : 'bg-[#D9F0FC]'}`}>
               <CheckCircle2 size={40} />
             </div>
             <h3 className={`text-[22px] font-black ${t.textMain} leading-tight mb-2`}>Entregar Avaliação?</h3>
@@ -467,7 +551,7 @@ export default function TestPlayer({
               <button onClick={handleFinishTest} className="w-full py-4 bg-[#008BC9] text-white font-bold rounded-xl shadow-md hover:bg-[#003A79] transition-colors text-[15px]">
                 Confirmar e Entregar
               </button>
-              <button onClick={() => setShowSubmitWarning(false)} className="w-full py-4 bg-transparent border-2 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-[15px]">
+              <button onClick={() => setShowSubmitWarning(false)} className={`w-full py-4 bg-transparent border-2 font-bold rounded-xl transition-colors text-[15px] ${theme === 'dark' ? 'border-gray-700 text-gray-400 hover:bg-gray-800' : 'border-gray-300 text-gray-600 hover:bg-gray-50'}`}>
                 Voltar ao Teste
               </button>
             </div>
