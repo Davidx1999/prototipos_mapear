@@ -8,6 +8,7 @@ import {
 import Button from '../../ui/Button';
 import Textarea from '../../ui/Textarea';
 import TestSubHeader from './TestSubHeader';
+import TestSidebar from './TestSidebar';
 
 export default function TestPlayer({
   theme, setTheme,
@@ -118,15 +119,39 @@ export default function TestPlayer({
         </div>
       </div>
 
-      <main className="flex-1 overflow-y-auto custom-scrollbar flex flex-col items-center pt-6 md:pt-10 pb-16 px-4 md:px-8 scroll-smooth relative">
-        <div className={`w-full max-w-[800px] flex flex-col transition-all duration-300`} style={{ fontSize: `${fontSize}px` }}>
-          <TestSubHeader
-            title={currentTask.title}
-            description={currentTask.description}
-            theme={theme}
-          />
+      <TestSubHeader theme={theme} />
 
-          <div className="flex flex-col gap-10 mt-[24px] mb-8">
+      <div className="flex-1 flex overflow-hidden">
+        <main className="flex-1 overflow-y-auto custom-scrollbar flex flex-col items-center pt-6 md:pt-8 pb-16 px-4 md:px-8 scroll-smooth relative">
+        <div className={`w-full max-w-[800px] flex flex-col transition-all duration-300`} style={{ fontSize: `${fontSize}px` }}>
+
+          {/* Task label + title — scrolls with content */}
+          {(() => {
+            const taskMatch = currentTask.title.match(/^(Tarefa \d+):\s*(.*)$/i);
+            const taskLabel = taskMatch ? taskMatch[1] : `Tarefa ${currentTaskIndex + 1}`;
+            const taskSub = taskMatch ? taskMatch[2] : currentTask.title;
+            const t2 = { textMain: theme === 'dark' ? 'text-white' : 'text-neutral-7' };
+            return (
+              <div className="flex flex-col gap-2 mb-[24px]">
+                <div className="flex items-stretch gap-2 animate-fade-slide">
+                  <div className="w-[6px] bg-[#008BC9] rounded-sm shrink-0"></div>
+                  <div className="flex flex-col justify-center leading-tight">
+                    <span className="text-[14px] font-medium text-gray-500 tracking-wider">{taskLabel}</span>
+                    <h2 className={`text-[18px] font-semibold ${t2.textMain}`}>{taskSub}</h2>
+                  </div>
+                </div>
+                {currentTask.description && (
+                  <div className={`w-full px-[20px] pt-[16px] pb-[24px] rounded-[8px] border ${theme === 'dark' ? 'bg-neutral-6 border-neutral-2' : 'bg-neutral-1 border-[var(--neutral-2)]'}`}>
+                    <p className={`text-[14px] md:text-[15px] leading-relaxed text-justify ${theme === 'dark' ? 'text-neutral-1' : 'text-neutral-7'}`}>
+                      {currentTask.description}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          <div className="flex flex-col gap-10 mb-8">
             {currentTask.elements.map((el, idx) => {
               const renderItem = (item, uniqueKey) => {
                 const itemComplete = isItemComplete(item);
@@ -321,7 +346,21 @@ export default function TestPlayer({
             })}
           </div>
         </div>
-      </main>
+        </main>
+
+        <TestSidebar
+          theme={theme}
+          activeTest={activeTest}
+          currentTaskIndex={currentTaskIndex}
+          activeItemId={activeItemId}
+          answers={answers}
+          flags={flags}
+          getTaskItems={getTaskItems}
+          isItemComplete={isItemComplete}
+          jumpToTask={jumpToTask}
+          setActiveItemId={setActiveItemId}
+        />
+      </div>
 
       <div className={`h-[88px] shrink-0 ${theme === 'dark' ? 'bg-[#0B121A]' : 'bg-white'} border-t ${t.border} flex justify-between items-center px-4 md:px-8 shadow-[0_-10px_30px_rgba(0,0,0,0.08)] transition-colors duration-300`}>
         <div className="flex gap-2 w-auto md:w-[160px] shrink-0">
