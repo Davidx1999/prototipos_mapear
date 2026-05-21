@@ -11,7 +11,7 @@ export const mockAssessments = [
     status: 'active',
     startDate: '09 Dez, 25 - 16h',
     endDate: '18 Dez, 26 - 18h',
-    totalItems: 4,
+    totalItems: 12,
     avgTime: '3 Hora(s)',
     progress: 0,
     message: 'Você pode iniciar esta avaliação!'
@@ -43,6 +43,10 @@ export const mockAssessments = [
 ];
 
 export const getCulturaTest = () => {
+  const t1 = mockAvaliacaoCultura[0];
+  const t2 = mockAvaliacaoCultura[1];
+  const t3 = mockAvaliacaoCultura[2];
+
   return {
     id: 'CG-BR-001/2026',
     title: 'Cultura, Linguagem e Cotidiano Brasileiro',
@@ -50,30 +54,72 @@ export const getCulturaTest = () => {
     tasks: [
       {
         id: 'T1',
-        title: mockAvaliacaoCultura.tarefa,
+        title: t1.tarefa,
+        description: t1.descricao,
+        elements: t1.itens.map((item, index) => ({
+          type: 'item',
+          data: mapItem(item, index + 1)
+        }))
+      },
+      {
+        id: 'T2',
+        title: t2.tarefa,
+        description: t2.descricao,
         elements: [
           {
+            type: 'item',
+            data: mapItem(t2.itens[0], 5)
+          },
+          {
+            type: 'item',
+            data: mapItem(t2.itens[1], 6)
+          },
+          {
             type: 'block',
-            context: { text: mockAvaliacaoCultura.descricao },
-            items: mockAvaliacaoCultura.itens.map((item, index) => ({
-              id: item.id,
-              number: index + 1,
-              title: item.titulo,
-              type: item.tipo === 'multipla_escolha_com_justificativa' ? 'hybrid' : (item.tipo === 'subjetiva' ? 'subjective' : 'single_choice'),
-              text: item.descricao,
-              image: item.imagem ? `${import.meta.env.BASE_URL}${item.imagem.replace(/^\//, '')}` : undefined,
-              options: item.alternativas ? item.alternativas.map(opt => ({ id: opt.id, text: opt.texto })) : undefined
-            }))
+            title: 'Biomas Brasileiros e Relação Sociedade–Natureza',
+            context: {
+              text: t2.itens[2].blockContext.text,
+              image: t2.itens[2].blockContext.image ? `${import.meta.env.BASE_URL}${t2.itens[2].blockContext.image.replace(/^\//, '')}` : undefined
+            },
+            items: [
+              mapItem(t2.itens[2], 7),
+              mapItem(t2.itens[3], 8)
+            ]
           }
         ]
+      },
+      {
+        id: 'T3',
+        title: t3.tarefa,
+        description: t3.descricao,
+        elements: t3.itens.map((item, index) => ({
+          type: 'item',
+          data: mapItem(item, index + 9)
+        }))
       }
     ]
   };
 };
 
+function mapItem(item, number) {
+  return {
+    id: item.id,
+    number: number,
+    title: item.titulo,
+    type: item.tipo === 'multipla_escolha_com_justificativa' ? 'hybrid' : (item.tipo === 'subjetiva' ? 'subjective' : 'single_choice'),
+    text: item.descricao,
+    image: item.imagem ? `${import.meta.env.BASE_URL}${item.imagem.replace(/^\//, '')}` : undefined,
+    options: item.alternativas ? item.alternativas.map(opt => ({ id: opt.id, text: opt.texto })) : undefined,
+    // Custom layout/content attributes
+    table: item.table,
+    notice: item.notice,
+    warningBox: item.warningBox
+  };
+}
+
 // GERADOR DINÂMICO PARA ITENS
 export const generateMockTest = (totalItems = 56, id = null) => {
-  if (id === 'CG-BR-001/2026' || totalItems === 4) {
+  if (id === 'CG-BR-001/2026' || totalItems === 12 || totalItems === 4) {
     return getCulturaTest();
   }
 
