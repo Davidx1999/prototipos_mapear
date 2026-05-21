@@ -10,7 +10,7 @@ export default function PreTest({ colors, assessment, handleStartTest, setCurren
   let btnText = av.status === 'active' && av.progress > 0 ? 'CONTINUAR AVALIAÇÃO' : 'INICIAR AVALIAÇÃO';
 
   return (
-    <div className="min-h-screen flex flex-col font-['Montserrat',sans-serif] text-[#1D2432]" style={{ backgroundColor: colors.neutral[0] }}>
+    <div className="h-full w-full flex flex-col font-['Montserrat',sans-serif] text-[#1D2432] overflow-y-auto custom-scrollbar" style={{ backgroundColor: colors.neutral[0] }}>
       <main className="flex-1 max-w-[900px] w-full mx-auto p-4 md:p-10 pb-28 animate-fade-slide">
         <div className="mb-6 flex items-center gap-3">
           <Button

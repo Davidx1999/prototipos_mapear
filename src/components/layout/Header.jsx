@@ -55,46 +55,62 @@ const Header = ({
 
       {/* ══ DIREITA: AÇÕES E PERFIL ════════════════════════════════════════ */}
       <div className="flex items-center gap-[4px] md:gap-[12px]">
-        {/* Ajuda (Apenas Desktop) */}
-        <Button
-          variant="tertiary"
-          appearance="ghost"
-          size="md"
-          tertiaryTone={isDarkMode ? "low" : "high"}
-          iconLeft={<HelpCircle />}
-          className={`hidden md:flex ${isDarkMode ? "text-white hover:bg-white/10" : ""}`}
-          onClick={() => window.open('https://dev-ajuda.cenpe.ufc.br/guides/practical_guides', '_blank')}
-        >
-          Ajuda
-        </Button>
-
-        {/* Grip Menu */}
-        <div className="relative">
+        {currentScreen === 'realizacao-testes' ? (
           <Button
             variant="tertiary"
             appearance="ghost"
             iconOnly
             size="md"
-            selected={isGripOpen}
             tertiaryTone={isDarkMode ? "low" : "high"}
-            iconLeft={<Grip color={isGripOpen ? (isDarkMode ? colors.neutral[3] : undefined) : undefined} />}
-            onClick={openGripDrawer}
-            className={isDarkMode
-              ? (isGripOpen ? "!bg-white/20 !text-white" : "text-white hover:!bg-white/10")
-              : (isGripOpen ? "" : "hover:!bg-[var(--neutral-2)]")
-            }
+            iconLeft={isDarkMode ? <Sun className="text-white" /> : <Moon />}
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className={isDarkMode ? "hover:bg-white/10 text-white" : "hover:bg-[var(--neutral-2)] text-[var(--neutral-7)]"}
+            title="Alternar Modo Escuro"
           />
-          <GripMenu
-            colors={colors}
-            isGripOpen={isGripOpen}
-            setIsGripOpen={setIsGripOpen}
-            gripActiveTab={gripActiveTab}
-            setGripActiveTab={setGripActiveTab}
-            currentScreen={currentScreen}
-            navigateTo={navigateTo}
-            isDarkMode={isDarkMode}
-          />
-        </div>
+        ) : (
+          <>
+            {/* Ajuda (Apenas Desktop) */}
+            <Button
+              variant="tertiary"
+              appearance="ghost"
+              size="md"
+              tertiaryTone={isDarkMode ? "low" : "high"}
+              iconLeft={<HelpCircle />}
+              className={`hidden md:flex ${isDarkMode ? "text-white hover:bg-white/10" : ""}`}
+              onClick={() => window.open('https://dev-ajuda.cenpe.ufc.br/guides/practical_guides', '_blank')}
+            >
+              Ajuda
+            </Button>
+
+            {/* Grip Menu */}
+            <div className="relative">
+              <Button
+                variant="tertiary"
+                appearance="ghost"
+                iconOnly
+                size="md"
+                selected={isGripOpen}
+                tertiaryTone={isDarkMode ? "low" : "high"}
+                iconLeft={<Grip color={isGripOpen ? (isDarkMode ? colors.neutral[3] : undefined) : undefined} />}
+                onClick={openGripDrawer}
+                className={isDarkMode
+                  ? (isGripOpen ? "!bg-white/20 !text-white" : "text-white hover:!bg-white/10")
+                  : (isGripOpen ? "" : "hover:!bg-[var(--neutral-2)]")
+                }
+              />
+              <GripMenu
+                colors={colors}
+                isGripOpen={isGripOpen}
+                setIsGripOpen={setIsGripOpen}
+                gripActiveTab={gripActiveTab}
+                setGripActiveTab={setGripActiveTab}
+                currentScreen={currentScreen}
+                navigateTo={navigateTo}
+                isDarkMode={isDarkMode}
+              />
+            </div>
+          </>
+        )}
 
         {/* Acessibilidade */}
         <AccessibilityMenu

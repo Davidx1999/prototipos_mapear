@@ -116,8 +116,8 @@ export default function RealizacaoTestes({ colors, isDarkMode, navigateTo }) {
   // --- HANDLERS ---
   const handleAnswer = (key, value) => setAnswers(prev => ({ ...prev, [key]: value }));
 
-  const handleToggleFlag = () => {
-    const currentId = activeItemId.replace('question-', '');
+  const handleToggleFlag = (itemId) => {
+    const currentId = itemId ? itemId.replace('question-', '') : activeItemId.replace('question-', '');
     setFlags(prev => ({ ...prev, [currentId]: !prev[currentId] }));
   };
 

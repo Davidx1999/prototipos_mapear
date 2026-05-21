@@ -123,6 +123,31 @@ export default function MapearApp() {
     };
   }, []);
 
+  // Lock scroll on html/body for full-screen dashboards
+  useEffect(() => {
+    if (['devolutivas', 'realizacao-testes'].includes(currentScreen)) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      
+      const handleScrollLock = () => {
+        if (window.scrollY !== 0) {
+          window.scrollTo(0, 0);
+        }
+      };
+      
+      window.addEventListener('scroll', handleScrollLock);
+      
+      return () => {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        window.removeEventListener('scroll', handleScrollLock);
+      };
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+  }, [currentScreen]);
+
   // Sincronização de Roteamento via Hash
   useEffect(() => {
     const handleHashSync = () => {
@@ -258,7 +283,7 @@ export default function MapearApp() {
   }
 
   return (
-    <div className={`flex flex-col transition-all duration-500 ${isDarkMode ? 'dark-mode' : ''} ${currentScreen === 'devolutivas' ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
+    <div className={`flex flex-col transition-all duration-500 ${isDarkMode ? 'dark dark-mode' : ''} ${['devolutivas', 'realizacao-testes'].includes(currentScreen) ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
       <Header
         colors={colors}
         isHighContrast={isHighContrast}
@@ -286,7 +311,7 @@ export default function MapearApp() {
         openGripDrawer={openGripDrawer}
       />
 
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${currentScreen === 'devolutivas' ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
+      <div className={`flex-1 flex flex-col transition-all duration-300 ${['devolutivas', 'realizacao-testes'].includes(currentScreen) ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
         <ErrorBoundary>
           {currentScreen === 'dashboard' && (
           <Dashboard

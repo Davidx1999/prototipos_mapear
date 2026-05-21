@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search, ListTodo, BookOpen, Calendar, Clock, ChevronRight } from 'lucide-react';
+import Tabs from '../../ui/Tabs';
 
 export default function Dashboard({ 
   colors, 
@@ -13,7 +14,7 @@ export default function Dashboard({
   const filteredAssessments = mockAssessments.filter(a => a.status === statusMap[dashboardTab]);
 
   return (
-    <div className="min-h-screen flex flex-col font-['Montserrat',sans-serif] text-[#1D2432] relative overflow-hidden" style={{ backgroundColor: colors.neutral[0] }}>
+    <div className="h-full w-full flex flex-col font-['Montserrat',sans-serif] text-[#1D2432] relative overflow-y-auto custom-scrollbar" style={{ backgroundColor: colors.neutral[0] }}>
       <div
         className="absolute top-0 right-0 w-[450px] h-[450px] pointer-events-none opacity-80"
         style={{
@@ -34,13 +35,19 @@ export default function Dashboard({
           </div>
         </div>
 
-        <div className="w-full border-b border-gray-200 mb-6">
-          <div className="max-w-[1200px] w-full mx-auto px-4 md:px-10 flex overflow-x-auto hide-scrollbar">
-            {['Ativas', 'Realizadas', 'Expiradas'].map(tab => (
-              <button key={tab} onClick={() => setDashboardTab(tab)} className={`px-5 py-3 font-bold text-[14px] border-b-2 -mb-[1px] transition-colors whitespace-nowrap ${dashboardTab === tab ? 'border-[#008BC9] text-[#008BC9]' : 'border-transparent text-gray-500 hover:text-gray-800'}`}>
-                {tab}
-              </button>
-            ))}
+        <div className="w-full mb-6">
+          <div className="max-w-[1200px] w-full mx-auto px-4 md:px-10">
+            <Tabs
+              tabs={[
+                { id: 'Ativas', label: 'Ativas' },
+                { id: 'Realizadas', label: 'Realizadas' },
+                { id: 'Expiradas', label: 'Expiradas' }
+              ]}
+              activeTab={dashboardTab}
+              onChange={setDashboardTab}
+              colors={colors}
+              variant="line"
+            />
           </div>
         </div>
 

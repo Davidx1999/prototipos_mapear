@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle2, Clock, LayoutGrid } from 'lucide-react';
+import Button from '../../ui/Button';
 
 export default function Finished({
   formatTime,
@@ -9,7 +10,7 @@ export default function Finished({
   setCurrentScreen
 }) {
   return (
-    <div className={`min-h-[calc(100vh-73px)] flex flex-col font-['Montserrat',sans-serif] bg-[#F7F8FA]`}>
+    <div className={`h-full w-full flex flex-col font-['Montserrat',sans-serif] bg-[#F7F8FA] overflow-y-auto custom-scrollbar`}>
 
       <div className="flex-1 flex flex-col items-center justify-center p-6 animate-fade-slide text-center">
         <div className="w-32 h-32 bg-[#D1FAE5] rounded-full flex items-center justify-center mb-8 text-[#10B981] shadow-inner">
@@ -31,9 +32,9 @@ export default function Finished({
           </div>
         </div>
 
-        <button onClick={() => setCurrentScreen('dashboard')} className="bg-[#008BC9] text-white px-12 py-4 rounded-xl font-bold text-[15px] shadow-lg hover:bg-[#003A79] transition-all transform hover:-translate-y-1 uppercase tracking-wide">
+        <Button onClick={() => setCurrentScreen('dashboard')} variant="primary" size="lg" className="px-12 rounded-xl shadow-lg hover:bg-[#003A79]">
           VOLTAR PARA O INÍCIO
-        </button>
+        </Button>
       </div>
     </div>
   );

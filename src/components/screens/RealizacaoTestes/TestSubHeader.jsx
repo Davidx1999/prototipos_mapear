@@ -11,12 +11,13 @@ const TestSubHeader = ({
   className = '',
   ...props
 }) => {
-  const bgSticky = theme === 'dark' ? 'bg-[#0B121A]' : 'bg-[#FFFFFF]';
+  const hasBg = className.split(' ').some(c => c.startsWith('bg-'));
+  const bgSticky = hasBg ? '' : (theme === 'dark' ? 'bg-[#0B121A]' : 'bg-[#FFFFFF]');
   const borderColor = theme === 'dark' ? 'border-neutral-2' : 'border-[var(--neutral-2)]';
 
   return (
     <div
-      className={`sticky top-0 z-10 w-full border-b ${borderColor} ${bgSticky} ${className}`}
+      className={`relative z-[900] w-full border-b ${borderColor} ${bgSticky} ${className}`}
       {...props}
     >
       {children}

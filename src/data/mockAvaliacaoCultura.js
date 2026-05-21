@@ -6,7 +6,7 @@ export const mockAvaliacaoCultura = [
     itens: [
       {
         id: "item1",
-        titulo: "Diversidade Cultural Brasileira",
+        titulo: "Diversidade Cultural Brasileira. O Brasil é marcado por uma grande diversidade cultural, visível nas festas populares, nos esportes, na música e nos hábitos cotidianos. Essas manifestações fazem parte da construção da identidade nacional e influenciam fim.",
         imagem: "/assets/RealizacaoDeTestes/pandeiroBrasil.jpg",
         descricao: "O Brasil é conhecido por sua diversidade cultural, resultado da mistura de povos indígenas, africanos, europeus e asiáticos. Essa diversidade aparece em festas, músicas, comidas e costumes regionais. Assinale a alternativa que melhor representa essa diversidade cultural:",
         tipo: "multipla_escolha_com_justificativa",
