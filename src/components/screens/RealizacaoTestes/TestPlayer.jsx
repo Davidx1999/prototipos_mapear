@@ -152,17 +152,17 @@ export default function TestPlayer({
       </div>
 
       {!showMapModal ? (
-        <TestSubHeader theme={theme} className="h-5 py-0 flex items-center justify-center border-b transition-colors duration-300 overflow-hidden shrink-0">
-          <div className="flex items-center justify-center gap-3 px-4 overflow-x-auto max-w-full custom-scrollbar leading-none h-full">
+        <TestSubHeader theme={theme} className="h-5 py-0 flex items-center justify-center border-b transition-colors duration-300 overflow-hidden shrink-0" style={{ height: '20px', minHeight: '20px', maxHeight: '20px' }}>
+          <div className="flex items-center justify-center gap-3 px-4 overflow-x-auto max-w-full custom-scrollbar leading-none h-full" style={{ height: '20px' }}>
             {activeTest.tasks.map((task, idx) => {
               const isCurrentTask = idx === currentTaskIndex;
               const flatItems = getTaskItems(task);
               return (
                 <React.Fragment key={task.id}>
                   {idx > 0 && (
-                    <div className="w-[1px] h-2.5 bg-neutral-3 dark:bg-neutral-6 mx-0.5 shrink-0" />
+                    <div className="w-[1px] h-2 bg-neutral-3 dark:bg-neutral-6 mx-0.5 shrink-0" />
                   )}
-                  <div className={`flex items-center gap-1 px-1 py-0.5 rounded transition-colors ${isCurrentTask ? 'bg-brand-extraLight/40 dark:bg-brand-ultraDark/40' : ''}`}>
+                  <div className={`flex items-center gap-1 px-1 py-0 rounded transition-colors ${isCurrentTask ? 'bg-brand-extraLight/40 dark:bg-brand-ultraDark/40' : ''}`} style={{ height: '16px' }}>
                     <span className={`text-[9px] font-black tracking-wider mr-1 uppercase leading-none ${isCurrentTask ? 'text-[#008BC9]' : 'text-neutral-5 dark:text-neutral-4'}`}>
                       T{idx + 1}
                     </span>
@@ -174,9 +174,9 @@ export default function TestPlayer({
                         const hasText = answers[`${item.id}_text`] && answers[`${item.id}_text`].trim() !== '';
                         const isPartiallyAnswered = item.type === 'hybrid' && ((!!hasChoice && !hasText) || (!hasChoice && !!hasText));
                         
-                        let dotClass = "w-2 h-2 rounded-full transition-all duration-200 cursor-pointer shrink-0 border ";
+                        let dotClass = "w-1.5 h-1.5 rounded-full transition-all duration-200 cursor-pointer shrink-0 border ";
                         if (isCurrentItem) {
-                          dotClass += "bg-white border-[#0C63AA] ring-2 ring-[#0C63AA] ring-offset-0.5";
+                          dotClass += "bg-white border-[#0C63AA] ring-1 ring-[#0C63AA] ring-offset-[1px]";
                         } else if (isAnswered) {
                           dotClass += "bg-brand-base border-[#003A79]";
                         } else if (isPartiallyAnswered) {
