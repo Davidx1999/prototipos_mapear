@@ -209,63 +209,61 @@ export default function TestPlayer({
         </div>
 
         {/* Minimalist Item Map */}
-        {!showMapModal && (
-          <div className="h-[28px] bg-brand-ultraDark border-t border-b border-brand-dark flex items-center justify-center overflow-x-auto px-4 md:px-8 w-full select-none gap-2 scrollbar-none animate-fade-slide">
-            {activeTest.tasks.map((task, taskIdx) => {
-              const taskItems = getTaskItems(task);
-              return (
-                <div key={task.id} className="flex items-center gap-[4px] pr-[8px] border-r border-brand-dark last:border-r-0 h-full shrink-0">
-                  {/* Task square */}
-                  <div
-                    onClick={() => jumpToTask(taskIdx)}
-                    className={`w-5 h-5 flex items-center justify-center font-bold text-[11px] rounded-[4px] cursor-pointer transition-colors ${
-                      currentTaskIndex === taskIdx
-                        ? 'bg-brand-light text-brand-ultraDark'
-                        : 'bg-transparent text-brand-light hover:bg-white/10'
-                    }`}
-                  >
-                    {taskIdx + 1}
-                  </div>
-                  {/* Item markers */}
-                  {taskItems.map((item) => {
-                    const status = getItemStatus(item.id);
-                    const isActiveItem = activeItemId === `question-${item.id}`;
-                    
-                    let markerClass = '';
-                    if (isActiveItem) {
-                      markerClass = 'bg-[var(--neutral-0)] border-2 border-brand-base';
-                    } else {
-                      if (status === 'completed') {
-                        markerClass = 'bg-brand-base';
-                      } else if (status === 'partial') {
-                        markerClass = 'bg-secondary-base';
-                      } else {
-                        markerClass = 'bg-neutral-3';
-                      }
-                    }
-                    
-                    return (
-                      <div
-                        key={item.id}
-                        onClick={() => {
-                          jumpToTask(taskIdx);
-                          setTimeout(() => {
-                            setActiveItemId(`question-${item.id}`);
-                            scrollToQuestion(`question-${item.id}`);
-                          }, 100);
-                        }}
-                        className={`h-[12px] rounded-[999px] cursor-pointer transition-all duration-300 ${
-                          isActiveItem ? 'w-[64px]' : 'w-[16px]'
-                        } ${markerClass}`}
-                        title={`Item ${item.number}`}
-                      />
-                    );
-                  })}
+        <div className="h-[28px] bg-brand-ultraDark border-t border-b border-brand-dark flex items-center justify-center overflow-x-auto px-4 md:px-8 w-full select-none gap-2 scrollbar-none animate-fade-slide">
+          {activeTest.tasks.map((task, taskIdx) => {
+            const taskItems = getTaskItems(task);
+            return (
+              <div key={task.id} className="flex items-center gap-[4px] pr-[8px] border-r border-brand-dark last:border-r-0 h-full shrink-0">
+                {/* Task square */}
+                <div
+                  onClick={() => jumpToTask(taskIdx)}
+                  className={`w-5 h-5 flex items-center justify-center font-bold text-[11px] rounded-[4px] cursor-pointer transition-colors ${
+                    currentTaskIndex === taskIdx
+                      ? 'bg-brand-light text-brand-ultraDark'
+                      : 'bg-transparent text-brand-light hover:bg-white/10'
+                  }`}
+                >
+                  {taskIdx + 1}
                 </div>
-              );
-            })}
-          </div>
-        )}
+                {/* Item markers */}
+                {taskItems.map((item) => {
+                  const status = getItemStatus(item.id);
+                  const isActiveItem = activeItemId === `question-${item.id}`;
+                  
+                  let markerClass = '';
+                  if (isActiveItem) {
+                    markerClass = 'bg-[var(--neutral-0)] border-2 border-brand-base';
+                  } else {
+                    if (status === 'completed') {
+                      markerClass = 'bg-brand-base';
+                    } else if (status === 'partial') {
+                      markerClass = 'bg-secondary-base';
+                    } else {
+                      markerClass = 'bg-neutral-3';
+                    }
+                  }
+                  
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => {
+                        jumpToTask(taskIdx);
+                        setTimeout(() => {
+                          setActiveItemId(`question-${item.id}`);
+                          scrollToQuestion(`question-${item.id}`);
+                        }, 100);
+                      }}
+                      className={`h-[12px] rounded-[999px] cursor-pointer transition-all duration-300 ${
+                        isActiveItem ? 'w-[64px]' : 'w-[16px]'
+                      } ${markerClass}`}
+                      title={`Item ${item.number}`}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
       </TestSubHeader>
 
       <div className="flex-1 flex overflow-hidden">
@@ -763,21 +761,30 @@ export default function TestPlayer({
 
       {/* Floating Toggle Button — rendered inside the TestPlayer root div to inherit the zoom styling */}
       <div 
-        className={`absolute z-[800] ${isDragging ? '' : 'transition-all duration-300'} top-[180px]`}
-        style={{ right: showMapModal ? (isMobile ? '320px' : `${sidebarWidth}px`) : '0px' }}
+        className={`absolute z-[800] ${isDragging ? '' : 'transition-all duration-300'}`}
+        style={{ 
+          right: showMapModal ? (isMobile ? '320px' : `${sidebarWidth}px`) : '0px',
+          top: (isMobile && showMapModal) ? '8px' : '108px'
+        }}
       >
         <button
           onClick={() => setShowMapModal(!showMapModal)}
           className={`
-            h-[40px] px-4 flex items-center gap-2 font-bold text-[14px] transition-all duration-150
-            bg-brand-ultraDark text-white border border-brand-dark border-r-0
-            rounded-l-[8px] cursor-pointer outline-none hover:bg-brand-dark active:scale-[0.97]
-            shadow-[0_4px_12px_rgba(0,0,0,0.15)]
+            h-[40px] flex items-center transition-all duration-150 cursor-pointer outline-none border-0
+            bg-brand-base text-white hover:bg-brand-dark active:bg-brand-extraDark active:scale-[0.97]
+            rounded-l-[4px] rounded-r-none shadow-[0_4px_12px_rgba(0,0,0,0.15)]
+            ${showMapModal ? 'w-[40px] justify-center px-0' : 'px-4 gap-2 font-bold text-[14px]'}
           `}
           title={showMapModal ? "Colapsar Mapa de Itens" : "Expandir Mapa de Itens"}
         >
-          {showMapModal ? <PanelRightClose size={18} className="text-brand-light" /> : <PanelRightOpen size={18} className="text-brand-light" />}
-          <span>Mapa de Itens</span>
+          {showMapModal ? (
+            <PanelRightClose size={18} />
+          ) : (
+            <>
+              <PanelRightOpen size={18} />
+              <span>Mapa de Itens</span>
+            </>
+          )}
         </button>
       </div>
     </div>
