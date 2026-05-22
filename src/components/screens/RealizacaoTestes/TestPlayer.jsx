@@ -763,7 +763,7 @@ export default function TestPlayer({
 
       {/* Floating Toggle Button — rendered inside the TestPlayer root div to inherit the zoom styling */}
       <div 
-        className={`absolute z-[800] ${isDragging ? '' : 'transition-all duration-300'} top-[140px]`}
+        className={`absolute z-[800] ${isDragging ? '' : 'transition-all duration-300'} top-[180px]`}
         style={{ right: showMapModal ? (isMobile ? '320px' : `${sidebarWidth}px`) : '0px' }}
       >
         <button
