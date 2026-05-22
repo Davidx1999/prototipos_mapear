@@ -110,6 +110,9 @@ const Button = ({
       if (appearance === 'link') {
         return 'bg-transparent text-[var(--neutral-3)] border-transparent cursor-not-allowed pointer-events-none';
       }
+      if (appearance === 'ghost') {
+        return 'bg-transparent text-[var(--neutral-3)] border-transparent cursor-not-allowed pointer-events-none';
+      }
       return 'bg-[var(--neutral-2)] text-[var(--neutral-3)] border-[var(--neutral-2)] cursor-not-allowed pointer-events-none';
     }
     return variantStyles[variant]?.[appearance] || variantStyles.primary.solid;

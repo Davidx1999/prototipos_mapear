@@ -143,17 +143,20 @@ export default function TestPlayer({
   return (
     <div className={`w-full h-full flex flex-col font-['Montserrat',sans-serif] ${t.bgApp} transition-colors duration-300 overflow-hidden relative`}>
       {/* Floating Toggle Button (visible in both states, transitions smoothly) */}
-      <div className={`fixed z-[800] shadow-2xl transition-all duration-300 ${showMapModal ? 'right-[320px] xl:right-[420px]' : 'right-0'} top-[220px]`}>
-        <Button
-          variant="secondary"
-          appearance="solid"
-          size="md"
+      <div className={`fixed z-[800] transition-all duration-300 ${showMapModal ? 'right-[320px] xl:right-[420px]' : 'right-0'} top-[140px]`}>
+        <button
           onClick={() => setShowMapModal(!showMapModal)}
-          iconLeft={showMapModal ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
-          className="rounded-r-none rounded-l-[4px] border-r-0"
+          className={`
+            h-[40px] px-4 flex items-center gap-2 font-bold text-[14px] transition-all duration-150
+            bg-brand-ultraDark text-white border border-brand-dark border-r-0
+            rounded-l-[8px] cursor-pointer outline-none hover:bg-brand-dark active:scale-[0.97]
+            shadow-[0_4px_12px_rgba(0,0,0,0.15)]
+          `}
+          title={showMapModal ? "Colapsar Mapa de Itens" : "Expandir Mapa de Itens"}
         >
-          Mapa de Itens
-        </Button>
+          {showMapModal ? <PanelRightClose size={18} className="text-brand-light" /> : <PanelRightOpen size={18} className="text-brand-light" />}
+          <span>Mapa de Itens</span>
+        </button>
       </div>
 
       <TestSubHeader theme={theme} className="bg-brand-ultraDark !border-b-0 shadow-sm shrink-0 z-50 flex flex-col w-full">
@@ -163,6 +166,7 @@ export default function TestPlayer({
               variant="secondary"
               appearance="solid"
               size="md"
+              iconOnly
               onClick={() => setShowExitWarning(true)}
               title="Sair da Avaliação"
               className="rounded-[4px]"
@@ -229,13 +233,7 @@ export default function TestPlayer({
                   
                   let markerClass = '';
                   if (isActiveItem) {
-                    if (status === 'completed') {
-                      markerClass = 'bg-brand-base border-2 border-brand-extraDark';
-                    } else if (status === 'partial') {
-                      markerClass = 'bg-secondary-base border-2 border-brand-extraDark';
-                    } else {
-                      markerClass = 'bg-neutral-6 border-2 border-brand-base';
-                    }
+                    markerClass = 'bg-[var(--neutral-0)] border-2 border-brand-base';
                   } else {
                     if (status === 'completed') {
                       markerClass = 'bg-brand-base';
@@ -256,7 +254,7 @@ export default function TestPlayer({
                           scrollToQuestion(`question-${item.id}`);
                         }, 100);
                       }}
-                      className={`h-[12px] rounded-[4px] cursor-pointer transition-all duration-300 ${
+                      className={`h-[12px] rounded-[999px] cursor-pointer transition-all duration-300 ${
                         isActiveItem ? 'w-[64px]' : 'w-[16px]'
                       } ${markerClass}`}
                       title={`Item ${item.number}`}
@@ -555,7 +553,23 @@ export default function TestPlayer({
               </Button>
             </div>
 
-            {/* Right buttons (Próximos + Enviar Teste) */}
+            {/* Middle button (Enviar Teste) */}
+            <div className="flex-1 flex justify-center items-center">
+              {/* Enviar Teste */}
+              <Button
+                variant={submitVariant}
+                appearance="solid"
+                size="lg"
+                onClick={onAttemptFinish}
+                disabled={isSubmitDisabled}
+                className="shadow-md min-w-[160px] rounded-[4px]"
+                title="Enviar Teste"
+              >
+                Enviar Teste
+              </Button>
+            </div>
+
+            {/* Right buttons (Próximos) */}
             <div className="flex-1 flex justify-end items-center gap-3">
               {/* Arrow Right + Próximo Item */}
               <Button
@@ -583,19 +597,6 @@ export default function TestPlayer({
                 className="rounded-[4px]"
               >
                 <SquareArrowRight size={20} />
-              </Button>
-
-              {/* Enviar Teste */}
-              <Button
-                variant={submitVariant}
-                appearance="solid"
-                size="lg"
-                onClick={onAttemptFinish}
-                disabled={isSubmitDisabled}
-                className="shadow-md min-w-[160px] rounded-[4px]"
-                title="Enviar Teste"
-              >
-                Enviar Teste
               </Button>
             </div>
           </div>

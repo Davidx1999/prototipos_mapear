@@ -236,7 +236,6 @@ export default function RealizacaoTestes({ colors, isDarkMode, navigateTo }) {
 
   const jumpToTask = (taskIndex) => {
     setCurrentTaskIndex(taskIndex);
-    setShowMapModal(false);
     setTimeout(() => {
       scrollToTop();
     }, 100);
