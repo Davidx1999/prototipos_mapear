@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import {
   Sun, Moon, LayoutGrid, Clock, Flag,
   ChevronLeft, ChevronRight, CheckCircle2, X, Send,
@@ -761,25 +762,28 @@ export default function TestPlayer({
       )}
     </div>
 
-      {/* Floating Toggle Button — outside overflow-hidden container so it is never clipped */}
-      <div 
-        className={`fixed z-[800] ${isDragging ? '' : 'transition-all duration-300'} top-[140px]`}
-        style={{ right: showMapModal ? (isMobile ? '320px' : `${sidebarWidth}px`) : '0px' }}
-      >
-        <button
-          onClick={() => setShowMapModal(!showMapModal)}
-          className={`
-            h-[40px] px-4 flex items-center gap-2 font-bold text-[14px] transition-all duration-150
-            bg-brand-ultraDark text-white border border-brand-dark border-r-0
-            rounded-l-[8px] cursor-pointer outline-none hover:bg-brand-dark active:scale-[0.97]
-            shadow-[0_4px_12px_rgba(0,0,0,0.15)]
-          `}
-          title={showMapModal ? "Colapsar Mapa de Itens" : "Expandir Mapa de Itens"}
+      {/* Floating Toggle Button — rendered via Portal to document.body to prevent clipping by overflow-hidden containers */}
+      {createPortal(
+        <div 
+          className={`fixed z-[800] ${isDragging ? '' : 'transition-all duration-300'} top-[140px]`}
+          style={{ right: showMapModal ? (isMobile ? '320px' : `${sidebarWidth}px`) : '0px' }}
         >
-          {showMapModal ? <PanelRightClose size={18} className="text-brand-light" /> : <PanelRightOpen size={18} className="text-brand-light" />}
-          <span>Mapa de Itens</span>
-        </button>
-      </div>
+          <button
+            onClick={() => setShowMapModal(!showMapModal)}
+            className={`
+              h-[40px] px-4 flex items-center gap-2 font-bold text-[14px] transition-all duration-150
+              bg-brand-ultraDark text-white border border-brand-dark border-r-0
+              rounded-l-[8px] cursor-pointer outline-none hover:bg-brand-dark active:scale-[0.97]
+              shadow-[0_4px_12px_rgba(0,0,0,0.15)]
+            `}
+            title={showMapModal ? "Colapsar Mapa de Itens" : "Expandir Mapa de Itens"}
+          >
+            {showMapModal ? <PanelRightClose size={18} className="text-brand-light" /> : <PanelRightOpen size={18} className="text-brand-light" />}
+            <span>Mapa de Itens</span>
+          </button>
+        </div>,
+        document.body
+      )}
     </>
   );
 }
