@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { Blocks, PanelLeftOpen, ChevronRight, X } from 'lucide-react';
+import { LayoutGrid, PanelLeftOpen, ChevronRight, X, ChevronDown } from 'lucide-react';
 import CascadeMobile from './cascade/CascadeMobile';
 import CascadeDesktop from './cascade/CascadeDesktop';
+import Button from './Button';
 
 /**
  * CascadeSelector (Refactored)
@@ -43,6 +44,17 @@ export default function CascadeSelector({
   }, []);
 
   useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
     if (initialSelections.length > 0) setSelections(initialSelections);
     if (selectedLeafItems.length > 0) setSelectedLeafs(selectedLeafItems);
   }, [initialSelections, selectedLeafItems]);
@@ -68,7 +80,7 @@ export default function CascadeSelector({
 
   const selectItem = (levelIndex, value, objData = null) => {
     const isLastLevel = levelIndex === levels.length - 1;
-    const isTurmaLevel = levelIndex === 4;
+    const isTurmaLevel = levels[levelIndex]?.id === 'turma';
 
     if (isTurmaLevel) {
       const currentTurmas = selections[levelIndex] || [];
@@ -110,11 +122,11 @@ export default function CascadeSelector({
   const toggleAllForLevel = (levelIndex, allAvailable) => {
     if (levelIndex === levels.length - 1) {
       setSelectedLeafs(selectedLeafs.length === allAvailable.length ? [] : [...allAvailable]);
-    } else if (levelIndex === 4) {
-      const current = Array.isArray(selections[4]) ? selections[4] : [];
+    } else if (levels[levelIndex]?.id === 'turma') {
+      const current = Array.isArray(selections[levelIndex]) ? selections[levelIndex] : [];
       const next = current.length === allAvailable.length ? [] : [...allAvailable];
       const newSelections = [...selections];
-      newSelections[4] = next;
+      newSelections[levelIndex] = next;
       setSelections(newSelections);
 
       // Trigger sync if selecting all turmas
@@ -167,31 +179,50 @@ export default function CascadeSelector({
   // ══ RENDERING HELPERS ════════════════════════════════════════════════════
   const breadcrumbHtml = selections.length === 0 ? (
     <span className={`text-neutral-500 font-medium truncate ${variant === 'sidebar' ? 'text-[11px] md:text-[12px]' : 'text-[14px] md:text-[14px]'}`}>
-      Escolha uma avaliação para aplicar...
+      Escolha uma {levels[levels.length - 1]?.title?.toLowerCase() || 'avaliação'}...
     </span>
   ) : (
     <div className={`flex items-center gap-[8px] flex-1 min-w-0 pr-[16px] overflow-hidden whitespace-nowrap ${variant === 'sidebar' ? 'text-[11px] md:text-[12px]' : 'text-[14px] md:text-[14px]'}`}>
       {isOpen ? (
         // MODO ABERTO: Mostra o caminho completo para permitir navegação retroativa
-        selections.map((s, i) => {
-          if (!s) return null;
+        (() => {
+          if (selections.length <= 1) {
+            return selections.map((s, i) => {
+              if (!s) return null;
+              const isArray = Array.isArray(s);
+              const fullLabel = isArray ? `${s.length} ${levels[i]?.title}` : (typeof s === 'object' ? s.nome : s);
+              const label = fullLabel.length > 16 ? fullLabel.substring(0, 13) + '...' : fullLabel;
+              return (
+                <span
+                  key={i}
+                  onClick={(e) => { e.stopPropagation(); setSelections(selections.slice(0, i)); setSearchLevel(i); }}
+                  className="font-semibold shrink-0 cursor-pointer hover:underline transition-colors"
+                  style={{ color: colors?.neutral?.[7] || '#1D2432' }}
+                >
+                  {label}
+                </span>
+              );
+            });
+          }
+          const i = selections.length - 1;
+          const s = selections[i];
           const isArray = Array.isArray(s);
           const fullLabel = isArray ? `${s.length} ${levels[i]?.title}` : (typeof s === 'object' ? s.nome : s);
           const label = fullLabel.length > 16 ? fullLabel.substring(0, 13) + '...' : fullLabel;
-          const isLast = i === selections.length - 1;
           return (
-            <React.Fragment key={i}>
+            <>
+              <span className="text-neutral-400 font-semibold shrink-0">...</span>
+              <ChevronRight size={20} className="text-neutral-400 shrink-0" />
               <span
                 onClick={(e) => { e.stopPropagation(); setSelections(selections.slice(0, i)); setSearchLevel(i); }}
-                className={`font-semibold shrink-0 cursor-pointer hover:underline transition-colors ${isLast ? '' : 'hidden md:block'}`}
-                style={{ color: isLast ? (colors?.neutral?.[7] || '#1D2432') : (colors?.neutral?.[5] || '#64748B') }}
+                className="font-semibold shrink-0 cursor-pointer hover:underline transition-colors"
+                style={{ color: colors?.neutral?.[7] || '#1D2432' }}
               >
                 {label}
               </span>
-              {(!isLast || (multiSelectLeaf && selectedLeafs.length > 0)) && <ChevronRight size={20} className="text-neutral-400 shrink-0 hidden md:block" />}
-            </React.Fragment>
+            </>
           );
-        })
+        })()
       ) : (
         // MODO FECHADO: Mostra apenas o último item selecionado (ex: o Teste) com truncamento
         (() => {
@@ -221,21 +252,40 @@ export default function CascadeSelector({
   return (
     <div className={`relative w-full`} style={{ zIndex: isOpen ? 80 : 40 }} ref={containerRef}>
       {/* Top Selector Bar */}
-      <div className="items-center gap-[6px] md:gap-[8px] flex w-full">
+      <div className="items-center gap-[8px] flex w-full">
         <div
-          className={`flex items-center bg-neutral-0 border transition-all ${isOpen ? 'border-[2px] border-[var(--primary-base)] ring-2 ring-[var(--primary-light)]' : 'border-neutral-300 shadow-sm'} rounded-[4px] ${variant === 'sidebar' ? 'h-[36px] md:h-[40px] px-[12px] flex-1 min-w-0' : 'h-[44px] md:h-[48px] px-[16px] w-fit min-w-[40%] max-w-[calc(100%-56px)]'} cursor-pointer hover:border-[var(--primary-base)] overflow-hidden`}
+          className={`flex items-center justify-between bg-neutral-0 border transition-all ${
+            isOpen ? 'border-[2px] border-[var(--primary-base)] ring-2 ring-[var(--primary-light)]' : 'border-neutral-300 shadow-sm'
+          } rounded-[4px] ${
+            isMobile
+              ? 'h-[44px] px-[16px] w-full'
+              : variant === 'sidebar'
+                ? 'h-[36px] md:h-[40px] px-[12px] flex-1 min-w-0'
+                : 'h-[44px] md:h-[48px] px-[16px] flex-1 md:flex-initial md:w-fit md:min-w-[40%] md:max-w-[calc(100%-56px)]'
+          } cursor-pointer hover:border-[var(--primary-base)] overflow-hidden`}
           onClick={toggle}
         >
-          <Blocks size={20} className="text-primary-base shrink-0 mr-[8px] md:mr-[12px]" />
-          {breadcrumbHtml}
+          <div className="flex items-center min-w-0 flex-1">
+            <LayoutGrid size={20} className="text-primary-base shrink-0 mr-[8px] md:mr-[12px]" />
+            {breadcrumbHtml}
+          </div>
+          {isMobile && (
+            <ChevronDown
+              size={20}
+              className={`text-neutral-500 shrink-0 ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            />
+          )}
         </div>
         {!isMobile && (
-          <button
+          <Button
             onClick={toggle}
-            className={`${variant === 'sidebar' ? 'w-[36px] h-[36px] md:w-[40px] md:h-[40px]' : 'w-[44px] h-[44px] md:w-[48px] md:h-[48px]'} shrink-0 rounded-[4px] flex items-center justify-center transition-colors ${isOpen ? 'bg-neutral-100 border border-neutral-300 text-neutral-700' : 'bg-[#008BC9] text-white hover:bg-[#003A79] shadow-sm'}`}
+            variant={isOpen ? 'tertiary' : 'primary'}
+            appearance="solid"
+            iconOnly={true}
+            className={`${variant === 'sidebar' ? '!h-[36px] !w-[36px] md:!h-[40px] md:!w-[40px]' : '!h-[44px] !w-[44px] md:!h-[48px] md:!w-[48px]'}`}
           >
             {isOpen ? <X size={20} /> : <PanelLeftOpen size={20} />}
-          </button>
+          </Button>
         )}
       </div>
 

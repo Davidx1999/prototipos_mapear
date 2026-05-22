@@ -37,7 +37,7 @@ const Button = ({
              active:text-[var(--primary-extra-dark)]`
     },
     secondary: {
-      solid: `bg-[var(--primary-extra-light)] text-[#008BC9] border-[#008BC9] hover:bg-[var(--primary-light)] shadow-md ${showRing ? 'ring-2 ring-[#003A79]' : ''}`,
+      solid: `bg-[var(--primary-extra-light)] text-[#008BC9] border-[#008BC9] hover:bg-[var(--primary-light)] ${showRing ? 'ring-2 ring-[#003A79]' : ''}`,
       ghost: `bg-transparent text-[var(--primary-base)] border-transparent
               hover:bg-[var(--primary-light)] hover:bg-opacity-[0.48]
               active:bg-[var(--primary-base)] active:text-[var(--primary-dark)]`,

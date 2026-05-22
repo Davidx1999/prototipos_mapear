@@ -104,17 +104,26 @@ const CascadeDesktop = ({
       </div>
 
       {/* Alert Banner for Multiple Selection */}
-      {Array.isArray(selections[4]) && selections[4].length > 1 && (
-        <div
-          className="p-[16px] flex items-center gap-[16px] border-t shrink-0"
-          style={{ backgroundColor: colors.semantic?.info?.extraLight || '#DFF8FF', borderColor: colors.neutral[2] || '#E5E7EB' }}
-        >
-          <AlertCircle size={20} style={{ color: colors.semantic?.info?.dark || '#155274', flexShrink: 0 }} />
-          <span className="text-[14px] leading-snug" style={{ color: colors.neutral[7] }}>
-            Exibindo <strong>somente</strong> avaliações <strong>realizadas por ambas</strong> as turmas. Alguns registros podem estar <strong>ocultos</strong>.
-          </span>
-        </div>
-      )}
+      {(() => {
+        const turmaIdx = levels.findIndex(lvl => lvl.id === 'turma');
+        if (turmaIdx !== -1) {
+          const turmaSelections = selections[turmaIdx];
+          if (Array.isArray(turmaSelections) && turmaSelections.length > 1) {
+            return (
+              <div
+                className="p-[16px] flex items-center gap-[16px] border-t shrink-0"
+                style={{ backgroundColor: colors.semantic?.info?.extraLight || '#DFF8FF', borderColor: colors.neutral[2] || '#E5E7EB' }}
+              >
+                <AlertCircle size={20} style={{ color: colors.semantic?.info?.dark || '#155274', flexShrink: 0 }} />
+                <span className="text-[14px] leading-snug" style={{ color: colors.neutral[7] }}>
+                  Exibindo <strong>somente</strong> avaliações <strong>realizadas por ambas</strong> as turmas. Alguns registros podem estar <strong>ocultos</strong>.
+                </span>
+              </div>
+            );
+          }
+        }
+        return null;
+      })()}
 
       {/* Final Leaf Warnings */}
       {multiSelectLeaf && selections.length >= levels.length - 1 && (() => {
@@ -133,12 +142,17 @@ const CascadeDesktop = ({
 
       {/* Footer Actions */}
       <div className="p-[16px] md:px-[24px] md:py-[12px] border-t border-neutral-200 bg-neutral-0 flex justify-end gap-[16px] items-center shrink-0">
-        <button
+        <Button
           onClick={onClearAll}
-          className="px-[16px] py-[10px] text-[14px] font-bold text-neutral-600 hover:bg-neutral-200 border border-neutral-300 rounded-[4px] transition-colors flex items-center gap-[6px] bg-neutral-0 shadow-sm"
+          disabled={selections.length === 0 && selectedLeafs.length === 0}
+          variant="tertiary"
+          appearance="solid"
+          size="md"
+          className="!text-[12px] font-semibold tracking-normal normal-case !border"
+          style={selections.length === 0 && selectedLeafs.length === 0 ? { color: colors?.neutral?.[3] || '#CACDD5', borderColor: colors?.neutral?.[3] || '#CACDD5', backgroundColor: 'transparent' } : {}}
         >
-          LIMPAR SELEÇÃO <Eraser size={20} />
-        </button>
+          Limpar Seleção
+        </Button>
         <Button
           onClick={onConfirm}
           disabled={selections.length === 0 || (multiSelectLeaf && selectedLeafs.length === 0)}

@@ -20,12 +20,12 @@ const CascadeItem = ({
 
   // Mobile and Desktop have slightly different paddings and text sizes
   const containerClasses = isMobile
-    ? `mx-[12px] my-[3px] px-[16px] py-[14px] rounded-[12px] flex items-center justify-between active:scale-[0.98] transition-all`
+    ? `mx-[12px] my-[4px] px-[16px] py-[12px] rounded-[8px] flex items-center justify-between active:scale-[0.98] transition-all cursor-pointer`
     : `px-[12px] py-[12px] rounded-[4px] text-[14px] font-normal cursor-pointer transition-colors flex justify-between items-center group ${isSelected ? ((isLastLevel && multiSelectLeaf) || isTurmaLevel ? 'bg-blue-50 text-neutral-800' : 'bg-[#003A79] text-white shadow-md') : 'text-neutral-700 hover:bg-neutral-100'}`;
 
   const containerStyle = isMobile ? {
-    backgroundColor: isSelected ? `${colors.primary.base}12` : 'transparent',
-    border: `1px solid ${isSelected ? `${colors.primary.base}30` : 'transparent'}`
+    backgroundColor: isSelected ? (colors.primary.extraLight || '#E0F2FE') : 'transparent',
+    border: `1px solid ${isSelected ? (colors.primary.base + '20') : 'transparent'}`
   } : {};
 
   return (
@@ -50,7 +50,7 @@ const CascadeItem = ({
         <div className="flex flex-col gap-[2px] overflow-hidden flex-1 py-1">
           <span
             className={`leading-snug line-clamp-3 font-normal ${isMobile ? 'text-[15px]' : 'text-[14px]'}`}
-            style={{ color: isMobile ? (isSelected ? colors.primary.base : colors.neutral[7]) : 'inherit' }}
+            style={{ color: isMobile ? (isSelected ? (colors.primary.dark || '#003A79') : (colors.neutral[7] || '#1D2432')) : 'inherit' }}
             title={label}
           >
             {label}
@@ -64,7 +64,20 @@ const CascadeItem = ({
       </div>
 
       {!isLastLevel && !isTurmaLevel && (
-        <ChevronRight size={20} className={`shrink-0 ${isMobile ? '' : (isSelected ? 'text-white' : 'opacity-50 group-hover:text-primary-base')}`} style={isMobile ? { color: colors.neutral[3] } : {}} />
+        isMobile ? (
+          isSelected ? (
+            <div 
+              className="w-[32px] h-[32px] rounded-[6px] flex items-center justify-center shrink-0"
+              style={{ backgroundColor: colors.neutral[2] || '#E5E7EB' }}
+            >
+              <ChevronRight size={18} style={{ color: colors.neutral[7] || '#1D2432' }} />
+            </div>
+          ) : (
+            <ChevronRight size={20} className="shrink-0" style={{ color: colors.neutral[4] || '#9CA3AF' }} />
+          )
+        ) : (
+          <ChevronRight size={20} className={`shrink-0 ${isSelected ? 'text-white' : 'opacity-50 group-hover:text-primary-base'}`} />
+        )
       )}
     </div>
   );

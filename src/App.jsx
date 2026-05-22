@@ -75,8 +75,8 @@ export default function MapearApp() {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('user.test');
+  const [password, setPassword] = useState('User@123');
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
 

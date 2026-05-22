@@ -24,7 +24,7 @@ const CascadeColumn = ({
   searchQuery
 }) => {
   const isLastLevel = index === levels.length - 1;
-  const isTurmaLevel = index === 4;
+  const isTurmaLevel = level.id === 'turma';
   const isMultiSelectLevel = isTurmaLevel || (isLastLevel && multiSelectLeaf);
 
   let innerContent = null;
@@ -48,13 +48,6 @@ const CascadeColumn = ({
     );
   } else if (filteredItems.length === 0 && !searchQuery) {
     innerContent = <div className="p-[16px] text-[14px] text-neutral-400 text-center font-medium">Nenhum resultado encontrado.</div>;
-  } else if (isSyncing && index === syncingLevel) {
-    innerContent = (
-      <div className="flex items-center justify-center h-full gap-2 py-12">
-        <div className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: colors.primary?.dark || '#003A79', borderTopColor: 'transparent' }}></div>
-        <span className="text-[12px] font-bold" style={{ color: colors.primary?.dark || '#003A79' }}>Sincronizando...</span>
-      </div>
-    );
   } else {
     const renderItem = (item, idx, customKeyPrefix = "") => {
       const value = typeof item === 'object' ? item.id : item;
@@ -127,7 +120,7 @@ const CascadeColumn = ({
 
   const getSelectionCount = () => {
     if (isLastLevel) return selectedLeafs.length;
-    if (isTurmaLevel) return Array.isArray(selections[4]) ? selections[4].length : 0;
+    if (isTurmaLevel) return Array.isArray(selections[index]) ? selections[index].length : 0;
     return 0;
   };
 
