@@ -37,10 +37,43 @@ export default function TestPlayer({
   handleFinishTest,
   goPrevItem, goNextItem,
   confirmNextTask, jumpToTask,
+  scrollToTop, scrollToQuestion,
   setCurrentScreen
 }) {
   const [showExitWarning, setShowExitWarning] = React.useState(false);
   const [showSubmitWarning, setShowSubmitWarning] = React.useState(false);
+
+  const flatItems = React.useMemo(() => {
+    const items = [];
+    let globalIdx = 1;
+    activeTest.tasks.forEach((task, tIdx) => {
+      const taskItems = getTaskItems(task);
+      taskItems.forEach((item) => {
+        items.push({
+          ...item,
+          taskIdx: tIdx,
+          globalIndex: globalIdx++,
+        });
+      });
+    });
+    return items;
+  }, [activeTest, getTaskItems]);
+
+  const getItemStatus = (itemId) => {
+    const item = flatItems.find(i => i.id === itemId);
+    if (!item) return 'unanswered';
+
+    if (item.type === 'hybrid') {
+      const hasChoice = answers[`${itemId}_choice`] || answers[itemId];
+      const hasText = answers[`${itemId}_text`] && answers[`${itemId}_text`].trim() !== '';
+      if (hasChoice && hasText) return 'completed';
+      if (hasChoice || hasText) return 'partial';
+      return 'unanswered';
+    }
+
+    if (isItemComplete(item)) return 'completed';
+    return 'unanswered';
+  };
 
   const onAttemptFinish = () => {
     if (getTotalAnswered() < getTotalItems()) {
@@ -59,7 +92,7 @@ export default function TestPlayer({
       if (items.length > 0) {
         setActiveItemId(`question-${items[0].id}`);
         setTimeout(() => {
-          document.getElementById(`question-${items[0].id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          scrollToQuestion(`question-${items[0].id}`);
         }, 150);
       }
     }
@@ -74,7 +107,7 @@ export default function TestPlayer({
       if (items.length > 0) {
         setActiveItemId(`question-${items[0].id}`);
         setTimeout(() => {
-          document.getElementById(`question-${items[0].id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          scrollToQuestion(`question-${items[0].id}`);
         }, 150);
       }
     }
@@ -117,21 +150,22 @@ export default function TestPlayer({
           size="md"
           onClick={() => setShowMapModal(!showMapModal)}
           iconLeft={showMapModal ? <PanelRightClose size={20} /> : <PanelRightOpen size={20} />}
-          className="rounded-r-none rounded-l-xl border-r-0"
+          className="rounded-r-none rounded-l-[4px] border-r-0"
         >
           Mapa de Itens
         </Button>
       </div>
 
-      <TestSubHeader theme={theme} className="bg-brand-ultraDark border-b shadow-sm shrink-0 z-50 flex flex-col w-full">
+      <TestSubHeader theme={theme} className="bg-brand-ultraDark !border-b-0 shadow-sm shrink-0 z-50 flex flex-col w-full">
         <div className="py-4 flex justify-between items-center px-4 md:px-8 transition-colors duration-300">
           <div className="flex items-center gap-4 overflow-hidden flex-1 mr-4">
             <Button
               variant="secondary"
               appearance="solid"
-              iconOnly={true}
+              size="md"
               onClick={() => setShowExitWarning(true)}
               title="Sair da Avaliação"
+              className="rounded-[4px]"
             >
               <DoorOpen size={20} />
             </Button>
@@ -141,14 +175,13 @@ export default function TestPlayer({
           </div>
 
           <div className="flex items-center gap-4 shrink-0">
-            <div className="flex items-center bg-black/45 rounded-md p-1 shadow-inner hidden md:flex shrink-0 gap-1">
+            <div className="flex items-center bg-black/45 rounded-[4px] p-1 shadow-inner hidden md:flex shrink-0 gap-1">
               <Button
                 variant="tertiary"
                 appearance="ghost"
                 size="xs"
-                iconOnly
                 onClick={() => setFontSize(Math.max(14, fontSize - 2))}
-                className="!text-white hover:!bg-white/10 !w-7 !h-7 !p-0 font-bold text-sm"
+                className="text-white hover:bg-white/10 font-bold text-xs rounded-[4px]"
                 title="Diminuir fonte"
               >
                 A-
@@ -158,24 +191,86 @@ export default function TestPlayer({
                 variant="tertiary"
                 appearance="ghost"
                 size="xs"
-                iconOnly
                 onClick={() => setFontSize(Math.min(24, fontSize + 2))}
-                className="!text-white hover:!bg-white/10 !w-7 !h-7 !p-0 font-bold text-[16px]"
+                className="text-white hover:bg-white/10 font-bold text-sm rounded-[4px]"
                 title="Aumentar fonte"
               >
                 A+
               </Button>
             </div>
 
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded bg-black/40 text-white font-mono font-bold text-[14px] tracking-widest shadow-inner shrink-0">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-[4px] bg-black/40 text-white font-mono font-bold text-[14px] tracking-widest shadow-inner shrink-0">
               <Clock size={16} className="text-[#94CFEF]" /> {formatTime(timeRemaining)}
             </div>
           </div>
         </div>
+
+        {/* Minimalist Item Map */}
+        <div className="h-[28px] bg-brand-ultraDark border-t border-b border-brand-dark flex items-center justify-center overflow-x-auto px-4 md:px-8 w-full select-none gap-2 scrollbar-none">
+          {activeTest.tasks.map((task, taskIdx) => {
+            const taskItems = getTaskItems(task);
+            return (
+              <div key={task.id} className="flex items-center gap-[4px] pr-[8px] border-r border-brand-dark last:border-r-0 h-full shrink-0">
+                {/* Task square */}
+                <div
+                  onClick={() => jumpToTask(taskIdx)}
+                  className={`w-5 h-5 flex items-center justify-center font-bold text-[11px] rounded-[4px] cursor-pointer transition-colors ${
+                    currentTaskIndex === taskIdx
+                      ? 'bg-brand-light text-brand-ultraDark'
+                      : 'bg-transparent text-brand-light hover:bg-white/10'
+                  }`}
+                >
+                  {taskIdx + 1}
+                </div>
+                {/* Item markers */}
+                {taskItems.map((item) => {
+                  const status = getItemStatus(item.id);
+                  const isActiveItem = activeItemId === `question-${item.id}`;
+                  
+                  let markerClass = '';
+                  if (isActiveItem) {
+                    if (status === 'completed') {
+                      markerClass = 'bg-brand-base border-2 border-brand-extraDark';
+                    } else if (status === 'partial') {
+                      markerClass = 'bg-secondary-base border-2 border-brand-extraDark';
+                    } else {
+                      markerClass = 'bg-neutral-6 border-2 border-brand-base';
+                    }
+                  } else {
+                    if (status === 'completed') {
+                      markerClass = 'bg-brand-base';
+                    } else if (status === 'partial') {
+                      markerClass = 'bg-secondary-base';
+                    } else {
+                      markerClass = 'bg-neutral-3';
+                    }
+                  }
+                  
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => {
+                        jumpToTask(taskIdx);
+                        setTimeout(() => {
+                          setActiveItemId(`question-${item.id}`);
+                          scrollToQuestion(`question-${item.id}`);
+                        }, 100);
+                      }}
+                      className={`h-[12px] rounded-[4px] cursor-pointer transition-all duration-300 ${
+                        isActiveItem ? 'w-[64px]' : 'w-[16px]'
+                      } ${markerClass}`}
+                      title={`Item ${item.number}`}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
       </TestSubHeader>
 
       <div className="flex-1 flex overflow-hidden">
-        <main className="flex-1 overflow-y-auto custom-scrollbar flex flex-col items-center pt-6 md:pt-8 pb-16 px-4 md:px-8 scroll-smooth relative">
+        <main id="test-player-main" className="flex-1 overflow-y-auto custom-scrollbar flex flex-col items-center pt-6 md:pt-8 pb-16 px-4 md:px-8 scroll-smooth relative">
           <div className={`w-full max-w-[800px] flex flex-col transition-all duration-300`} style={{ fontSize: `${fontSize}px` }}>
 
             {/* Task label + title — scrolls with content */}
@@ -223,20 +318,8 @@ export default function TestPlayer({
                           <span className="font-medium">{item.title}</span>
                         </h3>
                         <div className="flex items-center gap-2 mb-0.5 shrink-0">
-                          <Button
-                            variant="tertiary"
-                            appearance="solid"
-                            size="xs"
-                            onClick={() => handleToggleFlag(`question-${item.id}`)}
-                            iconLeft={<Flag size={14} className={flags[item.id] ? 'fill-yellow-500 text-yellow-500' : ''} />}
-                            selected={!!flags[item.id]}
-                            className="!h-[28px] !px-3"
-                            title="Revisar depois"
-                          >
-                            Revisar
-                          </Button>
                           {itemComplete && (
-                            <div className="flex items-center gap-1.5 px-3 py-1 bg-[#10B981] text-white rounded-full text-[12px] font-bold shadow-sm shrink-0 animate-fade-slide" style={{ height: '28px' }}>
+                            <div className="flex items-center gap-1.5 px-3 py-1 bg-[#10B981] text-white rounded-[4px] text-[12px] font-bold shadow-sm shrink-0 animate-fade-slide" style={{ height: '28px' }}>
                               <CheckCircle2 size={14} /> <span className="hidden sm:inline">Respondida</span>
                             </div>
                           )}
@@ -252,7 +335,7 @@ export default function TestPlayer({
                       <p className={`${t.textMain} leading-relaxed whitespace-pre-line mt-[8px]`} style={{ fontSize: '1em' }}>{item.text}</p>
 
                       {item.table && (
-                        <div className={`w-full overflow-x-auto mt-[8px] border rounded-xl shadow-inner ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
+                        <div className={`w-full overflow-x-auto mt-[8px] border rounded-[8px] shadow-inner ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
                           <table className="w-full text-left border-collapse">
                             <thead>
                               <tr className={`border-b ${theme === 'dark' ? 'bg-gray-900/50 border-gray-800' : 'bg-gray-50 border-gray-200'}`}>
@@ -279,12 +362,12 @@ export default function TestPlayer({
                       )}
 
                       {item.notice && (
-                        <div className={`w-full border-l-4 border-[#008BC9] p-5 rounded-r-xl mt-[8px] flex flex-col gap-4 ${theme === 'dark' ? 'bg-[#003A79]/15' : 'bg-[#F0F9FF]'}`}>
+                        <div className={`w-full border-l-4 border-[#008BC9] p-5 rounded-r-[8px] mt-[8px] flex flex-col gap-4 ${theme === 'dark' ? 'bg-[#003A79]/15' : 'bg-[#F0F9FF]'}`}>
                           <p className={`text-[14px] font-semibold leading-relaxed ${theme === 'dark' ? 'text-[#94CFEF]' : 'text-[#003A79]'}`}>
                             {item.notice.text}
                           </p>
                           {item.notice.videoUrl && (
-                            <div className={`w-full aspect-video rounded-lg overflow-hidden border shadow-sm bg-black ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
+                            <div className={`w-full aspect-video rounded-[8px] overflow-hidden border shadow-sm bg-black ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}>
                               <iframe
                                 src={item.notice.videoUrl}
                                 title="YouTube video player"
@@ -299,7 +382,7 @@ export default function TestPlayer({
                       )}
 
                       {item.warningBox && (
-                        <div className={`w-full flex items-start gap-3 p-4 rounded-lg mt-[8px] shadow-inner border ${theme === 'dark'
+                        <div className={`w-full flex items-start gap-3 p-4 rounded-[8px] mt-[8px] shadow-inner border ${theme === 'dark'
                           ? 'bg-yellow-950/10 border-yellow-900/30'
                           : 'bg-yellow-50 border-yellow-250'
                           }`}>
@@ -315,7 +398,7 @@ export default function TestPlayer({
                           {item.options?.map((opt) => {
                             const isSelected = answers[`${item.id}_choice`] === opt.id || answers[item.id] === opt.id;
                             return (
-                              <label key={opt.id} className={`flex items-center gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all duration-200 group ${isSelected ? `${t.activeOptionBg} ${t.activeOptionBorder} shadow-md transform scale-[1.01]` : `${t.optionBg} ${t.optionBorder} ${t.optionHover}`}`}>
+                              <label key={opt.id} className={`flex items-center gap-4 p-5 rounded-[8px] border-2 cursor-pointer transition-all duration-200 group ${isSelected ? `${t.activeOptionBg} ${t.activeOptionBorder} shadow-md transform scale-[1.01]` : `${t.optionBg} ${t.optionBorder} ${t.optionHover}`}`}>
                                 <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${isSelected ? 'border-white bg-[#008BC9]' : 'border-gray-400 bg-white group-hover:border-[#008BC9]'}`}>
                                   <span className={`font-bold text-[14px] ${isSelected ? 'text-white' : 'text-gray-600'}`}>{opt.id}</span>
                                 </div>
@@ -428,6 +511,7 @@ export default function TestPlayer({
             jumpToTask={jumpToTask}
             setActiveItemId={setActiveItemId}
             setShowMapModal={setShowMapModal}
+            scrollToQuestion={scrollToQuestion}
           />
         )}
       </div>
@@ -445,12 +529,13 @@ export default function TestPlayer({
               {/* Square Arrow Left - Prev Task */}
               <Button
                 variant="secondary"
-                appearance="solid"
+                appearance="ghost"
                 size="lg"
                 iconOnly
                 onClick={goPrevTask}
                 disabled={currentTaskIndex === 0}
                 title="Tarefa Anterior"
+                className="rounded-[4px]"
               >
                 <SquareArrowLeft size={20} />
               </Button>
@@ -458,45 +543,29 @@ export default function TestPlayer({
               {/* Arrow Left + Item Anterior */}
               <Button
                 variant="secondary"
-                appearance="solid"
+                appearance="ghost"
                 size="lg"
                 onClick={goPrevItem}
                 disabled={isFirstItemOverall}
                 iconLeft={<ArrowLeft size={20} />}
-                className="!px-0 sm:!px-[24px] !w-[48px] sm:!w-auto"
+                className="!px-0 sm:!px-[24px] !w-[48px] sm:!w-auto rounded-[4px]"
                 title="Item Anterior"
               >
                 <span className="hidden sm:inline">Item Anterior</span>
               </Button>
             </div>
 
-            {/* Center button (Enviar Teste) */}
-            <div className="flex shrink-0 justify-center items-center">
-              <Button
-                variant={submitVariant}
-                appearance="solid"
-                size="lg"
-                onClick={onAttemptFinish}
-                disabled={isSubmitDisabled}
-                iconRight={<Send size={18} />}
-                className="shadow-md min-w-[160px]"
-                title="Enviar Teste"
-              >
-                Enviar Teste
-              </Button>
-            </div>
-
-            {/* Right buttons (Próximos) */}
+            {/* Right buttons (Próximos + Enviar Teste) */}
             <div className="flex-1 flex justify-end items-center gap-3">
               {/* Arrow Right + Próximo Item */}
               <Button
                 variant="secondary"
-                appearance="solid"
+                appearance="ghost"
                 size="lg"
                 onClick={goNextItem}
                 disabled={isLastItemOverall}
                 iconRight={<ArrowRight size={20} />}
-                className="!px-0 sm:!px-[24px] !w-[48px] sm:!w-auto"
+                className="!px-0 sm:!px-[24px] !w-[48px] sm:!w-auto rounded-[4px]"
                 title="Próximo Item"
               >
                 <span className="hidden sm:inline">Próximo Item</span>
@@ -505,14 +574,28 @@ export default function TestPlayer({
               {/* Square Arrow Right - Next Task */}
               <Button
                 variant="secondary"
-                appearance="solid"
+                appearance="ghost"
                 size="lg"
                 iconOnly
                 onClick={goNextTask}
                 disabled={currentTaskIndex === activeTest.tasks.length - 1}
                 title="Próxima Tarefa"
+                className="rounded-[4px]"
               >
                 <SquareArrowRight size={20} />
+              </Button>
+
+              {/* Enviar Teste */}
+              <Button
+                variant={submitVariant}
+                appearance="solid"
+                size="lg"
+                onClick={onAttemptFinish}
+                disabled={isSubmitDisabled}
+                className="shadow-md min-w-[160px] rounded-[4px]"
+                title="Enviar Teste"
+              >
+                Enviar Teste
               </Button>
             </div>
           </div>
@@ -522,14 +605,14 @@ export default function TestPlayer({
       {/* Warnings & Modals */}
       {showTaskSuccessModal && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center animate-fade-slide p-4">
-          <div className={`w-full max-w-[400px] ${t.cardBg} rounded-2xl shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#10B981] relative`}>
+          <div className={`w-full max-w-[400px] ${t.cardBg} rounded-[8px] shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#10B981] relative`}>
             <Button
               variant="tertiary"
               appearance="ghost"
               size="sm"
               iconOnly
               onClick={() => setShowTaskSuccessModal(false)}
-              className="absolute top-4 right-4 !rounded-full text-gray-500 hover:bg-gray-105"
+              className="absolute top-4 right-4 rounded-[4px] text-gray-500 hover:bg-gray-105"
             >
               <X size={20} />
             </Button>
@@ -543,7 +626,7 @@ export default function TestPlayer({
               appearance="solid"
               size="lg"
               onClick={confirmNextTask}
-              className="w-full shadow-lg"
+              className="w-full shadow-lg rounded-[4px]"
             >
               Ir para o Próximo Caderno
             </Button>
@@ -553,7 +636,7 @@ export default function TestPlayer({
 
       {showIncompleteWarning && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center animate-fade-slide p-4">
-          <div className={`w-full max-w-[440px] ${t.cardBg} rounded-2xl shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#F59E0B] relative`}>
+          <div className={`w-full max-w-[440px] ${t.cardBg} rounded-[8px] shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#F59E0B] relative`}>
             <div className="w-20 h-20 bg-[#FEF3C7] rounded-full flex items-center justify-center mx-auto mb-6 text-[#F59E0B]">
               <AlertTriangle size={40} />
             </div>
@@ -565,7 +648,7 @@ export default function TestPlayer({
                 appearance="solid"
                 size="lg"
                 onClick={() => setShowIncompleteWarning(false)}
-                className="w-full shadow-md"
+                className="w-full shadow-md rounded-[4px]"
               >
                 Voltar e Responder
               </Button>
@@ -574,7 +657,7 @@ export default function TestPlayer({
                 appearance="solid"
                 size="lg"
                 onClick={handleFinishTest}
-                className="w-full"
+                className="w-full rounded-[4px]"
               >
                 Enviar Mesmo Assim
               </Button>
@@ -585,14 +668,14 @@ export default function TestPlayer({
 
       {showExitWarning && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center animate-fade-slide p-4">
-          <div className={`w-full max-w-[440px] ${t.cardBg} rounded-2xl shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#EF4444] relative`}>
+          <div className={`w-full max-w-[440px] ${t.cardBg} rounded-[8px] shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#EF4444] relative`}>
             <Button
               variant="tertiary"
               appearance="ghost"
               size="sm"
               iconOnly
               onClick={() => setShowExitWarning(false)}
-              className="absolute top-4 right-4 !rounded-full"
+              className="absolute top-4 right-4 rounded-[4px]"
             >
               <X size={20} />
             </Button>
@@ -609,7 +692,7 @@ export default function TestPlayer({
                 appearance="solid"
                 size="lg"
                 onClick={() => setShowExitWarning(false)}
-                className="w-full shadow-md"
+                className="w-full shadow-md rounded-[4px]"
               >
                 Continuar Avaliação
               </Button>
@@ -618,7 +701,7 @@ export default function TestPlayer({
                 appearance="solid"
                 size="lg"
                 onClick={() => setCurrentScreen('dashboard')}
-                className="w-full !border-red-500 !text-red-500 hover:!bg-red-50 dark:hover:!bg-red-950/20"
+                className="w-full !border-red-500 !text-red-500 hover:!bg-red-50 dark:hover:!bg-red-950/20 rounded-[4px]"
               >
                 Sim, Sair da Prova
               </Button>
@@ -629,14 +712,14 @@ export default function TestPlayer({
 
       {showSubmitWarning && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center animate-fade-slide p-4">
-          <div className={`w-full max-w-[440px] ${t.cardBg} rounded-2xl shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#008BC9] relative`}>
+          <div className={`w-full max-w-[440px] ${t.cardBg} rounded-[8px] shadow-2xl overflow-hidden flex flex-col p-8 text-center border-t-8 border-[#008BC9] relative`}>
             <Button
               variant="tertiary"
               appearance="ghost"
               size="sm"
               iconOnly
               onClick={() => setShowSubmitWarning(false)}
-              className="absolute top-4 right-4 !rounded-full"
+              className="absolute top-4 right-4 rounded-[4px]"
             >
               <X size={20} />
             </Button>
@@ -653,7 +736,7 @@ export default function TestPlayer({
                 appearance="solid"
                 size="lg"
                 onClick={handleFinishTest}
-                className="w-full shadow-md"
+                className="w-full shadow-md rounded-[4px]"
               >
                 Confirmar e Entregar
               </Button>
@@ -662,7 +745,7 @@ export default function TestPlayer({
                 appearance="solid"
                 size="lg"
                 onClick={() => setShowSubmitWarning(false)}
-                className="w-full"
+                className="w-full rounded-[4px]"
               >
                 Voltar ao Teste
               </Button>

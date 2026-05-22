@@ -39,6 +39,37 @@ export default function RealizacaoTestes({ colors, isDarkMode, navigateTo }) {
     setTheme(isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
+  // --- SCROLL LOCK & HELPERS ---
+  const scrollToTop = (smooth = true) => {
+    const container = document.getElementById('test-player-main');
+    if (container) {
+      container.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+    }
+  };
+
+  const scrollToQuestion = (questionId, smooth = true) => {
+    const container = document.getElementById('test-player-main');
+    const target = document.getElementById(questionId);
+    if (container && target) {
+      const containerRect = container.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const relativeTop = targetRect.top - containerRect.top + container.scrollTop;
+      const offset = relativeTop - (container.clientHeight / 2) + (target.clientHeight / 2);
+      container.scrollTo({ top: offset, behavior: smooth ? 'smooth' : 'auto' });
+    }
+  };
+
+  useEffect(() => {
+    if (currentScreen !== 'test') return;
+    const handleWindowScroll = () => {
+      if (window.scrollY !== 0) {
+        window.scrollTo(0, 0);
+      }
+    };
+    window.addEventListener('scroll', handleWindowScroll);
+    return () => window.removeEventListener('scroll', handleWindowScroll);
+  }, [currentScreen]);
+
   // --- EFEITOS (Timer) ---
   useEffect(() => {
     let interval;
@@ -136,7 +167,9 @@ export default function RealizacaoTestes({ colors, isDarkMode, navigateTo }) {
     setFlags({});
     setActiveItemId(`question-${generated.tasks[0].elements[0].data?.id || generated.tasks[0].elements[0].items[0]?.id}`);
     setCurrentScreen('test');
-    window.scrollTo(0, 0);
+    setTimeout(() => {
+      scrollToTop(false);
+    }, 50);
   };
 
   const handleAttemptFinish = () => {
@@ -161,13 +194,13 @@ export default function RealizacaoTestes({ colors, isDarkMode, navigateTo }) {
 
     if (idx > 0) {
       const prevId = flatItems[idx - 1].id;
-      document.getElementById(`question-${prevId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      scrollToQuestion(`question-${prevId}`);
     } else if (currentTaskIndex > 0) {
       setCurrentTaskIndex(prev => prev - 1);
       setTimeout(() => {
         const prevTaskItems = getTaskItems(activeTest.tasks[currentTaskIndex - 1]);
         const lastId = prevTaskItems[prevTaskItems.length - 1].id;
-        document.getElementById(`question-${lastId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        scrollToQuestion(`question-${lastId}`);
       }, 100);
     }
   };
@@ -180,14 +213,14 @@ export default function RealizacaoTestes({ colors, isDarkMode, navigateTo }) {
 
     if (idx < flatItems.length - 1) {
       const nextId = flatItems[idx + 1].id;
-      document.getElementById(`question-${nextId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      scrollToQuestion(`question-${nextId}`);
     } else if (currentTaskIndex < activeTest.tasks.length - 1) {
       if (isTaskComplete(currentTaskIndex)) {
         setShowTaskSuccessModal(true);
       } else {
         setCurrentTaskIndex(prev => prev + 1);
         setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          scrollToTop();
         }, 100);
       }
     }
@@ -197,7 +230,7 @@ export default function RealizacaoTestes({ colors, isDarkMode, navigateTo }) {
     setShowTaskSuccessModal(false);
     setCurrentTaskIndex(prev => prev + 1);
     setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToTop();
     }, 100);
   };
 
@@ -205,14 +238,14 @@ export default function RealizacaoTestes({ colors, isDarkMode, navigateTo }) {
     setCurrentTaskIndex(taskIndex);
     setShowMapModal(false);
     setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToTop();
     }, 100);
   };
 
   // ==========================================================================
   if (currentScreen === 'dashboard') { return <Dashboard colors={colors} mockAssessments={mockAssessments} dashboardTab={dashboardTab} setDashboardTab={setDashboardTab} setSelectedAssessmentId={setSelectedAssessmentId} setCurrentScreen={setCurrentScreen} />; }
   if (currentScreen === 'pre_test') { const assessment = mockAssessments.find(a => a.id === selectedAssessmentId); return <PreTest colors={colors} assessment={assessment} handleStartTest={handleStartTest} setCurrentScreen={setCurrentScreen} />; }
-  if (currentScreen === 'test') { return <TestPlayer theme={theme} setTheme={setTheme} activeTest={activeTest} currentTaskIndex={currentTaskIndex} setCurrentTaskIndex={setCurrentTaskIndex} activeItemId={activeItemId} setActiveItemId={setActiveItemId} answers={answers} flags={flags} timeRemaining={timeRemaining} fontSize={fontSize} setFontSize={setFontSize} showMapModal={showMapModal} setShowMapModal={setShowMapModal} showTaskSuccessModal={showTaskSuccessModal} setShowTaskSuccessModal={setShowTaskSuccessModal} showIncompleteWarning={showIncompleteWarning} setShowIncompleteWarning={setShowIncompleteWarning} collapseTasks={collapseTasks} setCollapseTasks={setCollapseTasks} formatTime={formatTime} getTaskItems={getTaskItems} isItemComplete={isItemComplete} isTaskComplete={isTaskComplete} getTotalItems={getTotalItems} getTotalAnswered={getTotalAnswered} handleAnswer={handleAnswer} handleToggleFlag={handleToggleFlag} handleAttemptFinish={handleAttemptFinish} handleFinishTest={handleFinishTest} goPrevItem={goPrevItem} goNextItem={goNextItem} confirmNextTask={confirmNextTask} jumpToTask={jumpToTask} setCurrentScreen={setCurrentScreen} />; }
+  if (currentScreen === 'test') { return <TestPlayer theme={theme} setTheme={setTheme} activeTest={activeTest} currentTaskIndex={currentTaskIndex} setCurrentTaskIndex={setCurrentTaskIndex} activeItemId={activeItemId} setActiveItemId={setActiveItemId} answers={answers} flags={flags} timeRemaining={timeRemaining} fontSize={fontSize} setFontSize={setFontSize} showMapModal={showMapModal} setShowMapModal={setShowMapModal} showTaskSuccessModal={showTaskSuccessModal} setShowTaskSuccessModal={setShowTaskSuccessModal} showIncompleteWarning={showIncompleteWarning} setShowIncompleteWarning={setShowIncompleteWarning} collapseTasks={collapseTasks} setCollapseTasks={setCollapseTasks} formatTime={formatTime} getTaskItems={getTaskItems} isItemComplete={isItemComplete} isTaskComplete={isTaskComplete} getTotalItems={getTotalItems} getTotalAnswered={getTotalAnswered} handleAnswer={handleAnswer} handleToggleFlag={handleToggleFlag} handleAttemptFinish={handleAttemptFinish} handleFinishTest={handleFinishTest} goPrevItem={goPrevItem} goNextItem={goNextItem} confirmNextTask={confirmNextTask} jumpToTask={jumpToTask} scrollToTop={scrollToTop} scrollToQuestion={scrollToQuestion} setCurrentScreen={setCurrentScreen} />; }
   if (currentScreen === 'finished') { return <Finished formatTime={formatTime} timeSpent={timeSpent} totalAnswered={getTotalAnswered()} totalItems={getTotalItems()} setCurrentScreen={setCurrentScreen} />; }
   return null;
 }

@@ -60,15 +60,16 @@ const AccessibilityMenu = ({
           <div className="flex flex-col gap-[12px] px-[8px]">
             <span className="text-[12px] md:text-[14px] font-medium">Tamanho da fonte</span>
             <div className="flex items-center justify-between gap-[12px]">
-              <button
+              <Button
+                variant="tertiary"
+                appearance="ghost"
+                size="xs"
                 onClick={() => setFontScale(Math.max(1, fontScale - 1))}
-                className="text-[12px] font-bold transition-all active:scale-90"
-                style={{ color: 'inherit' }}
-                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
-                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                className="font-bold text-xs rounded-[4px] min-w-0 px-2 text-inherit hover:bg-white/10 active:scale-90 transition-all"
+                title="Diminuir fonte"
               >
                 A-
-              </button>
+              </Button>
 
               {/* Slider Track */}
               <div
@@ -111,15 +112,16 @@ const AccessibilityMenu = ({
                 />
               </div>
 
-              <button
+              <Button
+                variant="tertiary"
+                appearance="ghost"
+                size="xs"
                 onClick={() => setFontScale(Math.min(5, fontScale + 1))}
-                className="text-[16px] md:text-[18px] font-bold transition-all active:scale-90"
-                style={{ color: 'inherit' }}
-                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
-                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                className="font-bold text-sm rounded-[4px] min-w-0 px-2 text-inherit hover:bg-white/10 active:scale-90 transition-all"
+                title="Aumentar fonte"
               >
                 A+
-              </button>
+              </Button>
             </div>
           </div>
 

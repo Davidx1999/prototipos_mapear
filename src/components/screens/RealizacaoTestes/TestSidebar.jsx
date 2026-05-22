@@ -1,6 +1,5 @@
 import React from 'react';
-import { PanelRightClose, ListTodo, BookMarked, Flag } from 'lucide-react';
-import Button from '../../ui/Button';
+import { ListTodo, BookMarked } from 'lucide-react';
 
 const TestSidebar = ({
   theme = 'light',
@@ -83,26 +82,12 @@ const TestSidebar = ({
         lg:relative lg:w-[320px] lg:xl:w-[420px] lg:shadow-none lg:z-10
         ${t.bg} ${t.border}
       `}>
-        {/* Floating Toggle Button (visible when sidebar is open) */}
-        <div className="absolute left-0 top-[220px] -translate-x-full z-[800]">
-          <Button
-            variant="secondary"
-            appearance="solid"
-            size="md"
-            onClick={() => setShowMapModal(false)}
-            iconLeft={<PanelRightClose size={20} />}
-            className="rounded-r-none rounded-l-xl border-r-0 shadow-lg"
-          >
-            Mapa de Itens
-          </Button>
-        </div>
-
         {/* Header */}
         <div className={`p-4 border-b flex justify-between items-center ${t.border}`}>
           <h3 className={`font-bold text-[16px] ${t.textMain}`}>
             Mapa de Itens
           </h3>
-          <span className="text-[12px] font-bold px-2 py-0.5 rounded-full bg-brand-extraLight text-brand-extraDark dark:bg-brand-extraDark dark:text-brand-light">
+          <span className="text-[12px] font-bold px-2 py-0.5 rounded-[4px] bg-brand-extraLight text-brand-extraDark dark:bg-brand-extraDark dark:text-brand-light">
             {totalAnswered}/{flatItems.length}
           </span>
         </div>
@@ -119,17 +104,17 @@ const TestSidebar = ({
             {/* Legend items aligned horizontally */}
             <div className="flex flex-wrap gap-x-4 gap-y-2 items-center">
               {/* Respondido */}
-              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-7 dark:text-neutral-2">
+              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-7">
                 <span className="w-3 h-3 rounded-full bg-brand-base border border-brand-extraDark shrink-0" />
                 <span>Respondido</span>
               </div>
               {/* Incompleto */}
-              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-7 dark:text-neutral-2">
-                <span className="w-3 h-3 rounded-full bg-semantic-warning-base border border-semantic-warning-dark shrink-0" />
+              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-7">
+                <span className="w-3 h-3 rounded-full bg-secondary-base border border-secondary-dark shrink-0" />
                 <span>Incompleto</span>
               </div>
               {/* Em Branco */}
-              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-7 dark:text-neutral-2">
+              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-neutral-7">
                 <span className="w-3 h-3 rounded-full bg-neutral-0 border border-neutral-3 shrink-0" />
                 <span>Em Branco</span>
               </div>
@@ -151,64 +136,40 @@ const TestSidebar = ({
                     <span className="truncate font-bold" title={task.title}>{task.title}</span>
                   </div>
 
-                  {/* Question Grid */}
-                  <div className="grid grid-cols-2 xl:grid-cols-3 gap-2 mt-1">
+                  {/* Question Grid (Now square buttons flex-wrap) */}
+                  <div className="flex flex-wrap gap-2 mt-1">
                     {taskItems.map((item) => {
                       const status = getItemStatus(item.id);
                       const isActive = activeItemId === `question-${item.id}`;
-                      const isFlagged = flags[item.id];
 
                       let itemBgBorderText = '';
 
                       if (status === 'completed') {
                         // Equivalent to primary solid button style
-                        itemBgBorderText = 'bg-[var(--primary-base)] text-white border-transparent hover:bg-[var(--primary-dark)] active:bg-[var(--primary-extra-dark)]';
+                        itemBgBorderText = 'bg-brand-base text-white border border-transparent hover:bg-brand-dark';
                       } else if (status === 'partial') {
-                        // Equivalent to warning solid style
-                        itemBgBorderText = 'bg-[var(--semantic-warning-base)] text-[var(--neutral-7)] border border-[var(--semantic-warning-dark)] hover:bg-[var(--semantic-warning-light)]';
+                        // Incomplete secondary: stroke secondary/base, background secondary/extraLight
+                        itemBgBorderText = 'bg-secondary-extraLight border border-secondary-base text-secondary-base hover:bg-secondary-light hover:bg-opacity-[0.2]';
                       } else {
                         // Equivalent to tertiary solid button style
-                        itemBgBorderText = 'bg-[var(--neutral-0)] border border-[var(--neutral-3)] hover:bg-[var(--neutral-2)] text-[var(--neutral-7)] dark:bg-[#151E28] dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800';
+                        itemBgBorderText = 'bg-neutral-0 border border-neutral-3 hover:bg-neutral-2 text-neutral-7 dark:bg-[#151E28] dark:border-gray-800 dark:text-gray-300 dark:hover:bg-gray-800';
                       }
 
-                      // Define dynamic styles for flag inside item box
-                      const getFlagColorClass = () => {
-                        if (isFlagged) return 'fill-yellow-500 text-yellow-500';
-                        if (status === 'completed') return 'text-white/50 hover:text-yellow-300';
-                        return 'text-neutral-4 hover:text-yellow-500 dark:text-gray-400';
-                      };
-
                       return (
-                        <div
+                        <button
                           key={item.id}
+                          type="button"
                           onClick={() => navigateToQuestion(item)}
                           className={`
-                            h-[32px] rounded-[4px] font-bold text-[14px] leading-[20px] transition-all duration-120
-                            flex items-center justify-between px-3 cursor-pointer select-none outline-none
+                            w-9 h-9 rounded-[4px] font-bold text-[14px] transition-all duration-120
+                            flex items-center justify-center cursor-pointer select-none outline-none
                             ${itemBgBorderText}
                             ${isActive ? 'ring-[3px] ring-brand-dark ring-offset-1 dark:ring-offset-[#151E28]' : ''}
                           `}
                           title={item.title}
                         >
-                          <span>{item.number}</span>
-                          
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (handleToggleFlag) {
-                                handleToggleFlag(`question-${item.id}`);
-                              }
-                            }}
-                            className="p-1 -mr-1.5 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-colors cursor-pointer shrink-0"
-                            title={isFlagged ? "Remover marcação de revisão" : "Marcar para revisão"}
-                          >
-                            <Flag
-                              size={13}
-                              className={`transition-colors shrink-0 ${getFlagColorClass()}`}
-                            />
-                          </button>
-                        </div>
+                          {item.number}
+                        </button>
                       );
                     })}
                   </div>
