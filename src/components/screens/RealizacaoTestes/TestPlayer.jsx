@@ -154,26 +154,8 @@ export default function TestPlayer({
   const isLastItemOverall = currentTaskIndex === lastTaskIndex && lastTaskItems[lastTaskItems.length - 1]?.id === currentItemIdClean;
 
   return (
+    <>
     <div className={`w-full h-full flex flex-col font-['Montserrat',sans-serif] ${t.bgApp} transition-colors duration-300 overflow-hidden relative`}>
-      {/* Floating Toggle Button (visible in both states, transitions smoothly) */}
-      <div 
-        className={`fixed z-[800] ${isDragging ? '' : 'transition-all duration-300'} top-[140px]`}
-        style={{ right: showMapModal ? (isMobile ? '320px' : `${sidebarWidth}px`) : '0px' }}
-      >
-        <button
-          onClick={() => setShowMapModal(!showMapModal)}
-          className={`
-            h-[40px] px-4 flex items-center gap-2 font-bold text-[14px] transition-all duration-150
-            bg-brand-ultraDark text-white border border-brand-dark border-r-0
-            rounded-l-[8px] cursor-pointer outline-none hover:bg-brand-dark active:scale-[0.97]
-            shadow-[0_4px_12px_rgba(0,0,0,0.15)]
-          `}
-          title={showMapModal ? "Colapsar Mapa de Itens" : "Expandir Mapa de Itens"}
-        >
-          {showMapModal ? <PanelRightClose size={18} className="text-brand-light" /> : <PanelRightOpen size={18} className="text-brand-light" />}
-          <span>Mapa de Itens</span>
-        </button>
-      </div>
 
       <TestSubHeader theme={theme} className="bg-brand-ultraDark !border-b-0 shadow-sm shrink-0 z-50 flex flex-col w-full">
         <div className="py-4 flex justify-between items-center px-4 md:px-8 transition-colors duration-300">
@@ -778,5 +760,26 @@ export default function TestPlayer({
         </div>
       )}
     </div>
+
+      {/* Floating Toggle Button — outside overflow-hidden container so it is never clipped */}
+      <div 
+        className={`fixed z-[800] ${isDragging ? '' : 'transition-all duration-300'} top-[140px]`}
+        style={{ right: showMapModal ? (isMobile ? '320px' : `${sidebarWidth}px`) : '0px' }}
+      >
+        <button
+          onClick={() => setShowMapModal(!showMapModal)}
+          className={`
+            h-[40px] px-4 flex items-center gap-2 font-bold text-[14px] transition-all duration-150
+            bg-brand-ultraDark text-white border border-brand-dark border-r-0
+            rounded-l-[8px] cursor-pointer outline-none hover:bg-brand-dark active:scale-[0.97]
+            shadow-[0_4px_12px_rgba(0,0,0,0.15)]
+          `}
+          title={showMapModal ? "Colapsar Mapa de Itens" : "Expandir Mapa de Itens"}
+        >
+          {showMapModal ? <PanelRightClose size={18} className="text-brand-light" /> : <PanelRightOpen size={18} className="text-brand-light" />}
+          <span>Mapa de Itens</span>
+        </button>
+      </div>
+    </>
   );
 }
