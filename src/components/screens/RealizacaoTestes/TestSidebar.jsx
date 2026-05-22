@@ -14,6 +14,11 @@ const TestSidebar = ({
   jumpToTask,
   setActiveItemId,
   setShowMapModal,
+  sidebarWidth,
+  setSidebarWidth,
+  isDragging,
+  setIsDragging,
+  isMobile,
 }) => {
   // Build flat list of all items with globalIndex and taskIdx
   const flatItems = React.useMemo(() => {
@@ -31,6 +36,36 @@ const TestSidebar = ({
     });
     return items;
   }, [activeTest, getTaskItems]);
+
+  // Mouse drag logic for resizing
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  React.useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMouseMove = (e) => {
+      const newWidth = window.innerWidth - e.clientX;
+      // Constrain sidebar width between 280px and 50% of screen width (up to 600px)
+      const maxWidth = Math.min(600, window.innerWidth * 0.5);
+      const constrainedWidth = Math.max(280, Math.min(maxWidth, newWidth));
+      setSidebarWidth(constrainedWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, setSidebarWidth, setIsDragging]);
 
   // Get item status for coloring
   const getItemStatus = (itemId) => {
@@ -77,11 +112,32 @@ const TestSidebar = ({
         onClick={() => setShowMapModal(false)}
       />
 
-      <aside className={`
-        fixed top-0 right-0 z-50 w-[320px] h-full border-l flex flex-col shadow-2xl transition-all duration-300 overflow-y-auto custom-scrollbar
-        lg:relative lg:w-[320px] lg:xl:w-[420px] lg:shadow-none lg:z-10
-        ${t.bg} ${t.border}
-      `}>
+      <aside 
+        style={{ width: isMobile ? undefined : `${sidebarWidth}px` }}
+        className={`
+          fixed top-0 right-0 z-50 w-[320px] max-w-[calc(100vw-16px)] h-full border-l flex flex-col shadow-2xl overflow-y-auto custom-scrollbar
+          lg:relative lg:shadow-none lg:z-10
+          ${isDragging ? '' : 'transition-all duration-300'}
+          ${t.bg} ${t.border}
+        `}
+      >
+        {/* Resize Handle (desktop only) */}
+        {!isMobile && (
+          <div
+            onMouseDown={handleMouseDown}
+            className="absolute left-0 top-0 bottom-0 w-[10px] -ml-[5px] cursor-col-resize z-[60] group flex items-center justify-center select-none"
+          >
+            {/* Subtle line indicator */}
+            <div className="w-[2px] h-full bg-transparent group-hover:bg-brand-base/40 group-active:bg-brand-base transition-colors duration-150" />
+            
+            {/* Visual grab indicator in the middle */}
+            <div className="absolute top-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-150 pointer-events-none">
+              <div className="w-1.5 h-1.5 rounded-full bg-brand-base/60" />
+              <div className="w-1.5 h-1.5 rounded-full bg-brand-base/60" />
+              <div className="w-1.5 h-1.5 rounded-full bg-brand-base/60" />
+            </div>
+          </div>
+        )}
         {/* Header */}
         <div className={`p-4 border-b flex justify-between items-center ${t.border}`}>
           <h3 className={`font-bold text-[16px] ${t.textMain}`}>

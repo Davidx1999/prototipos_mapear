@@ -42,6 +42,19 @@ export default function TestPlayer({
 }) {
   const [showExitWarning, setShowExitWarning] = React.useState(false);
   const [showSubmitWarning, setShowSubmitWarning] = React.useState(false);
+  const [sidebarWidth, setSidebarWidth] = React.useState(360);
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    setSidebarWidth(window.innerWidth >= 1280 ? 420 : 320);
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const flatItems = React.useMemo(() => {
     const items = [];
@@ -143,7 +156,10 @@ export default function TestPlayer({
   return (
     <div className={`w-full h-full flex flex-col font-['Montserrat',sans-serif] ${t.bgApp} transition-colors duration-300 overflow-hidden relative`}>
       {/* Floating Toggle Button (visible in both states, transitions smoothly) */}
-      <div className={`fixed z-[800] transition-all duration-300 ${showMapModal ? 'right-[320px] xl:right-[420px]' : 'right-0'} top-[140px]`}>
+      <div 
+        className={`fixed z-[800] ${isDragging ? '' : 'transition-all duration-300'} top-[140px]`}
+        style={{ right: showMapModal ? (isMobile ? '320px' : `${sidebarWidth}px`) : '0px' }}
+      >
         <button
           onClick={() => setShowMapModal(!showMapModal)}
           className={`
@@ -210,61 +226,63 @@ export default function TestPlayer({
         </div>
 
         {/* Minimalist Item Map */}
-        <div className="h-[28px] bg-brand-ultraDark border-t border-b border-brand-dark flex items-center justify-center overflow-x-auto px-4 md:px-8 w-full select-none gap-2 scrollbar-none">
-          {activeTest.tasks.map((task, taskIdx) => {
-            const taskItems = getTaskItems(task);
-            return (
-              <div key={task.id} className="flex items-center gap-[4px] pr-[8px] border-r border-brand-dark last:border-r-0 h-full shrink-0">
-                {/* Task square */}
-                <div
-                  onClick={() => jumpToTask(taskIdx)}
-                  className={`w-5 h-5 flex items-center justify-center font-bold text-[11px] rounded-[4px] cursor-pointer transition-colors ${
-                    currentTaskIndex === taskIdx
-                      ? 'bg-brand-light text-brand-ultraDark'
-                      : 'bg-transparent text-brand-light hover:bg-white/10'
-                  }`}
-                >
-                  {taskIdx + 1}
-                </div>
-                {/* Item markers */}
-                {taskItems.map((item) => {
-                  const status = getItemStatus(item.id);
-                  const isActiveItem = activeItemId === `question-${item.id}`;
-                  
-                  let markerClass = '';
-                  if (isActiveItem) {
-                    markerClass = 'bg-[var(--neutral-0)] border-2 border-brand-base';
-                  } else {
-                    if (status === 'completed') {
-                      markerClass = 'bg-brand-base';
-                    } else if (status === 'partial') {
-                      markerClass = 'bg-secondary-base';
+        {!showMapModal && (
+          <div className="h-[28px] bg-brand-ultraDark border-t border-b border-brand-dark flex items-center justify-center overflow-x-auto px-4 md:px-8 w-full select-none gap-2 scrollbar-none animate-fade-slide">
+            {activeTest.tasks.map((task, taskIdx) => {
+              const taskItems = getTaskItems(task);
+              return (
+                <div key={task.id} className="flex items-center gap-[4px] pr-[8px] border-r border-brand-dark last:border-r-0 h-full shrink-0">
+                  {/* Task square */}
+                  <div
+                    onClick={() => jumpToTask(taskIdx)}
+                    className={`w-5 h-5 flex items-center justify-center font-bold text-[11px] rounded-[4px] cursor-pointer transition-colors ${
+                      currentTaskIndex === taskIdx
+                        ? 'bg-brand-light text-brand-ultraDark'
+                        : 'bg-transparent text-brand-light hover:bg-white/10'
+                    }`}
+                  >
+                    {taskIdx + 1}
+                  </div>
+                  {/* Item markers */}
+                  {taskItems.map((item) => {
+                    const status = getItemStatus(item.id);
+                    const isActiveItem = activeItemId === `question-${item.id}`;
+                    
+                    let markerClass = '';
+                    if (isActiveItem) {
+                      markerClass = 'bg-[var(--neutral-0)] border-2 border-brand-base';
                     } else {
-                      markerClass = 'bg-neutral-3';
+                      if (status === 'completed') {
+                        markerClass = 'bg-brand-base';
+                      } else if (status === 'partial') {
+                        markerClass = 'bg-secondary-base';
+                      } else {
+                        markerClass = 'bg-neutral-3';
+                      }
                     }
-                  }
-                  
-                  return (
-                    <div
-                      key={item.id}
-                      onClick={() => {
-                        jumpToTask(taskIdx);
-                        setTimeout(() => {
-                          setActiveItemId(`question-${item.id}`);
-                          scrollToQuestion(`question-${item.id}`);
-                        }, 100);
-                      }}
-                      className={`h-[12px] rounded-[999px] cursor-pointer transition-all duration-300 ${
-                        isActiveItem ? 'w-[64px]' : 'w-[16px]'
-                      } ${markerClass}`}
-                      title={`Item ${item.number}`}
-                    />
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+                    
+                    return (
+                      <div
+                        key={item.id}
+                        onClick={() => {
+                          jumpToTask(taskIdx);
+                          setTimeout(() => {
+                            setActiveItemId(`question-${item.id}`);
+                            scrollToQuestion(`question-${item.id}`);
+                          }, 100);
+                        }}
+                        className={`h-[12px] rounded-[999px] cursor-pointer transition-all duration-300 ${
+                          isActiveItem ? 'w-[64px]' : 'w-[16px]'
+                        } ${markerClass}`}
+                        title={`Item ${item.number}`}
+                      />
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </TestSubHeader>
 
       <div className="flex-1 flex overflow-hidden">
@@ -510,6 +528,11 @@ export default function TestPlayer({
             setActiveItemId={setActiveItemId}
             setShowMapModal={setShowMapModal}
             scrollToQuestion={scrollToQuestion}
+            sidebarWidth={sidebarWidth}
+            setSidebarWidth={setSidebarWidth}
+            isDragging={isDragging}
+            setIsDragging={setIsDragging}
+            isMobile={isMobile}
           />
         )}
       </div>
