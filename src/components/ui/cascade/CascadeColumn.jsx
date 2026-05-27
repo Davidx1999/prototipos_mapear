@@ -29,7 +29,16 @@ const CascadeColumn = ({
 
   let innerContent = null;
 
-  if (!rawItems || rawItems.length === 0) {
+  if (isSyncing && index === syncingLevel) {
+    innerContent = (
+      <div className="flex flex-row items-center justify-center gap-[8px] h-full min-h-[180px] w-full" style={{ color: colors?.primary?.extraDark || '#003A79' }}>
+        <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+        </svg>
+        <span className="text-[14px] font-semibold animate-pulse">Sincronizando...</span>
+      </div>
+    );
+  } else if (!rawItems || rawItems.length === 0) {
     const emptyMessages = [
       'Nenhum item disponível',
       'Selecione um Estado para ver os Municípios',

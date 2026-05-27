@@ -161,7 +161,7 @@ const Button = ({
         ${currentJustify}
         ${activeAppearanceStyles}
         ${selectionStyles}
-        ${appearance === 'solid' ? 'uppercase' : ''}
+        ${appearance === 'solid' ? 'uppercase' : appearance === 'ghost' ? 'lowercase' : ''}
         ${currentSize.height}
         ${currentSize.padding}
         ${currentSize.fontSize}

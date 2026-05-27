@@ -148,10 +148,11 @@ const CascadeDesktop = ({
           variant="tertiary"
           appearance="solid"
           size="md"
-          className="!text-[12px] font-semibold tracking-normal normal-case !border"
+          className="!text-[12px] font-semibold tracking-normal !border"
           style={selections.length === 0 && selectedLeafs.length === 0 ? { color: colors?.neutral?.[3] || '#CACDD5', borderColor: colors?.neutral?.[3] || '#CACDD5', backgroundColor: 'transparent' } : {}}
+          iconRight={<Eraser size={20} />}
         >
-          Limpar Seleção
+          LIMPAR SELEÇÃO
         </Button>
         <Button
           onClick={onConfirm}

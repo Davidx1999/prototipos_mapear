@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, ChevronLeft, ChevronRight, Search, LayoutGrid, Check, AlertCircle } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Search, LayoutGrid, Check, AlertCircle, Eraser } from 'lucide-react';
 import Input from '../Input';
 import Callout from '../Callout';
 import CascadeItem from './CascadeItem';
@@ -214,7 +214,14 @@ const CascadeMobile = ({
 
         {/* List Content */}
         <div className="flex-1 overflow-y-auto" style={{ backgroundColor: colors.neutral[0] }}>
-          {!rawItems || rawItems.length === 0 ? (
+          {isSyncing && syncingLevel === mobileStep ? (
+            <div className="flex flex-row items-center justify-center gap-[8px] h-full min-h-[180px] w-full" style={{ color: colors?.primary?.extraDark || '#003A79' }}>
+              <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+              </svg>
+              <span className="text-[14px] font-semibold animate-pulse">Sincronizando...</span>
+            </div>
+          ) : !rawItems || rawItems.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-[48px] text-center gap-[12px]">
               <span className="text-[15px] font-semibold" style={{ color: colors.neutral[5] }}>Complete as etapas anteriores para continuar.</span>
             </div>
@@ -336,10 +343,11 @@ const CascadeMobile = ({
             variant="tertiary"
             appearance="solid"
             size="md"
-            className="flex-1 !text-[12px] font-semibold tracking-normal normal-case !border"
+            className="flex-1 !text-[12px] font-semibold tracking-normal !border"
             style={selections.length === 0 && selectedLeafs.length === 0 ? { color: colors?.neutral?.[3] || '#CACDD5', borderColor: colors?.neutral?.[3] || '#CACDD5', backgroundColor: 'transparent' } : {}}
+            iconRight={<Eraser size={18} />}
           >
-            Limpar Seleção
+            LIMPAR SELEÇÃO
           </Button>
           <Button
             onClick={onConfirm}
