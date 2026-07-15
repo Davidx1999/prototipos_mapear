@@ -1450,66 +1450,80 @@ const AcompanhamentoEscolar = ({ colors, navigateTo, isDarkMode }) => {
               {subTab === 'panorama' && (
                 <div className="flex flex-col gap-6 animate-fade-slide">
                   {/* Superior Numeric Cards (Saúde da Escola) */}
-                  <div className={`rounded-[4px] border p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 shadow-xs ${isDarkMode ? 'bg-slate-900 border-slate-850' : 'bg-white border-slate-200'}`}>
-                    {/* Card 1: Percentual de Acertos */}
+                  <div className={`rounded-[4px] border p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 shadow-xs ${isDarkMode ? 'bg-slate-900 border-slate-850' : 'bg-white border-slate-200'}`}>
+                    {/* Card 1: Acertos */}
                     <div className="flex flex-col justify-between">
                       <div className="flex justify-between items-center text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-wide">
-                        <span>Percentual de Acertos</span>
+                        <span>Acertos</span>
                         <Info className="w-3.5 h-3.5 text-slate-350 dark:text-slate-655" />
                       </div>
                       <div className="mt-2.5 flex items-baseline gap-2">
                         <span className="text-2xl font-extrabold text-slate-800 dark:text-white">{currentMetrics.suf}%</span>
                       </div>
-                      <span className={`text-[10px] font-bold mt-1 ${currentMetrics.indicatorClass}`}>
-                        {currentMetrics.indicator}
+                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 mt-1">
+                        n = {selectedTurma.serie === "1em" ? 128 : selectedTurma.serie === "2em" ? 104 : 132} alunos
                       </span>
                     </div>
 
-                    {/* Card 2: Avaliações Realizadas */}
+                    {/* Card 2: Participação */}
                     <div className="flex flex-col justify-between border-t sm:border-t-0 sm:border-l pt-4 sm:pt-0 sm:pl-6" style={{ borderColor: isDarkMode ? '#1e293b' : '#f1f5f9' }}>
                       <div className="flex justify-between items-center text-[10px] font-bold text-slate-455 dark:text-slate-500 uppercase tracking-wide">
-                        <span>Avaliações Realizadas</span>
+                        <span>Participação</span>
+                        <Info className="w-3.5 h-3.5 text-slate-350 dark:text-slate-655" />
+                      </div>
+                      <div className="mt-2.5">
+                        <span className="text-2xl font-extrabold text-slate-800 dark:text-white">{currentMetrics.part}%</span>
+                      </div>
+                      <span className={`text-[10px] font-bold mt-1 ${currentMetrics.part < 90 ? 'text-rose-600' : 'text-emerald-600'}`}>
+                        {currentMetrics.part < 90 ? 'pode mascarar a média' : 'dentro do esperado'}
+                      </span>
+                    </div>
+
+                    {/* Card 3: Em Branco */}
+                    <div className="flex flex-col justify-between border-t md:border-t-0 md:border-l pt-4 md:pt-0 md:pl-6" style={{ borderColor: isDarkMode ? '#1e293b' : '#f1f5f9' }}>
+                      <div className="flex justify-between items-center text-[10px] font-bold text-slate-455 dark:text-slate-500 uppercase tracking-wide">
+                        <span>Em Branco</span>
                         <Info className="w-3.5 h-3.5 text-slate-350 dark:text-slate-655" />
                       </div>
                       <div className="mt-2.5">
                         <span className="text-2xl font-extrabold text-slate-800 dark:text-white">
-                          {Math.round(currentMetrics.part * 1.35)}
+                          {year === '2026' ? '3%' : '2%'}
                         </span>
                       </div>
                       <span className="text-[10px] font-bold text-slate-450 dark:text-slate-500 mt-1">
-                        Saeb + Formativas
+                        respostas sem tentativa
                       </span>
                     </div>
 
-                    {/* Card 3: Itens Resolvidos */}
+                    {/* Card 4: Sem Conteúdo Cognitivo */}
                     <div className="flex flex-col justify-between border-t lg:border-t-0 lg:border-l pt-4 lg:pt-0 lg:pl-6" style={{ borderColor: isDarkMode ? '#1e293b' : '#f1f5f9' }}>
                       <div className="flex justify-between items-center text-[10px] font-bold text-slate-455 dark:text-slate-500 uppercase tracking-wide">
-                        <span>Itens Resolvidos</span>
+                        <span>Sem Conteúdo Cognitivo</span>
                         <Info className="w-3.5 h-3.5 text-slate-350 dark:text-slate-655" />
                       </div>
                       <div className="mt-2.5">
                         <span className="text-2xl font-extrabold text-slate-800 dark:text-white">
-                          7.000
+                          2%
                         </span>
                       </div>
-                      <span className="text-[10px] font-bold text-emerald-600 mt-1">
-                        +14% vs rede
+                      <span className="text-[10px] font-bold text-slate-450 dark:text-slate-500 mt-1">
+                        sem engajamento avaliável
                       </span>
                     </div>
 
-                    {/* Card 4: Total de Intervenções */}
+                    {/* Card 5: Avaliações */}
                     <div className="flex flex-col justify-between border-t lg:border-t-0 lg:border-l pt-4 lg:pt-0 lg:pl-6" style={{ borderColor: isDarkMode ? '#1e293b' : '#f1f5f9' }}>
                       <div className="flex justify-between items-center text-[10px] font-bold text-slate-455 dark:text-slate-500 uppercase tracking-wide">
-                        <span>Total de Intervenções</span>
+                        <span>Avaliações</span>
                         <Info className="w-3.5 h-3.5 text-slate-350 dark:text-slate-655" />
                       </div>
                       <div className="mt-2.5">
                         <span className="text-2xl font-extrabold text-slate-800 dark:text-white">
-                          {interventions.length + 2}
+                          {year === '2026' ? 120 : 108}
                         </span>
                       </div>
-                      <span className="text-[10px] font-bold text-amber-600 mt-1">
-                        {interventions.length} novas registradas
+                      <span className="text-[10px] font-bold text-slate-450 dark:text-slate-500 mt-1">
+                        ano letivo {year}
                       </span>
                     </div>
                   </div>
