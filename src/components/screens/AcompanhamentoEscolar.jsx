@@ -1808,11 +1808,13 @@ const AcompanhamentoEscolar = ({ colors, navigateTo, isDarkMode }) => {
                                   <Button
                                     onClick={() => triggerToast(`Abrindo perfil histórico e de tentativas do ${stu.nome}.`)}
                                     variant="tertiary"
-                                    appearance="link"
+                                    appearance="ghost"
                                     size="xs"
                                     uppercase={false}
+                                    iconRight={<ChevronRight className="w-3.5 h-3.5" />}
+                                    className="text-slate-700 dark:text-slate-350"
                                   >
-                                    Perfil →
+                                    Acompanhar Estudante
                                   </Button>
                                 </td>
                               </tr>
