@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles } from 'lucide-react';
 
 const MatchMomentumChart = ({
@@ -8,14 +8,27 @@ const MatchMomentumChart = ({
   const [viewMode, setViewMode] = useState('mensal'); // 'mensal' | 'semanal'
   const [hoveredItem, setHoveredItem] = useState(null);
 
-  // SVG Size Configuration (Expanded)
-  const width = 640;
-  const height = 240;
-  const paddingLeft = 60;
-  const paddingRight = 80;
-  const centerY = height / 2;
+  const containerRef = useRef(null);
+  const [width, setWidth] = useState(640);
 
-  // Monthly values (6 months) - Balanced to show positive/negative values
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver(entries => {
+      if (entries[0] && entries[0].contentRect.width > 0) {
+        setWidth(entries[0].contentRect.width);
+      }
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // SVG Size Configuration
+  const height = 260;
+  const paddingLeft = 40;
+  const paddingRight = 40;
+  const centerY = 120; // Center Y axis line
+
+  // Monthly values (6 months)
   const mVals = [
     { label: "Janeiro", val: Math.max(35, Math.min(95, currentPerf - 8)), event: null },
     { label: "Fevereiro", val: Math.max(35, Math.min(95, currentPerf - 4)), event: null },
@@ -25,7 +38,7 @@ const MatchMomentumChart = ({
     { label: "Junho", val: 82, event: { type: "star", label: "Simulado SAEB: Meta de Proficiência superada (+12 p.p.)" } }
   ];
 
-  // Weekly values (12 weeks) - Balanced to show positive/negative values
+  // Weekly values (12 weeks)
   const wVals = [
     { label: "Semana 1", val: 66, event: null },
     { label: "Semana 2", val: 68, event: null },
@@ -51,7 +64,7 @@ const MatchMomentumChart = ({
 
   const getBarX = (idx) => paddingLeft + idx * (barWidth + 4);
   const getCenterX = (idx) => getBarX(idx) + barWidth / 2;
-  const getY = (val) => centerY - ((val - 70) / 30) * 90; // scale diff up to 30% variation (using 90px height)
+  const getY = (val) => centerY - ((val - 70) / 30) * 80;
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -88,7 +101,7 @@ const MatchMomentumChart = ({
       </div>
 
       {/* Expanded Chart Container */}
-      <div className="relative w-full h-[260px]">
+      <div ref={containerRef} className="relative w-full h-[260px]">
         {/* Tooltip Overlay */}
         {hoveredItem && (
           <div
@@ -119,42 +132,21 @@ const MatchMomentumChart = ({
             strokeWidth="2.5"
             strokeDasharray="4,4"
           />
-          <text
-            x={width - paddingRight + 8}
-            y={centerY + 3}
-            fontSize="10"
-            fill={isDarkMode ? "#94a3b8" : "#475569"}
-            fontWeight="bold"
-            textAnchor="start"
-          >
-            Meta (70%)
-          </text>
 
-          {/* Grid lines (Limit lines: +20% and -20% which is 90% and 50%) */}
+          {/* Grid lines */}
           {[90, 50].map((tick) => {
             const y = getY(tick);
             return (
-              <g key={tick}>
-                <line
-                  x1={paddingLeft}
-                  y1={y}
-                  x2={width - paddingRight}
-                  y2={y}
-                  stroke={isDarkMode ? "#334155" : "#e2e8f0"}
-                  strokeWidth="1.2"
-                  strokeDasharray="2,2"
-                />
-                <text
-                  x={paddingLeft - 10}
-                  y={y + 3.5}
-                  textAnchor="end"
-                  fontSize="9"
-                  fill={isDarkMode ? "#64748b" : "#94a3b8"}
-                  fontWeight="bold"
-                >
-                  {tick === 90 ? "+20% (90%)" : "-20% (50%)"}
-                </text>
-              </g>
+              <line
+                key={tick}
+                x1={paddingLeft}
+                y1={y}
+                x2={width - paddingRight}
+                y2={y}
+                stroke={isDarkMode ? "#334155" : "#e2e8f0"}
+                strokeWidth="1.2"
+                strokeDasharray="2,2"
+              />
             );
           })}
 
@@ -174,6 +166,11 @@ const MatchMomentumChart = ({
               ? (isDarkMode ? "#10b981" : "#10b981")
               : (isDarkMode ? "#ef4444" : "#ef4444");
 
+            // Format X label: Jan, Fev, Mar... for months, or S1, S2, S3... for weeks
+            const shortLabel = viewMode === 'mensal' 
+              ? item.label.substring(0, 3) 
+              : `S${idx + 1}`;
+
             return (
               <g
                 key={idx}
@@ -186,7 +183,7 @@ const MatchMomentumChart = ({
                   x={x - 2}
                   y={10}
                   width={barWidth + 4}
-                  height={height - 20}
+                  height={height - 40}
                   fill="transparent"
                 />
 
@@ -200,6 +197,18 @@ const MatchMomentumChart = ({
                   rx={rx}
                   className="hover:opacity-85 transition-opacity"
                 />
+
+                {/* X Axis Label */}
+                <text
+                  x={getCenterX(idx)}
+                  y={height - 12}
+                  textAnchor="middle"
+                  fontSize="9"
+                  fill={isDarkMode ? "#94a3b8" : "#64748b"}
+                  fontWeight="bold"
+                >
+                  {shortLabel}
+                </text>
 
                 {/* Event Badge Circle Overlay */}
                 {item.event && item.event.type === "alert" && (
