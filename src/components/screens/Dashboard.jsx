@@ -299,7 +299,7 @@ const Dashboard = ({
                     </div>
 
                     <div className="flex flex-col h-full">
-                      <h4 className="text-[16px] font-bold leading-tight mb-[8px] group-hover:text-primary-base transition-colors" title={card.title} style={{ color: isDarkMode ? colors.neutral[0] : colors.neutral[7] }}>
+                      <h4 className="text-[16px] font-bold leading-tight mb-[8px] group-hover:text-brand-base transition-colors" title={card.title} style={{ color: isDarkMode ? colors.neutral[0] : colors.neutral[7] }}>
                         {card.title}
                       </h4>
                       <p className="text-[14px] leading-relaxed mb-[16px] line-clamp-3" style={{ color: isDarkMode ? colors.neutral[2] : colors.neutral[5] }}>

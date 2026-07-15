@@ -35,7 +35,7 @@ const CascadeDesktop = ({
         <div className="flex items-center gap-[8px]">
           <div className="w-[180px] shrink-0 relative">
             <select
-              className="w-full h-[42px] px-[12px] text-[14px] font-bold text-neutral-700 outline-none appearance-none cursor-pointer hover:bg-neutral-50 disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed rounded-[4px] border border-neutral-300 focus:border-2 focus:border-primary-base focus:ring-2 focus:ring-[var(--primary-light)] transition-all"
+              className="w-full h-[42px] px-[12px] text-[14px] font-bold text-neutral-700 outline-none appearance-none cursor-pointer hover:bg-neutral-50 disabled:bg-neutral-50 disabled:text-neutral-400 disabled:cursor-not-allowed rounded-[4px] border border-neutral-300 focus:border-2 focus:border-brand-base focus:ring-2 focus:ring-[var(--color-brand-300)] transition-all"
               value={searchLevel}
               onChange={(e) => {
                 const val = parseInt(e.target.value);

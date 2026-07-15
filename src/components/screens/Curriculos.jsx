@@ -38,7 +38,7 @@ const Curriculos = ({
           <div className="flex items-center gap-[8px] md:gap-[16px] w-full">
             <div className="relative flex-1">
               <Search size={16} className="absolute left-[16px] top-1/2 -translate-y-1/2" style={{ color: colors.neutral[4] }} />
-              <input type="text" placeholder="Pesquise pelo código ou título" className="w-full pl-[40px] pr-[16px] py-[10px] md:py-[12px] rounded-[8px] border text-[14px] md:text-[14px] outline-none transition-colors focus:border-primary-base" style={{ borderColor: colors.neutral[3] }} />
+              <input type="text" placeholder="Pesquise pelo código ou título" className="w-full pl-[40px] pr-[16px] py-[10px] md:py-[12px] rounded-[8px] border text-[14px] md:text-[14px] outline-none transition-colors focus:border-brand-base" style={{ borderColor: colors.neutral[3] }} />
             </div>
             <Button variant="primary" iconOnly size="default"><Search size={20} /></Button>
           </div>
@@ -91,7 +91,7 @@ const Curriculos = ({
             <span className="text-[12px] md:text-[14px]" style={{ color: colors.neutral[5] }}>1 a 10 de 115 registros</span>
             <div className="flex items-center gap-[8px]">
               <Button variant="tertiary" iconOnly size="sm"><ChevronLeft size={16} /></Button>
-              <span className="text-[12px] md:text-[14px] font-medium">Página <input type="text" defaultValue="1" className="w-[32px] md:w-[40px] text-center border rounded-[4px] mx-[4px] py-[2px] md:py-[4px] outline-none focus:border-primary-base transition-colors" style={{ borderColor: colors.neutral[3] }} /> de 12</span>
+              <span className="text-[12px] md:text-[14px] font-medium">Página <input type="text" defaultValue="1" className="w-[32px] md:w-[40px] text-center border rounded-[4px] mx-[4px] py-[2px] md:py-[4px] outline-none focus:border-brand-base transition-colors" style={{ borderColor: colors.neutral[3] }} /> de 12</span>
               <Button variant="tertiary" iconOnly size="sm"><ChevronRight size={16} /></Button>
             </div>
           </div>

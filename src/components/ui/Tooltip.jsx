@@ -53,7 +53,7 @@ const Tooltip = ({
       {isVisible && content && (
         <div className={`
           absolute z-[100] px-[12px] py-[8px] 
-          bg-[var(--neutral-7)] text-[var(--neutral-0)] text-[12px] font-medium
+          bg-[var(--color-neutral-7)] text-[var(--color-neutral-0)] text-[12px] font-medium
           rounded-[6px] shadow-lg whitespace-normal min-w-[200px] max-w-[300px]
           animate-fade-in pointer-events-none
           ${positionStyles[position]}

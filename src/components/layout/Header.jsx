@@ -45,7 +45,7 @@ const Header = ({
   };
 
   return (
-    <header className="sticky top-0 z-[1000] px-[16px] md:px-[24px] py-[10px] md:py-[16px] border-b flex justify-between items-center transition-colors duration-500" style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2], backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0] }}>
+    <header className="sticky top-0 z-[1000] h-[84px] px-[16px] md:px-[24px] border-b flex justify-between items-center transition-colors duration-500" style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2], backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0] }}>
       {/* ══ ESQUERDA: MENU E LOGO ══════════════════════════════════════════ */}
       <div className="flex items-center gap-[12px] md:gap-[24px]">
         <div className="flex items-center gap-[12px] cursor-pointer" onClick={() => navigateTo('dashboard')}>
@@ -64,7 +64,7 @@ const Header = ({
             tertiaryTone={isDarkMode ? "low" : "high"}
             iconLeft={isDarkMode ? <Sun className="text-white" /> : <Moon />}
             onClick={() => setIsDarkMode(!isDarkMode)}
-            className={isDarkMode ? "hover:bg-white/10 text-white" : "hover:bg-[var(--neutral-2)] text-[var(--neutral-7)]"}
+            className={isDarkMode ? "hover:bg-white/10 text-white" : "hover:bg-[var(--color-neutral-2)] text-[var(--color-neutral-7)]"}
             title="Alternar Modo Escuro"
           />
         ) : (
@@ -74,9 +74,8 @@ const Header = ({
               variant="tertiary"
               appearance="ghost"
               size="md"
-              tertiaryTone={isDarkMode ? "low" : "high"}
               iconLeft={<HelpCircle />}
-              className={`hidden md:flex ${isDarkMode ? "text-white hover:bg-white/10" : ""}`}
+              className="hidden md:flex"
               onClick={() => window.open('https://dev-ajuda.cenpe.ufc.br/guides/practical_guides', '_blank')}
             >
               Ajuda
@@ -90,13 +89,8 @@ const Header = ({
                 iconOnly
                 size="md"
                 selected={isGripOpen}
-                tertiaryTone={isDarkMode ? "low" : "high"}
-                iconLeft={<Grip color={isGripOpen ? (isDarkMode ? colors.neutral[3] : undefined) : undefined} />}
+                iconLeft={<Grip />}
                 onClick={openGripDrawer}
-                className={isDarkMode
-                  ? (isGripOpen ? "!bg-white/20 !text-white" : "text-white hover:!bg-white/10")
-                  : (isGripOpen ? "" : "hover:!bg-[var(--neutral-2)]")
-                }
               />
               <GripMenu
                 colors={colors}
@@ -161,12 +155,12 @@ const Header = ({
                 </div>
               </div>
               <div className="py-[6px] flex flex-col gap-[2px]">
-                <button className="mx-[4px] flex items-center gap-[12px] px-[16px] py-[10px] text-[14px] font-semibold transition-colors rounded-[8px] hover:bg-[var(--neutral-2)]" style={{ color: isDarkMode ? colors.neutral[0] : colors.neutral[7] }}>
+                <button className="mx-[4px] flex items-center gap-[12px] px-[16px] py-[10px] text-[14px] font-semibold transition-colors rounded-[8px] hover:bg-[var(--color-neutral-2)]" style={{ color: isDarkMode ? colors.neutral[0] : colors.neutral[7] }}>
                   <User size={18} /> Meu Perfil
                 </button>
                 <button
                   onClick={() => setIsDarkMode(!isDarkMode)}
-                  className="mx-[4px] flex items-center justify-between px-[16px] py-[10px] text-[14px] font-semibold transition-colors rounded-[8px] hover:bg-[var(--neutral-2)]"
+                  className="mx-[4px] flex items-center justify-between px-[16px] py-[10px] text-[14px] font-semibold transition-colors rounded-[8px] hover:bg-[var(--color-neutral-2)]"
                   style={{ color: isDarkMode ? colors.neutral[0] : colors.neutral[7] }}
                 >
                   <div className="flex items-center gap-[12px]">

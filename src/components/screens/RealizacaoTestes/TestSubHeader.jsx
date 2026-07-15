@@ -13,7 +13,7 @@ const TestSubHeader = ({
 }) => {
   const hasBg = className.split(' ').some(c => c.startsWith('bg-'));
   const bgSticky = hasBg ? '' : (theme === 'dark' ? 'bg-[#0B121A]' : 'bg-[#FFFFFF]');
-  const borderColor = theme === 'dark' ? 'border-neutral-2' : 'border-[var(--neutral-2)]';
+  const borderColor = theme === 'dark' ? 'border-neutral-2' : 'border-[var(--color-neutral-2)]';
 
   return (
     <div

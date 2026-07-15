@@ -76,7 +76,7 @@ const CascadeItem = ({
             <ChevronRight size={20} className="shrink-0" style={{ color: colors.neutral[4] || '#9CA3AF' }} />
           )
         ) : (
-          <ChevronRight size={20} className={`shrink-0 ${isSelected ? 'text-white' : 'opacity-50 group-hover:text-primary-base'}`} />
+          <ChevronRight size={20} className={`shrink-0 ${isSelected ? 'text-white' : 'opacity-50 group-hover:text-brand-base'}`} />
         )
       )}
     </div>

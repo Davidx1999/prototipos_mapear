@@ -34,15 +34,15 @@ const Usuarios = ({
         </div>
         <div className="flex gap-[8px] md:gap-[12px] w-full justify-end overflow-x-auto hide-scrollbar pb-[4px]">
           <div className="relative w-[180px] shrink-0">
-            <select className="w-full px-[16px] py-[8px] rounded-[8px] border text-[12px] font-semibold outline-none appearance-none bg-neutral-0 truncate focus:border-primary-base cursor-pointer hover:bg-neutral-1" style={{ borderColor: colors.neutral[3], color: colors.neutral[6] }}><option>Filtrar por Perfil</option></select>
+            <select className="w-full px-[16px] py-[8px] rounded-[8px] border text-[12px] font-semibold outline-none appearance-none bg-neutral-0 truncate focus:border-brand-base cursor-pointer hover:bg-neutral-1" style={{ borderColor: colors.neutral[3], color: colors.neutral[6] }}><option>Filtrar por Perfil</option></select>
             <ChevronDown size={14} className="absolute right-[12px] top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: colors.neutral[6] }} />
           </div>
           <div className="relative w-[180px] shrink-0">
-            <select className="w-full px-[16px] py-[8px] rounded-[8px] border text-[12px] font-semibold outline-none appearance-none bg-neutral-0 truncate focus:border-primary-base cursor-pointer hover:bg-neutral-1" style={{ borderColor: colors.neutral[3], color: colors.neutral[6] }}><option>Filtrar por Escola</option></select>
+            <select className="w-full px-[16px] py-[8px] rounded-[8px] border text-[12px] font-semibold outline-none appearance-none bg-neutral-0 truncate focus:border-brand-base cursor-pointer hover:bg-neutral-1" style={{ borderColor: colors.neutral[3], color: colors.neutral[6] }}><option>Filtrar por Escola</option></select>
             <ChevronDown size={14} className="absolute right-[12px] top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: colors.neutral[6] }} />
           </div>
           <div className="relative w-[180px] shrink-0">
-            <select className="w-full px-[16px] py-[8px] rounded-[8px] border text-[12px] font-semibold outline-none appearance-none bg-neutral-0 truncate focus:border-primary-base cursor-pointer hover:bg-neutral-1" style={{ borderColor: colors.neutral[3], color: colors.neutral[6] }}><option>Filtrar por Turma</option></select>
+            <select className="w-full px-[16px] py-[8px] rounded-[8px] border text-[12px] font-semibold outline-none appearance-none bg-neutral-0 truncate focus:border-brand-base cursor-pointer hover:bg-neutral-1" style={{ borderColor: colors.neutral[3], color: colors.neutral[6] }}><option>Filtrar por Turma</option></select>
             <ChevronDown size={14} className="absolute right-[12px] top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: colors.neutral[6] }} />
           </div>
         </div>
@@ -106,7 +106,7 @@ const Usuarios = ({
           <span className="text-[12px] md:text-[14px]" style={{ color: colors.neutral[5] }}>1 a 10 de 231 registros</span>
           <div className="flex items-center gap-[8px]">
             <Button variant="tertiary" iconOnly size="sm"><ChevronLeft size={16} /></Button>
-            <span className="text-[12px] md:text-[14px] font-medium">Página <input type="text" defaultValue="1" className="w-[32px] md:w-[40px] text-center border rounded-[4px] mx-[4px] py-[2px] md:py-[4px] outline-none focus:border-primary-base transition-colors" style={{ borderColor: colors.neutral[3] }} /> de 24</span>
+            <span className="text-[12px] md:text-[14px] font-medium">Página <input type="text" defaultValue="1" className="w-[32px] md:w-[40px] text-center border rounded-[4px] mx-[4px] py-[2px] md:py-[4px] outline-none focus:border-brand-base transition-colors" style={{ borderColor: colors.neutral[3] }} /> de 24</span>
             <Button variant="tertiary" iconOnly size="sm"><ChevronRight size={16} /></Button>
           </div>
         </div>

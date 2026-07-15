@@ -27,11 +27,11 @@ const SplitButton = ({
 
     // Active/Selected state (Secondary)
     if (isActive) {
-      return `bg-[var(--primary-extra-light)] text-[#008BC9] border border-[#008BC9] hover:bg-[var(--primary-light)] shadow-md ${showRing ? 'ring-2 ring-[#003A79]' : ''}`;
+      return `bg-[var(--color-brand-100)] text-[#008BC9] border border-[#008BC9] hover:bg-[var(--color-brand-300)] shadow-md ${showRing ? 'ring-2 ring-[#003A79]' : ''}`;
     }
 
     if (variant === 'tertiary') {
-      return 'bg-white text-gray-700 border border-[var(--neutral-3)] hover:bg-[var(--neutral-2)] shadow-sm';
+      return 'bg-white text-gray-700 border border-[var(--color-neutral-3)] hover:bg-[var(--color-neutral-2)] shadow-sm';
     }
 
     // Default Primary

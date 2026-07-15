@@ -232,7 +232,7 @@ export default function TestPlayer({
                   
                   let markerClass = '';
                   if (isActiveItem) {
-                    markerClass = 'bg-[var(--neutral-0)] border-2 border-brand-base';
+                    markerClass = 'bg-[var(--color-neutral-0)] border-2 border-brand-base';
                   } else {
                     if (status === 'completed') {
                       markerClass = 'bg-brand-base';
@@ -286,7 +286,7 @@ export default function TestPlayer({
                     </div>
                   </div>
                   {currentTask.description && (
-                    <div className={`w-full px-[20px] pt-[16px] pb-[24px] rounded-[8px] border ${theme === 'dark' ? 'bg-neutral-6 border-neutral-2' : 'bg-neutral-1 border-[var(--neutral-2)]'}`}>
+                    <div className={`w-full px-[20px] pt-[16px] pb-[24px] rounded-[8px] border ${theme === 'dark' ? 'bg-neutral-6 border-neutral-2' : 'bg-neutral-1 border-[var(--color-neutral-2)]'}`}>
                       <p className={`text-[14px] md:text-[15px] leading-relaxed text-justify ${theme === 'dark' ? 'text-neutral-1' : 'text-neutral-7'}`}>
                         {currentTask.description}
                       </p>

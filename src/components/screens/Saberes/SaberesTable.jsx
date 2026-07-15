@@ -78,7 +78,7 @@ const SaberesTable = ({
             <div className="flex items-start justify-between gap-[12px]">
               <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
                 <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`}>
-                  <ChevronDown size={18} className="text-primary-base" />
+                  <ChevronDown size={18} className="text-brand-base" />
                 </div>
                 <div className="flex flex-col flex-1 min-w-0">
                   <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">{m.cod}</span>
@@ -129,7 +129,7 @@ const SaberesTable = ({
             <div className="flex items-start justify-between gap-[12px]">
               <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
                 <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`}>
-                  <ChevronDown size={18} className="text-primary-base" />
+                  <ChevronDown size={18} className="text-brand-base" />
                 </div>
                 <div className="flex flex-col flex-1 min-w-0">
                   <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">{m.cod}</span>
@@ -186,7 +186,7 @@ const SaberesTable = ({
             <div className="flex items-start justify-between gap-[12px]">
               <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
                 <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`}>
-                  <ChevronDown size={18} className="text-primary-base" />
+                  <ChevronDown size={18} className="text-brand-base" />
                 </div>
                 <div className="flex flex-col flex-1 min-w-0">
                   <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">{m.cod}</span>
@@ -243,7 +243,7 @@ const SaberesTable = ({
             <div className="flex items-start justify-between gap-[12px]">
               <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.cod ? null : m.cod)}>
                 <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.cod ? 'rotate-180' : ''}`}>
-                  <ChevronDown size={18} className="text-primary-base" />
+                  <ChevronDown size={18} className="text-brand-base" />
                 </div>
                 <div className="flex flex-col flex-1 min-w-0">
                   <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">{m.cod}</span>
@@ -271,7 +271,7 @@ const SaberesTable = ({
               </div>
 
               <div className="flex flex-col gap-[12px] bg-neutral-0 p-[16px] rounded-[8px] border mb-[16px]" style={{ borderColor: colors.neutral[2] }}>
-                <div className="flex items-center gap-[8px] text-[14px]"><BookOpen size={16} className="text-primary-base shrink-0" /> <strong className="shrink-0">Ano(s) Escolar(es):</strong> <span className="truncate">6º Ano, 7º Ano, 8º Ano</span></div>
+                <div className="flex items-center gap-[8px] text-[14px]"><BookOpen size={16} className="text-brand-base shrink-0" /> <strong className="shrink-0">Ano(s) Escolar(es):</strong> <span className="truncate">6º Ano, 7º Ano, 8º Ano</span></div>
                 <div className="flex items-center gap-[8px] text-[14px]"><GitCompare size={16} className="text-[#10B981] shrink-0" /> <strong className="shrink-0">Equivalência(s):</strong> <span className="truncate">BNCC ({m.cod}), SAEB (P0{Math.floor(Math.random() * 9) + 1})</span></div>
                 <div className="flex items-center gap-[8px] text-[14px] flex-wrap">
                   <RefreshCcw size={16} className="text-[#8B5CF6] shrink-0" />
@@ -333,7 +333,7 @@ const SaberesTable = ({
             <div className="flex items-start justify-between gap-[12px]">
               <div className="flex items-start gap-[12px] flex-1 min-w-0" onClick={() => setExpandedItem(expandedItem === m.origem ? null : m.origem)}>
                 <div className={`mt-[2px] shrink-0 transition-transform ${expandedItem === m.origem ? 'rotate-180' : ''}`}>
-                  <ChevronDown size={18} className="text-primary-base" />
+                  <ChevronDown size={18} className="text-brand-base" />
                 </div>
                 <div className="flex flex-col flex-1 min-w-0">
                   <span className="text-[11px] font-bold text-neutral-4 uppercase tracking-wider">Origem</span>

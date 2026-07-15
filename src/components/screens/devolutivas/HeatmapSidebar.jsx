@@ -241,7 +241,7 @@ export default function HeatmapSidebar({
                 iconOnly={true}
                 iconLeft={<ArrowUp />}
                 onClick={(e) => { e.stopPropagation(); scrollSidebar('up'); }}
-                className={`hover:!bg-[var(--primary-dark)] hover:!text-white transition-colors duration-150 ${isDarkMode ? 'text-[var(--primary-light)]' : 'text-[#003A79]'}`}
+                className={`hover:!bg-[var(--color-brand-700)] hover:!text-white transition-colors duration-150 ${isDarkMode ? 'text-[var(--color-brand-300)]' : 'text-[#003A79]'}`}
                 title="Subir"
               />
               <Button
@@ -253,7 +253,7 @@ export default function HeatmapSidebar({
                 iconOnly={true}
                 iconLeft={<ArrowDown />}
                 onClick={(e) => { e.stopPropagation(); scrollSidebar('down'); }}
-                className={`hover:!bg-[var(--primary-dark)] hover:!text-white transition-colors duration-150 ${isDarkMode ? 'text-[var(--primary-light)]' : 'text-[#003A79]'}`}
+                className={`hover:!bg-[var(--color-brand-700)] hover:!text-white transition-colors duration-150 ${isDarkMode ? 'text-[var(--color-brand-300)]' : 'text-[#003A79]'}`}
                 title="Descer"
               />
             </>

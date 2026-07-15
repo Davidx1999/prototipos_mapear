@@ -127,7 +127,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
         />
 
         <div className="mb-[24px] md:mb-[32px] animate-fade-slide">
-          <span className="text-[12px] md:text-[14px] font-bold text-primary-base tracking-widest uppercase">Aplicação em Andamento</span>
+          <span className="text-[12px] md:text-[14px] font-bold text-brand-base tracking-widest uppercase">Aplicação em Andamento</span>
           <h1 className="text-[24px] md:text-[32px] font-black text-neutral-6 mt-[4px] md:mt-[8px] leading-tight font-montserrat">Registro de Presença</h1>
         </div>
 
@@ -164,7 +164,7 @@ export default function RegistroPresenca({ colors, navigateTo }) {
               <div className="p-[20px] md:p-[24px] border-b border-neutral-2 flex flex-col md:flex-row justify-between md:items-center gap-[16px] bg-neutral-0">
                 <div>
                   <h2 className="text-[18px] md:text-[20px] font-bold text-neutral-6 flex items-center gap-[8px]">
-                    <Users className="text-primary-base w-[22px] h-[22px]" /> Lista de Chamada
+                    <Users className="text-brand-base w-[22px] h-[22px]" /> Lista de Chamada
                   </h2>
                   <p className="text-[14px] text-neutral-5 mt-[6px] leading-tight">Alocados para: <strong className="text-[#003A79]">{filters.avaliacaoNome}</strong></p>
                 </div>

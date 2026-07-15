@@ -255,18 +255,18 @@ export default function CascadeSelector({
       <div className="items-center gap-[8px] flex w-full">
         <div
           className={`flex items-center justify-between bg-neutral-0 border transition-all ${
-            isOpen ? 'border-[2px] border-[var(--primary-base)] ring-2 ring-[var(--primary-light)]' : 'border-neutral-300 shadow-sm'
+            isOpen ? 'border-[2px] border-[var(--color-brand-500)] ring-2 ring-[var(--color-brand-300)]' : 'border-neutral-300 shadow-sm'
           } rounded-[4px] ${
             isMobile
               ? 'h-[44px] px-[16px] w-full'
               : variant === 'sidebar'
                 ? 'h-[36px] md:h-[40px] px-[12px] flex-1 min-w-0'
                 : 'h-[44px] md:h-[48px] px-[16px] flex-1 md:flex-initial md:w-fit md:min-w-[40%] md:max-w-[calc(100%-56px)]'
-          } cursor-pointer hover:border-[var(--primary-base)] overflow-hidden`}
+          } cursor-pointer hover:border-[var(--color-brand-500)] overflow-hidden`}
           onClick={toggle}
         >
           <div className="flex items-center min-w-0 flex-1">
-            <LayoutGrid size={20} className="text-primary-base shrink-0 mr-[8px] md:mr-[12px]" />
+            <LayoutGrid size={20} className="text-brand-base shrink-0 mr-[8px] md:mr-[12px]" />
             {breadcrumbHtml}
           </div>
           {isMobile && (
@@ -352,18 +352,22 @@ export default function CascadeSelector({
               Esta ação irá remover todo o contexto selecionado e retornar o mapa ao estado inicial. Deseja continuar?
             </p>
             <div className="flex gap-3">
-              <button
+              <Button
+                variant="tertiary"
+                appearance="outline"
                 onClick={() => setShowClearConfirm(false)}
-                className="flex-1 py-2.5 rounded-lg border border-gray-300 font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex-1"
               >
                 CANCELAR
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="destructive"
+                appearance="solid"
                 onClick={confirmClear}
-                className="flex-1 py-2.5 rounded-lg bg-red-600 text-white font-bold hover:bg-red-700 transition-all shadow-md active:scale-95"
+                className="flex-1"
               >
                 LIMPAR TUDO
-              </button>
+              </Button>
             </div>
           </div>
         </div>,

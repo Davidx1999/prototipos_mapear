@@ -67,7 +67,7 @@ const SaberesFooter = ({ colors, tabs, activeSaberesTab, currentPage, setCurrent
                 type="text"
                 value={currentPage}
                 onChange={handlePageInput}
-                className="w-[36px] h-[36px] text-center border rounded-[4px] mx-[8px] outline-none focus:border-primary-base transition-colors"
+                className="w-[36px] h-[36px] text-center border rounded-[4px] mx-[8px] outline-none focus:border-brand-base transition-colors"
                 style={{ borderColor: colors.neutral[3] }}
               />
               de {totalPages}

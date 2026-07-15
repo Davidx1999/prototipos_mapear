@@ -78,7 +78,7 @@ const SaberesFilters = ({
           style={{ color: colors.neutral[7] }}
         >
           {opt}
-          <div className="w-[4px] h-[4px] rounded-full bg-primary-base opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="w-[4px] h-[4px] rounded-full bg-brand-base opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
       ))}
     </div>
@@ -214,13 +214,13 @@ const SaberesFilters = ({
         <div className="flex gap-[16px] w-full flex-col md:flex-row animate-fade-slide">
           <div className="flex-1 flex flex-col gap-[8px]">
             <label className="text-[12px] font-bold" style={{ color: colors.neutral[7] }}>Filtrar por Habilidade Origem</label>
-            <select className="w-full px-[16px] py-[10px] rounded-[8px] border text-[14px] outline-none bg-neutral-0 focus:border-primary-base transition-colors" style={{ borderColor: colors.neutral[3] }}>
+            <select className="w-full px-[16px] py-[10px] rounded-[8px] border text-[14px] outline-none bg-neutral-0 focus:border-brand-base transition-colors" style={{ borderColor: colors.neutral[3] }}>
               <option>Selecione</option>
             </select>
           </div>
           <div className="flex-1 flex flex-col gap-[8px]">
             <label className="text-[12px] font-bold" style={{ color: colors.neutral[7] }}>Filtrar por Habilidade Destino</label>
-            <select className="w-full px-[16px] py-[10px] rounded-[8px] border text-[14px] outline-none bg-neutral-0 focus:border-primary-base transition-colors" style={{ borderColor: colors.neutral[3] }}>
+            <select className="w-full px-[16px] py-[10px] rounded-[8px] border text-[14px] outline-none bg-neutral-0 focus:border-brand-base transition-colors" style={{ borderColor: colors.neutral[3] }}>
               <option>Selecione</option>
             </select>
           </div>

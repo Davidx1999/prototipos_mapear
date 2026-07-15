@@ -32,8 +32,8 @@ const Login = ({
           </div>
 
           {/* Logo Login Específica */}
-          <div className="mb-[24px]">
-            <img src="assets/logo_login_mapear.png" alt="Mapear Login" className="h-[40px] md:h-[56px] object-contain" style={{ filter: loginLogoFilter }} />
+          <div className="mb-[24px] flex items-center justify-center w-full">
+            <img src="assets/logo_login_mapear.png" alt="Mapear Login" className="h-[64px] w-auto max-w-full object-contain block" style={{ filter: loginLogoFilter }} />
           </div>
 
           <div className="text-center w-full">

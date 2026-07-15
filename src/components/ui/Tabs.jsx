@@ -178,7 +178,7 @@ const Tabs = ({
         >
           <button
             onClick={() => scroll('left')}
-            className="pointer-events-auto ml-[4px] p-[4px] rounded-full bg-white border shadow-sm hover:text-primary-base transition-colors text-slate-600 hover:text-blue-600"
+            className="pointer-events-auto ml-[4px] p-[4px] rounded-full bg-white border shadow-sm hover:text-brand-base transition-colors text-slate-600 hover:text-blue-600"
             style={{ borderColor: colors?.neutral?.[2] || '#DEE1E8' }}
           >
             <ChevronLeft size={16} />
@@ -250,7 +250,7 @@ const Tabs = ({
         >
           <button
             onClick={() => scroll('right')}
-            className="pointer-events-auto mr-[4px] p-[4px] rounded-full bg-white border shadow-sm hover:text-primary-base transition-colors text-slate-600 hover:text-blue-600"
+            className="pointer-events-auto mr-[4px] p-[4px] rounded-full bg-white border shadow-sm hover:text-brand-base transition-colors text-slate-600 hover:text-blue-600"
             style={{ borderColor: colors?.neutral?.[2] || '#DEE1E8' }}
           >
             <ChevronRight size={16} />

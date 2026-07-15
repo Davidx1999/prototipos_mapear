@@ -9,9 +9,9 @@ import Button from './Button';
  * @param {Function} onBack - Function to handle back button click
  * @param {Object} colors - Design system colors
  */
-export default function Breadcrumb({ paths, onBack, colors }) {
+export default function Breadcrumb({ paths, onBack, colors, className = '' }) {
   return (
-    <div className="flex items-center gap-[16px] mb-[24px] md:mb-[24px] animate-fade-slide">
+    <div className={`flex items-center gap-[16px] mb-[24px] animate-fade-slide ${className}`}>
       {/* Botão de Voltar */}
       {onBack && (
         <Button
@@ -27,7 +27,7 @@ export default function Breadcrumb({ paths, onBack, colors }) {
       )}
 
       {/* Caminho */}
-      <nav className="flex items-center gap-[4px] text-[12px] md:text-[14px] font-semibold tracking-wider">
+      <nav className="flex items-center gap-[4px] text-[12px] font-semibold tracking-wider">
         {paths.map((path, index) => {
           const isLast = index === paths.length - 1;
 

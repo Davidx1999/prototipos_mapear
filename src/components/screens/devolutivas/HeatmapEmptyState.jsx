@@ -1,6 +1,6 @@
 import React from 'react';
 import { Settings2 } from 'lucide-react';
-
+import Button from '../../ui/Button';
 export default function HeatmapEmptyState({ isContextExpanded, setIsContextExpanded, colors, isDarkMode = false }) {
   return (
     <div 
@@ -20,8 +20,8 @@ export default function HeatmapEmptyState({ isContextExpanded, setIsContextExpan
       <div className="flex flex-col items-center justify-center max-w-2xl relative z-10">
         <div className="relative mb-8">
           {/* Círculos decorativos pulsantes */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-primary-base/5 rounded-full animate-pulse" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary-base/10 rounded-full animate-pulse delay-700" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-brand-base/5 rounded-full animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-brand-base/10 rounded-full animate-pulse delay-700" />
 
           <img
             src={`${import.meta.env.BASE_URL}assets/Figure/colored/noHeatmap.png`}
@@ -40,17 +40,19 @@ export default function HeatmapEmptyState({ isContextExpanded, setIsContextExpan
           className="text-[14px] max-w-[440px] leading-relaxed mb-8"
           style={{ color: isDarkMode ? colors.neutral[3] : '#6B7280' }}
         >
-          Para visualizar o Mapa de Calor, utilize o <span className="font-bold text-primary-base" style={{ color: isDarkMode ? colors.primary.light : '' }}>Seleção de Contexto</span> no painel lateral e selecione o contexto desejado.
+          Para visualizar o Mapa de Calor, utilize o <span className="font-bold text-brand-base" style={{ color: isDarkMode ? colors.primary.light : '' }}>Seleção de Contexto</span> no painel lateral e selecione o contexto desejado.
         </p>
 
         {!isContextExpanded && (
-          <button
+          <Button
+            variant="primary"
+            appearance="solid"
             onClick={() => setIsContextExpanded(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-primary-base text-white rounded-xl font-bold text-[14px] shadow-lg shadow-primary-base/20 hover:bg-primary-dark transition-all active:scale-95 group"
+            iconLeft={<Settings2 size={20} className="group-hover:rotate-45 transition-transform" />}
+            className="group"
           >
-            <Settings2 size={20} className="group-hover:rotate-45 transition-transform" />
             Abrir Configurações
-          </button>
+          </Button>
         )}
       </div>
     </div>

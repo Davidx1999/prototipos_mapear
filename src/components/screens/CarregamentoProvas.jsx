@@ -281,7 +281,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
 
             <div className="grid grid-cols-3 gap-[8px] mt-[4px]">
               <div className="bg-white p-3 rounded-lg border text-center" style={{ borderColor: themeColors.neutral[2] }}>
-                <span className="text-[18px] font-bold text-primary-base" style={{ color: themeColors.primary.base }}>10</span>
+                <span className="text-[18px] font-bold text-brand-base" style={{ color: themeColors.primary.base }}>10</span>
                 <span className="text-[9px] text-neutral-4 uppercase font-bold block mt-[2px]">Alunos</span>
               </div>
               <div className="bg-white p-3 rounded-lg border text-center" style={{ borderColor: themeColors.neutral[2] }}>
@@ -299,15 +299,15 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
             <h3 className="text-[11px] font-bold uppercase tracking-wider text-neutral-4">Como funciona:</h3>
             <div className="flex flex-col gap-[10px]">
               <div className="flex gap-[12px] items-start">
-                <div className="w-[20px] h-[20px] rounded-full bg-primary-light text-primary-base font-bold text-[11px] flex items-center justify-center shrink-0">1</div>
+                <div className="w-[20px] h-[20px] rounded-full bg-brand-light text-brand-base font-bold text-[11px] flex items-center justify-center shrink-0">1</div>
                 <p className="text-[12px] text-neutral-6 leading-relaxed">Selecione a Regional, Município, Escola e a Turma ativa.</p>
               </div>
               <div className="flex gap-[12px] items-start">
-                <div className="w-[20px] h-[20px] rounded-full bg-primary-light text-primary-base font-bold text-[11px] flex items-center justify-center shrink-0">2</div>
+                <div className="w-[20px] h-[20px] rounded-full bg-brand-light text-brand-base font-bold text-[11px] flex items-center justify-center shrink-0">2</div>
                 <p className="text-[12px] text-neutral-6 leading-relaxed">Selecione o aluno e aponte a câmera para a folha de respostas.</p>
               </div>
               <div className="flex gap-[12px] items-start">
-                <div className="w-[20px] h-[20px] rounded-full bg-primary-light text-primary-base font-bold text-[11px] flex items-center justify-center shrink-0">3</div>
+                <div className="w-[20px] h-[20px] rounded-full bg-brand-light text-brand-base font-bold text-[11px] flex items-center justify-center shrink-0">3</div>
                 <p className="text-[12px] text-neutral-6 leading-relaxed">Confirme a transcrição automática gerada pela nossa IA Mapear.</p>
               </div>
             </div>
@@ -465,7 +465,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
                   onClick={() => setStudentFilter(filterId)}
                   className={`px-[12px] py-[6px] rounded-full text-[12px] font-bold transition-all border shrink-0 ${
                     isActive
-                      ? 'bg-primary-base text-white border-primary-base'
+                      ? 'bg-brand-base text-white border-brand-base'
                       : 'bg-neutral-0 text-neutral-5 border-neutral-300 hover:bg-neutral-100'
                   }`}
                   style={{
@@ -532,7 +532,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
                   )}
                   {student.status === 'Em Processamento' && (
                     <div className="w-[32px] h-[32px] flex items-center justify-center">
-                      <Loader2 size={18} className="animate-spin text-primary-base" />
+                      <Loader2 size={18} className="animate-spin text-brand-base" />
                     </div>
                   )}
                   {student.status === 'Concluído' && (
@@ -865,7 +865,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
               onClick={isContextReady ? handleSimulateDesktopUpload : undefined}
               className={`border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center transition-all ${
                 isContextReady
-                  ? 'border-primary-base hover:bg-[#E6F6FC]/10 cursor-pointer bg-neutral-0 active:scale-[0.99]'
+                  ? 'border-brand-base hover:bg-[#E6F6FC]/10 cursor-pointer bg-neutral-0 active:scale-[0.99]'
                   : 'border-neutral-300 bg-neutral-50 text-neutral-400 cursor-not-allowed opacity-60'
               }`}
               style={{
@@ -873,7 +873,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
               }}
             >
               <div className={`w-[56px] h-[56px] rounded-full flex items-center justify-center mb-3 ${
-                isContextReady ? 'bg-primary-light text-primary-base' : 'bg-neutral-2 text-neutral-4'
+                isContextReady ? 'bg-brand-light text-brand-base' : 'bg-neutral-2 text-neutral-4'
               }`} style={{
                 backgroundColor: isContextReady ? themeColors.primary.light : themeColors.neutral[2],
                 color: isContextReady ? themeColors.primary.base : themeColors.neutral[4]
@@ -930,7 +930,7 @@ export default function CarregamentoProvas({ colors, navigateTo }) {
                           <tr key={row.id} className="hover:bg-neutral-50/50 transition-colors text-[13px]">
                             <td className="px-6 py-4 font-semibold text-neutral-7 truncate max-w-[200px]" style={{ color: themeColors.neutral[7] }}>
                               <div className="flex items-center gap-2">
-                                <FileText size={16} className="text-primary-base shrink-0" style={{ color: themeColors.primary.base }} />
+                                <FileText size={16} className="text-brand-base shrink-0" style={{ color: themeColors.primary.base }} />
                                 <span className="truncate" title={row.name}>{row.name}</span>
                               </div>
                             </td>

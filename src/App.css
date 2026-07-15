@@ -2,7 +2,7 @@
 
 .card-blue-shadow:hover {
   box-shadow: 0 10px 25px -5px rgba(0, 139, 201, 0.25), 0 8px 10px -6px rgba(0, 139, 201, 0.1);
-  border-color: #008BC9 !important;
+  border-color: var(--color-brand-500) !important;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -24,7 +24,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #CACDD5;
+  background: var(--color-neutral-3);
   border-radius: 4px;
 }
 

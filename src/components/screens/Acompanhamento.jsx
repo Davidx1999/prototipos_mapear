@@ -21,11 +21,11 @@ const Acompanhamento = ({
         onBack={() => navigateTo('dashboard')}
         paths={[
           { label: 'Início', onClick: () => navigateTo('dashboard') },
-          { label: 'Acompanhamento Escolar' }
+          { label: 'Acompanhamento Estudantil' }
         ]}
       />
 
-      <h2 className="text-[22px] md:text-[28px] font-bold mb-[8px]" style={{ color: colors.neutral[7] }}>Acompanhamento Escolar</h2>
+      <h2 className="text-[22px] md:text-[28px] font-bold mb-[8px]" style={{ color: colors.neutral[7] }}>Acompanhamento Estudantil</h2>
       <p className="text-[14px] md:text-[14px] mb-[24px] md:mb-[32px]" style={{ color: colors.neutral[5] }}>Para começar, selecione o acompanhamento de notas que deseja realizar entre Alunos ou Escolas.</p>
 
       <div className="flex flex-col mb-[32px] gap-[12px]">
@@ -84,13 +84,13 @@ const Acompanhamento = ({
       <div className="sticky top-[64px] md:top-[74px] z-40 bg-neutral-0 pt-[8px] pb-[8px] -mx-[16px] md:-mx-[32px] px-[16px] md:px-[32px] mb-[24px]">
         <div className="flex flex-col md:flex-row md:items-center justify-between border-b gap-[16px] md:gap-0" style={{ borderColor: colors.neutral[2] }}>
           <div className="flex items-center overflow-x-auto hide-scrollbar w-full">
-            <div className={`px-[16px] md:px-[24px] py-[12px] font-bold text-[14px] md:text-[14px] cursor-pointer whitespace-nowrap border-b-2 transition-colors ${acompanhamentoTab === 0 ? 'border-primary-base text-primary-base' : 'border-transparent text-neutral-5 hover:text-primary-base'}`} onClick={() => setAcompanhamentoTab(0)}>
+            <div className={`px-[16px] md:px-[24px] py-[12px] font-bold text-[14px] md:text-[14px] cursor-pointer whitespace-nowrap border-b-2 transition-colors ${acompanhamentoTab === 0 ? 'border-brand-base text-brand-base' : 'border-transparent text-neutral-5 hover:text-brand-base'}`} onClick={() => setAcompanhamentoTab(0)}>
               Teoria Clássica dos Testes (TCT)
             </div>
-            <div className={`px-[16px] md:px-[24px] py-[12px] font-bold text-[14px] md:text-[14px] cursor-pointer whitespace-nowrap border-b-2 transition-colors ${acompanhamentoTab === 1 ? 'border-primary-base text-primary-base' : 'border-transparent text-neutral-5 hover:text-primary-base'}`} onClick={() => setAcompanhamentoTab(1)}>
+            <div className={`px-[16px] md:px-[24px] py-[12px] font-bold text-[14px] md:text-[14px] cursor-pointer whitespace-nowrap border-b-2 transition-colors ${acompanhamentoTab === 1 ? 'border-brand-base text-brand-base' : 'border-transparent text-neutral-5 hover:text-brand-base'}`} onClick={() => setAcompanhamentoTab(1)}>
               Teoria de Resposta ao Item (TRI)
             </div>
-            <div className={`px-[16px] md:px-[24px] py-[12px] font-bold text-[14px] md:text-[14px] cursor-pointer whitespace-nowrap border-b-2 transition-colors ${acompanhamentoTab === 2 ? 'border-primary-base text-primary-base' : 'border-transparent text-neutral-5 hover:text-primary-base'}`} onClick={() => setAcompanhamentoTab(2)}>
+            <div className={`px-[16px] md:px-[24px] py-[12px] font-bold text-[14px] md:text-[14px] cursor-pointer whitespace-nowrap border-b-2 transition-colors ${acompanhamentoTab === 2 ? 'border-brand-base text-brand-base' : 'border-transparent text-neutral-5 hover:text-brand-base'}`} onClick={() => setAcompanhamentoTab(2)}>
               Linha do Tempo
             </div>
           </div>
@@ -107,7 +107,7 @@ const Acompanhamento = ({
               <span className="text-[12px] font-bold block mb-[8px]" style={{ color: colors.neutral[7] }}>Acompanhamento por ano</span>
               <div className="flex items-center gap-[8px] overflow-x-auto hide-scrollbar">
                 {['Todos os anos', '2023', '2024', '2025', '2026', '2027', '2028', '2029'].map(year => (
-                  <div key={year} className={`px-[12px] py-[4px] rounded-full text-[12px] font-bold cursor-pointer transition-colors ${year === '2023' ? 'bg-[#94CFEF] text-[#003A79]' : 'bg-transparent text-primary-base hover:bg-[#D9F0FC]'}`}>{year}</div>
+                  <div key={year} className={`px-[12px] py-[4px] rounded-full text-[12px] font-bold cursor-pointer transition-colors ${year === '2023' ? 'bg-[#94CFEF] text-[#003A79]' : 'bg-transparent text-brand-base hover:bg-[#D9F0FC]'}`}>{year}</div>
                 ))}
               </div>
             </div>
@@ -201,28 +201,28 @@ const Acompanhamento = ({
                 <span className="text-[14px] font-bold" style={{ color: colors.neutral[7] }}>Matemática</span>
 
                 <div className="flex flex-col gap-[8px]">
-                  <div className="flex justify-between items-center"><span className="text-[14px] font-medium" style={{ color: colors.neutral[6] }}>Reconhecer</span><BarChart size={14} className="text-primary-base" /></div>
+                  <div className="flex justify-between items-center"><span className="text-[14px] font-medium" style={{ color: colors.neutral[6] }}>Reconhecer</span><BarChart size={14} className="text-brand-base" /></div>
                   <div className="flex items-center gap-[12px]">
                     <div className="flex-1 h-[8px] bg-[#FEE2E2] rounded-full overflow-hidden"><div className="h-full bg-[#FACC15]" style={{ width: '56%' }}></div></div>
                     <span className="text-[14px] font-bold">56%</span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-[8px]">
-                  <div className="flex justify-between items-center"><span className="text-[14px] font-medium" style={{ color: colors.neutral[6] }}>Aplicar</span><BarChart size={14} className="text-primary-base" /></div>
+                  <div className="flex justify-between items-center"><span className="text-[14px] font-medium" style={{ color: colors.neutral[6] }}>Aplicar</span><BarChart size={14} className="text-brand-base" /></div>
                   <div className="flex items-center gap-[12px]">
                     <div className="flex-1 h-[8px] bg-[#E5E7EB] rounded-full overflow-hidden"><div className="h-full bg-[#4ADE80]" style={{ width: '83%' }}></div></div>
                     <span className="text-[14px] font-bold">83%</span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-[8px]">
-                  <div className="flex justify-between items-center"><span className="text-[14px] font-medium" style={{ color: colors.neutral[6] }}>Raciocinar</span><BarChart size={14} className="text-primary-base" /></div>
+                  <div className="flex justify-between items-center"><span className="text-[14px] font-medium" style={{ color: colors.neutral[6] }}>Raciocinar</span><BarChart size={14} className="text-brand-base" /></div>
                   <div className="flex items-center gap-[12px]">
                     <div className="flex-1 h-[8px] bg-[#E5E7EB] rounded-full overflow-hidden"><div className="h-full bg-[#4ADE80]" style={{ width: '87%' }}></div></div>
                     <span className="text-[14px] font-bold">87%</span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-[8px]">
-                  <div className="flex justify-between items-center"><span className="text-[14px] font-medium" style={{ color: colors.neutral[6] }}>Interpretar</span><BarChart size={14} className="text-primary-base" /></div>
+                  <div className="flex justify-between items-center"><span className="text-[14px] font-medium" style={{ color: colors.neutral[6] }}>Interpretar</span><BarChart size={14} className="text-brand-base" /></div>
                   <div className="flex items-center gap-[12px]">
                     <div className="flex-1 h-[8px] bg-[#E5E7EB] rounded-full overflow-hidden"><div className="h-full bg-[#9CA3AF]" style={{ width: '47%' }}></div></div>
                     <span className="text-[14px] font-bold">47%</span>
@@ -236,7 +236,7 @@ const Acompanhamento = ({
             <div className="p-[20px] border-b flex justify-between items-center" style={{ borderColor: colors.neutral[2] }}>
               <h3 className="text-[16px] font-bold" style={{ color: colors.neutral[7] }}>Testes do Aluno</h3>
               <div className="flex items-center gap-[8px]">
-                <BarChart2 size={16} className="text-primary-base" />
+                <BarChart2 size={16} className="text-brand-base" />
                 <Grid size={16} className="text-[#969DA9]" />
                 <HelpCircle size={14} className="ml-[8px]" style={{ color: colors.neutral[4] }} />
               </div>
@@ -250,12 +250,12 @@ const Acompanhamento = ({
                     <span>100</span><span>75</span><span>50</span><span>25</span><span>0</span>
                   </div>
                   <div className="flex items-end justify-between w-full h-full pl-[24px] pb-[24px]">
-                    <div className="w-[12%] bg-[#FACC15] rounded-t-[4px] relative group" style={{ height: '42%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T4</span></div>
-                    <div className="w-[12%] bg-[#4ADE80] rounded-t-[4px] relative" style={{ height: '75%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T5</span></div>
-                    <div className="w-[12%] bg-[#4ADE80] rounded-t-[4px] relative" style={{ height: '100%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T6</span></div>
+                    <div className="w-[12%] bg-[#FACC15] rounded-t-[4px] relative group" style={{ height: '42%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T4</span></div>
+                    <div className="w-[12%] bg-[#4ADE80] rounded-t-[4px] relative" style={{ height: '75%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T5</span></div>
+                    <div className="w-[12%] bg-[#4ADE80] rounded-t-[4px] relative" style={{ height: '100%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T6</span></div>
                     <div className="w-[12%] bg-[#E5E7EB] rounded-t-[4px] relative" style={{ height: '5%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-[#969DA9] w-full text-center">T7</span></div>
-                    <div className="w-[12%] bg-[#4ADE80] rounded-t-[4px] relative" style={{ height: '92%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T8</span></div>
-                    <div className="w-[12%] bg-[#4ADE80] rounded-t-[4px] relative" style={{ height: '95%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T9</span></div>
+                    <div className="w-[12%] bg-[#4ADE80] rounded-t-[4px] relative" style={{ height: '92%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T8</span></div>
+                    <div className="w-[12%] bg-[#4ADE80] rounded-t-[4px] relative" style={{ height: '95%' }}><span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T9</span></div>
                   </div>
                 </div>
                 <div className="flex justify-between px-[48px] mt-[8px] text-[11px] font-medium" style={{ color: colors.neutral[5] }}>
@@ -276,20 +276,20 @@ const Acompanhamento = ({
                       <div className="w-full bg-[#EF4444]" style={{ height: '11%' }}></div>
                       <div className="w-full bg-[#94CFEF]" style={{ height: '10%' }}></div>
                       <div className="w-full bg-neutral-0 border border-neutral-2" style={{ height: '6%' }}></div>
-                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T4</span>
+                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T4</span>
                     </div>
                     <div className="w-[12%] h-full flex flex-col justify-end relative">
                       <div className="w-full bg-[#4ADE80] rounded-t-[4px]" style={{ height: '83%' }}></div>
                       <div className="w-full bg-[#FACC15]" style={{ height: '9%' }}></div>
                       <div className="w-full bg-[#94CFEF]" style={{ height: '4%' }}></div>
                       <div className="w-full bg-neutral-0 border border-neutral-2" style={{ height: '4%' }}></div>
-                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T5</span>
+                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T5</span>
                     </div>
                     <div className="w-[12%] h-full flex flex-col justify-end relative">
                       <div className="w-full bg-[#4ADE80] rounded-t-[4px]" style={{ height: '82%' }}></div>
                       <div className="w-full bg-[#FACC15]" style={{ height: '11%' }}></div>
                       <div className="w-full bg-[#EF4444]" style={{ height: '7%' }}></div>
-                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T6</span>
+                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T6</span>
                     </div>
                     <div className="w-[12%] bg-[#E5E7EB] rounded-t-[4px] relative" style={{ height: '5%' }}>
                       <span className="absolute -bottom-[20px] text-[11px] font-bold text-[#969DA9] w-full text-center">T7</span>
@@ -299,13 +299,13 @@ const Acompanhamento = ({
                       <div className="w-full bg-[#FACC15]" style={{ height: '7%' }}></div>
                       <div className="w-full bg-[#EF4444]" style={{ height: '5%' }}></div>
                       <div className="w-full bg-[#94CFEF]" style={{ height: '3%' }}></div>
-                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T8</span>
+                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T8</span>
                     </div>
                     <div className="w-[12%] h-full flex flex-col justify-end relative">
                       <div className="w-full bg-[#4ADE80] rounded-t-[4px]" style={{ height: '82%' }}></div>
                       <div className="w-full bg-[#FACC15]" style={{ height: '11%' }}></div>
                       <div className="w-full bg-[#EF4444]" style={{ height: '7%' }}></div>
-                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-primary-base w-full text-center">T9</span>
+                      <span className="absolute -bottom-[20px] text-[11px] font-bold text-brand-base w-full text-center">T9</span>
                     </div>
                   </div>
                 </div>
@@ -326,9 +326,9 @@ const Acompanhamento = ({
       {acompanhamentoTab === 2 && (
         <div className="animate-fade-slide flex flex-col items-center py-[24px]">
           <div className="flex items-center gap-[40px] mb-[24px]">
-            <span className="text-[18px] font-bold text-[#969DA9] cursor-pointer hover:text-primary-base">2022</span>
-            <span className="text-[18px] font-bold text-[#969DA9] cursor-pointer hover:text-primary-base">2023</span>
-            <span className="text-[18px] font-bold text-[#969DA9] cursor-pointer hover:text-primary-base">2024</span>
+            <span className="text-[18px] font-bold text-[#969DA9] cursor-pointer hover:text-brand-base">2022</span>
+            <span className="text-[18px] font-bold text-[#969DA9] cursor-pointer hover:text-brand-base">2023</span>
+            <span className="text-[18px] font-bold text-[#969DA9] cursor-pointer hover:text-brand-base">2024</span>
             <div className="flex flex-col items-center">
               <span className="text-[28px] font-black text-neutral-6">2025</span>
               <div className="w-full h-[3px] bg-[#008BC9] rounded-full mt-[4px]"></div>
@@ -336,9 +336,9 @@ const Acompanhamento = ({
           </div>
 
           <div className="flex items-center gap-[16px] md:gap-[24px] mb-[48px] overflow-x-auto hide-scrollbar w-full justify-center">
-            <span className="text-[12px] font-bold text-primary-base flex items-center gap-[4px] cursor-pointer border-b border-primary-base pb-[4px]">Jan <ChevronDown size={14} /></span>
+            <span className="text-[12px] font-bold text-brand-base flex items-center gap-[4px] cursor-pointer border-b border-brand-base pb-[4px]">Jan <ChevronDown size={14} /></span>
             {['Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'].map(m => (
-              <span key={m} className="text-[12px] font-bold text-[#969DA9] cursor-pointer hover:text-primary-base pb-[4px] border-b border-transparent">{m}</span>
+              <span key={m} className="text-[12px] font-bold text-[#969DA9] cursor-pointer hover:text-brand-base pb-[4px] border-b border-transparent">{m}</span>
             ))}
             <span className="text-[12px] font-bold text-[#969DA9] flex items-center gap-[4px] cursor-pointer pb-[4px] border-b border-transparent">Pós <ChevronDown size={14} /></span>
           </div>
@@ -355,7 +355,7 @@ const Acompanhamento = ({
                   <div className="hidden md:block md:w-1/2"></div>
 
                   <div className={`w-full pl-[56px] md:pl-0 md:w-1/2 flex flex-col ${isLeft ? 'md:pr-[40px] md:items-end' : 'md:pl-[40px] md:items-start'}`}>
-                    <div className="text-[14px] font-bold text-primary-base mb-[16px]">{monthData.month}</div>
+                    <div className="text-[14px] font-bold text-brand-base mb-[16px]">{monthData.month}</div>
 
                     <div className={`flex flex-col gap-[16px] w-full md:max-w-[360px]`}>
                       {monthData.items.map((item, itemIdx) => (
@@ -368,7 +368,7 @@ const Acompanhamento = ({
                           {item.type === 'card' && (
                             <div className="bg-neutral-0 border rounded-[8px] p-[20px] shadow-sm w-full" style={{ borderColor: colors.neutral[2] }}>
                               <div className="flex justify-between items-start mb-[16px]">
-                                <span className="text-[12px] font-bold text-primary-base px-[10px] py-[2px] rounded-[4px] border border-[#94CFEF] bg-[#D9F0FC]">{item.rank}</span>
+                                <span className="text-[12px] font-bold text-brand-base px-[10px] py-[2px] rounded-[4px] border border-[#94CFEF] bg-[#D9F0FC]">{item.rank}</span>
                               </div>
                               <h4 className="text-[14px] font-bold text-neutral-6 mb-[24px] leading-tight text-left">{item.title}</h4>
 

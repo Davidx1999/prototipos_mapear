@@ -23,38 +23,61 @@ const Button = ({
   selected = false,
   iconSize,
   showRing = false,
+  uppercase,
   ...props
 }) => {
   // ══ VARIANT & APPEARANCE CONFIG ══════════════════════════════════════════
   const variantStyles = {
     primary: {
-      solid: 'bg-[var(--primary-base)] text-white border-transparent hover:bg-[var(--primary-dark)] active:bg-[var(--primary-extra-dark)]',
-      ghost: `bg-transparent text-[var(--primary-base)] border-transparent
-              hover:bg-[var(--primary-light)] hover:text-[var(--primary-dark)]
-              active:bg-[var(--primary-dark)] active:text-[var(--primary-extra-light)]`,
-      link: `bg-transparent text-[var(--primary-base)] border-transparent
-             hover:text-[var(--primary-dark)]
-             active:text-[var(--primary-extra-dark)]`
+      solid: `bg-[var(--color-button-solid-primary-color-primary-bg)] hover:bg-[var(--color-button-solid-primary-color-primary-bg-hover)] active:bg-[var(--color-button-solid-primary-color-primary-bg-pressed)]
+              text-[var(--color-button-solid-primary-color-primary-text-button)] hover:text-[var(--color-button-solid-primary-color-primary-text-hover)] active:text-[var(--color-button-solid-primary-color-primary-text-pressed)]
+              border-transparent`,
+      ghost: `bg-transparent hover:bg-[var(--color-button-ghost-primary-color-primary-bg-hover)] active:bg-[var(--color-button-ghost-primary-color-primary-bg-pressed)]
+              text-[var(--color-button-ghost-primary-color-primary-text-button)] hover:text-[var(--color-button-ghost-primary-color-primary-text-hover)] active:text-[var(--color-button-ghost-primary-color-primary-text-pressed)]
+              border-transparent`,
+      link: `bg-transparent text-[var(--color-button-ghost-primary-color-primary-text-button)] hover:text-[var(--color-button-ghost-primary-color-primary-text-hover)] active:text-[var(--color-button-ghost-primary-color-primary-text-pressed)] border-transparent`
     },
     secondary: {
-      solid: `bg-[var(--primary-extra-light)] text-[#008BC9] border-[#008BC9] hover:bg-[var(--primary-light)] ${showRing ? 'ring-2 ring-[#003A79]' : ''}`,
-      ghost: `bg-transparent text-[var(--primary-base)] border-transparent
-              hover:bg-[var(--primary-light)] hover:bg-opacity-[0.48]
-              active:bg-[var(--primary-base)] active:text-[var(--primary-dark)]`,
-      link: `bg-transparent text-[var(--primary-dark)] border-transparent
-             hover:text-[var(--primary-base)]
-             active:text-[var(--primary-extra-dark)]`
+      solid: `bg-[var(--color-button-solid-secondary-color-secondary-bg)] hover:bg-[var(--color-button-solid-secondary-color-secondary-bg-hover)] active:bg-[var(--color-button-solid-secondary-color-secondary-bg-pressed)]
+              text-[var(--color-button-solid-secondary-color-secondary-text-button)] hover:text-[var(--color-button-solid-secondary-color-secondary-text-hover)] active:text-[var(--color-button-solid-secondary-color-secondary-text-pressed)]
+              border-transparent ${showRing ? 'ring-2 ring-[var(--color-button-solid-primary-color-primary-bg)]' : ''}`,
+      ghost: `bg-transparent hover:bg-[var(--color-button-ghost-secondary-color-secondary-bg-hover)] active:bg-[var(--color-button-ghost-secondary-color-secondary-bg-pressed)]
+              text-[var(--color-button-ghost-secondary-color-secondary-text-button)] hover:text-[var(--color-button-ghost-secondary-color-secondary-text-hover)] active:text-[var(--color-button-ghost-secondary-color-secondary-text-pressed)]
+              border-transparent`,
+      link: `bg-transparent text-[var(--color-button-ghost-secondary-color-secondary-text-button)] hover:text-[var(--color-button-ghost-secondary-color-secondary-text-hover)] active:text-[var(--color-button-ghost-secondary-color-secondary-text-pressed)] border-transparent`
     },
     tertiary: {
-      solid: `bg-[var(--neutral-0)] border-[var(--neutral-3)] border
-              hover:bg-[var(--neutral-2)] hover:border-[var(--neutral-3)]
-              active:bg-[var(--neutral-4)] active:border-[var(--neutral-5)]`,
-      ghost: `bg-transparent border-transparent
-              hover:bg-[var(--neutral-2)]
-              active:bg-[var(--neutral-4)]`,
-      link: `bg-transparent border-transparent
-             hover:text-[var(--neutral-7)]
-             active:text-[var(--neutral-4)]`
+      solid: `bg-[var(--color-button-solid-tertiary-color-neutral-bg)] hover:bg-[var(--color-button-solid-tertiary-color-neutral-bg-hover)] active:bg-[var(--color-button-solid-tertiary-color-neutral-bg-pressed)]
+              text-[var(--color-button-solid-tertiary-color-neutral-text-button)] hover:text-[var(--color-button-solid-tertiary-color-neutral-text-hover)] active:text-[var(--color-button-solid-tertiary-color-neutral-text-pressed)]
+              border-[var(--color-button-solid-tertiary-color-neutral-stk)] hover:border-[var(--color-button-solid-tertiary-color-neutral-stk-hover)] active:border-[var(--color-button-solid-tertiary-color-neutral-stk-pressed)] border`,
+      ghost: `bg-transparent hover:bg-[var(--color-button-ghost-tertiary-color-neutral-bg-hover)] active:bg-[var(--color-button-ghost-tertiary-color-neutral-bg-pressed)]
+              text-[var(--color-button-ghost-tertiary-color-neutral-text-button)] hover:text-[var(--color-button-ghost-tertiary-color-neutral-text-hover)] active:text-[var(--color-button-ghost-tertiary-color-neutral-text-pressed)]
+              border-transparent`,
+      link: `bg-transparent text-[var(--color-button-ghost-tertiary-color-neutral-text-button)] hover:text-[var(--color-button-ghost-tertiary-color-neutral-text-hover)] active:text-[var(--color-button-ghost-tertiary-color-neutral-text-pressed)] border-transparent`
+    },
+    'tertiary-2': {
+      ghost: `bg-transparent hover:bg-[var(--color-button-ghost-tertiary-2-color-neutral-bg-hover)] active:bg-[var(--color-button-ghost-tertiary-2-color-neutral-bg-pressed)]
+              text-[var(--color-button-ghost-tertiary-2-color-neutral-text-button)] hover:text-[var(--color-button-ghost-tertiary-2-color-neutral-text-hover)] active:text-[var(--color-button-ghost-tertiary-2-color-neutral-text-pressed)]
+              border-transparent`,
+      link: `bg-transparent text-[var(--color-button-ghost-tertiary-2-color-neutral-text-button)] hover:text-[var(--color-button-ghost-tertiary-2-color-neutral-text-hover)] active:text-[var(--color-button-ghost-tertiary-2-color-neutral-text-pressed)] border-transparent`
+    },
+    destructive: {
+      solid: `bg-[var(--color-button-solid-destructive-primary-color-destructive-bg)] hover:bg-[var(--color-button-solid-destructive-primary-color-destructive-bg-hover)] active:bg-[var(--color-button-solid-destructive-primary-color-destructive-bg-pressed)]
+              text-[var(--color-button-solid-destructive-primary-color-destructive-text-button)] hover:text-[var(--color-button-solid-destructive-primary-color-destructive-text-hover)] active:text-[var(--color-button-solid-destructive-primary-color-destructive-text-pressed)]
+              border-transparent`,
+      ghost: `bg-transparent hover:bg-[var(--color-button-ghost-destructive-primary-color-destructive-bg-hover)] active:bg-[var(--color-button-ghost-destructive-primary-color-destructive-bg-pressed)]
+              text-[var(--color-button-ghost-destructive-primary-color-destructive-text-button)] hover:text-[var(--color-button-ghost-destructive-primary-color-destructive-text-hover)] active:text-[var(--color-button-ghost-destructive-primary-color-destructive-text-pressed)]
+              border-transparent`,
+      link: `bg-transparent text-[var(--color-button-ghost-destructive-primary-color-destructive-text-button)] hover:text-[var(--color-button-ghost-destructive-primary-color-destructive-text-hover)] active:text-[var(--color-button-ghost-destructive-primary-color-destructive-text-pressed)] border-transparent`
+    },
+    'destructive-secondary': {
+      solid: `bg-[var(--color-button-solid-destructive-secondary-color-dest-secondary-bg)] hover:bg-[var(--color-button-solid-destructive-secondary-color-dest-secondary-bg-hover)] active:bg-[var(--color-button-solid-destructive-secondary-color-dest-secondary-bg-pressed)]
+              text-[var(--color-button-solid-destructive-secondary-color-dest-secondary-text-button)] hover:text-[var(--color-button-solid-destructive-secondary-color-dest-secondary-text-hover)] active:text-[var(--color-button-solid-destructive-secondary-color-dest-secondary-text-pressed)]
+              border-transparent`,
+      ghost: `bg-transparent hover:bg-[var(--color-button-ghost-destructive-secondary-color-dest-secondary-bg-hover)] active:bg-[var(--color-button-ghost-destructive-secondary-color-dest-secondary-bg-pressed)]
+              text-[var(--color-button-ghost-destructive-secondary-color-dest-secondary-text-button)] hover:text-[var(--color-button-ghost-destructive-secondary-color-dest-secondary-text-hover)] active:text-[var(--color-button-ghost-destructive-secondary-color-dest-secondary-text-pressed)]
+              border-transparent`,
+      link: `bg-transparent text-[var(--color-button-ghost-destructive-secondary-color-dest-secondary-text-button)] hover:text-[var(--color-button-ghost-destructive-secondary-color-dest-secondary-text-hover)] active:text-[var(--color-button-ghost-destructive-secondary-color-dest-secondary-text-pressed)] border-transparent`
     }
   };
 
@@ -95,7 +118,7 @@ const Button = ({
 
   const getTertiaryLabelColor = () => {
     if (variant !== 'tertiary') return '';
-    return tertiaryTone === 'high' ? 'text-[var(--neutral-7)]' : 'text-[var(--neutral-5)]';
+    return tertiaryTone === 'high' ? 'text-[var(--color-neutral-7)]' : 'text-[var(--color-neutral-5)]';
   };
 
   const justifyStyles = {
@@ -108,12 +131,12 @@ const Button = ({
   const getAppearanceStyles = () => {
     if (disabled || loading) {
       if (appearance === 'link') {
-        return 'bg-transparent text-[var(--neutral-3)] border-transparent cursor-not-allowed pointer-events-none';
+        return 'bg-transparent text-[var(--color-button-solid-disabled-color-disabled-text-button)] border-transparent cursor-not-allowed pointer-events-none';
       }
       if (appearance === 'ghost') {
-        return 'bg-transparent text-[var(--neutral-3)] border-transparent cursor-not-allowed pointer-events-none';
+        return 'bg-transparent text-[var(--color-button-solid-disabled-color-disabled-text-button)] border-transparent cursor-not-allowed pointer-events-none';
       }
-      return 'bg-[var(--neutral-2)] text-[var(--neutral-3)] border-[var(--neutral-2)] cursor-not-allowed pointer-events-none';
+      return 'bg-[var(--color-button-solid-disabled-color-disabled-bg)] text-[var(--color-button-solid-disabled-color-disabled-text-button)] border-[var(--color-button-solid-disabled-color-disabled-bg)] cursor-not-allowed pointer-events-none';
     }
     return variantStyles[variant]?.[appearance] || variantStyles.primary.solid;
   };
@@ -121,9 +144,9 @@ const Button = ({
   const activeAppearanceStyles = getAppearanceStyles();
 
   const selectionStyles = selected ? ({
-    primary: '!bg-[var(--primary-light)] !text-[var(--primary-dark)]',
-    secondary: `!bg-[var(--primary-base)] !text-[var(--primary-dark)] ${showRing ? 'ring-2 ring-[#003A79] ring-offset-1' : ''}`,
-    tertiary: '!bg-[var(--neutral-2)] !text-[var(--neutral-7)]'
+    primary: '!bg-[var(--color-brand-300)] !text-[var(--color-brand-700)]',
+    secondary: `!bg-[var(--color-brand-500)] !text-[var(--color-brand-700)] ${showRing ? 'ring-2 ring-[#003A79] ring-offset-1' : ''}`,
+    tertiary: '!bg-[var(--color-neutral-2)] !text-[var(--color-neutral-7)] !border-transparent'
   }[variant] || '') : '';
 
   const currentSize = sizeStyles[size] || sizeStyles.md;
@@ -155,13 +178,13 @@ const Button = ({
       disabled={disabled || loading}
       className={`
         relative flex flex-row items-center font-semibold transition-all duration-120
-        rounded-[4px] cursor-pointer outline-none shrink-0 overflow-hidden
-        focus-visible:ring-2 focus-visible:ring-[var(--primary-dark)] focus-visible:ring-offset-2
+        rounded-[var(--border-radius-xx-sm)] cursor-pointer outline-none shrink-0 overflow-hidden
+        focus-visible:ring-2 focus-visible:ring-[var(--color-brand-700)] focus-visible:ring-offset-2
         active:scale-[0.97]
         ${currentJustify}
         ${activeAppearanceStyles}
         ${selectionStyles}
-        ${appearance === 'solid' ? 'uppercase' : appearance === 'ghost' ? 'lowercase' : ''}
+        ${uppercase === true || (uppercase === undefined && appearance === 'solid') ? 'uppercase' : ''}
         ${currentSize.height}
         ${currentSize.padding}
         ${currentSize.fontSize}

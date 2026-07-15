@@ -16,7 +16,7 @@ const Textarea = ({
   return (
     <div className={`flex flex-col gap-[6px] ${fullWidth ? 'w-full' : ''}`}>
       {label && (
-        <label className="text-[14px] md:text-[14px] font-semibold text-[var(--neutral-6)]">
+        <label className="text-[14px] md:text-[14px] font-semibold text-[var(--color-neutral-6)]">
           {label}
         </label>
       )}
@@ -24,22 +24,22 @@ const Textarea = ({
       <textarea
         style={{ ...style }}
         className={`
-          w-full bg-[var(--neutral-0)] border text-[14px] md:text-[14px] outline-none transition-all
+          w-full bg-[var(--color-neutral-0)] border text-[14px] md:text-[14px] outline-none transition-all
           rounded-[4px] px-[16px] py-[12px] resize-y
           ${error
             ? 'border-red-500 focus:border-red-600'
-            : 'border-[var(--neutral-3)] focus:border-[2px] focus:border-[var(--primary-base)] focus:ring-2 focus:ring-[var(--primary-light)]'}
-          placeholder:text-[var(--neutral-4)]
+            : 'border-[var(--color-neutral-3)] focus:border-[2px] focus:border-[var(--color-brand-500)] focus:ring-2 focus:ring-[var(--color-brand-300)]'}
+          placeholder:text-[var(--color-neutral-4)]
           placeholder:font-normal
-          text-[var(--neutral-7)]
-          disabled:bg-[var(--neutral-1)] disabled:text-[var(--neutral-4)] disabled:cursor-not-allowed
+          text-[var(--color-neutral-7)]
+          disabled:bg-[var(--color-neutral-1)] disabled:text-[var(--color-neutral-4)] disabled:cursor-not-allowed
           ${className}
         `}
         {...props}
       />
 
       {(error || helperText) && (
-        <p className={`text-[11px] md:text-[12px] mt-[2px] ${error ? 'text-red-500 font-medium' : 'text-[var(--neutral-5)]'}`}>
+        <p className={`text-[11px] md:text-[12px] mt-[2px] ${error ? 'text-red-500 font-medium' : 'text-[var(--color-neutral-5)]'}`}>
           {typeof error === 'string' ? error : helperText}
         </p>
       )}

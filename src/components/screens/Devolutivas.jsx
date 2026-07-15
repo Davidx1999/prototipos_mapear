@@ -64,7 +64,7 @@ const calculateResult = (values, method) => {
   }
 };
 
-export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }) {
+export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast, navigationParams, setNavigationParams }) {
   // --- ESTADOS GERAIS E LAYOUT ---
   const [mainTab, setMainTab] = useState('heatmap');
   const [calcMethod, setCalcMethod] = useState('Média');
@@ -111,6 +111,65 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast }
   const [navPath, setNavPath] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+
+  // Auto-populate context when navigated from AcompanhamentoEscolar with parameters
+  useEffect(() => {
+    if (navigationParams) {
+      const { serie, letra, disciplina } = navigationParams;
+      
+      // Map classes from AcompanhamentoEscolar to available mock data in Devolutivas
+      let mappedTurma = '9º Ano A';
+      if (serie === '1em') {
+        mappedTurma = '7º Ano A';
+      } else if (serie === '2em') {
+        mappedTurma = '7º Ano B';
+      } else {
+        if (letra === 'B') mappedTurma = '9º Ano B';
+        else if (letra === 'C') mappedTurma = '9º Ano C';
+        else mappedTurma = '9º Ano A';
+      }
+
+      let mappedAvaliacao = 'Brasil em Foco: Cultura, Sociedade, Ciência e Cotidiano';
+      let mappedTeste = 'Cultura, Linguagem e Cotidiano Brasileiro';
+
+      if (disciplina === 'Matemática') {
+        mappedAvaliacao = 'Avaliação Diagnóstica 2026.1';
+        mappedTeste = mappedTurma.startsWith('9') ? 'Caderno 2 - Matemática' : 'Caderno 2';
+      }
+
+      const path = [
+        'Ceará',
+        'Fortaleza',
+        'Regional 1',
+        'Liceu do Conjunto Ceará',
+        mappedTurma,
+        mappedAvaliacao,
+        mappedTeste
+      ];
+
+      setNavLevel(6); // Test selected level
+      setNavPath(path);
+      setSelectedTurmas([mappedTurma]);
+      setFocalTurma(mappedTurma);
+      setIsLoaded(true);
+      setIsLoadingMatrix(false);
+      setMatrixError(null);
+      setIsContextExpanded(false); // Close sidebar so the matrix is clearly visible
+
+      if (setToast) {
+        setToast({
+          type: 'success',
+          title: 'Filtro Aplicado',
+          message: `Mapa de Calor carregado para a turma ${mappedTurma} na disciplina de ${disciplina}.`
+        });
+      }
+
+      // Clear navigationParams so it doesn't trigger on every render/hashchange
+      if (setNavigationParams) {
+        setNavigationParams(null);
+      }
+    }
+  }, [navigationParams, setNavigationParams, setToast]);
 
   const handleStartTutorial = () => {
     console.log("Iniciando Tutorial...");

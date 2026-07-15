@@ -45,12 +45,12 @@ const GenericModulePage = ({ colors, navigateTo }) => {
           >
             <div className="flex items-center gap-[16px] mb-[20px]">
               <div 
-                className="w-[48px] h-[48px] rounded-[10px] flex items-center justify-center transition-colors group-hover:bg-primary-light group-hover:text-primary-base" 
+                className="w-[48px] h-[48px] rounded-[10px] flex items-center justify-center transition-colors group-hover:bg-brand-light group-hover:text-brand-base" 
                 style={{ backgroundColor: colors.neutral[1], color: colors.neutral[5] }}
               >
                 {menu.icon}
               </div>
-              <h2 className="text-[18px] font-bold transition-colors group-hover:text-primary-base" style={{ color: colors.neutral[7] }}>
+              <h2 className="text-[18px] font-bold transition-colors group-hover:text-brand-base" style={{ color: colors.neutral[7] }}>
                 {menu.label}
               </h2>
             </div>
@@ -64,14 +64,14 @@ const GenericModulePage = ({ colors, navigateTo }) => {
                   style={{ color: colors.neutral[6] }}
                 >
                   <div className="flex items-center gap-[12px]">
-                    <div className="text-neutral-4 group-hover/item:text-primary-base transition-colors">
+                    <div className="text-neutral-4 group-hover/item:text-brand-base transition-colors">
                       {card.icon}
                     </div>
-                    <span className="text-[14px] font-semibold group-hover/item:text-primary-base transition-colors">
+                    <span className="text-[14px] font-semibold group-hover/item:text-brand-base transition-colors">
                       {card.title}
                     </span>
                   </div>
-                  <ChevronRight size={16} className="text-gray-300 group-hover/item:text-primary-base transition-colors" />
+                  <ChevronRight size={16} className="text-gray-300 group-hover/item:text-brand-base transition-colors" />
                 </button>
               ))}
             </div>

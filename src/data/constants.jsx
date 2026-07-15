@@ -51,7 +51,7 @@ export const sidebarMenus = [
     cards: [
       { id: 'card-saberes', title: 'Matriz de Saberes', route: 'saberes', keywords: ['habilidades', 'saberes', 'domínios', 'cognitivos', 'competências'], desc: 'Organize matrizes, relacione domínios e hierarquize habilidades cognitivas essenciais para a rede.', icon: <Grid size={20} /> },
       { id: 'card-curriculos', title: 'Matrizes Curriculares', route: 'curriculos', keywords: ['bncc', 'saeb', 'currículo', 'habilidades', 'nacional'], desc: 'Estruture habilidades educacionais com base em referenciais nacionais padronizados, como BNCC e SAEB.', icon: <BookOpen size={20} /> },
-      { id: 'card-conteudos', title: 'Edição de Conteúdos', keywords: ['material', 'didático', 'aula', 'alunos', 'estudantes', 'publicar'], desc: 'Crie, publique e disponibilize materiais didáticos acessíveis e bem estruturados para os estudantes.', icon: <FileEdit size={20} /> }
+      { id: 'card-conteudos', title: 'Edição de Conteúdos', keywords: ['material', 'didático', 'aula', 'alunos', 'estudantes', 'publicar'], desc: 'Crie, publique e disponibilize materiais didáticos acessíveis e estruturados para os estudantes.', icon: <FileEdit size={20} /> }
     ]
   },
   {
@@ -60,9 +60,9 @@ export const sidebarMenus = [
     shortDesc: 'Ciclo completo de avaliações',
     icon: <Edit3 size={24} />, // Note: Edit3 was in the original imports but might need checking
     cards: [
-      { id: 'card-editor-av', title: 'Editor de Avaliações', route: 'avaliacoes', keywords: ['prova', 'teste', 'exame', 'criar', 'caderno'], desc: 'Estruture cadernos, blocos de itens e defina todos os parâmetros para aplicação de novas provas.', icon: <PenTool size={20} /> },
-      { id: 'card-banco', title: 'Banco de Tarefas', keywords: ['questões', 'itens', 'perguntas', 'banco', 'repositório'], desc: 'Acesse e colabore em tarefas educacionais mantendo uma curadoria técnica pedagógica.', icon: <Database size={20} /> },
-      { id: 'card-alocacao', title: 'Alocação de Avaliações', keywords: ['alunos', 'professores', 'turmas', 'enviar prova', 'distribuir'], desc: 'Distribua as provas criadas associando os testes a turmas ou grupos específicos de estudantes.', icon: <Users size={20} /> },
+      { id: 'card-editor-av', title: 'Editor de Avaliações', route: 'avaliacoes', keywords: ['prova', 'teste', 'exame', 'criar', 'caderno'], desc: 'Elabore avaliações parametrizados com itens personalizados para os estudantes.', icon: <PenTool size={20} /> },
+      { id: 'card-banco', title: 'Banco De Tarefas & Itens', route: 'banco-tarefas', keywords: ['questões', 'itens', 'perguntas', 'banco', 'repositório'], desc: 'Acesse e colabore em tarefas educacionais mantendo uma curadoria pedagógica em testes.', icon: <Database size={20} /> },
+      { id: 'card-alocacao', title: 'Alocação de Avaliações', keywords: ['alunos', 'professores', 'turmas', 'enviar prova', 'distribuir'], desc: 'Distribua as avaliações para aplicação dos alunos e correção dos professores.', icon: <Users size={20} /> },
       { id: 'card-correcao', title: 'Correção de Avaliações', keywords: ['corrigir', 'ia', 'respostas', 'alunos', 'inteligência artificial'], desc: 'Utilize inteligência artificial para agrupar respostas e otimizar a velocidade de correção manual.', icon: <CheckSquare size={20} /> },
       { id: 'card-metricas', title: 'Métricas', keywords: ['desempenho', 'notas', 'alunos', 'escolas', 'indicadores'], desc: 'Acompanhe métricas gerais de correção e tenha a visão do status atual de estudantes e turmas.', icon: <TrendingUp size={20} /> },
       { id: 'card-upload', title: 'Carregamento de Provas', route: 'carregamento-provas', keywords: ['upload', 'pdf', 'scanner', 'digitalizar', 'alunos', 'htr'], desc: 'Faça upload de provas físicas e valide a leitura de respostas manuscritas via tecnologia HTR.', icon: <UploadCloud size={20} /> }
@@ -76,8 +76,9 @@ export const sidebarMenus = [
     cards: [
       { id: 'card-relatorios', title: 'Relatórios', keywords: ['notas', 'alunos', 'resultados', 'ranking', 'boletim'], desc: 'Acesse análises e rankings com indicadores consolidados de proficiência de toda a rede de ensino.', icon: <BarChart2 size={20} /> },
       { id: 'card-psico', title: 'Psicométricos', keywords: ['tri', 'alunos', 'itens', 'validade', 'curva', 'estatística'], desc: 'Avalie a curva de aprendizado e o comportamento em itens com validação estatística avançada (TRI).', icon: <LineChart size={20} /> },
-      { id: 'card-devolutivas', title: 'Devolutivas', route: 'devolutivas', keywords: ['alunos', 'notas', 'gabarito', 'mapa de calor', 'individual'], desc: 'Explore mapas de calor e visualize o desempenho detalhado de estudantes individualmente por turma.', icon: <LayoutDashboard size={20} /> },
-      { id: 'card-acompanhamento', title: 'Acompanhamento Escolar', route: 'acompanhamento', keywords: ['alunos', 'escolas', 'evolução', 'histórico', 'longitudinal'], desc: 'Monitore a evolução longitudinal por áreas de conhecimento das escolas e habilidades cognitivas.', icon: <TrendingUp size={20} /> }
+      { id: 'card-devolutivas', title: 'Devolutivas', route: 'devolutivas', keywords: ['alunos', 'notas', 'gabarito', 'mapa de calor', 'individual'], desc: 'Explore mapas de calor e visualize o desempenho detalhado de estudantes por turma.', icon: <LayoutDashboard size={20} /> },
+      { id: 'card-acompanhamento', title: 'Acompanhamento Estudantil', route: 'acompanhamento', keywords: ['alunos', 'escolas', 'evolução', 'histórico', 'longitudinal'], desc: 'Monitore a evolução de estudantes por áreas de conhecimento e habilidades cognitivas.', icon: <TrendingUp size={20} /> },
+      { id: 'card-acompanhamento-escolar', title: 'Acompanhamento Escolar', route: 'acompanhamento-escolar', keywords: ['escolas', 'gestão', 'acompanhamento', 'institucional', 'diretoria'], desc: 'Monitore as atividades e o andamento pedagógico e administrativo das escolas da rede.', icon: <ClipboardList size={20} /> }
     ]
   },
   {
@@ -86,7 +87,7 @@ export const sidebarMenus = [
     shortDesc: 'Ambiente dedicado aos estudantes',
     icon: <GraduationCap size={24} />,
     cards: [
-      { id: 'card-realizacao', title: 'Realização de Testes', route: 'realizacao-testes', keywords: ['alunos', 'estudantes', 'fazer prova', 'responder', 'teste'], desc: 'Acesse o environment exclusivo de estudantes para a resolution segura de testes e simulados.', icon: <GraduationCap size={20} /> }
+      { id: 'card-realizacao', title: 'Realização de Testes', route: 'realizacao-testes', keywords: ['alunos', 'estudantes', 'fazer prova', 'responder', 'teste'], desc: 'Acesse o ambiente exclusivo de estudantes para a realização de testes e simulados.', icon: <GraduationCap size={20} /> }
     ]
   },
   {
@@ -97,7 +98,7 @@ export const sidebarMenus = [
     cards: [
       { id: 'card-usuarios', title: 'Usuários', route: 'usuarios', keywords: ['acesso', 'professores', 'diretores', 'senha', 'perfil', 'cargo'], desc: 'Adicione perfis e gerencie as permissões de acesso baseadas nos cargos das entidades escolares.', icon: <UserCog size={20} /> },
       { id: 'card-escolas', title: 'Escolas', keywords: ['colégios', 'instituições', 'rede', 'município', 'dados'], desc: 'Atualize cadastros institucionais e administre as informações da rede de escolas ativas.', icon: <Building2 size={20} /> },
-      { id: 'card-turmas', title: 'Turmas', keywords: ['alunos', 'classes', 'estudantes', 'agrupamento', 'transferência'], desc: 'Organize o ensalamento, realize remanejamentos de alunos e vincule turmas às avaliações.', icon: <Users size={20} /> },
+      { id: 'card-turmas', title: 'Turmas', keywords: ['alunos', 'classes', 'estudantes', 'agrupamento', 'transferência'], desc: 'Organize as salas, remaneje alunos e conecte as turmas às avaliações.', icon: <Users size={20} /> },
       { id: 'card-presenca', title: 'Registro de Presença', route: 'registro-presenca', keywords: ['chamada', 'faltas', 'presença', 'alunos', 'aplicação'], desc: 'Realize o registro de presença dos alunos para as avaliações alocadas em cada turma.', icon: <CheckSquare size={20} /> }
     ]
   }

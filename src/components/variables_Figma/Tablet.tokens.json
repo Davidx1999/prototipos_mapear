@@ -1,0 +1,299 @@
+{
+  "button": {
+    "x-sm": {
+      "height": {
+        "$type": "number",
+        "$value": 32,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:56:11023",
+          "com.figma.hiddenFromPublishing": true,
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:c3ec94f1895b0c983751850ad20d86af5598605e/-1:-1",
+            "targetVariableName": "unit/80",
+            "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+            "targetVariableSetName": "MAPEAR Raw"
+          }
+        }
+      },
+      "min-width": {
+        "$type": "number",
+        "$value": 32,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:56:11022",
+          "com.figma.hiddenFromPublishing": true,
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:c3ec94f1895b0c983751850ad20d86af5598605e/-1:-1",
+            "targetVariableName": "unit/80",
+            "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+            "targetVariableSetName": "MAPEAR Raw"
+          }
+        }
+      }
+    },
+    "sm": {
+      "height": {
+        "$type": "number",
+        "$value": 44,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:46:5108",
+          "com.figma.hiddenFromPublishing": true,
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:bc928485fb7c968f883ae74756bc2b8a8a53180f/-1:-1",
+            "targetVariableName": "unit/110",
+            "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+            "targetVariableSetName": "MAPEAR Raw"
+          }
+        }
+      },
+      "min-width": {
+        "$type": "number",
+        "$value": 44,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:46:5103",
+          "com.figma.hiddenFromPublishing": true,
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:bc928485fb7c968f883ae74756bc2b8a8a53180f/-1:-1",
+            "targetVariableName": "unit/110",
+            "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+            "targetVariableSetName": "MAPEAR Raw"
+          }
+        }
+      }
+    },
+    "md": {
+      "height": {
+        "$type": "number",
+        "$value": 52,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:46:5101",
+          "com.figma.hiddenFromPublishing": true,
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:e10f5801bbe3a4f6c49ab0d3dc4afcefe1ba2721/-1:-1",
+            "targetVariableName": "unit/130",
+            "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+            "targetVariableSetName": "MAPEAR Raw"
+          }
+        }
+      },
+      "min-width": {
+        "$type": "number",
+        "$value": 52,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:46:5100",
+          "com.figma.hiddenFromPublishing": true,
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:e10f5801bbe3a4f6c49ab0d3dc4afcefe1ba2721/-1:-1",
+            "targetVariableName": "unit/130",
+            "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+            "targetVariableSetName": "MAPEAR Raw"
+          }
+        }
+      }
+    },
+    "lg": {
+      "height": {
+        "$type": "number",
+        "$value": 64,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:46:5106",
+          "com.figma.hiddenFromPublishing": true,
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:92d0d1b292366b8e789b334a25673bde4bfbc593/-1:-1",
+            "targetVariableName": "unit/160",
+            "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+            "targetVariableSetName": "MAPEAR Raw"
+          }
+        }
+      },
+      "min-width": {
+        "$type": "number",
+        "$value": 64,
+        "$extensions": {
+          "com.figma.variableId": "VariableID:46:5102",
+          "com.figma.hiddenFromPublishing": true,
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:92d0d1b292366b8e789b334a25673bde4bfbc593/-1:-1",
+            "targetVariableName": "unit/160",
+            "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+            "targetVariableSetName": "MAPEAR Raw"
+          }
+        }
+      }
+    }
+  },
+  "input box": {
+    "sm": {
+      "$type": "number",
+      "$value": 44,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:50:49",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP",
+          "FONT_VARIATIONS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:bc928485fb7c968f883ae74756bc2b8a8a53180f/-1:-1",
+          "targetVariableName": "unit/110",
+          "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+          "targetVariableSetName": "MAPEAR Raw"
+        }
+      }
+    },
+    "md": {
+      "$type": "number",
+      "$value": 52,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:50:50",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP",
+          "FONT_VARIATIONS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:e10f5801bbe3a4f6c49ab0d3dc4afcefe1ba2721/-1:-1",
+          "targetVariableName": "unit/130",
+          "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+          "targetVariableSetName": "MAPEAR Raw"
+        }
+      }
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 64,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:50:51",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP",
+          "FONT_VARIATIONS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:92d0d1b292366b8e789b334a25673bde4bfbc593/-1:-1",
+          "targetVariableName": "unit/160",
+          "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+          "targetVariableSetName": "MAPEAR Raw"
+        }
+      }
+    }
+  },
+  "icons": {
+    "xx-sm": {
+      "$type": "number",
+      "$value": 20,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:82:5712",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP",
+          "FONT_VARIATIONS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:2806ae17b2e58537e053226ccd07c01bacf9f54a/-1:-1",
+          "targetVariableName": "unit/50",
+          "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+          "targetVariableSetName": "MAPEAR Raw"
+        }
+      }
+    },
+    "x-sm": {
+      "$type": "number",
+      "$value": 22,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:82:5708",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP",
+          "FONT_VARIATIONS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:29c4d64d317ca01e21a6b7c607b0b25283e91835/-1:-1",
+          "targetVariableName": "unit/half-55",
+          "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+          "targetVariableSetName": "MAPEAR Raw"
+        }
+      }
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 24,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:82:5711",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP",
+          "FONT_VARIATIONS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:b1b23ed63e690a511576296154afce40cf81f38f/-1:-1",
+          "targetVariableName": "unit/60",
+          "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+          "targetVariableSetName": "MAPEAR Raw"
+        }
+      }
+    },
+    "md": {
+      "$type": "number",
+      "$value": 26,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:82:5709",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP",
+          "FONT_VARIATIONS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:03f034a53ec6a86cb6d72c3396f74b72331ae0fc/-1:-1",
+          "targetVariableName": "unit/half-65",
+          "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+          "targetVariableSetName": "MAPEAR Raw"
+        }
+      }
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 30,
+      "$extensions": {
+        "com.figma.variableId": "VariableID:82:5710",
+        "com.figma.scopes": [
+          "WIDTH_HEIGHT",
+          "GAP",
+          "FONT_VARIATIONS"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:9efd163532e8616e2c6b77fd985c77c8f6412f2d/-1:-1",
+          "targetVariableName": "unit/half-75",
+          "targetVariableSetId": "VariableCollectionId:e406e98296af909c4a47fad22adf6de92cc80d25/-1:-1",
+          "targetVariableSetName": "MAPEAR Raw"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Tablet"
+  }
+}

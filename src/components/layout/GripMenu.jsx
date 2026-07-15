@@ -50,7 +50,7 @@ const GripMenu = ({
               size="sm"
               tertiaryTone={isDarkMode ? "low" : "high"}
               iconLeft={<House />}
-              className={isDarkMode ? "bg-neutral-6 text-white hover:bg-primary-base border-neutral-5" : ""}
+              className={isDarkMode ? "bg-neutral-6 text-white hover:bg-brand-base border-neutral-5" : ""}
               onClick={() => { navigateTo('dashboard'); setIsGripOpen(false); }}
             >
               Início

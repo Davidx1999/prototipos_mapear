@@ -17,6 +17,7 @@ import Curriculos from './components/screens/Curriculos.jsx';
 import AvaliacoesEdicao from './components/screens/AvaliacoesEdicao';
 import Usuarios from './components/screens/Usuarios';
 import Acompanhamento from './components/screens/Acompanhamento';
+import AcompanhamentoEscolar from './components/screens/AcompanhamentoEscolar';
 import Devolutivas from './components/screens/Devolutivas';
 import RegistroPresenca from './components/screens/RegistroPresenca';
 import CarregamentoProvas from './components/screens/CarregamentoProvas';
@@ -93,6 +94,7 @@ export default function MapearApp() {
   const [isGraphVisible, setIsGraphVisible] = useState(true);
 
   const [acompanhamentoTab, setAcompanhamentoTab] = useState(0);
+  const [navigationParams, setNavigationParams] = useState(null);
 
   const [fontScale, setFontScale] = useState(3);
   const [isHighContrast, setIsHighContrast] = useState(false);
@@ -125,7 +127,7 @@ export default function MapearApp() {
 
   // Lock scroll on html/body for full-screen dashboards
   useEffect(() => {
-    if (['devolutivas', 'realizacao-testes'].includes(currentScreen)) {
+    if (['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas'].includes(currentScreen)) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
       
@@ -201,9 +203,10 @@ export default function MapearApp() {
     setIsGripOpen(false);
   };
 
-  const navigateTo = (screen, moduleName = '') => {
+  const navigateTo = (screen, moduleName = '', params = null) => {
     setActiveModuleName(moduleName);
     setCurrentScreen(screen);
+    setNavigationParams(params);
     // Atualiza a URL para refletir a página atual
     window.location.hash = `#/${screen}`;
     
@@ -223,8 +226,8 @@ export default function MapearApp() {
   const openGripDrawer = () => {
     let targetCat = gripActiveTab;
     if (currentScreen === 'saberes' || currentScreen === 'curriculos') targetCat = 'curriculos';
-    else if (currentScreen === 'avaliacoes') targetCat = 'avaliacoes';
-    else if (currentScreen === 'acompanhamento') targetCat = 'analise';
+    else if (currentScreen === 'avaliacoes' || currentScreen === 'banco-tarefas') targetCat = 'avaliacoes';
+    else if (currentScreen === 'acompanhamento' || currentScreen === 'acompanhamento-escolar') targetCat = 'analise';
     else if (currentScreen === 'usuarios') targetCat = 'administracao';
     else targetCat = activeMenu;
 
@@ -283,7 +286,7 @@ export default function MapearApp() {
   }
 
   return (
-    <div className={`flex flex-col transition-all duration-500 ${isDarkMode ? 'dark dark-mode' : ''} ${['devolutivas', 'realizacao-testes'].includes(currentScreen) ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
+    <div className={`flex flex-col transition-all duration-500 ${isDarkMode ? 'dark dark-mode' : ''} ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas'].includes(currentScreen) ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
       <Header
         colors={colors}
         isHighContrast={isHighContrast}
@@ -311,7 +314,7 @@ export default function MapearApp() {
         openGripDrawer={openGripDrawer}
       />
 
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${['devolutivas', 'realizacao-testes'].includes(currentScreen) ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
+      <div className={`flex-1 flex flex-col min-h-0 transition-all duration-300 ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas'].includes(currentScreen) ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
         <ErrorBoundary>
           {currentScreen === 'dashboard' && (
           <Dashboard
@@ -337,12 +340,21 @@ export default function MapearApp() {
             navigateTo={navigateTo}
           />
         )}
+        {currentScreen === 'acompanhamento-escolar' && (
+          <AcompanhamentoEscolar
+            colors={colors}
+            navigateTo={navigateTo}
+            isDarkMode={isDarkMode}
+          />
+        )}
         {currentScreen === 'devolutivas' && (
           <Devolutivas
             colors={colors}
             navigateTo={navigateTo}
             isDarkMode={isDarkMode}
             setToast={setToast}
+            navigationParams={navigationParams}
+            setNavigationParams={setNavigationParams}
           />
         )}
         {currentScreen === 'saberes' && (
@@ -372,11 +384,12 @@ export default function MapearApp() {
             navigateTo={navigateTo}
           />
         )}
-        {currentScreen === 'avaliacoes' && (
+        {(currentScreen === 'avaliacoes' || currentScreen === 'banco-tarefas') && (
           <AvaliacoesEdicao
             colors={colors}
             navigateTo={navigateTo}
             isDarkMode={isDarkMode}
+            initialSubTab={currentScreen === 'banco-tarefas' ? 'banco-tarefas' : 'avaliacoes'}
           />
         )}
         {currentScreen === 'usuarios' && (

@@ -51,7 +51,7 @@ const InteractiveChip = ({
 
   // ══ ACTIVE STATE ════════════════════════════════════════════════════════
   // Use CSS variables for design system consistency
-  const activeStyle = 'bg-[var(--primary-dark)] border-[var(--primary-dark)] text-[var(--neutral-0)] shadow-sm';
+  const activeStyle = 'bg-[var(--color-brand-700)] border-[var(--color-brand-700)] text-[var(--color-neutral-0)] shadow-sm';
 
   const currentSize = sizeStyles[size] || sizeStyles.md;
   const currentVariant = isActive ? activeStyle : (inactiveStyles[variant] || inactiveStyles.stroked);

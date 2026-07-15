@@ -180,8 +180,8 @@ const CascadeMobile = ({
                     <span className="text-[14px] font-normal" style={{ color: colors.neutral[5] }}>Todas</span>
                     <div
                       className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${(isTurmaLevel ? (selections[mobileStep]?.length === rawItems.length) : (selectedLeafs.length === rawItems.length))
-                        ? 'bg-primary-base border-primary-base text-white'
-                        : (((isTurmaLevel ? selections[mobileStep]?.length : selectedLeafs.length) > 0) ? 'bg-primary-base/20 border-primary-base' : 'border-neutral-300 bg-white')
+                        ? 'bg-brand-base border-brand-base text-white'
+                        : (((isTurmaLevel ? selections[mobileStep]?.length : selectedLeafs.length) > 0) ? 'bg-brand-base/20 border-brand-base' : 'border-neutral-300 bg-white')
                         }`}
                       style={{
                         backgroundColor: (isTurmaLevel ? (selections[mobileStep]?.length === rawItems.length) : (selectedLeafs.length === rawItems.length))
