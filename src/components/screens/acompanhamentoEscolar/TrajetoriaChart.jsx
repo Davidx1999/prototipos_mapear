@@ -4,7 +4,7 @@ import React from 'react';
  * TrajetoriaChart Component
  * Renders the longitudinal cohort SVG line chart supporting intentional gaps and legends.
  */
-const TrajetoriaChart = ({ items, refData, isDarkMode }) => {
+const TrajetoriaChart = ({ items, refData, isDarkMode, handleTrajDrill }) => {
   const width = 600;
   const height = 200;
   const paddingLeft = 40;
@@ -19,7 +19,7 @@ const TrajetoriaChart = ({ items, refData, isDarkMode }) => {
   const years = [2023, 2024, 2025, 2026];
 
   return (
-    <svg className="w-full h-full min-h-[180px]" viewBox={`0 0 ${width} ${height}`}>
+    <svg className="w-full h-auto min-h-[180px]" viewBox={`0 0 ${width} ${height}`}>
       {/* Grid Lines */}
       {gridTicks.map((tick) => {
         const y = getY(tick);
@@ -99,6 +99,8 @@ const TrajetoriaChart = ({ items, refData, isDarkMode }) => {
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className={it.drill ? "cursor-pointer hover:stroke-[3.5px] transition-all" : ""}
+                  onClick={() => it.drill && handleTrajDrill && handleTrajDrill(it.nome)}
                 />
               );
             })}
@@ -109,7 +111,11 @@ const TrajetoriaChart = ({ items, refData, isDarkMode }) => {
               const x = getX(idx);
               const y = getY(val);
               return (
-                <g key={idx} className="group cursor-pointer">
+                <g 
+                  key={idx} 
+                  className={`group ${it.drill ? 'cursor-pointer' : ''}`}
+                  onClick={() => it.drill && handleTrajDrill && handleTrajDrill(it.nome)}
+                >
                   <circle cx={x} cy={y} r="4" fill={it.color} stroke={isDarkMode ? "#0f172a" : "#ffffff"} strokeWidth="1.5" className="transition-all hover:scale-150" />
                   <title>{it.nome}: {val}% ({years[idx]})</title>
                 </g>
@@ -118,7 +124,15 @@ const TrajetoriaChart = ({ items, refData, isDarkMode }) => {
 
             {/* Item Label at the end */}
             {lastValidVal !== undefined && (
-              <text x={getX(lastValidIdx) + 8} y={getY(lastValidVal) + 3} fontSize="9" fill={it.color} fontWeight="extrabold">
+              <text 
+                x={getX(lastValidIdx) + 8} 
+                y={getY(lastValidVal) + 3} 
+                fontSize="9" 
+                fill={it.color} 
+                fontWeight="extrabold"
+                className={it.drill ? "cursor-pointer hover:underline select-none font-bold" : "select-none"}
+                onClick={() => it.drill && handleTrajDrill && handleTrajDrill(it.nome)}
+              >
                 {it.nome} ({lastValidVal}%)
               </text>
             )}

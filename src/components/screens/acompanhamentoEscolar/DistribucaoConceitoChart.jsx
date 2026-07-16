@@ -13,23 +13,23 @@ const DistribucaoConceitoChart = ({ isDarkMode }) => {
   const paddingBottom = 25;
 
   const months = ["Jan", "Mar", "Abr", "Jun", "Out"];
-  
+
   const data = [
     { ins: 15, par: 35, suf: 50 },
     { ins: 20, par: 25, suf: 55 },
     { ins: 10, par: 40, suf: 50 },
     { ins: 12, par: 28, suf: 60 },
-    { ins: 8,  par: 22, suf: 70 }
+    { ins: 8, par: 22, suf: 70 }
   ];
 
   const getX = (idx) => paddingLeft + ((idx + 0.5) * (width - paddingLeft - paddingRight)) / months.length;
   const getY = (val) => height - paddingBottom - (val * (height - paddingTop - paddingBottom)) / 100;
 
   const gridTicks = [25, 50, 75, 100];
-  const barWidth = 24;
+  const barWidth = 64;
 
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col gap-2 w-full h-full">
       <svg className="w-full h-full min-h-[160px]" viewBox={`0 0 ${width} ${height}`}>
         {/* Grid Lines */}
         {gridTicks.map((tick) => {
@@ -37,7 +37,7 @@ const DistribucaoConceitoChart = ({ isDarkMode }) => {
           return (
             <g key={tick}>
               <line x1={paddingLeft} y1={y} x2={width - paddingRight} y2={y} stroke={isDarkMode ? "#334155" : "#e2e8f0"} strokeWidth="1" strokeDasharray="3,3" />
-              <text x={paddingLeft - 8} y={y + 3} textAnchor="end" fontSize="9" fill={isDarkMode ? "#94a3b8" : "#64748b"} fontWeight="bold">{tick}%</text>
+              <text x={paddingLeft - 8} y={y + 3.5} textAnchor="end" fontSize="11" fill={isDarkMode ? "#94a3b8" : "#64748b"} fontWeight="bold">{tick}%</text>
             </g>
           );
         })}
@@ -45,14 +45,14 @@ const DistribucaoConceitoChart = ({ isDarkMode }) => {
         {months.map((m, idx) => {
           const x = getX(idx);
           return (
-            <text key={m} x={x} y={height - 5} textAnchor="middle" fontSize="9" fill={isDarkMode ? "#94a3b8" : "#64748b"} fontWeight="semibold">{m}</text>
+            <text key={m} x={x} y={height - 5} textAnchor="middle" fontSize="11" fill={isDarkMode ? "#94a3b8" : "#64748b"} fontWeight="semibold">{m}</text>
           );
         })}
 
         {/* Stacked Bars */}
         {data.map((item, idx) => {
           const x = getX(idx) - barWidth / 2;
-          
+
           const hIns = item.ins;
           const yIns = getY(hIns);
           const heightIns = height - paddingBottom - yIns;
@@ -74,10 +74,10 @@ const DistribucaoConceitoChart = ({ isDarkMode }) => {
           );
         })}
       </svg>
-      <div className="flex justify-center gap-3 text-[9px] font-bold text-slate-500 uppercase mt-1 border-t pt-2 border-slate-100 dark:border-slate-850">
+      <div className="flex justify-center gap-3 text-xs font-semibold text-slate-500 mt-1 border-t pt-2 border-slate-100 dark:border-slate-850">
         <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-emerald-500 rounded-[2px] inline-block"></span> Suficiente</span>
-        <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-amber-500 rounded-[2px] inline-block"></span> Parcial</span>
-        <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-rose-500 rounded-[2px] inline-block"></span> Crítico</span>
+        <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-amber-500 rounded-[2px] inline-block"></span> Parcialmente Suficiente</span>
+        <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-rose-500 rounded-[2px] inline-block"></span> Insuficiente</span>
       </div>
     </div>
   );

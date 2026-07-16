@@ -38,7 +38,7 @@ export default function Breadcrumb({ paths, onBack, colors, className = '' }) {
               )}
 
               {isLast ? (
-                <span style={{ color: colors.neutral[5] }}>
+                <span style={{ color: colors.neutral[7] }}>
                   {path.label}
                 </span>
               ) : (

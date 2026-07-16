@@ -1,4 +1,5 @@
 import React, { useState, useRef, useMemo } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Button from '../ui/Button';
 import Toast from '../ui/Toast';
 import Tabs from '../ui/Tabs';
@@ -338,7 +339,7 @@ const AcompanhamentoEscolar = ({ colors, navigateTo, isDarkMode }) => {
   };
 
   return (
-    <div className={`flex-1 w-full max-w-[1440px] mx-auto px-4 md:px-8 py-6 flex flex-col h-full ${isDarkMode ? 'bg-slate-955 text-slate-100' : 'bg-white text-slate-800'}`}>
+    <div className={`flex-1 w-full max-w-[1440px] mx-auto px-4 md:px-8 py-6 pb-24 flex flex-col h-full ${isDarkMode ? 'bg-slate-955 text-slate-100' : 'bg-white text-slate-800'}`}>
       
       {/* Seletor de Papéis */}
       <div className="flex justify-end mb-4 shrink-0">
@@ -424,18 +425,52 @@ const AcompanhamentoEscolar = ({ colors, navigateTo, isDarkMode }) => {
               </select>
             </label>
 
-            <label className="flex items-center gap-1.5 text-slate-455 dark:text-slate-500">
-              Ano Letivo:
-              <select
-                value={year}
-                onChange={(e) => changeYear(e.target.value)}
-                className="border border-slate-205 dark:border-slate-800 rounded-[4px] px-2.5 py-1 text-xs text-[#006699] dark:text-sky-400 bg-white dark:bg-slate-900 focus:outline-none cursor-pointer"
-              >
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-              </select>
-            </label>
+            <div className="flex items-center gap-1.5 text-slate-455 dark:text-slate-500">
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                Ano Letivo:
+              </label>
+              <div className="flex items-center gap-1">
+                <Button
+                  onClick={() => {
+                    const y = parseInt(year);
+                    if (y > 2024) changeYear((y - 1).toString());
+                  }}
+                  disabled={year === '2024'}
+                  variant="tertiary"
+                  appearance="ghost"
+                  size="xs"
+                  iconOnly={true}
+                  className="!p-1"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                
+                <select
+                  value={year}
+                  onChange={(e) => changeYear(e.target.value)}
+                  className="border border-slate-205 dark:border-slate-800 rounded-[4px] px-2.5 py-1 text-xs text-[#006699] dark:text-sky-400 bg-white dark:bg-slate-900 focus:outline-none cursor-pointer"
+                >
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                </select>
+
+                <Button
+                  onClick={() => {
+                    const y = parseInt(year);
+                    if (y < 2026) changeYear((y + 1).toString());
+                  }}
+                  disabled={year === '2026'}
+                  variant="tertiary"
+                  appearance="ghost"
+                  size="xs"
+                  iconOnly={true}
+                  className="!p-1"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </header>

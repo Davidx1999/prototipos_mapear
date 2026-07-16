@@ -125,11 +125,10 @@ const TurmaDetailView = ({
                   variant="tertiary"
                   appearance="solid"
                   size="sm"
+                  iconOnly={true}
                   iconLeft={<ChevronLeft />}
-                  className="!py-1"
-                >
-                  Voltar no Tempo
-                </Button>
+                  className="!p-1 !h-8 !w-8"
+                />
 
                 {/* Steps Indicators */}
                 <div className="flex items-center gap-2 px-2 bg-slate-50 dark:bg-slate-955 py-1.5 rounded-[4px] border border-slate-100 dark:border-slate-850 overflow-x-auto">
@@ -174,11 +173,10 @@ const TurmaDetailView = ({
                   variant="tertiary"
                   appearance="solid"
                   size="sm"
-                  iconRight={<ChevronRight />}
-                  className="!py-1"
-                >
-                  Avançar no Tempo
-                </Button>
+                  iconOnly={true}
+                  iconLeft={<ChevronRight />}
+                  className="!p-1 !h-8 !w-8"
+                />
               </div>
             </div>
           );
