@@ -72,7 +72,7 @@ const EvolucaoSerieChart = ({ isDarkMode, perfValue }) => {
           ))}
         </svg>
       </div>
-      <div className="flex gap-4 justify-center text-[10px] font-bold text-slate-500 uppercase mt-2 border-t pt-2 border-slate-100 dark:border-slate-850">
+      <div className="flex gap-4 justify-center text-xs font-semibold text-slate-500 mt-2 border-t pt-2 border-slate-100 dark:border-slate-850">
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-0.5 bg-[#a855f7] inline-block"></span> Português · Leitura</span>
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-0.5 bg-[#f59e0b] inline-block"></span> Matemática</span>
       </div>

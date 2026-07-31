@@ -63,9 +63,9 @@ export const sidebarMenus = [
       { id: 'card-editor-av', title: 'Editor de Avaliações', route: 'avaliacoes', keywords: ['prova', 'teste', 'exame', 'criar', 'caderno'], desc: 'Elabore avaliações parametrizados com itens personalizados para os estudantes.', icon: <PenTool size={20} /> },
       { id: 'card-banco', title: 'Banco De Tarefas & Itens', route: 'banco-tarefas', keywords: ['questões', 'itens', 'perguntas', 'banco', 'repositório'], desc: 'Acesse e colabore em tarefas educacionais mantendo uma curadoria pedagógica em testes.', icon: <Database size={20} /> },
       { id: 'card-alocacao', title: 'Alocação de Avaliações', keywords: ['alunos', 'professores', 'turmas', 'enviar prova', 'distribuir'], desc: 'Distribua as avaliações para aplicação dos alunos e correção dos professores.', icon: <Users size={20} /> },
-      { id: 'card-correcao', title: 'Correção de Avaliações', keywords: ['corrigir', 'ia', 'respostas', 'alunos', 'inteligência artificial'], desc: 'Utilize inteligência artificial para agrupar respostas e otimizar a velocidade de correção manual.', icon: <CheckSquare size={20} /> },
+      { id: 'card-correcao', title: 'Correção de Avaliações', route: 'correcao-avaliacoes', keywords: ['corrigir', 'ia', 'respostas', 'alunos', 'inteligência artificial'], desc: 'Utilize inteligência artificial para agrupar respostas e otimizar a velocidade de correção manual.', icon: <CheckSquare size={20} /> },
       { id: 'card-metricas', title: 'Métricas', keywords: ['desempenho', 'notas', 'alunos', 'escolas', 'indicadores'], desc: 'Acompanhe métricas gerais de correção e tenha a visão do status atual de estudantes e turmas.', icon: <TrendingUp size={20} /> },
-      { id: 'card-upload', title: 'Carregamento de Provas', route: 'carregamento-provas', keywords: ['upload', 'pdf', 'scanner', 'digitalizar', 'alunos', 'htr'], desc: 'Faça upload de provas físicas e valide a leitura de respostas manuscritas via tecnologia HTR.', icon: <UploadCloud size={20} /> }
+      { id: 'card-upload', title: 'Digitalização de Avaliações', route: 'digitalizacao-avaliacoes', keywords: ['upload', 'pdf', 'scanner', 'digitalizar', 'alunos', 'htr', 'avaliações'], desc: 'Faça upload de provas físicas e valide a leitura de respostas manuscritas via tecnologia HTR.', icon: <UploadCloud size={20} /> }
     ]
   },
   {

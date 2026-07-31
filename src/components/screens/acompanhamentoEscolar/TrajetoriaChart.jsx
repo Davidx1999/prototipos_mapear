@@ -19,7 +19,7 @@ const TrajetoriaChart = ({ items, refData, isDarkMode, handleTrajDrill }) => {
   const years = [2023, 2024, 2025, 2026];
 
   return (
-    <svg className="w-full h-auto min-h-[180px]" viewBox={`0 0 ${width} ${height}`}>
+    <svg className="w-full h-full" viewBox={`0 0 ${width} ${height}`}>
       {/* Grid Lines */}
       {gridTicks.map((tick) => {
         const y = getY(tick);

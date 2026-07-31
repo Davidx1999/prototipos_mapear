@@ -32,6 +32,59 @@ const Header = ({
   setIsDarkMode
 }) => {
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
+  const [isHeaderVisible, setIsHeaderVisible] = React.useState(true);
+  
+  const lastScrollY = React.useRef(0);
+  const startScrollY = React.useRef(0);
+  const scrollDirection = React.useRef('up');
+  const scrollThreshold = 60; // Quantidade de scroll para cima para aparecer
+  const hideThreshold = 0;   // Esconder IMEDIATAMENTE ao rolar para baixo
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      // Se for desktop, o header sempre fica visível
+      if (window.innerWidth >= 620) {
+        setIsHeaderVisible(true);
+        lastScrollY.current = window.scrollY;
+        return;
+      }
+
+      const currentScrollY = window.scrollY;
+      
+      // Se estiver muito próximo ao topo absoluto, mostra o header
+      if (currentScrollY <= 84) {
+        setIsHeaderVisible(true);
+        lastScrollY.current = currentScrollY;
+        return;
+      }
+      
+      const currentDirection = currentScrollY > lastScrollY.current ? 'down' : 'up';
+      
+      // Resetar ponto de partida se mudar de direção
+      if (currentDirection !== scrollDirection.current) {
+        scrollDirection.current = currentDirection;
+        startScrollY.current = currentScrollY;
+      }
+
+      // Lógica de esconder ao rolar para baixo
+      if (scrollDirection.current === 'down') {
+        if (currentScrollY > startScrollY.current + hideThreshold) {
+          setIsHeaderVisible(false);
+        }
+      } 
+      // Lógica de mostrar ao puxar para cima (com threshold)
+      else if (scrollDirection.current === 'up') {
+        if (currentScrollY < startScrollY.current - scrollThreshold) {
+          setIsHeaderVisible(true);
+        }
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = () => {
     closeAllDropdowns();
@@ -45,7 +98,9 @@ const Header = ({
   };
 
   return (
-    <header className="sticky top-0 z-[1000] h-[84px] px-[16px] md:px-[24px] border-b flex justify-between items-center transition-colors duration-500" style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2], backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0] }}>
+    <header className={`sticky top-0 z-[1000] h-[84px] px-[16px] md:px-[24px] border-b flex justify-between items-center transition-all duration-300 ease-in-out ${
+      isHeaderVisible ? 'translate-y-0' : 'max-[619px]:-translate-y-[100%] min-[620px]:translate-y-0'
+    }`} style={{ borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2], backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0] }}>
       {/* ══ ESQUERDA: MENU E LOGO ══════════════════════════════════════════ */}
       <div className="flex items-center gap-[12px] md:gap-[24px]">
         <div className="flex items-center gap-[12px] cursor-pointer" onClick={() => navigateTo('dashboard')}>

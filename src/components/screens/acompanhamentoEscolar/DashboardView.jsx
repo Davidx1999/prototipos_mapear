@@ -135,7 +135,7 @@ const DashboardView = ({
       arr.push({ label: trajPath.comp, onClick: () => handleTrajTo(1) });
     }
     if (trajPath.dom) {
-      arr.push({ label: trajPath.dom, onClick: () => {} });
+      arr.push({ label: trajPath.dom, onClick: () => { } });
     }
     return arr;
   }, [trajPath, handleTrajTo]);
@@ -646,15 +646,15 @@ const DashboardView = ({
           })()}
 
           {/* Gráfico de Tendência Histórica & Cronologia */}
-          <div className={`rounded-[4px] border p-6 shadow-xs ${isDarkMode ? 'bg-slate-900 border-slate-850' : 'bg-white border-slate-200'}`}>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Lado Esquerdo: Gráfico */}
-              <div className="lg:col-span-2 flex flex-col justify-between">
-                <div>
+          <div className={`rounded-[4px] border p-6 shadow-xs max-h-[320px] flex flex-col overflow-hidden ${isDarkMode ? 'bg-slate-900 border-slate-850' : 'bg-white border-slate-200'}`}>
+            <div className="flex gap-6 flex-1 min-h-0">
+              {/* Lado Esquerdo: Gráfico (66%) */}
+              <div className="flex-[2] flex flex-col gap-4 min-w-0">
+                <div className="shrink-0">
                   <h3 className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wide mb-1">{trajData.title}</h3>
-                  <p className="text-xs text-slate-450 dark:text-slate-400 font-light mb-4" dangerouslySetInnerHTML={{ __html: trajData.desc }} />
+                  <p className="text-xs text-slate-455 dark:text-slate-400 font-light" dangerouslySetInnerHTML={{ __html: trajData.desc }} />
                 </div>
-                <div className="h-auto py-4 mt-2">
+                <div className="flex-1 min-h-0 w-full">
                   <TrajetoriaChart
                     items={trajData.items.filter(it => !uncheckedTrajItems[it.nome])}
                     refData={uncheckedTrajItems['__reference__'] ? null : trajData.ref}
@@ -663,27 +663,25 @@ const DashboardView = ({
                   />
                 </div>
                 {trajData.gapNote && (
-                  <p className="text-[10px] font-light text-slate-400 dark:text-slate-500 italic mt-3 bg-slate-50 dark:bg-slate-950 p-2 border border-slate-100 dark:border-slate-850 rounded-[3px] leading-relaxed">
+                  <p className="text-[10px] font-light text-slate-400 dark:text-slate-500 italic bg-slate-50 dark:bg-slate-955 p-2 border border-slate-100 dark:border-slate-850 rounded-[3px] leading-relaxed shrink-0">
                     <strong>Nota curricular:</strong> {trajData.gapNote}
                   </p>
                 )}
               </div>
 
-              {/* Lado Direito: Cronologia de Eventos Escolares */}
-              <div className="border-t lg:border-t-0 lg:border-l pt-5 lg:pt-0 lg:pl-6 flex flex-col justify-start gap-4" style={{ borderColor: isDarkMode ? '#1e293b' : '#f1f5f9' }}>
-                <div>
-                  <div className="flex items-center gap-1.5 mb-1.5">
+              {/* Lado Direito: Cronologia (33%) */}
+              <div className="flex-1 border-l flex flex-col gap-4 pl-6 overflow-hidden" style={{ borderColor: isDarkMode ? '#1e293b' : '#f1f5f9' }}>
+                <div className="shrink-0">
+                  <div className="flex items-center gap-1.5 mb-1">
                     <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-450" />
                     <h4 className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wide">Cronologia de Eventos</h4>
                   </div>
-                  <p className="text-[11px] text-slate-455 dark:text-slate-400 font-light mb-4">Marcos de intervenções pedagógicas e alterações curriculares estruturais da coorte.</p>
+                  <p className="text-[11px] text-slate-455 dark:text-slate-400 font-light">Marcos de intervenções pedagógicas e alterações curriculares estruturais da coorte.</p>
                 </div>
-
-                <div className="relative flex-1 h-0 overflow-y-auto pr-2 flex flex-col gap-4 pl-4 border-l border-slate-200 dark:border-slate-800 ml-1.5 py-1">
+                <div className="flex-1 overflow-y-auto pr-1 flex flex-col gap-4 pl-4 border-l border-slate-200 dark:border-slate-800 ml-1.5">
                   {filteredEvents.length > 0 ? (
                     filteredEvents.map((ev, eIdx) => (
-                      <div key={eIdx} className="relative text-xs">
-                        {/* Timeline dot */}
+                      <div key={eIdx} className="relative text-xs shrink-0">
                         <span className="absolute -left-[20.5px] top-1 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 bg-slate-400 shadow-sm"></span>
                         <span className="text-[9px] font-extrabold uppercase text-[#006699] dark:text-sky-400">{ev.mes}</span>
                         <h5 className="font-bold text-slate-850 dark:text-slate-200 text-xs mt-0.5">{ev.titulo}</h5>

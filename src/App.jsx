@@ -21,9 +21,11 @@ import AcompanhamentoEscolar from './components/screens/AcompanhamentoEscolar';
 import Devolutivas from './components/screens/Devolutivas';
 import RegistroPresenca from './components/screens/RegistroPresenca';
 import CarregamentoProvas from './components/screens/CarregamentoProvas';
+import DigitalizacaoAvaliacoes from './components/screens/DigitalizacaoAvaliacoes';
 import GenericModulePage from './components/screens/GenericModulePage';
 import EmptyStatePage from './components/screens/EmptyStatePage';
 import RealizacaoTestes from './components/screens/RealizacaoTestes';
+import CorrecaoAvaliacoes from './components/screens/CorrecaoAvaliacoes';
 
 // UI
 import Toast from './components/ui/Toast';
@@ -70,6 +72,7 @@ export default function MapearApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('dashboard');
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isGlobalHeaderHidden, setIsGlobalHeaderHidden] = useState(false);
   const [activeModuleName, setActiveModuleName] = useState('');
 
   const [activeMenu, setActiveMenu] = useState('curriculos');
@@ -127,7 +130,7 @@ export default function MapearApp() {
 
   // Lock scroll on html/body for full-screen dashboards
   useEffect(() => {
-    if (['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas'].includes(currentScreen)) {
+    if (['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas', 'carregamento-provas'].includes(currentScreen)) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
       
@@ -206,6 +209,7 @@ export default function MapearApp() {
   const navigateTo = (screen, moduleName = '', params = null) => {
     setActiveModuleName(moduleName);
     setCurrentScreen(screen);
+    setIsGlobalHeaderHidden(false);
     setNavigationParams(params);
     // Atualiza a URL para refletir a página atual
     window.location.hash = `#/${screen}`;
@@ -286,7 +290,7 @@ export default function MapearApp() {
   }
 
   return (
-    <div className={`flex flex-col transition-all duration-500 ${isDarkMode ? 'dark dark-mode' : ''} ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas'].includes(currentScreen) ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
+    <div className={`flex flex-col transition-all duration-500 ${isDarkMode ? 'dark dark-mode' : ''} ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas', 'carregamento-provas'].includes(currentScreen) ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
       <Header
         colors={colors}
         isHighContrast={isHighContrast}
@@ -312,9 +316,10 @@ export default function MapearApp() {
         setCurrentScreen={setCurrentScreen}
         closeAllDropdowns={closeAllDropdowns}
         openGripDrawer={openGripDrawer}
+        isGlobalHeaderHidden={isGlobalHeaderHidden}
       />
 
-      <div className={`flex-1 flex flex-col min-h-0 transition-all duration-300 ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas'].includes(currentScreen) ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
+      <div className={`flex-1 flex flex-col min-h-0 transition-all duration-300 ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas', 'carregamento-provas'].includes(currentScreen) ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
         <ErrorBoundary>
           {currentScreen === 'dashboard' && (
           <Dashboard
@@ -406,10 +411,11 @@ export default function MapearApp() {
             navigateTo={navigateTo}
           />
         )}
-        {currentScreen === 'carregamento-provas' && (
-          <CarregamentoProvas
+        {(currentScreen === 'digitalizacao-avaliacoes' || currentScreen === 'carregamento-provas') && (
+          <DigitalizacaoAvaliacoes
             colors={colors}
             navigateTo={navigateTo}
+            setIsGlobalHeaderHidden={setIsGlobalHeaderHidden}
           />
         )}
         {currentScreen === 'realizacao-testes' && (
@@ -417,6 +423,14 @@ export default function MapearApp() {
             colors={colors}
             isDarkMode={isDarkMode}
             navigateTo={navigateTo}
+          />
+        )}
+        {currentScreen === 'correcao-avaliacoes' && (
+          <CorrecaoAvaliacoes
+            colors={colors}
+            isDarkMode={isDarkMode}
+            navigateTo={navigateTo}
+            setToast={setToast}
           />
         )}
         {currentScreen === 'generic' && (

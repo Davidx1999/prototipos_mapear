@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build:tokens": "node scripts/build-tokens.cjs",
+    "build": "node scripts/build-tokens.cjs && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d docs"
