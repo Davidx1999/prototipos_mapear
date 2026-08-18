@@ -81,7 +81,7 @@ const Tabs = ({
       <div className={`relative w-full ${className}`}>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-white border rounded-xl shadow-sm text-sm font-medium text-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          className="w-full flex items-center justify-between px-4 py-3 bg-white border rounded-[8px] shadow-sm text-sm font-medium text-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           style={{ borderColor: colors?.neutral?.[2] || '#DEE1E8' }}
         >
           <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ const Tabs = ({
 
         {isDropdownOpen && (
           <div
-            className="absolute top-[calc(100%+8px)] left-0 w-full bg-white border rounded-xl shadow-xl z-50 overflow-hidden flex flex-col"
+            className="absolute top-[calc(100%+8px)] left-0 w-full bg-white border rounded-[8px] shadow-xl z-50 overflow-hidden flex flex-col"
             style={{ borderColor: colors?.neutral?.[2] || '#DEE1E8' }}
           >
             <div className="max-h-[260px] overflow-y-auto hide-scrollbar">

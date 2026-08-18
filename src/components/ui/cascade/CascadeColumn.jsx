@@ -164,7 +164,7 @@ const CascadeColumn = ({
               Todas
             </Typography>
             <div
-              className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${isAllSelected ? 'bg-brand-base border-brand-base text-white' : (isPartialSelected ? 'bg-brand-base/20 border-brand-base' : 'border-neutral-300 bg-white')}`}
+              className={`w-4 h-4 rounded-[4px] border-2 flex items-center justify-center transition-all ${isAllSelected ? 'bg-brand-base border-brand-base text-white' : (isPartialSelected ? 'bg-brand-base/20 border-brand-base' : 'border-neutral-300 bg-white')}`}
               style={{
                 backgroundColor: isAllSelected ? colors.primary.base : (isPartialSelected ? `${colors.primary.base}20` : 'transparent'),
                 borderColor: (isAllSelected || isPartialSelected) ? colors.primary.base : colors.neutral[3]

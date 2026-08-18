@@ -83,35 +83,35 @@ const Button = ({
 
   const sizeStyles = {
     lg: {
-      height: 'h-[48px]',
-      padding: iconOnly ? 'px-0 w-[48px]' : 'px-[24px]',
+      height: '',
+      padding: iconOnly ? 'p-3.5' : 'px-6 py-3',
       fontSize: 'text-[16px]',
       lineHeight: 'leading-[24px]',
       iconSize: 20,
       gap: 'gap-[10px]'
     },
     md: {
-      height: 'h-[40px]',
-      padding: iconOnly ? 'px-0 w-[40px]' : 'px-[16px]',
+      height: '',
+      padding: iconOnly ? 'p-2.5' : 'px-[16px] py-[8px]',
       fontSize: 'text-[14px]',
       lineHeight: 'leading-[20px]',
       iconSize: 20,
       gap: 'gap-[8px]'
     },
     sm: {
-      height: 'h-[32px]',
-      padding: iconOnly ? 'px-0 w-[32px]' : 'px-[12px]',
+      height: '',
+      padding: iconOnly ? 'p-2' : 'px-[16px] py-[8px]',
       fontSize: 'text-[14px]',
       lineHeight: 'leading-[20px]',
-      iconSize: 20,
+      iconSize: 18,
       gap: 'gap-[6px]'
     },
     xs: {
-      height: 'h-[28px]',
-      padding: iconOnly ? 'px-0 w-[28px]' : 'px-[8px]',
-      fontSize: 'text-[14px]',
+      height: '',
+      padding: iconOnly ? 'p-1.5' : 'px-[16px] py-[6px]',
+      fontSize: 'text-[13px]',
       lineHeight: 'leading-[18px]',
-      iconSize: 20,
+      iconSize: 14,
       gap: 'gap-[6px]'
     }
   };
@@ -178,7 +178,7 @@ const Button = ({
       disabled={disabled || loading}
       className={`
         relative flex flex-row items-center font-semibold transition-all duration-120
-        rounded-[var(--border-radius-xx-sm)] cursor-pointer outline-none shrink-0 overflow-hidden
+        rounded-[4px] cursor-pointer outline-none shrink-0 overflow-hidden
         focus-visible:ring-2 focus-visible:ring-[var(--color-brand-700)] focus-visible:ring-offset-2
         active:scale-[0.97]
         ${currentJustify}

@@ -832,9 +832,9 @@ const AvaliacoesEditor = ({
                       <div className="p-6 flex-1 flex flex-col items-center justify-center text-center min-h-[220px]">
                         <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-3 relative">
                           <div className="w-12 h-14 bg-white border-2 border-slate-300 rounded-[8px] flex flex-col p-1.5 gap-1">
-                            <div className="w-full h-1 bg-slate-200 rounded" />
-                            <div className="w-3/4 h-1 bg-slate-200 rounded" />
-                            <div className="w-full h-1 bg-slate-200 rounded" />
+                            <div className="w-full h-1 bg-slate-200 rounded-[4px]" />
+                            <div className="w-3/4 h-1 bg-slate-200 rounded-[4px]" />
+                            <div className="w-full h-1 bg-slate-200 rounded-[4px]" />
                           </div>
                           <div className="w-8 h-8 rounded-full bg-[#0078B0] text-white flex items-center justify-center absolute -bottom-1 -right-1 shadow-md border-2 border-white">
                             <Search size={14} />

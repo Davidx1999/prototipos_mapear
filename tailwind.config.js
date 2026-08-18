@@ -101,6 +101,59 @@ export default {
             extraLight: 'var(--raw-color-semantic-info-lighter)',
           },
         },
+        // MAPEAR Extended Palette — Entity Chromatic System
+        // Used for visual differentiation of hierarchy levels (Teste, Tarefa, Item Composto, Item)
+        // and pedagogical metadata (Processo Cognitivo, Habilidade)
+        extended: {
+          storm: {    // 📘 Teste (Caderno)
+            dark: '#16449C',
+            base: '#0D5BF2',
+            light: '#9EC4FA',
+            extraLight: '#E8F0FE',
+          },
+          orange: {   // 🧩 Tarefa
+            dark: '#96580D',
+            base: '#E17A00',
+            light: '#FBBE77',
+            extraLight: '#FFE3C2',
+          },
+          lavender: { // 🔗 Item Composto
+            dark: '#5B358A',
+            base: '#B070F0',
+            light: '#D9BBFF',
+            extraLight: '#EEE0FF',
+          },
+          aqua: {     // ✏️ Item
+            dark: '#0B645F',
+            base: '#259E96',
+            light: '#7ED4CD',
+            extraLight: '#D1FBF9',
+          },
+          oliva: {    // 🧠 Processo Cognitivo
+            dark: '#52712A',
+            base: '#88A94A',
+            light: '#ADCE6D',
+            extraLight: '#CDED90',
+          },
+          cherry: {   // 🎯 Habilidade
+            dark: '#95102B',
+            base: '#D9265C',
+            light: '#F5A3BC',
+            extraLight: '#FDE8EF',
+          },
+          purple: {
+            dark: '#7B387A',
+            base: '#9F579E',
+            light: '#C693C2',
+            extraLight: '#EEE0FF',
+          },
+          wine: {
+            dark: '#6E1836',
+            base: '#A41450',
+            light: '#CE7E8F',
+            extraLight: '#F49EB0',
+          },
+        },
       },
       borderRadius: {
         none: 'var(--border-radius-none)',

@@ -196,19 +196,19 @@ const AvaliacoesList = ({
         <div className={`flex flex-wrap items-center gap-4 text-[14px] ${isDarkMode ? 'text-neutral-3' : 'text-[var(--color-neutral-5)]'}`}>
           <span>1 a {itemsToRender.length} de {itemsToRender.length} registros</span>
           <div className="flex items-center gap-2">
-            <button className={`w-[32px] h-[32px] flex items-center justify-center border rounded transition-colors ${isDarkMode ? 'border-neutral-5 bg-neutral-6 hover:bg-neutral-5 text-neutral-2' : 'border-neutral-2 bg-neutral-0 hover:bg-neutral-1 text-neutral-6'
+            <button className={`w-[32px] h-[32px] flex items-center justify-center border rounded-[4px] transition-colors ${isDarkMode ? 'border-neutral-5 bg-neutral-6 hover:bg-neutral-5 text-neutral-2' : 'border-neutral-2 bg-neutral-0 hover:bg-neutral-1 text-neutral-6'
               }`}>
               <ChevronLeft size={16} />
             </button>
             <div className="flex items-center gap-1.5">
               <span>Página</span>
-              <div className={`w-[40px] h-[32px] flex items-center justify-center border rounded font-semibold text-center text-[14px] ${isDarkMode ? 'border-neutral-5 bg-neutral-6 text-white' : 'border-neutral-2 bg-neutral-0 text-neutral-7'
+              <div className={`w-[40px] h-[32px] flex items-center justify-center border rounded-[4px] font-semibold text-center text-[14px] ${isDarkMode ? 'border-neutral-5 bg-neutral-6 text-white' : 'border-neutral-2 bg-neutral-0 text-neutral-7'
                 }`}>
                 1
               </div>
               <span>de 1</span>
             </div>
-            <button className={`w-[32px] h-[32px] flex items-center justify-center border rounded transition-colors ${isDarkMode ? 'border-neutral-5 bg-neutral-6 hover:bg-neutral-5 text-neutral-2' : 'border-neutral-2 bg-neutral-0 hover:bg-neutral-1 text-neutral-6'
+            <button className={`w-[32px] h-[32px] flex items-center justify-center border rounded-[4px] transition-colors ${isDarkMode ? 'border-neutral-5 bg-neutral-6 hover:bg-neutral-5 text-neutral-2' : 'border-neutral-2 bg-neutral-0 hover:bg-neutral-1 text-neutral-6'
               }`}>
               <ChevronRight size={16} />
             </button>

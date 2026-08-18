@@ -49,6 +49,22 @@ Ao construir ou refatorar qualquer texto, componente, tabela, modal ou formulár
 > [!IMPORTANT]
 > **Consistência de Rótulos**: Nunca utilize termos proibidos em placeholders, labels de inputs, cabeçalhos de tabelas, botões, modais ou mensagens de erro.
 
+### Estrutura da Hierarquia de Avaliações MAPEAR
+A hierarquia oficial de composição educacional do MAPEAR segue obrigatoriamente esta cadeia:
+`Avaliação` $\rightarrow$ `Teste` $\rightarrow$ `Tarefa` $\rightarrow$ `[Item Composto (opcional)]` $\rightarrow$ `Item`
+*(Uma Tarefa pode conter Itens diretamente ou agrupar Itens por meio de um Item Composto opcional)*.
+
+### Padrão de Identificação (Geração Automática de Código)
+Toda Avaliação gerada no sistema deve receber um código estruturado gerado automaticamente:
+`AV-[SGL_MUNICÍPIO]-[ANO]-[SEQUENCIAL]` (ex: `AV-SOB-2026-0042`, `AV-FORT-2026-0018`).
+
+### Atalhos de Teclado (Power User UX)
+Componentes de gestão e editores devem implementar suporte nativo a atalhos:
+- `Ctrl+K` / `Cmd+K`: Palette de Comandos / Busca Omnipresente.
+- `N`: Nova entidade / Nova Avaliação.
+- `D`: Duplicar entidade.
+- `1`, `2`, `3`: Alternância de Modos de Visualização.
+
 ---
 
 ## 3. Mapeamento do Tailwind CSS & Variáveis CSS
@@ -70,11 +86,14 @@ Para garantir acessibilidade e suporte a múltiplos temas, **nunca utilize cores
 | **Botão Primário Texto** | `text-button-primary-text` | `--color-button-solid-primary-color-primary-text-button` | Cor de texto do botão primário |
 | **Borda Padrão** | `border-border` | `--color-border-color-border` | Bordas de cards e divisores |
 | **Borda Destaque** | `border-border-accent` | `--color-border-color-border-accent` | Bordas ativas ou selecionadas |
-| **Raio de Borda (MD)** | `rounded-md` | `--border-radius-md` | Arredondamento secundário |
-| **Raio de Borda (8px)** | `rounded-lg` / `rounded-[8px]` | `--border-radius-lg` | Arredondamento obrigatório de 8px para cards, painéis, inputs, dropdowns e contêineres que não sejam botões |
+| **Raio de Borda (4px)** | `rounded` | `--border-radius-sm` | Arredondamento obrigatório para botões e seções interativas |
+| **Raio de Borda (8px)** | `rounded-lg` / `rounded-[8px]` | `--border-radius-lg` | Arredondamento obrigatório de 8px para cards, painéis, modais e grandes contêineres |
 
 > [!IMPORTANT]
-> **Regra de Border Radius**: Sempre utilize 8px de border radius (`rounded-lg` ou `rounded-[8px]`) em elementos estruturais que **não sejam botões** (cards, painéis, inputs, selects, contêineres, avisos e modais). Botões devem manter suas classes de arredondamento específicas do design system.
+> **Regras Estritas de Border Radius**:
+> 1. **Materiais Grandes / Modais / Containers principais:** Obrigatoriamente usar 8px (`rounded-lg`). Nunca maior que isso.
+> 2. **Botões e Seções Interativas:** Obrigatoriamente usar 4px (`rounded`).
+> 3. **Tags, Badges e Chips:** Podem ter liberdade visual (ex: `rounded-full`).
 
 ---
 
@@ -137,3 +156,7 @@ Ao responder solicitações do usuário ou implementar novos componentes:
 2. **Nomenclatura**: Substitua automaticamente termos legados no código ou em textos gerados (`Cidade` -> `Município`, `Prova` -> `Avaliação/Teste`, `Questão` -> `Item`, `Aluno` -> `Estudante`).
 3. **Temas**: Garanta que o componente responda ao seletor `data-theme` ou à classe `dark`.
 4. **Build dos Tokens**: Sempre que novos tokens JSON forem adicionados ao repositório, execute `npm run build:tokens`.
+5. **Modos "Tela Cheia" (Fullscreen) e Modais Globais**: Todo Drawer, Painel ou Modal que assuma comportamento de "Tela cheia" ou "Modal centralizado" **DEVE e SEMPRE DEVERÁ OBRIGATORIAMENTE obedecer ao tamanho do header global no eixo Y**. O Header Global possui 84px de altura.
+   - Isso significa que o contêiner não deve iniciar no ponto zero do topo da viewport (usando `fixed inset-0`).
+   - Para que o Modal/Tela Cheia cubra os headers locais das páginas mas respeite o Header Global, utilize **`fixed top-[84px] inset-x-0 bottom-0`**.
+   - Para Modais que devem iniciar 24px abaixo do header, aplique `pt-[24px]` no container do backdrop.

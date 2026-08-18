@@ -344,7 +344,7 @@ export default function CascadeSelector({
           onClick={() => setShowClearConfirm(false)}
         >
           <div
-            className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-sm border border-gray-200 animate-scale-up"
+            className="bg-white rounded-[8px] shadow-2xl p-6 w-full max-w-sm border border-gray-200 animate-scale-up"
             onClick={e => e.stopPropagation()}
           >
             <h3 className="text-lg font-bold text-gray-900 mb-2">Limpar Seleção?</h3>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CircleCheck, CircleMinus, CircleX, RouteOff, File } from 'lucide-react';
+import { CircleCheck, CircleMinus, CircleX, RouteOff, File, X } from 'lucide-react';
 import { defaultColors } from '../../../data/constants';
 import {
   colGroupsMap,
@@ -35,7 +35,8 @@ export const getStatusColors = (theme = 'default') => {
     '-1': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={20} style={{ color: themeColors.info }} /> },
     'sem_conteudo': { label: 'S/ Conteúdo Relevante', val: -1, icon: <RouteOff size={20} style={{ color: themeColors.info }} /> },
     'null': { label: 'Em Branco', val: null, icon: <File size={20} className="text-gray-500" /> },
-    'branco': { label: 'Em Branco', val: null, icon: <File size={20} className="text-gray-500" /> }
+    'branco': { label: 'Em Branco', val: null, icon: <File size={20} className="text-gray-500" /> },
+    'ausente': { label: 'Ausente', val: null, hasCenterMarker: true, icon: <X size={20} className="text-neutral-500" /> }
   };
 
   return {
@@ -49,7 +50,8 @@ export const getStatusColors = (theme = 'default') => {
     '-1': { ...base['-1'], bg: themeColors.info, border: 'rgba(0,0,0,0.1)' },
     'sem_conteudo': { ...base['sem_conteudo'], bg: themeColors.info, border: 'rgba(0,0,0,0.1)' },
     'null': { ...base['null'], bg: '#FFFFFF', border: '#E5E7EB' },
-    'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' }
+    'branco': { ...base['branco'], bg: '#FFFFFF', border: '#E5E7EB' },
+    'ausente': { ...base['ausente'], bg: '#DEE1E8', border: '#CACDD5', hasCenterMarker: true }
   };
 };
 
@@ -59,7 +61,8 @@ export const getLegendItems = (statusColors) => {
     statusColors['parcialmente'],
     statusColors['insuficiente'],
     statusColors['sem_conteudo'],
-    statusColors['branco']
+    statusColors['branco'],
+    statusColors['ausente']
   ];
 };
 

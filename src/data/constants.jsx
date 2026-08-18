@@ -61,6 +61,7 @@ export const sidebarMenus = [
     icon: <Edit3 size={24} />, // Note: Edit3 was in the original imports but might need checking
     cards: [
       { id: 'card-editor-av', title: 'Editor de Avaliações', route: 'avaliacoes', keywords: ['prova', 'teste', 'exame', 'criar', 'caderno'], desc: 'Elabore avaliações parametrizados com itens personalizados para os estudantes.', icon: <PenTool size={20} /> },
+      { id: 'card-editor-av-2', title: 'Editor de Avaliações 2 (Novo)', route: 'avaliacoes-v2', keywords: ['editor', 'novo', 'v2', 'avaliações', 'linear', 'fluxo', 'ciclo'], desc: 'Nova experiência focada no fluxo mental do usuário, ciclo de vida e baixa carga cognitiva.', icon: <PenTool size={20} /> },
       { id: 'card-banco', title: 'Banco De Tarefas & Itens', route: 'banco-tarefas', keywords: ['questões', 'itens', 'perguntas', 'banco', 'repositório'], desc: 'Acesse e colabore em tarefas educacionais mantendo uma curadoria pedagógica em testes.', icon: <Database size={20} /> },
       { id: 'card-alocacao', title: 'Alocação de Avaliações', keywords: ['alunos', 'professores', 'turmas', 'enviar prova', 'distribuir'], desc: 'Distribua as avaliações para aplicação dos alunos e correção dos professores.', icon: <Users size={20} /> },
       { id: 'card-correcao', title: 'Correção de Avaliações', route: 'correcao-avaliacoes', keywords: ['corrigir', 'ia', 'respostas', 'alunos', 'inteligência artificial'], desc: 'Utilize inteligência artificial para agrupar respostas e otimizar a velocidade de correção manual.', icon: <CheckSquare size={20} /> },

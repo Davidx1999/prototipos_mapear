@@ -21,7 +21,7 @@ const Callout = ({
   // Ultra-defensive check
   if (!colors || !colors.semantic || !colors.neutral) {
     return (
-      <div className={`p-4 rounded-lg bg-semantic-info-extraLight text-neutral-7${className}`}>
+      <div className={`p-4 rounded-[8px] bg-semantic-info-extraLight text-neutral-7${className}`}>
         {title && <div className="font-bold">{title}</div>}
         {description || children}
       </div>

@@ -69,7 +69,7 @@ const Toast = ({
 
   return (
     <div 
-      className="relative flex flex-col rounded-lg overflow-hidden border shadow-lg animate-in slide-in-from-top-4 duration-300"
+      className="relative flex flex-col rounded-[8px] overflow-hidden border shadow-lg animate-in slide-in-from-top-4 duration-300"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       style={{ 

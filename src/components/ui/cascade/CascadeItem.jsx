@@ -37,7 +37,7 @@ const CascadeItem = ({
       <div className="flex items-center gap-[14px] w-full overflow-hidden">
         {(multiSelectLeaf && isLastLevel) || isTurmaLevel ? (
           <div
-            className={`${isMobile ? 'w-[22px] h-[22px] rounded-[6px]' : 'w-4 h-4 rounded'} border-2 flex items-center justify-center transition-all shrink-0`}
+            className={`${isMobile ? 'w-[22px] h-[22px] rounded-[6px]' : 'w-4 h-4 rounded-[4px]'} border-2 flex items-center justify-center transition-all shrink-0`}
             style={{
               backgroundColor: isSelected ? colors.primary.base : 'transparent',
               borderColor: isSelected ? colors.primary.base : colors.neutral[3]

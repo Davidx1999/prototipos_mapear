@@ -88,12 +88,26 @@ export const colGroups = colGroupsMap['Domínios Cognitivos'];
 
 
 // --- 2. MOCK DATA: ALUNOS E DESEMPENHO ---
-const baseStatusKeys = ['suficiente', 'parcialmente', 'insuficiente', 'sem_conteudo', 'branco'];
+const baseStatusKeys = ['suficiente', 'parcialmente', 'insuficiente', 'sem_conteudo'];
 
 // Função auxiliar para gerar um padrão de respostas aleatório, mas realista
 const generateAnswers = (bias = 'random') => {
-  return Array.from({ length: 40 }, () => {
+  return Array.from({ length: 40 }, (_, i) => {
     const rand = Math.random();
+
+    // Aluno que faltou à avaliação
+    if (bias === 'empty') {
+      return 'ausente';
+    }
+
+    // Alguns itens deixados em branco pontualmente (ex.: questão 3, 8, ou probabilidade realista de ~8%)
+    if (i === 2 || i === 7 || rand < 0.08) {
+      // Pequena probabilidade aleatória de deixar em branco
+      if (rand < 0.25 || i === 2 || i === 7) {
+        return 'branco';
+      }
+    }
+
     if (bias === 'good') {
       if (rand < 0.6) return 'suficiente';
       if (rand < 0.9) return 'parcialmente';
@@ -103,8 +117,6 @@ const generateAnswers = (bias = 'random') => {
       if (rand < 0.8) return 'parcialmente';
       if (rand < 0.9) return 'sem_conteudo';
       return 'suficiente';
-    } else if (bias === 'empty') {
-      return 'branco'; // Aluno que faltou ou entregou em branco
     }
     return baseStatusKeys[Math.floor(Math.random() * baseStatusKeys.length)];
   });

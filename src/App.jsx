@@ -15,6 +15,8 @@ import Dashboard from './components/screens/Dashboard';
 import Saberes from './components/screens/Saberes.jsx';
 import Curriculos from './components/screens/Curriculos.jsx';
 import AvaliacoesEdicao from './components/screens/AvaliacoesEdicao';
+import AvaliacoesHubV2 from './components/screens/Avaliacoes/AvaliacoesHubV2';
+import BancoTarefasHubV2 from './components/screens/BancoTarefas/BancoTarefasHubV2';
 import Usuarios from './components/screens/Usuarios';
 import Acompanhamento from './components/screens/Acompanhamento';
 import AcompanhamentoEscolar from './components/screens/AcompanhamentoEscolar';
@@ -130,7 +132,7 @@ export default function MapearApp() {
 
   // Lock scroll on html/body for full-screen dashboards
   useEffect(() => {
-    if (['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas', 'carregamento-provas'].includes(currentScreen)) {
+    if (['devolutivas', 'realizacao-testes', 'avaliacoes', 'avaliacoes-v2', 'banco-tarefas', 'carregamento-provas'].includes(currentScreen)) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
       
@@ -290,7 +292,7 @@ export default function MapearApp() {
   }
 
   return (
-    <div className={`flex flex-col transition-all duration-500 ${isDarkMode ? 'dark dark-mode' : ''} ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas', 'carregamento-provas'].includes(currentScreen) ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
+    <div className={`flex flex-col transition-all duration-500 ${isDarkMode ? 'dark dark-mode' : ''} ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'avaliacoes-v2', 'banco-tarefas', 'carregamento-provas'].includes(currentScreen) ? 'h-screen overflow-hidden' : 'min-h-screen'}`} style={appStyle}>
       <Header
         colors={colors}
         isHighContrast={isHighContrast}
@@ -319,7 +321,7 @@ export default function MapearApp() {
         isGlobalHeaderHidden={isGlobalHeaderHidden}
       />
 
-      <div className={`flex-1 flex flex-col min-h-0 transition-all duration-300 ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'banco-tarefas', 'carregamento-provas'].includes(currentScreen) ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
+      <div className={`flex-1 flex flex-col min-h-0 transition-all duration-300 ${['devolutivas', 'realizacao-testes', 'avaliacoes', 'avaliacoes-v2', 'banco-tarefas', 'carregamento-provas'].includes(currentScreen) ? 'overflow-hidden' : ''}`} onClick={() => { if (isGripOpen || isA11yOpen || isProfileOpen) closeAllDropdowns(); }}>
         <ErrorBoundary>
           {currentScreen === 'dashboard' && (
           <Dashboard
@@ -389,12 +391,24 @@ export default function MapearApp() {
             navigateTo={navigateTo}
           />
         )}
-        {(currentScreen === 'avaliacoes' || currentScreen === 'banco-tarefas') && (
+        {currentScreen === 'avaliacoes' && (
           <AvaliacoesEdicao
             colors={colors}
             navigateTo={navigateTo}
             isDarkMode={isDarkMode}
-            initialSubTab={currentScreen === 'banco-tarefas' ? 'banco-tarefas' : 'avaliacoes'}
+            initialSubTab="avaliacoes"
+          />
+        )}
+        {currentScreen === 'banco-tarefas' && (
+          <BancoTarefasHubV2
+            isDarkMode={isDarkMode}
+          />
+        )}
+        {currentScreen === 'avaliacoes-v2' && (
+          <AvaliacoesHubV2
+            colors={colors}
+            navigateTo={navigateTo}
+            isDarkMode={isDarkMode}
           />
         )}
         {currentScreen === 'usuarios' && (

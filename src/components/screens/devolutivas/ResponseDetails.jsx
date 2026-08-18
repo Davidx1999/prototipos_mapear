@@ -297,7 +297,11 @@ export default function ResponseDetails({
                 <>
                   <span className="absolute top-4 left-4 text-[11px] font-bold uppercase tracking-widest" style={{ color: isDarkMode ? colors.neutral[4] : '#9CA3AF' }}>Produção do Aluno:</span>
                   <p className="text-[15px] font-medium leading-relaxed italic border-l-4 pl-4 py-1 mt-4" style={{ color: isDarkMode ? colors.neutral[0] : '#1D2432', borderColor: isDarkMode ? colors.neutral[4] : '#D1D5DB' }}>
-                    "Não."
+                    {studentStatus?.label === 'Ausente'
+                      ? 'Estudante ausente (não compareceu à avaliação).'
+                      : studentStatus?.label === 'Em Branco'
+                      ? 'Item deixado em branco pelo estudante (sem resposta registrada).'
+                      : '"Não."'}
                   </p>
                   {studentStatus && (
                     <div className="absolute top-4 right-4">

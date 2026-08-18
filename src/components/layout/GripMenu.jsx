@@ -22,13 +22,13 @@ const GripMenu = ({
     <>
       {/* Fundo semi-transparente que permite fechar clicando fora */}
       <div
-        className="fixed inset-0 top-[72px] bg-blue-900/20 backdrop-blur-[4px] z-[90]"
+        className="fixed top-[72px] left-0 w-screen h-[calc(100vh-72px)] bg-black/60 backdrop-blur-sm z-[90] transition-opacity"
         onClick={() => setIsGripOpen(false)}
       />
 
       {/* Painel centralizado e harmonizado com o botão Grip */}
       <div
-        className="fixed top-[72px] left-[16px] right-[16px] md:left-[40px] md:right-[40px] lg:left-[24px] lg:right-[24px] xl:left-[164px] xl:right-[164px] shadow-[0_24px_50px_rgba(0,0,0,0.1)] z-[100] border border-t-0 flex flex-col origin-top animate-slide-down-full rounded-b-[8px] rounded-t-none overflow-hidden"
+        className="fixed top-[72px] left-[16px] right-[16px] md:left-[40px] md:right-[40px] lg:left-[24px] lg:right-[24px] xl:left-[164px] xl:right-[164px] shadow-[0_24px_50px_rgba(0,0,0,0.5)] z-[100] border border-t-0 flex flex-col origin-top animate-slide-down-full rounded-b-[8px] rounded-t-none overflow-hidden"
         style={{ backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0], borderColor: isDarkMode ? colors.neutral[5] : colors.neutral[2] }}
       >
 

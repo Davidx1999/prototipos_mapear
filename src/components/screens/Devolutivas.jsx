@@ -372,7 +372,7 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast, 
   const filteredStudents = useMemo(() => {
     let rows = getMockRows(navLevel, navPath[navLevel], totalColsCount);
     if (hideNoParticipation) {
-      rows = rows.filter(student => !student.data.every(val => val === null || val === 'branco'));
+      rows = rows.filter(student => !student.data.every(val => val === null || val === 'branco' || val === 'ausente'));
     }
     if (focalTurma !== 'Todas') {
       // Normalização simples para o mock (fazendo '9 Ano A' bater com '9º Ano A')
@@ -512,6 +512,25 @@ export default function Devolutivas({ colors, navigateTo, isDarkMode, setToast, 
       containerRef.current.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
     }
   };
+
+  // --- SHORTCUTS (Ctrl+Scroll for Zoom) ---
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault(); // Impede o zoom da página pelo navegador
+        const zoomFactor = e.deltaY < 0 ? 0.1 : -0.1;
+        setZoomLevel(prev => Math.min(Math.max(0.4, prev + zoomFactor), 2));
+      }
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
 
   // --- HANDLERS DO TOOLTIP ---
   const handleCellMouseEnter = (e, alunoName, colInfo, statusKey) => {

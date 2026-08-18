@@ -1,5 +1,5 @@
 import React from 'react';
-import {  } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import Button from '../../ui/Button';
 
 export default function HeatmapFloatingHeaders({
@@ -27,7 +27,7 @@ export default function HeatmapFloatingHeaders({
     <>
       {/* PAINEL FLUTUANTE SUPERIOR: Destacar Habilidades */}
       {showSkills && (
-        <div 
+        <div
           className="absolute top-2 left-4 right-4 md:left-[352px] md:right-6 backdrop-blur-md rounded-[8px] border flex items-center px-4 py-3 gap-2 z-40 shadow-[0_8px_30px_rgb(0,0,0,0.12)] animate-fade-slide"
           style={{ backgroundColor: isDarkMode ? colors.neutral[6] : colors.neutral[0], borderColor: isDarkMode ? colors.neutral[5] : '#E5E7EB' }}
         >
@@ -35,7 +35,7 @@ export default function HeatmapFloatingHeaders({
 
           <div className="flex items-center w-full relative h-[34px]">
             {canScrollSkillsLeft && (
-              <div 
+              <div
                 className="absolute left-0 top-0 bottom-0 z-10 pr-8 flex items-center transition-opacity"
                 style={{ background: `linear-gradient(to right, ${isDarkMode ? colors.neutral[6] : colors.neutral[0]} 0%, ${isDarkMode ? colors.neutral[6] : colors.neutral[0]}E6 60%, transparent 100%)` }}
               >
@@ -51,10 +51,10 @@ export default function HeatmapFloatingHeaders({
                     key={skillName}
                     onClick={() => setActiveSkill(activeSkill === skillName ? null : skillName)}
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-[6px] text-[11px] font-bold transition-all border shrink-0 shadow-sm outline-none group ${activeSkill === skillName ? 'scale-[1.02]' : ''}`}
-                    style={{ 
-                      backgroundColor: activeSkill === skillName ? '#94CFEF' : (isDarkMode ? colors.neutral[6] : '#FFFFFF'), 
-                      borderColor: activeSkill === skillName ? '#008BC9' : (isDarkMode ? colors.neutral[5] : '#D1D5DB'), 
-                      color: activeSkill === skillName ? '#003A79' : (isDarkMode ? colors.neutral[1] : '#4B5563') 
+                    style={{
+                      backgroundColor: activeSkill === skillName ? '#94CFEF' : (isDarkMode ? colors.neutral[6] : '#FFFFFF'),
+                      borderColor: activeSkill === skillName ? '#008BC9' : (isDarkMode ? colors.neutral[5] : '#D1D5DB'),
+                      color: activeSkill === skillName ? '#003A79' : (isDarkMode ? colors.neutral[1] : '#4B5563')
                     }}
                   >
                     <span className="shrink-0">{skill.code}</span>
@@ -71,7 +71,7 @@ export default function HeatmapFloatingHeaders({
             </div>
 
             {canScrollSkillsRight && (
-              <div 
+              <div
                 className="absolute right-0 top-0 bottom-0 z-10 pl-8 flex items-center transition-opacity"
                 style={{ background: `linear-gradient(to left, ${isDarkMode ? colors.neutral[6] : colors.neutral[0]} 0%, ${isDarkMode ? colors.neutral[6] : colors.neutral[0]}E6 60%, transparent 100%)` }}
               >

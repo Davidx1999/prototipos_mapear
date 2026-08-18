@@ -9,7 +9,7 @@ import Button from './Button';
  * @param {Function} onBack - Function to handle back button click
  * @param {Object} colors - Design system colors
  */
-export default function Breadcrumb({ paths, onBack, colors, className = '' }) {
+export default function Breadcrumb({ paths, onBack, className = '' }) {
   return (
     <div className={`flex items-center gap-[16px] mb-[24px] animate-fade-slide ${className}`}>
       {/* Botão de Voltar */}
@@ -34,18 +34,17 @@ export default function Breadcrumb({ paths, onBack, colors, className = '' }) {
           return (
             <React.Fragment key={index}>
               {index > 0 && (
-                <span className="mx-[4px]" style={{ color: colors.primary.base }}>/</span>
+                <span className="mx-[4px] text-brand-500">/</span>
               )}
 
               {isLast ? (
-                <span style={{ color: colors.neutral[7] }}>
+                <span className="text-neutral-7 dark:text-neutral-2">
                   {path.label}
                 </span>
               ) : (
                 <span
                   onClick={path.onClick}
-                  className="cursor-pointer transition-colors hover:opacity-80"
-                  style={{ color: colors.primary.base }}
+                  className="cursor-pointer transition-colors hover:opacity-80 text-brand-500"
                 >
                   {path.label}
                 </span>

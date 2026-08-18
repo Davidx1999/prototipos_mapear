@@ -96,7 +96,7 @@ export default function TutorialOverlay({ steps = [], onFinish }) {
 
       {/* Tooltip Content */}
       <div
-        className="absolute bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] border border-gray-100 p-6 w-[320px] pointer-events-auto transition-all duration-500 animate-fade-slide"
+        className="absolute bg-white rounded-[8px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] border border-gray-100 p-6 w-[320px] pointer-events-auto transition-all duration-500 animate-fade-slide"
         style={pos}
       >
         <div className="flex justify-between items-start mb-4">
@@ -141,7 +141,7 @@ export default function TutorialOverlay({ steps = [], onFinish }) {
                 if (currentStep < steps.length - 1) setCurrentStep(prev => prev + 1);
                 else onFinish();
               }}
-              className="bg-[#008BC9] text-white px-5 py-2.5 rounded-xl font-bold text-[14px] hover:bg-[#003A79] transition-all shadow-md active:scale-95 flex items-center gap-2"
+              className="bg-[#008BC9] text-white px-5 py-2.5 rounded-[8px] font-bold text-[14px] hover:bg-[#003A79] transition-all shadow-md active:scale-95 flex items-center gap-2"
             >
               {currentStep < steps.length - 1 ? (
                 <>Próximo <ChevronRight size={18} /></>

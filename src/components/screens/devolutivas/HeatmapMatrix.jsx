@@ -1,5 +1,5 @@
 import React from 'react';
-import { Info } from 'lucide-react';
+import { Info, X } from 'lucide-react';
 
 export default function HeatmapMatrix({
   containerRef,
@@ -138,9 +138,16 @@ export default function HeatmapMatrix({
                                       onMouseEnter={(e) => handleCellMouseEnter(e, student.name, col, val)}
                                       onMouseLeave={handleCellMouseLeave}
                                       onClick={() => onOpenModal('details', { student, col })}
-                                      className={`w-[32px] h-[32px] rounded-[1px] border cursor-pointer transition-all duration-300 ${faded ? 'opacity-[0.16]' : 'hover:scale-125 hover:shadow-lg hover:z-30 hover:border-gray-800 relative'}`}
-                                      style={{ backgroundColor: stColor.bg, borderColor: stColor.border }}
-                                    ></div>
+                                      className={`w-[32px] h-[32px] rounded-[1px] border cursor-pointer transition-all duration-300 flex items-center justify-center ${faded ? 'opacity-[0.16]' : 'hover:scale-125 hover:shadow-lg hover:z-30 hover:border-gray-800 relative'}`}
+                                      style={{ 
+                                        backgroundColor: isDarkMode ? (val === 'ausente' ? colors.neutral[5] : stColor.bg) : stColor.bg, 
+                                        borderColor: isDarkMode ? (stColor.bg === '#FFFFFF' ? colors.neutral[5] : stColor.border) : stColor.border 
+                                      }}
+                                    >
+                                      {(val === 'ausente' || stColor?.hasCenterMarker) && (
+                                        <X size={14} className="stroke-[2.5] text-neutral-500 dark:text-neutral-300 pointer-events-none" />
+                                      )}
+                                    </div>
                                   )
                                 })}
                               </div>
