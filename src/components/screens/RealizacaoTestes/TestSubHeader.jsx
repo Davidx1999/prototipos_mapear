@@ -2,8 +2,7 @@ import React from 'react';
 
 /**
  * TestSubHeader Component
- * A sticky element that remains fixed below the main system header.
- * Does NOT render task-specific content — that content scrolls with the page.
+ * Elemento fixo abaixo do header principal do sistema.
  */
 const TestSubHeader = ({
   theme = 'light',
@@ -12,8 +11,8 @@ const TestSubHeader = ({
   ...props
 }) => {
   const hasBg = className.split(' ').some(c => c.startsWith('bg-'));
-  const bgSticky = hasBg ? '' : (theme === 'dark' ? 'bg-[#0B121A]' : 'bg-[#FFFFFF]');
-  const borderColor = theme === 'dark' ? 'border-neutral-2' : 'border-[var(--color-neutral-2)]';
+  const bgSticky = hasBg ? '' : 'bg-bg-container';
+  const borderColor = 'border-border';
 
   return (
     <div
@@ -26,3 +25,4 @@ const TestSubHeader = ({
 };
 
 export default TestSubHeader;
+

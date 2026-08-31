@@ -29,7 +29,8 @@ const Header = ({
   closeAllDropdowns,
   openGripDrawer,
   isDarkMode,
-  setIsDarkMode
+  setIsDarkMode,
+  isGlobalHeaderHidden = false
 }) => {
   const [showLogoutModal, setShowLogoutModal] = React.useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = React.useState(true);
@@ -96,6 +97,8 @@ const Header = ({
     setIsHighContrast(false);
     setShowLogoutModal(false);
   };
+
+  if (isGlobalHeaderHidden) return null;
 
   return (
     <header className={`sticky top-0 z-[1000] h-[84px] px-[16px] md:px-[24px] border-b flex justify-between items-center transition-all duration-300 ease-in-out ${

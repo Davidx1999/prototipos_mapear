@@ -1,17 +1,18 @@
 import React from 'react';
-import { BookOpen, Puzzle, Link2, PenLine, Brain, Target } from 'lucide-react';
+import { Bookmark, BookMarked, BookOpenText, Route, Paperclip, Brain, Target } from 'lucide-react';
 
 /**
  * EntityLegendBar — Barra de legenda cromática sutil (Heurística H6 de Nielsen)
  * Limpa, minimalista, integrada sem borda ou container pesado.
  */
 const ENTITY_LEGEND = [
-  { label: 'Teste',           icon: BookOpen, colorDot: 'bg-extended-storm-base',    textColor: 'text-extended-storm-dark dark:text-extended-storm-light' },
-  { label: 'Tarefa',          icon: Puzzle,   colorDot: 'bg-extended-orange-base',   textColor: 'text-extended-orange-dark dark:text-extended-orange-light' },
-  { label: 'Item Composto',   icon: Link2,    colorDot: 'bg-extended-lavender-base', textColor: 'text-extended-lavender-dark dark:text-extended-lavender-light' },
-  { label: 'Item',            icon: PenLine,  colorDot: 'bg-extended-aqua-base',     textColor: 'text-extended-aqua-dark dark:text-extended-aqua-light' },
-  { label: 'Cognitivo',       icon: Brain,    colorDot: 'bg-extended-oliva-base',    textColor: 'text-extended-oliva-dark dark:text-extended-oliva-light' },
-  { label: 'Habilidade',      icon: Target,   colorDot: 'bg-extended-cherry-base',   textColor: 'text-extended-cherry-dark dark:text-extended-cherry-light' },
+  { label: 'Avaliação',       icon: Bookmark,     colorDot: 'bg-brand-500',              textColor: 'text-brand-700 dark:text-brand-300' },
+  { label: 'Teste',           icon: BookMarked,   colorDot: 'bg-extended-storm-base',    textColor: 'text-extended-storm-dark dark:text-extended-storm-light' },
+  { label: 'Tarefa',          icon: BookOpenText, colorDot: 'bg-extended-orange-base',   textColor: 'text-extended-orange-dark dark:text-extended-orange-light' },
+  { label: 'Item Composto',   icon: Route,        colorDot: 'bg-extended-lavender-base', textColor: 'text-extended-lavender-dark dark:text-extended-lavender-light' },
+  { label: 'Item',            icon: Paperclip,    colorDot: 'bg-extended-aqua-base',     textColor: 'text-extended-aqua-dark dark:text-extended-aqua-light' },
+  { label: 'Cognitivo',       icon: Brain,        colorDot: 'bg-extended-oliva-base',    textColor: 'text-extended-oliva-dark dark:text-extended-oliva-light' },
+  { label: 'Habilidade',      icon: Target,       colorDot: 'bg-extended-cherry-base',   textColor: 'text-extended-cherry-dark dark:text-extended-cherry-light' },
 ];
 
 export default function EntityLegendBar({ isDarkMode }) {

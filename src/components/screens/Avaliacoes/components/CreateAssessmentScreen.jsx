@@ -3,7 +3,7 @@ import {
   ArrowLeft, ArrowRight, Check, BookOpen, Search,
   Plus, Trash2, Calendar, FileText, X, AlertTriangle,
   Target, Brain, Sparkles, Cpu, Printer, Monitor, Layers,
-  ShieldCheck, Info, Link2, PenLine, Puzzle, Database,
+  ShieldCheck, Info, Bookmark, BookMarked, BookOpenText, Route, Paperclip, Database,
   ChevronDown, ChevronUp, Eye, School, Network,
   UserCheck, Clock, Wand2, ListChecks, MessageCircle, List, PlusCircle, Loader2
 } from 'lucide-react';
@@ -199,6 +199,12 @@ export default function CreateAssessmentScreen({ onBack, onCreateAssessment, ini
   const [expandedTests, setExpandedTests] = useState({});
   const [expandedTasks, setExpandedTasks] = useState({});
   const [expandedItems, setExpandedItems] = useState({});
+  const [activeItemPath, setActiveItemPath] = useState({ tIdx: 0, tfIdx: 0, iIdx: 0 });
+  const [openSectionsStep2, setOpenSectionsStep2] = useState({
+    conteudo: true,
+    classificacao: true,
+    criterios: true
+  });
 
   // ── AI Fill Simulation State ──
   const [aiFillingItem, setAiFillingItem] = useState(null); // `${tIdx}-${tfIdx}-${iIdx}`
@@ -845,424 +851,628 @@ export default function CreateAssessmentScreen({ onBack, onCreateAssessment, ini
           )}
 
           {/* ═══════════════════════════════════════════ */}
-          {/* STEP 2: CONSTRUÇÃO DOS TESTES              */}
+          {/* STEP 2: CONSTRUÇÃO DOS TESTES & ITENS       */}
           {/* ═══════════════════════════════════════════ */}
-          {currentStep === 2 && (
-            <section id="step-2" className="space-y-8 step-transition">
-              <div className="text-center space-y-2 mb-8">
-                <h1 className="text-3xl font-bold text-fgv-navy tracking-tight">Construção da Avaliação</h1>
-                <p className="text-slate-500">Adicione cadernos de testes por componente curricular, organize tarefas e edite itens via Markdown.</p>
-              </div>
+          {currentStep === 2 && (() => {
+            // Find active item
+            const currentTest = testsConfig[activeItemPath.tIdx] || testsConfig[0];
+            const currentTask = currentTest?.tasks?.[activeItemPath.tfIdx] || currentTest?.tasks?.[0];
+            const currentItem = currentTask?.items?.[activeItemPath.iIdx] || currentTask?.items?.[0];
 
-              <div id="tests-container" className="space-y-10">
-                {testsConfig.map((teste, tIdx) => {
-                  const isTestExpanded = expandedTests[tIdx] !== false;
-                  const toggleTest = () => setExpandedTests(prev => ({ ...prev, [tIdx]: !isTestExpanded }));
-                  return (
-                    <div key={tIdx} className={`rounded-[8px] border ${cardBg} overflow-hidden`}>
-                      {/* Test Header */}
-                      <div className={`p-5 flex items-center justify-between gap-3 border-b ${isDarkMode ? 'border-neutral-5' : 'border-neutral-2'}`}>
-                        <div className="flex items-center gap-2 flex-1">
-                          <Chips label={`Teste ${String(tIdx + 1).padStart(2, '0')}`} status="storm" variant="dark" iconLeft={<BookOpen />} />
-                          <input
-                            type="text"
-                            value={teste.name}
-                            onChange={e => setTestsConfig(prev => prev.map((t, i) => i === tIdx ? { ...t, name: e.target.value } : t))}
-                            placeholder="Nome do Caderno"
-                            className={`flex-1 px-3 h-[38px] border rounded-[8px] text-xs font-bold ${isDarkMode ? 'bg-neutral-7 border-neutral-5 text-white' : 'bg-neutral-1 border-neutral-3 text-neutral-6'}`}
-                          />
-                          <select
-                            value={teste.subject}
-                            onChange={e => setTestsConfig(prev => prev.map((t, i) => i === tIdx ? { ...t, subject: e.target.value } : t))}
-                            className={`w-[200px] px-3 h-[38px] border rounded-[8px] text-xs font-bold ${isDarkMode ? 'bg-neutral-7 border-neutral-5 text-white' : 'bg-neutral-1 border-neutral-3 text-neutral-6'}`}
-                          >
-                            {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
-                          </select>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {testsConfig.length > 1 && (
-                            <Button variant="destructive-secondary" appearance="ghost" size="xs" iconOnly iconLeft={<Trash2 size={16} />} onClick={() => removeTest(tIdx)} />
-                          )}
-                          <Button variant="tertiary" appearance="ghost" size="xs" iconOnly iconLeft={isTestExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />} onClick={toggleTest} />
-                        </div>
+            // Flat list of items for sequential navigation
+            const flatItems = [];
+            testsConfig.forEach((teste, tIdx) => {
+              (teste.tasks || []).forEach((task, tfIdx) => {
+                (task.items || []).forEach((item, iIdx) => {
+                  flatItems.push({ tIdx, tfIdx, iIdx, testName: teste.name, taskTitle: task.title, item });
+                });
+              });
+            });
+
+            const currentFlatIndex = flatItems.findIndex(
+              fi => fi.tIdx === activeItemPath.tIdx && fi.tfIdx === activeItemPath.tfIdx && fi.iIdx === activeItemPath.iIdx
+            );
+            const safeFlatIndex = currentFlatIndex >= 0 ? currentFlatIndex : 0;
+
+            const handlePrev = () => {
+              if (safeFlatIndex > 0) {
+                const prev = flatItems[safeFlatIndex - 1];
+                setActiveItemPath({ tIdx: prev.tIdx, tfIdx: prev.tfIdx, iIdx: prev.iIdx });
+              }
+            };
+
+            const handleNext = () => {
+              if (safeFlatIndex < flatItems.length - 1) {
+                const next = flatItems[safeFlatIndex + 1];
+                setActiveItemPath({ tIdx: next.tIdx, tfIdx: next.tfIdx, iIdx: next.iIdx });
+              }
+            };
+
+            // Calculate item completion count
+            const requiredFieldsCount = 6;
+            const filledCount = (currentItem?.statement ? 1 : 0) +
+              (currentItem?.skills?.length ? 1 : 0) +
+              (currentItem?.descriptor ? 1 : 0) +
+              (currentItem?.cognitiveProcess || currentTask?.cognitiveProcess ? 1 : 0) +
+              (currentItem?.hasAnswer || currentItem?.expectedAnswer ? 1 : 0) +
+              (currentItem?.performanceLevels?.sufficient ? 1 : 0);
+
+            const isItemComplete = filledCount >= 5;
+
+            return (
+              <section id="step-2" className="space-y-6 step-transition">
+                {/* Step 2 Header */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-4 dark:border-neutral-700">
+                  <div>
+                    <h1 className="text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">
+                      Construção da Avaliação
+                    </h1>
+                    <p className="text-xs text-neutral-500 mt-0.5">
+                      Navegue pela árvore hierárquica e realize a autoria focada de cada Item com seus critérios pedagógicos.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="secondary"
+                      appearance="solid"
+                      size="sm"
+                      iconLeft={<Database size={13} />}
+                      onClick={() => setBancoModalTargetTestIdx(activeItemPath.tIdx)}
+                    >
+                      Importar do Banco
+                    </Button>
+                    <Button
+                      variant="primary"
+                      appearance="solid"
+                      size="sm"
+                      iconLeft={<Plus size={13} />}
+                      onClick={addTest}
+                    >
+                      Novo Teste (Caderno)
+                    </Button>
+                  </div>
+                </div>
+
+                {/* 2-Column Split Workspace */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[600px] items-start">
+                  
+                  {/* LEFT COLUMN: Tree Explorer (4 cols) */}
+                  <div
+                    className={`lg:col-span-4 rounded-[8px] border overflow-hidden flex flex-col max-h-[750px] shadow-xs ${
+                      isDarkMode ? 'bg-neutral-850 border-neutral-700 text-white' : 'bg-white border-neutral-200 text-neutral-800'
+                    }`}
+                  >
+                    {/* Tree Header */}
+                    <div className={`p-3.5 px-4 border-b flex items-center justify-between shrink-0 ${
+                      isDarkMode ? 'bg-neutral-800 border-neutral-700' : 'bg-neutral-50 border-neutral-200'
+                    }`}>
+                      <div className="flex items-center gap-2">
+                        <Bookmark size={16} className="text-[#0078B0]" />
+                        <span className="text-xs font-bold uppercase tracking-wider">Estrutura da Avaliação</span>
                       </div>
+                      <span className="text-[11px] font-bold text-[#0078B0] bg-[#0078B0]/10 px-2 py-0.5 rounded-[4px]">
+                        {flatItems.length} Itens
+                      </span>
+                    </div>
 
-                      {/* Tasks */}
-                      {isTestExpanded && (
-                        <div className="p-5 space-y-4">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-extended-orange-dark dark:text-extended-orange-light uppercase tracking-wider flex items-center gap-1.5">
-                              <Puzzle size={14} className="text-extended-orange-base" /> Tarefas deste teste ({teste.tasks?.length || 0})
+                    {/* Tree Content List */}
+                    <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2 divide-y divide-neutral-100 dark:divide-neutral-700/50">
+                      {testsConfig.map((teste, tIdx) => {
+                        const isTestActive = activeItemPath.tIdx === tIdx;
+                        return (
+                           <div key={tIdx} className="pt-2 first:pt-0 flex flex-col gap-1.5">
+                            {/* Teste Node */}
+                            <div className="flex items-center justify-between p-1.5 px-2 rounded-[4px] bg-neutral-100/70 dark:bg-neutral-800 font-bold text-xs">
+                              <div className="flex items-center gap-1.5 min-w-0 flex-1 mr-1 truncate">
+                                <BookMarked size={13} className="text-[#0078B0] shrink-0" />
+                                <span className="truncate">{teste.name || `Teste 0${tIdx + 1}`}</span>
+                              </div>
+                              <div className="flex items-center gap-1 shrink-0">
+                                <button
+                                  onClick={() => addTask(tIdx)}
+                                  className="p-1 rounded-[3px] text-[#0078B0] hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                  title="Adicionar Tarefa"
+                                >
+                                  <Plus size={12} />
+                                </button>
+                                {testsConfig.length > 1 && (
+                                  <button
+                                    onClick={() => removeTest(tIdx)}
+                                    className="p-1 rounded-[3px] text-neutral-400 hover:text-red-500"
+                                    title="Excluir Teste"
+                                  >
+                                    <Trash2 size={12} />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Tarefas Nodes */}
+                            <div className="pl-3 border-l border-neutral-200 dark:border-neutral-700 ml-2 flex flex-col gap-1.5">
+                              {(teste.tasks || []).map((task, tfIdx) => {
+                                return (
+                                  <div key={tfIdx} className="flex flex-col gap-1">
+                                    <div className="flex items-center justify-between p-1 px-1.5 rounded-[4px] hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                                      <div className="flex items-center gap-1 min-w-0 flex-1 mr-1 truncate">
+                                        <BookOpenText size={12} className="text-neutral-500 shrink-0" />
+                                        <span className="truncate">{task.title || `Tarefa ${tfIdx + 1}`}</span>
+                                      </div>
+                                      <button
+                                        onClick={() => addItem(tIdx, tfIdx)}
+                                        className="p-0.5 rounded-[3px] text-[#0078B0] hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                                        title="Adicionar Item a esta Tarefa"
+                                      >
+                                        <Plus size={11} />
+                                      </button>
+                                    </div>
+
+                                    {/* Itens Nodes */}
+                                    <div className="pl-3 border-l border-neutral-200 dark:border-neutral-700 ml-2 flex flex-col gap-0.5">
+                                      {(task.items || []).map((it, iIdx) => {
+                                        const isSelected =
+                                          activeItemPath.tIdx === tIdx &&
+                                          activeItemPath.tfIdx === tfIdx &&
+                                          activeItemPath.iIdx === iIdx;
+                                        const hasSkill = it.skills && it.skills.length > 0;
+
+                                        return (
+                                          <div
+                                            key={iIdx}
+                                            onClick={() => setActiveItemPath({ tIdx, tfIdx, iIdx })}
+                                            className={`p-1.5 px-2 rounded-[4px] cursor-pointer flex items-center justify-between text-xs transition-all border ${
+                                              isSelected
+                                                ? 'bg-[#F2FAFE] dark:bg-[#0078B0]/20 border-[#0078B0] text-[#0078B0] dark:text-[#38BDF8] font-bold shadow-xs'
+                                                : 'border-transparent hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
+                                            }`}
+                                          >
+                                            <div className="flex items-center gap-1.5 min-w-0 flex-1 truncate mr-1">
+                                              <span className={`w-1.5 h-1.5 rounded-full ${hasSkill ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+                                              <span className="truncate">Item {String(iIdx + 1).padStart(2, '0')}</span>
+                                              {hasSkill && (
+                                                <span className="font-mono text-[10px] bg-neutral-200/70 dark:bg-neutral-700 px-1 rounded-[3px]">
+                                                  {it.skills[0]}
+                                                </span>
+                                              )}
+                                            </div>
+                                            {isSelected && <Check size={12} className="text-[#0078B0] shrink-0" />}
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Tree Footer */}
+                    <div className={`p-3 border-t text-[11px] text-neutral-500 flex items-center justify-between shrink-0 ${
+                      isDarkMode ? 'bg-neutral-800 border-neutral-700' : 'bg-neutral-50 border-neutral-200'
+                    }`}>
+                      <span>Total de Cadernos: {testsConfig.length}</span>
+                      <button onClick={addTest} className="text-[#0078B0] font-bold hover:underline">
+                        + Novo Teste
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* RIGHT COLUMN: Focused Item Editor (8 cols) */}
+                  <div
+                    className={`lg:col-span-8 rounded-[8px] border overflow-hidden shadow-xs flex flex-col ${
+                      isDarkMode ? 'bg-neutral-850 border-neutral-700 text-white' : 'bg-white border-neutral-200 text-neutral-900'
+                    }`}
+                  >
+                    {currentItem ? (
+                      <div className="flex flex-col">
+                        {/* Item Focused Header */}
+                        <div
+                          className={`p-4 px-6 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0 ${
+                            isDarkMode ? 'bg-neutral-800 border-neutral-700' : 'bg-neutral-50/70 border-neutral-200'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 flex-wrap">
+                            <span className="text-[16px] font-bold tracking-tight">
+                              Item {String(activeItemPath.iIdx + 1).padStart(2, '0')}
                             </span>
-                            <div className="flex items-center gap-2">
-                              <Button variant="secondary" appearance="solid" size="xs" iconLeft={<Database size={12} />} onClick={() => setBancoModalTargetTestIdx(tIdx)}>
-                                Importar do Banco
-                              </Button>
-                              <Button variant="tertiary" appearance="solid" size="xs" iconLeft={<Plus size={12} />} onClick={() => addTask(tIdx)}>
-                                Criar Tarefa
-                              </Button>
+                            <span className="text-xs text-neutral-500 font-medium">
+                              ({currentTask?.title} • {currentTest?.name})
+                            </span>
+
+                            {/* Response Type */}
+                            <div className="relative">
+                              <select
+                                value={currentItem.type || 'Múltipla Escolha'}
+                                onChange={e => updateItemField(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'type', e.target.value)}
+                                className={`text-[12px] font-semibold h-[30px] pl-2 pr-7 border rounded-[4px] outline-none appearance-none cursor-pointer ${
+                                  isDarkMode
+                                    ? 'bg-neutral-900 border-neutral-700 text-white focus:border-[#0078B0]'
+                                    : 'bg-white border-neutral-300 text-neutral-800 focus:border-[#0078B0]'
+                                }`}
+                              >
+                                {RESPONSE_TYPES.map(rt => (
+                                  <option key={rt.label} value={rt.label}>{rt.label}</option>
+                                ))}
+                              </select>
+                              <ChevronDown size={13} className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-400" />
                             </div>
                           </div>
 
-                          <div className="space-y-4">
-                            {teste.tasks?.map((tf, tfIdx) => {
-                              const isTaskExpanded = expandedTasks[`${tIdx}-${tfIdx}`] !== false;
-                              const toggleTask = () => setExpandedTasks(prev => ({ ...prev, [`${tIdx}-${tfIdx}`]: !isTaskExpanded }));
+                          {/* Completion & AI Actions */}
+                          <div className="flex items-center gap-3">
+                            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-[4px] border ${
+                              isItemComplete
+                                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
+                                : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+                            }`}>
+                              {filledCount} de {requiredFieldsCount} campos preenchidos
+                            </span>
 
-                              return (
-                                <div key={tfIdx} className={`rounded-[12px] border ${isDarkMode ? 'border-neutral-5 bg-neutral-7' : 'border-neutral-2 bg-white'} overflow-hidden shadow-sm`}>
-
-                                  <div className="px-6 py-5 bg-white dark:bg-neutral-7 relative">
-                                    <div className="absolute top-0 right-0 p-4 flex items-center gap-2">
-                                      <Button variant="tertiary" appearance="ghost" size="xs" iconOnly iconLeft={isTaskExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />} onClick={toggleTask} />
-                                      <Button variant="destructive-secondary" appearance="ghost" size="xs" iconOnly iconLeft={<Trash2 size={16} />} onClick={() => removeTask(tIdx, tfIdx)} />
-                                    </div>
-                                    <div className="flex items-center gap-3 mb-4 max-w-[80%]">
-                                      <div className="inline-block bg-brand-800 text-white text-[10px] font-bold px-3 py-1 rounded-[6px] shadow-inner tracking-wider">
-                                        TAREFA {String(tfIdx + 1).padStart(2, '0')}
-                                      </div>
-                                      <input
-                                        type="text"
-                                        value={tf.title}
-                                        onChange={e => updateTaskField(tIdx, tfIdx, 'title', e.target.value)}
-                                        placeholder="Título da Tarefa"
-                                        className={`flex-1 px-3 py-1 h-[32px] border-b-2 bg-transparent text-sm font-bold focus:outline-none focus:border-brand-500 ${isDarkMode ? 'border-neutral-5 text-white' : 'border-neutral-2 text-neutral-6'}`}
-                                      />
-                                    </div>
-
-                                    {isTaskExpanded && (
-                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-                                        <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-extended-orange-dark/50 bg-extended-orange-dark/10' : 'border-extended-orange-light bg-extended-orange-extraLight/30'}`}>
-                                          <h4 className="text-[10px] font-bold text-neutral-6 dark:text-neutral-3 uppercase tracking-wider mb-1">Expectativa de Desempenho <span className="text-semantic-error-base">*</span></h4>
-                                          <p className="text-[10px] text-neutral-4 mb-3">O que o estudante deve demonstrar ao resolver esta tarefa.</p>
-                                          {tf.expectation ? (
-                                            <div className="text-xs font-bold text-neutral-6 dark:text-neutral-3 mb-3 line-clamp-2">{tf.expectation}</div>
-                                          ) : (
-                                            <div className="text-xs font-bold italic text-extended-orange-base mb-3">Não cadastrada</div>
-                                          )}
-                                          <button onClick={() => openInternalMdModal(tIdx, tfIdx, null, 'expectation')} className="w-full py-2.5 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 text-brand-500 text-xs font-bold rounded-[8px] border border-brand-200 dark:border-brand-800 transition-colors flex items-center justify-center gap-2">
-                                            <FileText size={14} /> {tf.expectation ? 'Editar Markdown *' : 'Cadastrar Markdown *'}
-                                          </button>
-                                        </div>
-                                        <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-neutral-5 bg-neutral-6/50' : 'border-neutral-2 bg-neutral-1/50'}`}>
-                                          <h4 className="text-[10px] font-bold text-neutral-5 dark:text-neutral-4 uppercase tracking-wider mb-1">Contexto (Opcional)</h4>
-                                          <p className="text-[10px] text-neutral-4 mb-3">Texto de apoio, gráfico, imagem ou poema base.</p>
-                                          {tf.context ? (
-                                            <div className="text-xs font-bold text-neutral-6 dark:text-white mb-3 line-clamp-2">{tf.context}</div>
-                                          ) : (
-                                            <div className="text-xs font-bold italic text-neutral-4 mb-3">Não informado</div>
-                                          )}
-                                          <button onClick={() => openInternalMdModal(tIdx, tfIdx, null, 'context')} className="w-full py-2.5 bg-white dark:bg-neutral-7 hover:bg-neutral-1 dark:hover:bg-neutral-6 text-neutral-6 dark:text-neutral-3 text-xs font-bold rounded-[8px] border border-neutral-2 dark:border-neutral-5 transition-colors flex items-center justify-center gap-2">
-                                            <FileText size={14} /> {tf.context ? 'Editar Markdown (Opcional)' : 'Adicionar Markdown (Opcional)'}
-                                          </button>
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
-
-                                  {isTaskExpanded && (
-                                    <div className="p-6 bg-transparent dark:bg-transparent">
-                                      <div className="flex items-center gap-2 mb-4">
-                                        <ListChecks size={16} className="text-neutral-4" />
-                                        <h3 className="text-xs font-bold text-neutral-5 dark:text-neutral-3 uppercase tracking-wider">Itens e Compostos da Tarefa</h3>
-                                      </div>
-
-                                      <div className="space-y-6">
-                                        {tf.items?.map((it, iIdx) => {
-                                          const isItemExpanded = expandedItems[`${tIdx}-${tfIdx}-${iIdx}`] !== false;
-                                          const toggleItem = () => setExpandedItems(prev => ({ ...prev, [`${tIdx}-${tfIdx}-${iIdx}`]: !isItemExpanded }));
-                                          return (
-                                            <div key={iIdx} className="border-2 border-brand-500 rounded-[12px] bg-white dark:bg-neutral-6 overflow-hidden shadow-sm">
-                                              {/* Item Header */}
-                                              <div className="bg-neutral-1 dark:bg-neutral-7 border-b border-neutral-2 dark:border-neutral-5 px-4 py-3 flex items-center justify-between">
-                                                <div className="flex items-center gap-3">
-                                                  <div className="bg-brand-800 text-white text-[11px] font-bold px-3 py-1.5 rounded-[8px] shadow-inner tracking-wider">ITM-{String(iIdx + 1).padStart(2, '0')}</div>
-                                                  <div className="flex bg-white dark:bg-neutral-6 rounded-[8px] p-0.5 border border-neutral-2 dark:border-neutral-5 shadow-sm">
-                                                    {['Múltipla Escolha', 'Resposta Construída', 'Híbrida'].map(type => (
-                                                      <button
-                                                        key={type}
-                                                        onClick={() => updateItemField(tIdx, tfIdx, iIdx, 'type', type)}
-                                                        className={`px-3 py-1.5 text-[11px] font-bold rounded-[6px] transition-colors flex items-center gap-1.5 ${(it.type || 'Múltipla Escolha') === type
-                                                            ? 'bg-white dark:bg-neutral-5 text-neutral-8 dark:text-white shadow-sm border border-neutral-2 dark:border-neutral-4'
-                                                            : 'text-neutral-5 dark:text-neutral-4 hover:bg-neutral-1 dark:hover:bg-neutral-6 border border-transparent'
-                                                          }`}
-                                                      >
-                                                        {type === 'Múltipla Escolha' && <List size={12} className="text-neutral-4" />}
-                                                        {type === 'Resposta Construída' && <PenLine size={12} className="text-neutral-4" />}
-                                                        {type === 'Híbrida' && <Layers size={12} className="text-neutral-4" />}
-                                                        {type}
-                                                      </button>
-                                                    ))}
-                                                  </div>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                  {aiFillingItem === `${tIdx}-${tfIdx}-${iIdx}` ? (
-                                                    <Button variant="primary" appearance="solid" size="xs" iconLeft={<Loader2 size={12} className="animate-spin" />} disabled>
-                                                      Gerando com IA...
-                                                    </Button>
-                                                  ) : (
-                                                    <Button variant="primary" appearance="ghost" size="xs" iconRight={<Sparkles size={12} />} onClick={() => handleFillAI(tIdx, tfIdx, iIdx)}>
-                                                      Preencher c/ IA
-                                                    </Button>
-                                                  )}
-                                                  <Button variant="tertiary" appearance="ghost" size="xs" iconOnly iconLeft={<Trash2 size={16} />} onClick={() => removeItem(tIdx, tfIdx, iIdx)} />
-                                                  <Button variant="tertiary" appearance="ghost" size="xs" iconOnly iconLeft={isItemExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />} onClick={toggleItem} />
-                                                </div>
-                                              </div>
-
-                                              {/* Item Body */}
-                                              {isItemExpanded && (
-                                                <div className="p-6 space-y-6">
-
-                                                  {/* Enunciado */}
-                                                  <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-extended-orange-dark/50 bg-extended-orange-dark/10' : 'border-extended-orange-light bg-extended-orange-extraLight/30'}`}>
-                                                    <h4 className="text-[10px] font-bold text-neutral-6 dark:text-neutral-3 uppercase tracking-wider mb-1">Enunciado Principal <span className="text-semantic-error-base">*</span></h4>
-                                                    <p className="text-[10px] text-neutral-4 mb-3">Texto da pergunta ou contextualização em Markdown.</p>
-                                                    {it.statement ? (
-                                                      <div className="text-xs font-bold text-neutral-6 dark:text-neutral-3 mb-3 line-clamp-2">{it.statement}</div>
-                                                    ) : (
-                                                      <div className="text-xs font-bold italic text-extended-orange-base mb-3">Não cadastrado</div>
-                                                    )}
-                                                    <button onClick={() => openInternalMdModal(tIdx, tfIdx, iIdx, 'statement')} className="w-full py-2.5 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 text-brand-500 text-xs font-bold rounded-[8px] border border-brand-200 dark:border-brand-800 transition-colors flex items-center justify-center gap-2">
-                                                      <FileText size={14} /> {it.statement ? 'Editar Markdown do Enunciado *' : 'Cadastrar Markdown do Enunciado *'}
-                                                    </button>
-                                                  </div>
-
-                                                  {/* Resposta Esperada e Comentários */}
-                                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-brand-900/50 bg-brand-900/10' : 'border-brand-200 bg-brand-50/30'}`}>
-                                                      <div className="flex items-center gap-2 mb-1">
-                                                        <Target size={12} className="text-brand-500" />
-                                                        <h4 className="text-[10px] font-bold text-brand-700 dark:text-brand-400 uppercase tracking-wider">Resposta Esperada (Markdown)</h4>
-                                                      </div>
-                                                      <p className="text-[10px] text-brand-500 dark:text-brand-300 mb-3 ml-5">Expectativa objetiva para a resposta do estudante.</p>
-                                                      {it.expectedAnswer ? (
-                                                        <div className="text-xs font-bold text-neutral-6 dark:text-neutral-3 mb-3 ml-5 line-clamp-2">{it.expectedAnswer}</div>
-                                                      ) : (
-                                                        <div className="text-xs font-bold italic text-neutral-4 mb-3 ml-5">Não cadastrada</div>
-                                                      )}
-                                                      <button onClick={() => openInternalMdModal(tIdx, tfIdx, iIdx, 'expectedAnswer')} className="w-full py-2.5 bg-white dark:bg-neutral-7 hover:bg-neutral-1 dark:hover:bg-neutral-6 text-brand-600 dark:text-brand-400 text-xs font-bold rounded-[8px] border border-brand-200 dark:border-brand-800 transition-colors flex items-center justify-center gap-2">
-                                                        <FileText size={14} /> {it.expectedAnswer ? 'Editar Resposta Esperada' : 'Cadastrar Resposta Esperada'}
-                                                      </button>
-                                                    </div>
-
-                                                    <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-neutral-5 bg-neutral-6/50' : 'border-neutral-2 bg-neutral-1/50'}`}>
-                                                      <div className="flex items-center gap-2 mb-1">
-                                                        <MessageCircle size={12} className="text-neutral-5" />
-                                                        <h4 className="text-[10px] font-bold text-neutral-5 dark:text-neutral-4 uppercase tracking-wider">Comentários Pedagógicos (Markdown)</h4>
-                                                      </div>
-                                                      <p className="text-[10px] text-neutral-4 mb-3 ml-5">Notas técnicas e exceções pedagógicas para os avaliadores.</p>
-                                                      {it.pedagogicalComments ? (
-                                                        <div className="text-xs font-bold text-neutral-6 dark:text-white mb-3 ml-5 line-clamp-2">{it.pedagogicalComments}</div>
-                                                      ) : (
-                                                        <div className="text-xs font-bold italic text-neutral-4 mb-3 ml-5">Não cadastrados</div>
-                                                      )}
-                                                      <button onClick={() => openInternalMdModal(tIdx, tfIdx, iIdx, 'pedagogicalComments')} className="w-full py-2.5 bg-white dark:bg-neutral-7 hover:bg-neutral-1 dark:hover:bg-neutral-6 text-neutral-6 dark:text-neutral-3 text-xs font-bold rounded-[8px] border border-neutral-2 dark:border-neutral-5 transition-colors flex items-center justify-center gap-2">
-                                                        <FileText size={14} /> {it.pedagogicalComments ? 'Editar Comentários' : 'Cadastrar Comentários'}
-                                                      </button>
-                                                    </div>
-                                                  </div>
-
-                                                  {/* BNCC */}
-                                                  <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-extended-orange-dark/50 bg-neutral-7' : 'border-extended-orange-light bg-white'}`}>
-                                                    <h4 className="text-[10px] font-bold text-neutral-6 dark:text-neutral-3 uppercase tracking-wider mb-3">1. Habilidades Avaliadas (BNCC) <span className="text-semantic-error-base">*</span></h4>
-                                                    <div className={`border rounded-[8px] p-4 flex items-center justify-between ${isDarkMode ? 'border-extended-orange-dark/50' : 'border-extended-orange-light'}`}>
-                                                      {it.skills && it.skills.length > 0 ? (
-                                                        <div className="flex flex-wrap gap-2">
-                                                          {it.skills.map(skillId => (
-                                                            <span key={skillId} className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-brand-500 bg-brand-50 dark:bg-brand-900/20 px-2.5 py-1 rounded-[6px]">
-                                                              {skillId}
-                                                              <button onClick={() => removeSkillFromItem(tIdx, tfIdx, iIdx, skillId)} className="text-neutral-4 hover:text-semantic-error-base ml-1"><X size={12} /></button>
-                                                            </span>
-                                                          ))}
-                                                        </div>
-                                                      ) : (
-                                                        <span className="text-xs font-bold italic text-neutral-4">Nenhuma habilidade vinculada</span>
-                                                      )}
-                                                      <button onClick={() => openSkillsModal(tIdx, tfIdx, iIdx)} className="px-4 py-2 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 text-brand-600 dark:text-brand-400 text-xs font-bold rounded-[6px] transition-colors flex items-center gap-2">
-                                                        <Plus size={14} /> Adicionar Habilidades
-                                                      </button>
-                                                    </div>
-                                                  </div>
-
-                                                  {/* Processos Cognitivos */}
-                                                  <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-neutral-5 bg-neutral-7' : 'border-neutral-2 bg-white'}`}>
-                                                    <h4 className="text-[10px] font-bold text-neutral-6 dark:text-neutral-3 uppercase tracking-wider mb-3">2. Processos Cognitivos</h4>
-                                                    <div className={`border rounded-[8px] p-2 flex flex-wrap gap-2 ${isDarkMode ? 'border-neutral-5' : 'border-neutral-2'}`}>
-                                                      {COGNITIVE_PROCESSES.map(pc => (
-                                                        <button
-                                                          key={pc}
-                                                          onClick={() => updateItemField(tIdx, tfIdx, iIdx, 'cognitiveProcess', pc)}
-                                                          className={`px-4 py-2 rounded-[6px] text-xs font-bold transition-all border ${(it.cognitiveProcess || tf.cognitiveProcess) === pc
-                                                              ? 'border-brand-500 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 shadow-sm'
-                                                              : 'border-transparent text-neutral-5 hover:bg-neutral-1 dark:hover:bg-neutral-6'
-                                                            }`}
-                                                        >
-                                                          {pc}
-                                                        </button>
-                                                      ))}
-                                                    </div>
-                                                  </div>
-
-                                                  {/* Sentença Descritora */}
-                                                  <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-neutral-5 bg-neutral-7' : 'border-neutral-2 bg-white'}`}>
-                                                    <h4 className="text-[10px] font-bold text-neutral-6 dark:text-neutral-3 uppercase tracking-wider mb-3">3. Sentença Descritora <span className="text-semantic-error-base">*</span></h4>
-                                                    <div className={`border rounded-[8px] p-4 flex items-center justify-between ${isDarkMode ? 'border-extended-orange-dark/50' : 'border-extended-orange-light'}`}>
-                                                      <div>
-                                                        <div className="text-[9px] font-bold text-neutral-4 uppercase tracking-wider mb-1">Título Curto de Referência</div>
-                                                        {it.descriptor ? (
-                                                          <div className="text-xs font-bold text-neutral-6 dark:text-neutral-3">{it.descriptor}</div>
-                                                        ) : (
-                                                          <div className="text-xs font-bold italic text-extended-orange-base">Não cadastrada</div>
-                                                        )}
-                                                      </div>
-                                                      <button onClick={() => openInternalMdModal(tIdx, tfIdx, iIdx, 'descriptor')} className="px-4 py-2 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/30 dark:hover:bg-brand-900/50 text-brand-600 dark:text-brand-400 text-xs font-bold rounded-[6px] transition-colors flex items-center gap-2">
-                                                        <FileText size={14} /> Cadastrar Markdown *
-                                                      </button>
-                                                    </div>
-                                                  </div>
-
-                                                  {/* Padrões de Desempenho (Rubricas) */}
-                                                  {((it.type || 'Múltipla Escolha') === 'Múltipla Escolha' || it.type === 'Híbrida') && (
-                                                    <div className={`border rounded-[12px] p-6 ${isDarkMode ? 'border-neutral-5 bg-neutral-7' : 'border-neutral-2 bg-white'}`}>
-                                                      <div className="flex items-center gap-2 mb-4">
-                                                        <Layers size={16} className="text-extended-orange-base" />
-                                                        <h4 className="text-[10px] font-bold text-neutral-6 dark:text-neutral-3 uppercase tracking-wider">Padrões de Desempenho (Rubricas em Markdown)</h4>
-                                                      </div>
-
-                                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                        {/* Insuficiente */}
-                                                        <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-semantic-error-base/50' : 'border-semantic-error-light/50 bg-semantic-error-extraLight/10'}`}>
-                                                          <h5 className="text-[10px] font-bold text-semantic-error-base uppercase tracking-wider mb-2">Insuficiente</h5>
-                                                          {it.performanceLevels?.insufficient ? (
-                                                            <div className="text-xs font-bold text-neutral-6 dark:text-neutral-3 mb-4 line-clamp-3">{it.performanceLevels.insufficient}</div>
-                                                          ) : (
-                                                            <div className="text-xs font-bold italic text-neutral-4 mb-4">Não cadastrado</div>
-                                                          )}
-                                                          <button onClick={() => openInternalMdModal(tIdx, tfIdx, iIdx, 'perf-insufficient')} className="w-full py-2.5 text-semantic-error-base bg-white dark:bg-neutral-7 hover:bg-neutral-1 dark:hover:bg-neutral-6 text-xs font-bold rounded-[8px] border border-semantic-error-light/50 transition-colors flex items-center justify-center gap-2">
-                                                            <FileText size={14} /> Cadastrar Markdown
-                                                          </button>
-                                                        </div>
-
-                                                        {/* Parcialmente Suficiente */}
-                                                        <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-extended-orange-base/50' : 'border-extended-orange-light/50 bg-extended-orange-extraLight/10'}`}>
-                                                          <h5 className="text-[10px] font-bold text-extended-orange-base uppercase tracking-wider mb-2">Parcialmente Suficiente</h5>
-                                                          {it.performanceLevels?.partial ? (
-                                                            <div className="text-xs font-bold text-neutral-6 dark:text-neutral-3 mb-4 line-clamp-3">{it.performanceLevels.partial}</div>
-                                                          ) : (
-                                                            <div className="text-xs font-bold italic text-neutral-4 mb-4">Não cadastrado</div>
-                                                          )}
-                                                          <button onClick={() => openInternalMdModal(tIdx, tfIdx, iIdx, 'perf-partial')} className="w-full py-2.5 text-extended-orange-base bg-white dark:bg-neutral-7 hover:bg-neutral-1 dark:hover:bg-neutral-6 text-xs font-bold rounded-[8px] border border-extended-orange-light/50 transition-colors flex items-center justify-center gap-2">
-                                                            <FileText size={14} /> Cadastrar Markdown
-                                                          </button>
-                                                        </div>
-
-                                                        {/* Suficiente */}
-                                                        <div className={`border rounded-[12px] p-5 ${isDarkMode ? 'border-semantic-success-base/50' : 'border-semantic-success-light/50 bg-semantic-success-extraLight/10'}`}>
-                                                          <h5 className="text-[10px] font-bold text-semantic-success-base uppercase tracking-wider mb-2">Suficiente</h5>
-                                                          {it.performanceLevels?.sufficient ? (
-                                                            <div className="text-xs font-bold text-neutral-6 dark:text-neutral-3 mb-4 line-clamp-3">{it.performanceLevels.sufficient}</div>
-                                                          ) : (
-                                                            <div className="text-xs font-bold italic text-neutral-4 mb-4">Não cadastrado</div>
-                                                          )}
-                                                          <button onClick={() => openInternalMdModal(tIdx, tfIdx, iIdx, 'perf-sufficient')} className="w-full py-2.5 text-semantic-success-base bg-white dark:bg-neutral-7 hover:bg-neutral-1 dark:hover:bg-neutral-6 text-xs font-bold rounded-[8px] border border-semantic-success-light/50 transition-colors flex items-center justify-center gap-2">
-                                                            <FileText size={14} /> Cadastrar Markdown
-                                                          </button>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  )}
-
-                                                  {/* Alternativas (se Múltipla Escolha) */}
-                                                  {(it.type || 'Múltipla Escolha') === 'Múltipla Escolha' && (
-                                                    <div className={`border rounded-[12px] p-6 ${isDarkMode ? 'border-neutral-5 bg-neutral-7' : 'border-neutral-2 bg-white'}`}>
-                                                      <div className="flex items-center justify-between mb-4">
-                                                        <h4 className="text-[10px] font-bold text-neutral-6 dark:text-neutral-3 uppercase tracking-wider">Alternativas, Intenção & Análise da Resposta (Markdown)</h4>
-                                                        <span className="text-[10px] font-bold text-neutral-4 uppercase tracking-wider">{numAlternatives} Alternativas</span>
-                                                      </div>
-
-                                                      <div className="space-y-3">
-                                                        {Array.from({ length: numAlternatives }).map((_, altIdx) => {
-                                                          const letters = ['A', 'B', 'C', 'D', 'E'];
-                                                          const letter = letters[altIdx];
-                                                          return (
-                                                            <div key={letter} className={`flex items-center gap-3 p-3 rounded-[8px] border ${isDarkMode ? 'border-neutral-5 bg-neutral-6/50' : 'border-neutral-2 bg-neutral-1/50'}`}>
-                                                              <div className="w-5 h-5 rounded-full border border-neutral-4 flex items-center justify-center shrink-0"></div>
-                                                              <div className="w-6 h-6 bg-white dark:bg-neutral-6 border border-neutral-3 dark:border-neutral-5 rounded-[4px] flex items-center justify-center text-xs font-bold text-neutral-6 dark:text-neutral-3 shrink-0">
-                                                                {letter}
-                                                              </div>
-                                                              <input
-                                                                type="text"
-                                                                placeholder={`Texto da alternativa ${letter} / intenção pedagógica...`}
-                                                                className={`flex-1 px-3 py-2 border rounded-[6px] text-xs ${isDarkMode ? 'bg-neutral-7 border-neutral-5 text-white' : 'bg-white border-neutral-3 text-neutral-6'}`}
-                                                              />
-                                                              <button className={`px-3 py-2 bg-white dark:bg-neutral-7 border rounded-[6px] text-[11px] font-bold transition-colors flex items-center gap-1.5 shrink-0 ${isDarkMode ? 'border-neutral-5 text-neutral-3 hover:bg-neutral-6' : 'border-neutral-2 text-neutral-5 hover:bg-neutral-1'}`}>
-                                                                <FileText size={12} /> + Análise da Resposta (Markdown)
-                                                              </button>
-                                                            </div>
-                                                          )
-                                                        })}
-                                                      </div>
-                                                    </div>
-                                                  )}
-
-                                                </div>
-                                              )}
-                                            </div>
-                                          );
-                                        })}
-
-                                        {/* Add Item Buttons */}
-                                        <div className="flex gap-4 pt-4">
-                                          <button onClick={() => addItem(tIdx, tfIdx)} className="flex-1 py-3 border border-dashed border-brand-500 rounded-[12px] bg-brand-50/50 hover:bg-brand-50 dark:bg-brand-900/10 dark:hover:bg-brand-900/30 transition-all text-brand-600 dark:text-brand-400 font-bold text-xs flex items-center justify-center gap-2">
-                                            <PlusCircle size={16} /> Adicionar Item
-                                          </button>
-                                          <button className="flex-1 py-3 border border-dashed border-extended-lavender-base rounded-[12px] bg-extended-lavender-extraLight/30 hover:bg-extended-lavender-extraLight/60 dark:bg-extended-lavender-dark/10 dark:hover:bg-extended-lavender-dark/30 transition-all text-extended-lavender-dark dark:text-extended-lavender-light font-bold text-xs flex items-center justify-center gap-2">
-                                            <Layers size={16} /> Adicionar Item Composto
-                                          </button>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-
-                          <div className="pt-4">
-                            <Button variant="secondary" appearance="solid" size="sm" iconLeft={<Plus size={14} />} onClick={() => addTask(tIdx)}>
-                              Nova Tarefa
-                            </Button>
+                            {aiFillingItem === `${activeItemPath.tIdx}-${activeItemPath.tfIdx}-${activeItemPath.iIdx}` ? (
+                              <Button variant="primary" appearance="solid" size="xs" disabled iconLeft={<Loader2 size={12} className="animate-spin" />}>
+                                Gerando...
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="tertiary"
+                                appearance="solid"
+                                size="xs"
+                                iconLeft={<Sparkles size={12} className="text-[#0078B0]" />}
+                                onClick={() => handleFillAI(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx)}
+                              >
+                                Preencher c/ IA
+                              </Button>
+                            )}
                           </div>
                         </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
 
-              <button
-                onClick={addTest}
-                className="w-full py-6 border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50 hover:bg-slate-100 hover:border-fgv-blue transition-all text-slate-600 hover:text-fgv-blue flex flex-col items-center justify-center gap-2 group"
-              >
-                <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-slate-200 flex items-center justify-center text-xl group-hover:bg-blue-50">
-                  <Plus size={20} />
+                        {/* Item Structured 3 Sections */}
+                        <div className="p-6 flex flex-col gap-6">
+
+                          {/* ─── 1. CONTEÚDO ─── */}
+                          <div className={`border rounded-[8px] overflow-hidden ${isDarkMode ? 'border-neutral-700 bg-neutral-900/50' : 'border-neutral-200 bg-white'}`}>
+                            <div
+                              onClick={() => setOpenSectionsStep2(prev => ({ ...prev, conteudo: !prev.conteudo }))}
+                              className={`p-3 px-4 border-b flex items-center justify-between cursor-pointer select-none ${
+                                isDarkMode ? 'bg-neutral-800 border-neutral-700' : 'bg-neutral-50 border-neutral-200'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <span className="w-5 h-5 rounded-full bg-[#0078B0] text-white flex items-center justify-center text-[10px] font-bold">1</span>
+                                <h3 className="text-[13px] font-bold">Conteúdo do Item</h3>
+                              </div>
+                              <span className="text-neutral-400">
+                                {openSectionsStep2.conteudo ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                              </span>
+                            </div>
+
+                            {openSectionsStep2.conteudo && (
+                              <div className="p-4 flex flex-col gap-4">
+                                {/* Enunciado Principal */}
+                                <div className="flex flex-col gap-1.5">
+                                  <div className="flex items-center justify-between">
+                                    <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-6 dark:text-neutral-3">
+                                      Enunciado Principal <span className="text-red-500">*</span>
+                                    </label>
+                                    <button
+                                      onClick={() => openInternalMdModal(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'statement')}
+                                      className="text-xs font-bold text-[#0078B0] hover:underline flex items-center gap-1"
+                                    >
+                                      <FileText size={12} /> Abrir Editor Markdown
+                                    </button>
+                                  </div>
+                                  <textarea
+                                    rows={3}
+                                    value={currentItem.statement || ''}
+                                    onChange={e => updateItemField(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'statement', e.target.value)}
+                                    placeholder="Digite a formulação clara da questão..."
+                                    className={`w-full p-2.5 text-xs leading-relaxed border rounded-[4px] outline-none ${
+                                      isDarkMode ? 'bg-neutral-800 border-neutral-700 text-white focus:border-[#0078B0]' : 'bg-white border-neutral-300 text-neutral-800 focus:border-[#0078B0]'
+                                    }`}
+                                  />
+                                </div>
+
+                                {/* Contexto da Tarefa / Item */}
+                                <div className="flex flex-col gap-1.5">
+                                  <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-6 dark:text-neutral-3">
+                                    Contexto / Texto de Apoio
+                                  </label>
+                                  {currentTask?.hasItemComposto && currentTask?.itemCompostoMarkdown ? (
+                                    <div className="p-2.5 rounded-[4px] bg-neutral-50 dark:bg-neutral-800 border text-xs text-neutral-600 dark:text-neutral-300">
+                                      <span className="font-bold block mb-1">Texto Base da Tarefa: {currentTask.itemCompostoTitle}</span>
+                                      <p className="line-clamp-2 italic">{currentTask.itemCompostoMarkdown}</p>
+                                    </div>
+                                  ) : (
+                                    <input
+                                      type="text"
+                                      value={currentTask?.context || ''}
+                                      onChange={e => updateTaskField(activeItemPath.tIdx, activeItemPath.tfIdx, 'context', e.target.value)}
+                                      placeholder="Texto de apoio, gráfico ou poema..."
+                                      className={`w-full px-3 h-[36px] text-xs border rounded-[4px] outline-none ${
+                                        isDarkMode ? 'bg-neutral-800 border-neutral-700 text-white' : 'bg-white border-neutral-300 text-neutral-800'
+                                      }`}
+                                    />
+                                  )}
+                                </div>
+
+                                {/* Alternativas (se Múltipla Escolha) */}
+                                {(currentItem.type || 'Múltipla Escolha') === 'Múltipla Escolha' && (
+                                  <div className="flex flex-col gap-2 pt-2 border-t dark:border-neutral-700">
+                                    <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-6 dark:text-neutral-3">
+                                      Alternativas e Análise de Distratores ({numAlternatives} Alternativas)
+                                    </label>
+                                    <div className="space-y-2">
+                                      {altLabels.map(letter => (
+                                        <div key={letter} className="flex items-center gap-2 p-2 rounded-[4px] border border-neutral-200 dark:border-neutral-700 bg-neutral-50/40 dark:bg-neutral-800/40">
+                                          <div className="w-6 h-6 rounded-full bg-white dark:bg-neutral-700 border flex items-center justify-center font-bold text-xs shrink-0">
+                                            {letter}
+                                          </div>
+                                          <input
+                                            type="text"
+                                            value={currentItem.alternativeIntentions?.[letter] || ''}
+                                            onChange={e => updateItemField(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'alternativeIntentions', {
+                                              ...(currentItem.alternativeIntentions || {}),
+                                              [letter]: e.target.value
+                                            })}
+                                            placeholder={`Texto e justificativa pedagógica da alternativa ${letter}...`}
+                                            className={`flex-1 px-2.5 h-[32px] text-xs border rounded-[4px] ${
+                                              isDarkMode ? 'bg-neutral-900 border-neutral-700 text-white' : 'bg-white border-neutral-300 text-neutral-800'
+                                            }`}
+                                          />
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Resposta Esperada (se Discursiva / Híbrida) */}
+                                {(currentItem.type === 'Resposta Construída' || currentItem.type === 'Híbrida') && (
+                                  <div className="flex flex-col gap-1.5 pt-2 border-t dark:border-neutral-700">
+                                    <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-6 dark:text-neutral-3">
+                                      Resposta Esperada (Padrão de Correção)
+                                    </label>
+                                    <textarea
+                                      rows={2}
+                                      value={currentItem.expectedAnswer || ''}
+                                      onChange={e => updateItemField(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'expectedAnswer', e.target.value)}
+                                      placeholder="Expectativa de resposta para orientar os corretores e calibração de IA..."
+                                      className={`w-full p-2.5 text-xs border rounded-[4px] outline-none ${
+                                        isDarkMode ? 'bg-neutral-800 border-neutral-700 text-white' : 'bg-white border-neutral-300 text-neutral-800'
+                                      }`}
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* ─── 2. CLASSIFICAÇÃO PEDAGÓGICA ─── */}
+                          <div className={`border rounded-[8px] overflow-hidden ${isDarkMode ? 'border-neutral-700 bg-neutral-900/50' : 'border-neutral-200 bg-white'}`}>
+                            <div
+                              onClick={() => setOpenSectionsStep2(prev => ({ ...prev, classificacao: !prev.classificacao }))}
+                              className={`p-3 px-4 border-b flex items-center justify-between cursor-pointer select-none ${
+                                isDarkMode ? 'bg-neutral-800 border-neutral-700' : 'bg-neutral-50 border-neutral-200'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <span className="w-5 h-5 rounded-full bg-[#0078B0] text-white flex items-center justify-center text-[10px] font-bold">2</span>
+                                <h3 className="text-[13px] font-bold">Classificação Pedagógica</h3>
+                              </div>
+                              <span className="text-neutral-400">
+                                {openSectionsStep2.classificacao ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                              </span>
+                            </div>
+
+                            {openSectionsStep2.classificacao && (
+                              <div className="p-4 flex flex-col gap-4">
+                                {/* Habilidades BNCC */}
+                                <div className="flex flex-col gap-1.5">
+                                  <div className="flex items-center justify-between">
+                                    <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-6 dark:text-neutral-3">
+                                      Habilidades Avaliadas (BNCC) <span className="text-red-500">*</span>
+                                    </label>
+                                    <button
+                                      onClick={() => openSkillsModal(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx)}
+                                      className="text-xs font-bold text-[#0078B0] hover:underline flex items-center gap-1"
+                                    >
+                                      <Plus size={12} /> Vincular Habilidades
+                                    </button>
+                                  </div>
+
+                                  <div className="p-2.5 rounded-[4px] border border-neutral-200 dark:border-neutral-700 flex items-center justify-between bg-neutral-50/50 dark:bg-neutral-800/50">
+                                    {currentItem.skills && currentItem.skills.length > 0 ? (
+                                      <div className="flex flex-wrap gap-1.5">
+                                        {currentItem.skills.map(skillId => (
+                                          <span key={skillId} className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-[#0078B0] bg-[#0078B0]/10 px-2 py-0.5 rounded-[4px]">
+                                            {skillId}
+                                            <button onClick={() => removeSkillFromItem(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, skillId)} className="text-neutral-400 hover:text-red-500">
+                                              <X size={11} />
+                                            </button>
+                                          </span>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <span className="text-xs italic text-neutral-400">Nenhuma habilidade vinculada</span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Processos Cognitivos e Sentença Descritora */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                  <div className="flex flex-col gap-1.5">
+                                    <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-6 dark:text-neutral-3">
+                                      Processo Cognitivo (Bloom)
+                                    </label>
+                                    <select
+                                      value={currentItem.cognitiveProcess || currentTask?.cognitiveProcess || 'Compreender'}
+                                      onChange={e => updateItemField(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'cognitiveProcess', e.target.value)}
+                                      className={`px-3 h-[36px] text-xs border rounded-[4px] outline-none ${
+                                        isDarkMode ? 'bg-neutral-800 border-neutral-700 text-white' : 'bg-white border-neutral-300 text-neutral-800'
+                                      }`}
+                                    >
+                                      {COGNITIVE_PROCESSES.map(pc => <option key={pc} value={pc}>{pc}</option>)}
+                                    </select>
+                                  </div>
+
+                                  <div className="flex flex-col gap-1.5">
+                                    <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-6 dark:text-neutral-3">
+                                      Sentença Descritora (Matriz)
+                                    </label>
+                                    <input
+                                      type="text"
+                                      value={currentItem.descriptor || ''}
+                                      onChange={e => updateItemField(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'descriptor', e.target.value)}
+                                      placeholder="Ex: D1 - Localizar informação explícita"
+                                      className={`px-3 h-[36px] text-xs border rounded-[4px] outline-none ${
+                                        isDarkMode ? 'bg-neutral-800 border-neutral-700 text-white' : 'bg-white border-neutral-300 text-neutral-800'
+                                      }`}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* ─── 3. CRITÉRIOS DE AVALIAÇÃO & RUBRICAS ─── */}
+                          <div className={`border rounded-[8px] overflow-hidden ${isDarkMode ? 'border-neutral-700 bg-neutral-900/50' : 'border-neutral-200 bg-white'}`}>
+                            <div
+                              onClick={() => setOpenSectionsStep2(prev => ({ ...prev, criterios: !prev.criterios }))}
+                              className={`p-3 px-4 border-b flex items-center justify-between cursor-pointer select-none ${
+                                isDarkMode ? 'bg-neutral-800 border-neutral-700' : 'bg-neutral-50 border-neutral-200'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <span className="w-5 h-5 rounded-full bg-[#0078B0] text-white flex items-center justify-center text-[10px] font-bold">3</span>
+                                <h3 className="text-[13px] font-bold">Critérios de Avaliação e Rubricas</h3>
+                              </div>
+                              <span className="text-neutral-400">
+                                {openSectionsStep2.criterios ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                              </span>
+                            </div>
+
+                            {openSectionsStep2.criterios && (
+                              <div className="p-4 flex flex-col gap-4">
+                                <label className="text-[11px] font-bold uppercase tracking-wider text-neutral-6 dark:text-neutral-3">
+                                  Padrões de Desempenho (3 Níveis)
+                                </label>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                  <div className="p-3 rounded-[4px] border border-red-200 dark:border-red-900/40 bg-red-50/20 dark:bg-red-950/10 flex flex-col gap-1.5">
+                                    <span className="text-[10px] font-bold text-red-600 uppercase">Insuficiente</span>
+                                    <textarea
+                                      rows={2}
+                                      value={currentItem.performanceLevels?.insufficient || ''}
+                                      onChange={e => updateItemField(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'performanceLevels', {
+                                        ...(currentItem.performanceLevels || {}),
+                                        insufficient: e.target.value
+                                      })}
+                                      placeholder="Critérios de erro..."
+                                      className="w-full p-2 text-xs border rounded-[4px] bg-white dark:bg-neutral-800"
+                                    />
+                                  </div>
+
+                                  <div className="p-3 rounded-[4px] border border-amber-200 dark:border-amber-900/40 bg-amber-50/20 dark:bg-amber-950/10 flex flex-col gap-1.5">
+                                    <span className="text-[10px] font-bold text-amber-600 uppercase">Parcial</span>
+                                    <textarea
+                                      rows={2}
+                                      value={currentItem.performanceLevels?.partial || ''}
+                                      onChange={e => updateItemField(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'performanceLevels', {
+                                        ...(currentItem.performanceLevels || {}),
+                                        partial: e.target.value
+                                      })}
+                                      placeholder="Critérios de domínio parcial..."
+                                      className="w-full p-2 text-xs border rounded-[4px] bg-white dark:bg-neutral-800"
+                                    />
+                                  </div>
+
+                                  <div className="p-3 rounded-[4px] border border-emerald-200 dark:border-emerald-900/40 bg-emerald-50/20 dark:bg-emerald-950/10 flex flex-col gap-1.5">
+                                    <span className="text-[10px] font-bold text-emerald-600 uppercase">Suficiente</span>
+                                    <textarea
+                                      rows={2}
+                                      value={currentItem.performanceLevels?.sufficient || ''}
+                                      onChange={e => updateItemField(activeItemPath.tIdx, activeItemPath.tfIdx, activeItemPath.iIdx, 'performanceLevels', {
+                                        ...(currentItem.performanceLevels || {}),
+                                        sufficient: e.target.value
+                                      })}
+                                      placeholder="Critérios de alcance pleno..."
+                                      className="w-full p-2 text-xs border rounded-[4px] bg-white dark:bg-neutral-800"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                        </div>
+
+                        {/* Sequential Navigation inside Step 2 */}
+                        <div className={`p-4 px-6 border-t flex items-center justify-between gap-4 shrink-0 ${
+                          isDarkMode ? 'bg-neutral-800/80 border-neutral-700' : 'bg-neutral-50/60 border-neutral-200'
+                        }`}>
+                          <button
+                            type="button"
+                            onClick={handlePrev}
+                            disabled={safeFlatIndex === 0}
+                            className={`px-3.5 py-1.5 rounded-[4px] text-xs font-semibold border flex items-center gap-1.5 ${
+                              safeFlatIndex > 0 ? 'border-neutral-300 text-neutral-700 hover:bg-neutral-100 cursor-pointer' : 'opacity-40 cursor-not-allowed'
+                            }`}
+                          >
+                            <ArrowLeft size={13} /> Item anterior
+                          </button>
+
+                          <span className="text-xs font-bold text-neutral-600 dark:text-neutral-300">
+                            Item {safeFlatIndex + 1} de {flatItems.length}
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={handleNext}
+                            disabled={safeFlatIndex >= flatItems.length - 1}
+                            className={`px-3.5 py-1.5 rounded-[4px] text-xs font-bold flex items-center gap-1.5 ${
+                              safeFlatIndex < flatItems.length - 1
+                                ? 'bg-[#0078B0] text-white hover:bg-[#006899] cursor-pointer'
+                                : 'opacity-40 bg-neutral-300 text-neutral-500 cursor-not-allowed'
+                            }`}
+                          >
+                            Próximo item <ArrowRight size={13} />
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-12 text-center text-neutral-400">
+                        <BookOpen size={36} className="mx-auto mb-2 opacity-30" />
+                        <p className="text-sm font-semibold">Nenhum item cadastrado nesta tarefa.</p>
+                        <Button variant="primary" appearance="solid" size="xs" onClick={() => addItem(activeItemPath.tIdx, activeItemPath.tfIdx)} className="mt-3">
+                          + Adicionar Primeiro Item
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
                 </div>
-                <span className="font-bold">Adicionar Novo Teste à Avaliação</span>
-                <span className="text-xs font-normal">Ex: Matemática, Língua Portuguesa, Ciências...</span>
-              </button>
 
-              <div className="flex justify-between pt-8 border-t border-slate-200">
-                <button onClick={() => goToStep(1)} className="bg-white border border-slate-300 text-slate-700 font-semibold px-6 py-3 rounded-xl hover:bg-slate-50 transition-all flex items-center gap-2">
-                  <ArrowLeft size={16} /> Voltar
-                </button>
-                <button onClick={() => goToStep(3)} className="bg-fgv-navy hover:bg-fgv-blue text-white font-semibold px-8 py-3 rounded-xl transition-all shadow-md flex items-center gap-3">
-                  <span>Avançar para Configurações</span>
-                  <ArrowRight size={16} />
-                </button>
-              </div>
-            </section>
-          )}
+                {/* Step 2 Global Navigation Buttons */}
+                <div className="flex justify-between pt-6 border-t dark:border-neutral-700">
+                  <button
+                    onClick={() => goToStep(1)}
+                    className="bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 font-semibold px-6 py-2.5 rounded-[6px] hover:bg-neutral-50 transition-all flex items-center gap-2 text-xs"
+                  >
+                    <ArrowLeft size={15} /> Voltar para Identificação
+                  </button>
+                  <button
+                    onClick={() => goToStep(3)}
+                    className="bg-[#0078B0] hover:bg-[#006899] text-white font-bold px-7 py-2.5 rounded-[6px] transition-all shadow-sm flex items-center gap-2.5 text-xs"
+                  >
+                    <span>Avançar para Configurações (Etapa 3)</span>
+                    <ArrowRight size={15} />
+                  </button>
+                </div>
+              </section>
+            );
+          })()}
 
           {/* ═══════════════════════════════════════════ */}
           {/* STEP 3: CONFIGURAÇÕES DE APLICAÇÃO          */}

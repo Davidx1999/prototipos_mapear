@@ -48,7 +48,7 @@ export default function AvaliacoesHistoryView({
                   <div className="flex items-center gap-2 mb-1.5">
                     <Chips label={av.code} status="storm" variant="dark" />
                     <Chips label="Arquivada" status="neutral" variant="stroked" iconLeft={<Archive size={12} />} />
-                    <Chips label={av.type} status={av.type === 'Somativa' ? 'cherry' : 'oliva'} variant="light" />
+                    <Chips label={av.type} status={av.type === 'Somativa' ? 'cherry' : av.type === 'Diagnóstica' ? 'oliva' : 'storm'} variant="stroked" className="!text-neutral-7 dark:!text-neutral-2" />
                   </div>
                   <h3 className="text-base font-bold text-neutral-8 dark:text-white truncate">{av.title}</h3>
                   <div className="flex items-center gap-4 mt-2 text-xs font-medium text-neutral-5 dark:text-neutral-4">

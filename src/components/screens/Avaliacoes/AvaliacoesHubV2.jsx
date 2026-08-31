@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  Search, Plus, Eye, Sliders, FileText,
-  Layers, Copy, CheckCircle2, Building2, Calendar, AlertTriangle, Archive, Trash2
+  Search, Plus, Eye, Sliders, FileText, Filter, X, ChevronDown, Check,
+  Layers, Copy, CheckCircle2, Building2, Calendar, AlertTriangle, Archive, Trash2, Edit3
 } from 'lucide-react';
 import Button from '../../ui/Button';
-import Chips from '../../ui/Chips';
 import Breadcrumb from '../../ui/Breadcrumb';
+import Input from '../../ui/Input';
+import Tabs from '../../ui/Tabs';
+import { defaultColors } from '../../../data/constants';
 
 import AvaliacoesQueueView from './components/AvaliacoesQueueView';
 import AvaliacoesKanbanView from './components/AvaliacoesKanbanView';
@@ -16,6 +18,7 @@ import EntityLegendBar from './components/EntityLegendBar';
 import CreateAssessmentScreen from './components/CreateAssessmentScreen';
 import AvaliacoesTrashModal from './components/AvaliacoesTrashModal';
 import AvaliacoesHistoryView from './components/AvaliacoesHistoryView';
+import AvaliacoesEditor from './AvaliacoesEditor';
 
 // ─── ENRICHED MOCK DATA INCLUDING HISTORICAL YEARS (2026, 2025, 2024) ───
 const INITIAL_ASSESSMENTS = [
@@ -23,7 +26,7 @@ const INITIAL_ASSESSMENTS = [
   {
     id: 'av-001',
     code: 'AV-SOB-2026-0042',
-    title: 'Avaliação Somativa de Língua Portuguesa - 5º Ano',
+    title: 'Avaliação Formativa 2 – Rede Estadual de Mato Grosso do Sul – Anos Iniciais do Ensino Fundamental (4º e 5º anos): Diagnóstico Pedagógico de Aprendizagens, Habilidades e Competências Curriculares Essenciais com Foco no Monitoramento e no Avanço Escolar Integral',
     schoolYear: '2026',
     municipality: 'Sobral',
     grade: '5º Ano - Ensino Fundamental',
@@ -110,7 +113,7 @@ const INITIAL_ASSESSMENTS = [
     endDate: '2026-08-29',
     correctionDeadline: '2026-08-30',
     status: 'Em edição',
-    nextStep: 'Aprovação pedagógica da Coordenação',
+    nextStep: 'Alocar turmas e definir período de aplicação',
     owner: 'Coord. Helena',
     testsCount: 1, tasksCount: 4, itemsCount: 20,
     testsTree: [
@@ -192,21 +195,33 @@ const INITIAL_ASSESSMENTS = [
     owner: 'Coord. Fernanda',
     testsCount: 3, tasksCount: 9, itemsCount: 36,
     testsTree: [
-      { title: 'Teste de Língua Portuguesa', subject: 'Língua Portuguesa', tasks: [
-        { title: 'Tarefa 01 - Leitura', cognitiveProcess: 'Compreender', responseType: 'Múltipla Escolha', items: [
-          { title: 'Item 01', skill: 'EF03LP14', skillDesc: 'Identificar informação em texto', expectation: 'Localizar informação explícita', descriptor: 'D1', difficulty: 'Fácil', hasAnswer: true }
-        ]}
-      ]},
-      { title: 'Teste de Matemática', subject: 'Matemática', tasks: [
-        { title: 'Tarefa 01 - Números', cognitiveProcess: 'Aplicar', responseType: 'Múltipla Escolha', items: [
-          { title: 'Item 01', skill: 'EF03MA05', skillDesc: 'Resolver problemas de adição e subtração', expectation: 'Operar com números naturais', descriptor: 'D7', difficulty: 'Fácil', hasAnswer: true }
-        ]}
-      ]},
-      { title: 'Teste de Ciências', subject: 'Ciências da Natureza', tasks: [
-        { title: 'Tarefa 01 - Seres Vivos', cognitiveProcess: 'Conhecer', responseType: 'Múltipla Escolha', items: [
-          { title: 'Item 01', skill: 'EF03CI04', skillDesc: 'Identificar características de animais', expectation: 'Classificar animais', descriptor: 'D1', difficulty: 'Fácil', hasAnswer: true }
-        ]}
-      ]}
+      {
+        title: 'Teste de Língua Portuguesa', subject: 'Língua Portuguesa', tasks: [
+          {
+            title: 'Tarefa 01 - Leitura', cognitiveProcess: 'Compreender', responseType: 'Múltipla Escolha', items: [
+              { title: 'Item 01', skill: 'EF03LP14', skillDesc: 'Identificar informação em texto', expectation: 'Localizar informação explícita', descriptor: 'D1', difficulty: 'Fácil', hasAnswer: true }
+            ]
+          }
+        ]
+      },
+      {
+        title: 'Teste de Matemática', subject: 'Matemática', tasks: [
+          {
+            title: 'Tarefa 01 - Números', cognitiveProcess: 'Aplicar', responseType: 'Múltipla Escolha', items: [
+              { title: 'Item 01', skill: 'EF03MA05', skillDesc: 'Resolver problemas de adição e subtração', expectation: 'Operar com números naturais', descriptor: 'D7', difficulty: 'Fácil', hasAnswer: true }
+            ]
+          }
+        ]
+      },
+      {
+        title: 'Teste de Ciências', subject: 'Ciências da Natureza', tasks: [
+          {
+            title: 'Tarefa 01 - Seres Vivos', cognitiveProcess: 'Conhecer', responseType: 'Múltipla Escolha', items: [
+              { title: 'Item 01', skill: 'EF03CI04', skillDesc: 'Identificar características de animais', expectation: 'Classificar animais', descriptor: 'D1', difficulty: 'Fácil', hasAnswer: true }
+            ]
+          }
+        ]
+      }
     ]
   },
   {
@@ -230,12 +245,16 @@ const INITIAL_ASSESSMENTS = [
     owner: 'Prof. Ricardo',
     testsCount: 1, tasksCount: 5, itemsCount: 25,
     testsTree: [
-      { title: 'Caderno Único - Proporcionalidade', subject: 'Matemática', tasks: [
-        { title: 'Tarefa 01 - Razão e Proporção', cognitiveProcess: 'Aplicar', responseType: 'Múltipla Escolha', items: [
-          { title: 'Item 01', skill: 'EF07MA17', skillDesc: 'Resolver problemas com proporção', expectation: 'Calcular grandezas proporcionais', descriptor: 'D28', difficulty: 'Médio', hasAnswer: true },
-          { title: 'Item 02', skill: 'EF07MA18', skillDesc: 'Regra de três simples', expectation: 'Resolver regra de três', descriptor: 'D29', difficulty: 'Médio', hasAnswer: true }
-        ]}
-      ]}
+      {
+        title: 'Caderno Único - Proporcionalidade', subject: 'Matemática', tasks: [
+          {
+            title: 'Tarefa 01 - Razão e Proporção', cognitiveProcess: 'Aplicar', responseType: 'Múltipla Escolha', items: [
+              { title: 'Item 01', skill: 'EF07MA17', skillDesc: 'Resolver problemas com proporção', expectation: 'Calcular grandezas proporcionais', descriptor: 'D28', difficulty: 'Médio', hasAnswer: true },
+              { title: 'Item 02', skill: 'EF07MA18', skillDesc: 'Regra de três simples', expectation: 'Resolver regra de três', descriptor: 'D29', difficulty: 'Médio', hasAnswer: true }
+            ]
+          }
+        ]
+      }
     ]
   },
   // ── HISTORICAL ASSESSMENTS (2025 & 2024) ──
@@ -326,15 +345,61 @@ const getAssessmentBlockers = (assessment) => {
   ].filter(Boolean);
 };
 
-export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode }) {
+const STATUS_HEADER_BG_MAP = {
+  'Em edição': 'bg-[#FBBE77]',
+  'Programada': 'bg-[#9EC4FA]',
+  'Em aplicação': 'bg-[#B3E6F5]',
+  'Aplicação encerrada': 'bg-[#FCA5A5]',
+  'Em correção': 'bg-[#D9BBFF]',
+  'Concluída': 'bg-[#B8EBAD]',
+};
+
+const STATUS_OPTIONS = [
+  { id: 'Em edição', label: 'Em edição' },
+  { id: 'Programada', label: 'Programada' },
+  { id: 'Em aplicação', label: 'Em aplicação' },
+  { id: 'Aplicação encerrada', label: 'Aplicação encerrada' },
+  { id: 'Em correção', label: 'Em correção' },
+  { id: 'Concluída', label: 'Concluída' },
+];
+
+const SCALE_OPTIONS = [
+  { id: 'pequena', label: 'Pequena escala' },
+  { id: 'larga', label: 'Larga escala' },
+];
+
+const TYPE_OPTIONS = [
+  { id: 'Somativa', label: 'Somativa' },
+  { id: 'Diagnóstica', label: 'Diagnóstica' },
+  { id: 'Formativa', label: 'Formativa' },
+];
+
+const SUBJECT_OPTIONS = [
+  { id: 'Língua Portuguesa', label: 'Língua Portuguesa' },
+  { id: 'Matemática', label: 'Matemática' },
+  { id: 'Ciências da Natureza', label: 'Ciências da Natureza' },
+  { id: 'Multidisciplinar', label: 'Multidisciplinar' },
+];
+
+export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode, setIsGlobalHeaderHidden }) {
   const [assessments, setAssessments] = useState(INITIAL_ASSESSMENTS);
   const [trashAssessments, setTrashAssessments] = useState([]); // Lixeira
 
-  const [viewMode, setViewMode] = useState('kanban'); // 'queue' | 'kanban' | 'tree' | 'create' | 'history'
+  const [viewMode, setViewMode] = useState('kanban'); // 'kanban' | 'queue' | 'history' | 'editor'
   const [editingAssessment, setEditingAssessment] = useState(null);
   const [selectedMunicipality, setSelectedMunicipality] = useState('Todos os Municípios');
-  const [selectedStatusFilter, setSelectedStatusFilter] = useState('todos');
   const [selectedAssessment, setSelectedAssessment] = useState(null);
+
+  // Advanced Filters & Search State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [selectedScales, setSelectedScales] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+
+  const filterPopoverRef = useRef(null);
+  const searchInputRef = useRef(null);
 
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isTrashOpen, setIsTrashOpen] = useState(false);
@@ -343,46 +408,29 @@ export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode }) {
   const [yearFilter, setYearFilter] = useState('Todos os Anos Antigos');
 
   useEffect(() => {
+    if (viewMode === 'editor') {
+      setIsGlobalHeaderHidden?.(true);
+    } else {
+      setIsGlobalHeaderHidden?.(false);
+    }
+  }, [viewMode, setIsGlobalHeaderHidden]);
+
+  useEffect(() => {
     if (toast) {
       const timer = setTimeout(() => setToast(null), 3500);
       return () => clearTimeout(timer);
     }
   }, [toast]);
 
+  // Click outside listener for filter popover
   useEffect(() => {
-    const handleGlobalKeyDown = (e) => {
-      const key = e.key.toLowerCase();
-      
-      // Ctrl or Cmd
-      if (e.ctrlKey || e.metaKey) {
-        if (key === 'k') {
-          e.preventDefault();
-          setIsCommandPaletteOpen(true);
-        } else if (key === '1') {
-          e.preventDefault();
-          setIsCommandPaletteOpen(false);
-          setViewMode('queue');
-        } else if (key === '2') {
-          e.preventDefault();
-          setIsCommandPaletteOpen(false);
-          setViewMode('kanban');
-        } else if (key === '3') {
-          e.preventDefault();
-          setIsCommandPaletteOpen(false);
-          setViewMode('tree');
-        }
-      }
-      
-      // Alt (for New to avoid Ctrl+N browser conflict)
-      if (e.altKey && key === 'n') {
-        e.preventDefault();
-        setIsCommandPaletteOpen(false);
-        setEditingAssessment(null);
-        setViewMode('create');
+    const handleClickOutside = (e) => {
+      if (filterPopoverRef.current && !filterPopoverRef.current.contains(e.target)) {
+        setIsFilterMenuOpen(false);
       }
     };
-    window.addEventListener('keydown', handleGlobalKeyDown);
-    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const generateAutomaticCode = useCallback((municipality = 'SOB', year = '2026') => {
@@ -392,54 +440,88 @@ export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode }) {
     return `AV-${sgl}-${yr}-${seq}`;
   }, []);
 
-  // Creation / Edit Handler
-  const handleSaveFromScreen = useCallback((assessmentData) => {
-    if (assessmentData.id) {
-      setAssessments(prev => prev.map(a => a.id === assessmentData.id ? { ...a, ...assessmentData } : a));
-      if (selectedAssessment && selectedAssessment.id === assessmentData.id) {
-        setSelectedAssessment(prev => ({ ...prev, ...assessmentData }));
+  // Creation Handler -> Opens the exact same authoring workspace with empty template
+  const handleCreateNew = useCallback(() => {
+    const newAv = {
+      id: `av-${Date.now()}`,
+      code: generateAutomaticCode('SOB', '2026'),
+      title: 'Nova Avaliação',
+      schoolYear: '2026',
+      municipality: 'Sobral',
+      grade: '5º Ano - Ensino Fundamental',
+      subject: 'Língua Portuguesa',
+      type: 'Somativa',
+      status: 'Em edição',
+      tests: [
+        {
+          id: `teste-${Date.now()}`,
+          code: 'CAD-01',
+          title: 'Caderno 01',
+          tasks: [
+            {
+              id: `tar-${Date.now()}`,
+              code: 'TAR-01',
+              title: 'Tarefa 01',
+              hasItemComposto: false,
+              items: [
+                {
+                  id: `it-${Date.now()}`,
+                  code: 'Item 01',
+                  title: 'Item 01',
+                  type: 'multipla_escolha',
+                  status: 'pendente',
+                  enunciado: '',
+                  contexto: '',
+                  alternativas: [
+                    { id: `alt-a-${Date.now()}`, letra: 'A', texto: '', isCorreta: true, analiseDistrator: '' },
+                    { id: `alt-b-${Date.now()}`, letra: 'B', texto: '', isCorreta: false, analiseDistrator: '' }
+                  ],
+                  sentencaDescritora: '',
+                  processosCognitivosSentenca: ['Compreender elementos'],
+                  rubricas: { insuficiente: '', parcial: '', suficiente: '' },
+                  gabarito: 'A'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+    setEditingAssessment(newAv);
+    setViewMode('editor');
+  }, [generateAutomaticCode]);
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      const key = e.key.toLowerCase();
+
+      // Ctrl or Cmd
+      if (e.ctrlKey || e.metaKey) {
+        if (key === 'k') {
+          e.preventDefault();
+          setIsCommandPaletteOpen(true);
+        } else if (key === '1') {
+          e.preventDefault();
+          setViewMode('kanban');
+        } else if (key === '2') {
+          e.preventDefault();
+          setViewMode('queue');
+        }
       }
-      setToast({ type: 'success', message: `✓ Avaliação "${assessmentData.title}" atualizada com sucesso!` });
-    } else {
-      const newAv = {
-        id: `av-${Date.now()}`,
-        code: assessmentData.code,
-        title: assessmentData.title,
-        schoolYear: assessmentData.schoolYear || '2026',
-        municipality: assessmentData.municipality,
-        grade: assessmentData.grade,
-        subject: assessmentData.subject,
-        subjectSummary: assessmentData.subjectSummary,
-        scale: assessmentData.scale,
-        type: assessmentData.type,
-        correctionMethod: assessmentData.correctionMethod,
-        applicationMode: assessmentData.applicationMode,
-        startDate: assessmentData.startDate,
-        endDate: assessmentData.endDate,
-        correctionDeadline: assessmentData.correctionDeadline,
-        aiDescription: assessmentData.aiDescription,
-        status: 'Em edição',
-        nextStep: 'Adicionar Tarefas e Itens aos Testes criados',
-        owner: 'Novo Usuário',
-        testsCount: assessmentData.testsCount || assessmentData.testsConfig?.length || 1,
-        tasksCount: assessmentData.tasksCount || 0,
-        itemsCount: assessmentData.itemsCount || 0,
-        testsTree: assessmentData.testsTree || [],
-        blockers: assessmentData.blockers || []
-      };
 
-      setAssessments(prev => [newAv, ...prev]);
-      setSelectedAssessment(newAv);
-      setToast({ type: 'success', message: `✓ Avaliação "${assessmentData.title}" criada com sucesso!` });
-    }
-
-    setEditingAssessment(null);
-    setViewMode('queue');
-  }, [selectedAssessment]);
+      // Alt (for New to avoid Ctrl+N browser conflict)
+      if (e.altKey && key === 'n') {
+        e.preventDefault();
+        handleCreateNew();
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [handleCreateNew]);
 
   const handleStartEdit = useCallback((avToEdit) => {
     setEditingAssessment(avToEdit);
-    setViewMode('create');
+    setViewMode('editor');
   }, []);
 
   // Delete Action -> Lixeira
@@ -520,28 +602,90 @@ export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode }) {
     setConfirmAdvance(null);
   };
 
+  // Filter Handlers
+  const handleToggleStatus = (statusId) => {
+    setSelectedStatuses(prev => prev.includes(statusId) ? prev.filter(s => s !== statusId) : [...prev, statusId]);
+  };
+
+  const handleToggleScale = (scaleId) => {
+    setSelectedScales(prev => prev.includes(scaleId) ? prev.filter(s => s !== scaleId) : [...prev, scaleId]);
+  };
+
+  const handleToggleType = (typeId) => {
+    setSelectedTypes(prev => prev.includes(typeId) ? prev.filter(t => t !== typeId) : [...prev, typeId]);
+  };
+
+  const handleToggleSubject = (subjectId) => {
+    setSelectedSubjects(prev => prev.includes(subjectId) ? prev.filter(s => s !== subjectId) : [...prev, subjectId]);
+  };
+
+  const handleClearAllFilters = () => {
+    setSelectedStatuses([]);
+    setSelectedScales([]);
+    setSelectedTypes([]);
+    setSelectedSubjects([]);
+  };
+
+  const activeFiltersCount = selectedStatuses.length + selectedScales.length + selectedTypes.length + selectedSubjects.length;
+
   // Separação Lógica: Ativas (2026) vs Históricas (< 2026)
   const activeAssessments = assessments.filter(a => a.schoolYear === '2026' || a.schoolYear === '2026 (Atual)');
   const historicalAssessments = assessments.filter(a => a.schoolYear !== '2026' && a.schoolYear !== '2026 (Atual)');
   const availableYears = [...new Set(historicalAssessments.map(a => a.schoolYear))].sort((a, b) => b.localeCompare(a));
 
-  const assessmentsForStatusCounts = activeAssessments.filter(a => {
+  // Assessments filtradas por busca e filtros avançados
+  const filteredActiveAssessments = activeAssessments.filter(a => {
     if (selectedMunicipality !== 'Todos os Municípios' && a.municipality !== selectedMunicipality) return false;
+
+    // 1. Busca textual (Título, Código, Componente, Município)
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const matchTitle = (a.title || '').toLowerCase().includes(q);
+      const matchCode = (a.code || '').toLowerCase().includes(q);
+      const matchSubject = (a.subjectSummary || a.subject || '').toLowerCase().includes(q);
+      const matchMunicipality = (a.municipality || '').toLowerCase().includes(q);
+      if (!matchTitle && !matchCode && !matchSubject && !matchMunicipality) return false;
+    }
+
+    // 2. Status
+    if (selectedStatuses.length > 0 && !selectedStatuses.includes(a.status)) return false;
+
+    // 3. Escala
+    if (selectedScales.length > 0 && !selectedScales.includes(a.scale)) return false;
+
+    // 4. Natureza da Avaliação
+    if (selectedTypes.length > 0 && !selectedTypes.includes(a.type)) return false;
+
+    // 5. Componente Curricular
+    if (selectedSubjects.length > 0) {
+      const avSubjects = [a.subject, a.subjectSummary].filter(Boolean).join(' ');
+      const match = selectedSubjects.some(s => avSubjects.toLowerCase().includes(s.toLowerCase()));
+      if (!match) return false;
+    }
+
     return true;
   });
 
-  const filteredActiveAssessments = assessmentsForStatusCounts.filter(a => {
-    if (selectedStatusFilter !== 'todos' && a.status !== selectedStatusFilter) return false;
-    return true;
-  });
-
-  if (viewMode === 'create') {
+  if (viewMode === 'editor') {
     return (
-      <CreateAssessmentScreen
-        onBack={() => { setEditingAssessment(null); setViewMode('queue'); }}
-        onCreateAssessment={handleSaveFromScreen}
-        initialData={editingAssessment}
-        generateCode={generateAutomaticCode}
+      <AvaliacoesEditor
+        assessment={editingAssessment || selectedAssessment || assessments[0]}
+        onBack={() => {
+          setIsGlobalHeaderHidden?.(false);
+          setEditingAssessment(null);
+          setViewMode('kanban');
+        }}
+        onSaveAssessment={(updatedAv) => {
+          setAssessments(prev => {
+            const exists = prev.some(a => a.id === updatedAv.id);
+            if (exists) {
+              return prev.map(a => a.id === updatedAv.id ? { ...a, ...updatedAv } : a);
+            }
+            return [updatedAv, ...prev];
+          });
+          setToast({ type: 'success', message: `✓ Avaliação "${updatedAv.title}" salva com sucesso!` });
+        }}
+        colors={colors}
         isDarkMode={isDarkMode}
       />
     );
@@ -581,39 +725,34 @@ export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode }) {
         </div>
       )}
 
-      {/* ─── NEW UNIFIED HEADER ─── */}
+      {/* ─── TOOLBAR & NAVEGAÇÃO ─── */}
       {!isTrashOpen && (
-        <div className={`border-b shrink-0 py-2.5 ${isDarkMode ? 'border-neutral-5 bg-neutral-7/60' : 'border-neutral-2 bg-white/80'}`}>
-          <div className="w-full mx-auto px-4 flex flex-col gap-2.5" style={{ maxWidth: `${CONTENT_MAX_WIDTH_PERCENT}%` }}>
-            
-            {/* ROW 1: Title and View Switcher */}
+        <div className={`border-b-2 shrink-0 pt-2.5 pb-0 ${isDarkMode ? 'border-neutral-5 bg-neutral-7/60' : 'border-neutral-2 bg-white/80'}`}>
+          <div className="w-full mx-auto px-4 flex flex-col gap-[2px]" style={{ maxWidth: `${CONTENT_MAX_WIDTH_PERCENT}%` }}>
+
+            {/* LINHA 1 (SUPERIOR): Breadcrumb / Título à esquerda + Gestão Secundária (Histórico | Lixeira) à direita */}
             <div className="flex items-center justify-between gap-3">
+              {/* Esquerda: Breadcrumb e Título */}
               <div className="flex items-center gap-3">
-                <Breadcrumb 
-                  paths={[{ label: 'Editor de Avaliações' }]} 
+                <Breadcrumb
+                  paths={[{ label: 'Editor de Avaliações' }]}
                   onBack={() => navigateTo('dashboard')}
                   className="mb-0"
                 />
               </div>
 
-              <div className="flex items-center gap-1 p-0.5 bg-neutral-2/60 dark:bg-neutral-5/40 rounded-[8px] text-xs font-bold shrink-0">
-                {[
-                  { key: 'queue', label: 'Fila de Foco', icon: <Eye size={13} /> },
-                  { key: 'kanban', label: 'Kanban', icon: <Sliders size={13} /> },
-                  { key: 'tree', label: 'Tree Explorer', icon: <FileText size={13} /> },
-                  { key: 'history', label: 'Arquivo Histórico', icon: <Archive size={13} /> },
-                ].map(v => (
-                  <Button
-                    key={v.key}
-                    variant={viewMode === v.key ? 'primary' : 'tertiary'}
-                    appearance={viewMode === v.key ? 'solid' : 'ghost'}
-                    size="xs"
-                    iconLeft={v.icon}
-                    onClick={() => setViewMode(v.key)}
-                  >
-                    {v.label}
-                  </Button>
-                ))}
+              {/* Direita: Área Secundária de Gestão [Arquivo Histórico | Lixeira] */}
+              <div className="flex items-center gap-1.5 shrink-0">
+                <Button
+                  variant={viewMode === 'history' ? 'primary' : 'tertiary'}
+                  appearance={viewMode === 'history' ? 'solid' : 'ghost'}
+                  size="xs"
+                  iconLeft={<Archive size={13} />}
+                  onClick={() => setViewMode(viewMode === 'history' ? 'kanban' : 'history')}
+                  title="Acessar arquivo histórico de avaliações de anos anteriores"
+                >
+                  Arquivo Histórico
+                </Button>
 
                 <div className="h-4 w-px bg-neutral-3 dark:bg-neutral-5 my-auto mx-0.5" />
 
@@ -630,36 +769,36 @@ export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode }) {
               </div>
             </div>
 
-            {/* ROW 2: Status and Search */}
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                {viewMode !== 'history' && (
-                  <div className="flex items-center gap-1.5 text-xs font-medium flex-wrap">
-                    {[
-                      { key: 'todos', label: 'Todos os Status', count: assessmentsForStatusCounts.length, status: 'neutral' },
-                      { key: 'Em edição', label: 'Em edição', count: assessmentsForStatusCounts.filter(a => a.status === 'Em edição').length, status: 'orange' },
-                      { key: 'Programada', label: 'Programada', count: assessmentsForStatusCounts.filter(a => a.status === 'Programada').length, status: 'storm' },
-                      { key: 'Em aplicação', label: 'Em aplicação', count: assessmentsForStatusCounts.filter(a => a.status === 'Em aplicação').length, status: 'primary' },
-                      { key: 'Em correção', label: 'Em correção', count: assessmentsForStatusCounts.filter(a => a.status === 'Em correção').length, status: 'lavender' },
-                      { key: 'Concluída', label: 'Concluída', count: assessmentsForStatusCounts.filter(a => a.status === 'Concluída').length, status: 'success' },
-                    ].map(pill => (
-                      <button key={pill.key} onClick={() => setSelectedStatusFilter(pill.key)} className="cursor-pointer transition-transform hover:scale-105 outline-none">
-                        <Chips label={`${pill.label} (${pill.count})`} status={pill.status} variant={selectedStatusFilter === pill.key ? 'dark' : 'light'} />
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {viewMode === 'history' && (
-                  <div className="flex items-center gap-2 text-xs font-medium flex-wrap">
+            {/* LINHA 2 (CONSULTA E VISUALIZAÇÃO):
+                Esquerda: Visualização [Kanban | Fila de Foco]
+                Direita: Refinamento dos Dados [Filtros] + Busca Direta [Buscar avaliações...]
+            */}
+            <div className="flex items-end justify-between gap-3 flex-wrap md:flex-nowrap">
+              {/* Esquerda: Visualização: Kanban | Fila de Foco */}
+              <div className="flex items-center">
+                {viewMode !== 'history' ? (
+                  <Tabs
+                    tabs={[
+                      { id: 'kanban', label: 'Kanban', icon: <Sliders /> },
+                      { id: 'queue', label: 'Fila de Foco', icon: <Eye /> }
+                    ]}
+                    activeTab={viewMode}
+                    onChange={(tabId) => setViewMode(tabId)}
+                    variant="line"
+                    size="sm"
+                    colors={colors || defaultColors}
+                    className="!w-auto !border-b-0"
+                  />
+                ) : (
+                  <div className="flex items-center gap-2 text-xs font-medium flex-wrap pb-2">
                     <span className="text-neutral-5 dark:text-neutral-4 uppercase text-[10px] font-bold tracking-widest mr-1">Filtrar Histórico:</span>
-                    <select 
-                      value={yearFilter} 
+                    <select
+                      value={yearFilter}
                       onChange={e => setYearFilter(e.target.value)}
-                      className={`px-3 py-1 h-[30px] text-xs font-bold border rounded-[8px] outline-none cursor-pointer transition-colors shadow-sm ${
-                        isDarkMode 
-                          ? 'bg-neutral-8 border-neutral-6 text-neutral-2 hover:bg-neutral-7' 
-                          : 'bg-white border-neutral-3 text-neutral-7 hover:bg-neutral-1'
-                      }`}
+                      className={`px-3 py-1 h-[30px] text-xs font-bold border rounded-[8px] outline-none cursor-pointer transition-colors shadow-sm ${isDarkMode
+                        ? 'bg-neutral-8 border-neutral-6 text-neutral-2 hover:bg-neutral-7'
+                        : 'bg-white border-neutral-3 text-neutral-7 hover:bg-neutral-1'
+                        }`}
                     >
                       <option value="Todos os Anos Antigos">Todos os Anos Antigos</option>
                       {availableYears.map(y => <option key={y} value={y}>{y}</option>)}
@@ -668,16 +807,189 @@ export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode }) {
                 )}
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
-                <Button
-                  variant="tertiary"
-                  appearance="solid"
-                  size="xs"
-                  iconLeft={<Search size={14} className="text-brand-500" />}
-                  onClick={() => setIsCommandPaletteOpen(true)}
-                >
-                  Buscar avaliações... <kbd className="font-mono text-[10px] bg-neutral-2 dark:bg-neutral-5 px-1 py-0.5 rounded-[4px] font-bold text-neutral-7 dark:text-neutral-2 ml-1">Ctrl+K</kbd>
-                </Button>
+              {/* Direita: Refinamento dos dados: Filtros + Busca direta dentro de div com py-[4px] px-0 */}
+              <div className="flex items-center gap-2 shrink-0 py-[4px] px-0 mb-1">
+                {/* Botão e Popover de Filtros */}
+                <div className="relative" ref={filterPopoverRef}>
+                  <Button
+                    variant={activeFiltersCount > 0 ? 'primary' : 'tertiary'}
+                    appearance="solid"
+                    size="xs"
+                    iconLeft={<Filter size={13} />}
+                    onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}
+                    className="font-bold"
+                  >
+                    <span>Filtros</span>
+                    {activeFiltersCount > 0 && (
+                      <span className="ml-1 px-1.5 py-0.2 rounded-full bg-white text-brand-700 dark:bg-brand-900 dark:text-brand-200 text-[10px] font-bold">
+                        {activeFiltersCount}
+                      </span>
+                    )}
+                  </Button>
+
+                  {/* Dropdown Popover de Filtros */}
+                  {isFilterMenuOpen && (
+                    <div className={`absolute right-0 top-full mt-1.5 w-[320px] rounded-[8px] shadow-2xl border p-4 z-[100] animate-in fade-in slide-in-from-top-1 duration-150 ${isDarkMode ? 'bg-neutral-8 border-neutral-6 text-white' : 'bg-white border-neutral-2 text-neutral-8'
+                      }`}>
+                      <div className="flex items-center justify-between pb-2.5 border-b border-neutral-2 dark:border-neutral-7 mb-3">
+                        <div className="flex items-center gap-1.5">
+                          <Filter size={13} className="text-brand-500" />
+                          <span className="text-xs font-bold uppercase tracking-wider text-neutral-7 dark:text-neutral-2">Filtros</span>
+                        </div>
+                        {activeFiltersCount > 0 && (
+                          <button
+                            type="button"
+                            onClick={handleClearAllFilters}
+                            className="text-[11px] font-semibold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer"
+                          >
+                            Limpar filtros
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="space-y-4 max-h-[380px] overflow-y-auto pr-0.5">
+                        {/* 1. Status */}
+                        <div>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-4 dark:text-neutral-4 mb-1.5 block">
+                            Status
+                          </label>
+                          <div className="flex flex-wrap gap-1.5">
+                            {STATUS_OPTIONS.map(opt => {
+                              const isSelected = selectedStatuses.includes(opt.id);
+                              const headerBg = STATUS_HEADER_BG_MAP[opt.id] || 'bg-neutral-200';
+                              return (
+                                <button
+                                  key={opt.id}
+                                  type="button"
+                                  onClick={() => handleToggleStatus(opt.id)}
+                                  className={`px-2.5 py-1 rounded-[6px] text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${isSelected
+                                    ? `${headerBg} text-black ring-2 ring-neutral-800/20 shadow-xs border border-transparent`
+                                    : 'bg-neutral-1 dark:bg-neutral-7/60 border border-neutral-3/60 dark:border-neutral-6 text-neutral-7 dark:text-neutral-3 hover:bg-neutral-2 dark:hover:bg-neutral-7'
+                                    }`}
+                                >
+                                  <div className={`w-3.5 h-3.5 rounded-[3px] border flex items-center justify-center ${isSelected ? 'bg-black border-black text-white' : 'border-neutral-4 bg-white dark:bg-neutral-8'
+                                    }`}>
+                                    {isSelected && <Check size={10} strokeWidth={3} />}
+                                  </div>
+                                  <span>{opt.label}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* 2. Escala */}
+                        <div>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-4 dark:text-neutral-4 mb-1.5 block">
+                            Escala
+                          </label>
+                          <div className="flex flex-wrap gap-1.5">
+                            {SCALE_OPTIONS.map(opt => {
+                              const isSelected = selectedScales.includes(opt.id);
+                              return (
+                                <button
+                                  key={opt.id}
+                                  type="button"
+                                  onClick={() => handleToggleScale(opt.id)}
+                                  className={`px-2.5 py-1 rounded-[6px] text-xs font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${isSelected
+                                    ? 'bg-brand-50 dark:bg-brand-900/30 border-brand-500 text-brand-700 dark:text-brand-300 font-bold'
+                                    : 'bg-neutral-1 dark:bg-neutral-7/60 border-neutral-3/60 dark:border-neutral-6 text-neutral-7 dark:text-neutral-3 hover:bg-neutral-2 dark:hover:bg-neutral-7'
+                                    }`}
+                                >
+                                  <div className={`w-3.5 h-3.5 rounded-[3px] border flex items-center justify-center ${isSelected ? 'bg-brand-500 border-brand-500 text-white' : 'border-neutral-4 bg-white dark:bg-neutral-8'
+                                    }`}>
+                                    {isSelected && <Check size={10} strokeWidth={3} />}
+                                  </div>
+                                  <span>{opt.label}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* 3. Natureza */}
+                        <div>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-4 dark:text-neutral-4 mb-1.5 block">
+                            Natureza
+                          </label>
+                          <div className="flex flex-wrap gap-1.5">
+                            {TYPE_OPTIONS.map(opt => {
+                              const isSelected = selectedTypes.includes(opt.id);
+                              return (
+                                <button
+                                  key={opt.id}
+                                  type="button"
+                                  onClick={() => handleToggleType(opt.id)}
+                                  className={`px-2.5 py-1 rounded-[6px] text-xs font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${isSelected
+                                    ? 'bg-brand-50 dark:bg-brand-900/30 border-brand-500 text-brand-700 dark:text-brand-300 font-bold'
+                                    : 'bg-neutral-1 dark:bg-neutral-7/60 border-neutral-3/60 dark:border-neutral-6 text-neutral-7 dark:text-neutral-3 hover:bg-neutral-2 dark:hover:bg-neutral-7'
+                                    }`}
+                                >
+                                  <div className={`w-3.5 h-3.5 rounded-[3px] border flex items-center justify-center ${isSelected ? 'bg-brand-500 border-brand-500 text-white' : 'border-neutral-4 bg-white dark:bg-neutral-8'
+                                    }`}>
+                                    {isSelected && <Check size={10} strokeWidth={3} />}
+                                  </div>
+                                  <span>{opt.label}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* 4. Componente Curricular */}
+                        <div>
+                          <label className="text-[10px] font-bold uppercase tracking-wider text-neutral-4 dark:text-neutral-4 mb-1.5 block">
+                            Componente Curricular
+                          </label>
+                          <div className="flex flex-col gap-1">
+                            {SUBJECT_OPTIONS.map(opt => {
+                              const isSelected = selectedSubjects.includes(opt.id);
+                              return (
+                                <button
+                                  key={opt.id}
+                                  type="button"
+                                  onClick={() => handleToggleSubject(opt.id)}
+                                  className={`px-2.5 py-1.5 rounded-[6px] text-xs font-semibold border transition-all flex items-center justify-between cursor-pointer ${isSelected
+                                    ? 'bg-brand-50 dark:bg-brand-900/30 border-brand-500 text-brand-700 dark:text-brand-300 font-bold'
+                                    : 'bg-neutral-1 dark:bg-neutral-7/60 border-neutral-3/60 dark:border-neutral-6 text-neutral-7 dark:text-neutral-3 hover:bg-neutral-2 dark:hover:bg-neutral-7'
+                                    }`}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-3.5 h-3.5 rounded-[3px] border flex items-center justify-center ${isSelected ? 'bg-brand-500 border-brand-500 text-white' : 'border-neutral-4 bg-white dark:bg-neutral-8'
+                                      }`}>
+                                      {isSelected && <Check size={10} strokeWidth={3} />}
+                                    </div>
+                                    <span>{opt.label}</span>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Busca Direta (Search Input) */}
+                <div className="w-[210px] sm:w-[250px] md:w-[270px]">
+                  <Input
+                    ref={searchInputRef}
+                    type="text"
+                    placeholder="Buscar avaliações..."
+                    value={searchQuery}
+                    readOnly
+                    onClick={() => setIsCommandPaletteOpen(true)}
+                    iconLeft={<Search size={15} className="text-neutral-6 dark:text-neutral-4" />}
+                    iconRight={
+                      <kbd className="font-mono text-[9px] bg-neutral-2 dark:bg-neutral-6 px-1 py-0.5 rounded font-bold text-neutral-6 dark:text-neutral-3">
+                        Ctrl+K
+                      </kbd>
+                    }
+                    height="32px"
+                    className="!text-xs !bg-white dark:!bg-neutral-8 cursor-pointer"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -701,18 +1013,18 @@ export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode }) {
               <AvaliacoesQueueView assessments={filteredActiveAssessments} onSelectAssessment={setSelectedAssessment} onDuplicate={handleDuplicateAssessment} onUpdateStatus={(id, st) => setConfirmAdvance({ id, newStatus: st })} selectedAssessmentId={selectedAssessment?.id} isDarkMode={isDarkMode} />
             )}
             {viewMode === 'kanban' && (
-              <AvaliacoesKanbanView assessments={filteredActiveAssessments} onSelectAssessment={setSelectedAssessment} onDuplicate={handleDuplicateAssessment} onUpdateStatus={(id, st) => setConfirmAdvance({ id, newStatus: st })} onCreateNew={() => { setEditingAssessment(null); setViewMode('create'); }} selectedAssessmentId={selectedAssessment?.id} isDarkMode={isDarkMode} />
+              <AvaliacoesKanbanView assessments={filteredActiveAssessments} onSelectAssessment={setSelectedAssessment} onDuplicate={handleDuplicateAssessment} onUpdateStatus={(id, st) => setConfirmAdvance({ id, newStatus: st })} onCreateNew={handleCreateNew} selectedAssessmentId={selectedAssessment?.id} isDarkMode={isDarkMode} />
             )}
             {viewMode === 'tree' && (
               <AvaliacoesTreeView assessments={filteredActiveAssessments} onSelectAssessment={setSelectedAssessment} onDuplicate={handleDuplicateAssessment} isDarkMode={isDarkMode} />
             )}
             {viewMode === 'history' && (
-              <AvaliacoesHistoryView 
-                historicalAssessments={historicalAssessments} 
-                onDuplicateToCurrentYear={handleDuplicateAssessment} 
-                onSelectAssessment={setSelectedAssessment} 
+              <AvaliacoesHistoryView
+                historicalAssessments={historicalAssessments}
+                onDuplicateToCurrentYear={handleDuplicateAssessment}
+                onSelectAssessment={setSelectedAssessment}
                 yearFilter={yearFilter}
-                isDarkMode={isDarkMode} 
+                isDarkMode={isDarkMode}
               />
             )}
           </div>
@@ -734,7 +1046,7 @@ export default function AvaliacoesHubV2({ colors, navigateTo, isDarkMode }) {
       )}
 
       {/* Command Palette */}
-      <CommandPaletteModal isOpen={isCommandPaletteOpen} onClose={() => setIsCommandPaletteOpen(false)} assessments={assessments} onSelectAssessment={setSelectedAssessment} onCreateNew={() => { setIsCommandPaletteOpen(false); setEditingAssessment(null); setViewMode('create'); }} onDuplicate={handleDuplicateAssessment} onSwitchView={setViewMode} isDarkMode={isDarkMode} />
+      <CommandPaletteModal isOpen={isCommandPaletteOpen} onClose={() => setIsCommandPaletteOpen(false)} assessments={assessments} onSelectAssessment={setSelectedAssessment} onCreateNew={() => { setIsCommandPaletteOpen(false); handleCreateNew(); }} onDuplicate={handleDuplicateAssessment} onSwitchView={setViewMode} isDarkMode={isDarkMode} />
     </div>
   );
 }

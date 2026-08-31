@@ -30,7 +30,7 @@ const Button = ({
   const variantStyles = {
     primary: {
       solid: `bg-[var(--color-button-solid-primary-color-primary-bg)] hover:bg-[var(--color-button-solid-primary-color-primary-bg-hover)] active:bg-[var(--color-button-solid-primary-color-primary-bg-pressed)]
-              text-[var(--color-button-solid-primary-color-primary-text-button)] hover:text-[var(--color-button-solid-primary-color-primary-text-hover)] active:text-[var(--color-button-solid-primary-color-primary-text-pressed)]
+              text-[var(--color-button-solid-primary-color-primary-text-button)] text-white hover:text-[var(--color-button-solid-primary-color-primary-text-hover)] active:text-[var(--color-button-solid-primary-color-primary-text-pressed)]
               border-transparent`,
       ghost: `bg-transparent hover:bg-[var(--color-button-ghost-primary-color-primary-bg-hover)] active:bg-[var(--color-button-ghost-primary-color-primary-bg-pressed)]
               text-[var(--color-button-ghost-primary-color-primary-text-button)] hover:text-[var(--color-button-ghost-primary-color-primary-text-hover)] active:text-[var(--color-button-ghost-primary-color-primary-text-pressed)]
@@ -83,34 +83,42 @@ const Button = ({
 
   const sizeStyles = {
     lg: {
-      height: '',
-      padding: iconOnly ? 'p-3.5' : 'px-6 py-3',
+      height: iconOnly ? 'h-[56px] w-[56px]' : 'h-[56px]',
+      padding: iconOnly ? 'p-0' : 'px-6 py-3',
       fontSize: 'text-[16px]',
       lineHeight: 'leading-[24px]',
       iconSize: 20,
       gap: 'gap-[10px]'
     },
     md: {
-      height: '',
-      padding: iconOnly ? 'p-2.5' : 'px-[16px] py-[8px]',
+      height: iconOnly ? 'h-[48px] w-[48px]' : 'h-[48px]',
+      padding: iconOnly ? 'p-0' : 'px-[16px] py-[8px]',
       fontSize: 'text-[14px]',
       lineHeight: 'leading-[20px]',
       iconSize: 20,
       gap: 'gap-[8px]'
     },
     sm: {
-      height: '',
-      padding: iconOnly ? 'p-2' : 'px-[16px] py-[8px]',
+      height: iconOnly ? 'h-[40px] w-[40px]' : 'h-[40px]',
+      padding: iconOnly ? 'p-0' : 'px-[16px] py-[8px]',
       fontSize: 'text-[14px]',
       lineHeight: 'leading-[20px]',
       iconSize: 18,
       gap: 'gap-[6px]'
     },
-    xs: {
-      height: '',
-      padding: iconOnly ? 'p-1.5' : 'px-[16px] py-[6px]',
+    '1xs': {
+      height: iconOnly ? 'h-[34px] w-[34px]' : 'h-[34px]',
+      padding: iconOnly ? 'p-0' : 'px-[14px] py-[6px]',
       fontSize: 'text-[13px]',
       lineHeight: 'leading-[18px]',
+      iconSize: 15,
+      gap: 'gap-[6px]'
+    },
+    xs: {
+      height: iconOnly ? 'h-[28px] w-[28px]' : 'h-[28px]',
+      padding: iconOnly ? 'p-0' : 'px-[12px] py-[4px]',
+      fontSize: 'text-[12px]',
+      lineHeight: 'leading-[16px]',
       iconSize: 14,
       gap: 'gap-[6px]'
     }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, BookOpen, Puzzle, Link2, PenLine, Brain, Target, Plus, FileText, Eye } from 'lucide-react';
+import { ChevronDown, ChevronRight, Bookmark, BookMarked, BookOpenText, Route, Paperclip, Brain, Target, Plus, FileText, Eye } from 'lucide-react';
 import Button from '../../../ui/Button';
 import Chips from '../../../ui/Chips';
 import MarkdownContextModal from './MarkdownContextModal';
@@ -59,13 +59,13 @@ export default function AvaliacoesTreeView({ assessments = [], onSelectAssessmen
         <div>
           <h3 className="font-bold text-base text-neutral-8 dark:text-white">Visão Hierárquica (Tree Explorer)</h3>
           <div className="flex items-center gap-2 mt-1 text-xs font-semibold">
-            <span className="text-extended-storm-base flex items-center gap-1"><BookOpen size={13} /> Teste</span>
+            <span className="text-extended-storm-base flex items-center gap-1"><BookMarked size={13} /> Teste</span>
             <span className="text-neutral-3">→</span>
-            <span className="text-extended-orange-base flex items-center gap-1"><Puzzle size={13} /> Tarefa</span>
+            <span className="text-extended-orange-base flex items-center gap-1"><BookOpenText size={13} /> Tarefa</span>
             <span className="text-neutral-3">→</span>
-            <span className="text-extended-lavender-base flex items-center gap-1"><Link2 size={13} /> Item Composto (MD)</span>
+            <span className="text-extended-lavender-base flex items-center gap-1"><Route size={13} /> Item Composto (MD)</span>
             <span className="text-neutral-3">(opcional) →</span>
-            <span className="text-extended-aqua-base flex items-center gap-1"><PenLine size={13} /> Item</span>
+            <span className="text-extended-aqua-base flex items-center gap-1"><Paperclip size={13} /> Item</span>
           </div>
         </div>
         <div className="text-xs text-neutral-5 bg-neutral-1 dark:bg-neutral-5/40 px-3 py-1.5 rounded-[8px] border border-neutral-2 dark:border-neutral-5 font-mono font-bold">
@@ -123,7 +123,7 @@ export default function AvaliacoesTreeView({ assessments = [], onSelectAssessmen
                         >
                           <div className="flex items-center gap-2 text-xs font-bold text-extended-storm-dark dark:text-extended-storm-light">
                             {testExpanded ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
-                            <BookOpen size={16} className="text-extended-storm-base" />
+                            <BookMarked size={16} className="text-extended-storm-base" />
                             <span>{teste.title}</span>
                           </div>
 
@@ -167,7 +167,7 @@ export default function AvaliacoesTreeView({ assessments = [], onSelectAssessmen
                                     <div className="flex items-center justify-between">
                                       <div className="flex items-center gap-2 text-xs font-bold text-extended-orange-dark dark:text-extended-orange-light">
                                         {taskExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                                        <Puzzle size={15} className="text-extended-orange-base" />
+                                        <BookOpenText size={15} className="text-extended-orange-base" />
                                         <span>{tf.title}</span>
                                       </div>
                                       
@@ -224,7 +224,7 @@ export default function AvaliacoesTreeView({ assessments = [], onSelectAssessmen
                                           className="border-l-4 border-l-extended-lavender-base bg-extended-lavender-extraLight/40 dark:bg-extended-lavender-dark/10 rounded-r-xl p-3 flex items-center justify-between cursor-pointer hover:bg-extended-lavender-extraLight/70 transition-colors"
                                         >
                                           <div className="flex items-center gap-2 text-xs font-semibold text-extended-lavender-dark dark:text-extended-lavender-light">
-                                            <Link2 size={15} className="text-extended-lavender-base shrink-0" />
+                                            <Route size={15} className="text-extended-lavender-base shrink-0" />
                                             <span>Item Composto (Suporte Markdown):</span>
                                             <strong className="text-neutral-8 dark:text-white">{tf.itemCompostoTitle}</strong>
                                           </div>
@@ -261,7 +261,7 @@ export default function AvaliacoesTreeView({ assessments = [], onSelectAssessmen
                                           >
                                             <div className="flex items-center justify-between">
                                               <span className="text-xs font-bold text-extended-aqua-dark dark:text-extended-aqua-light flex items-center gap-1.5">
-                                                <PenLine size={13} className="text-extended-aqua-base" />
+                                                <Paperclip size={13} className="text-extended-aqua-base" />
                                                 {item.title}
                                               </span>
                                               <Chips label={item.hasAnswer ? 'Gabarito ok' : 'Pendente'} status={item.hasAnswer ? 'success' : 'error'} variant="dark" />

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Plus, Copy, Eye, Sliders, FileText, CornerDownLeft, HelpCircle, BookOpen, Puzzle, PenLine, Link2, ExternalLink } from 'lucide-react';
+import { Search, Plus, Copy, Eye, Sliders, FileText, CornerDownLeft, HelpCircle, BookOpen, Puzzle, PenLine, Link2, ExternalLink, Sparkles } from 'lucide-react';
 import Chips from '../../../ui/Chips';
 import Input from '../../../ui/Input';
+import Button from '../../../ui/Button';
 
 const TYPE_CHIP_MAP = {
   'Somativa':    'cherry',
@@ -9,10 +10,20 @@ const TYPE_CHIP_MAP = {
   'Formativa':   'storm',
 };
 
+const STATUS_HEADER_BG_MAP = {
+  'Em edição': 'bg-[#FBBE77]',
+  'Programada': 'bg-[#9EC4FA]',
+  'Em aplicação': 'bg-[#B3E6F5]',
+  'Aplicação encerrada': 'bg-[#FCA5A5]',
+  'Em correção': 'bg-[#D9BBFF]',
+  'Concluída': 'bg-[#B8EBAD]',
+};
+
 const STATUS_CHIP_MAP = {
   'Em edição':    'orange',
   'Programada':   'storm',
   'Em aplicação': 'primary',
+  'Aplicação encerrada': 'neutral',
   'Em correção':  'lavender',
   'Concluída':    'success',
 };
@@ -87,26 +98,28 @@ export default function CommandPaletteModal({
                 height="40px"
               />
             </div>
-            <button className={`shrink-0 flex items-center gap-1.5 px-3 h-[40px] rounded-[8px] border font-bold text-xs transition-colors ${
-              isDarkMode 
-                ? 'bg-[#1C1C1C] border-neutral-6 text-neutral-2 hover:border-brand-500' 
-                : 'bg-white border-neutral-3 text-neutral-8 hover:border-brand-500'
-            }`}>
-              Pergunte à IA <span className="text-sm">🌸</span>
-            </button>
+            <Button
+              variant="tertiary"
+              appearance="solid"
+              size="sm"
+              iconRight={<Sparkles size={14} />}
+              className="shrink-0 font-bold"
+            >
+              Pergunte à IA
+            </Button>
           </div>
 
           {/* Tabs */}
           <div className={`flex items-center gap-6 mt-4 text-[13px] font-bold border-b overflow-x-auto hide-scrollbar ${isDarkMode ? 'border-neutral-6' : 'border-neutral-2'}`}>
             <button className={`pb-2 border-b-2 ${isDarkMode ? 'text-white border-brand-500' : 'text-brand-500 border-brand-500'}`}>Todos</button>
             <button className={`pb-2 border-b-2 border-transparent flex items-center gap-1.5 ${isDarkMode ? 'text-neutral-4 hover:text-neutral-2' : 'text-neutral-5 hover:text-neutral-7'}`}>
-              <BookOpen size={14} className="text-[#FF5B5B]" /> Avaliações
+              <Bookmark size={14} className="text-[#FF5B5B]" /> Avaliações
             </button>
             <button className={`pb-2 border-b-2 border-transparent flex items-center gap-1.5 ${isDarkMode ? 'text-neutral-4 hover:text-neutral-2' : 'text-neutral-5 hover:text-neutral-7'}`}>
-              <Puzzle size={14} className="text-[#00C2FF]" /> Itens
+              <Paperclip size={14} className="text-[#00C2FF]" /> Itens
             </button>
             <button className={`pb-2 border-b-2 border-transparent flex items-center gap-1.5 ${isDarkMode ? 'text-neutral-4 hover:text-neutral-2' : 'text-neutral-5 hover:text-neutral-7'}`}>
-              <FileText size={14} className="text-[#4F5BFF]" /> Cadernos
+              <BookMarked size={14} className="text-[#4F5BFF]" /> Cadernos
             </button>
           </div>
           
@@ -198,20 +211,31 @@ export default function CommandPaletteModal({
                       av.status === 'Arquivada' ? 'border-[#8F9BBA]' : 'border-[#9155FD]'
                     }`} />
                     
-                    <div className="flex items-baseline gap-2 truncate">
+                    <div className="flex items-center gap-2 truncate">
                       <span className={`text-[13px] font-semibold truncate ${isDarkMode ? 'text-white' : 'text-neutral-8'}`}>
                         {av.title}
                       </span>
-                      <span className="text-[11px] text-neutral-4 shrink-0">em {av.municipality} ({av.schoolYear}) • {av.status}</span>
+                      <span className="text-[11px] text-neutral-4 shrink-0">em {av.municipality} ({av.schoolYear})</span>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-[4px] text-[10px] font-bold text-black shrink-0 ${
+                        STATUS_HEADER_BG_MAP[av.status] || 'bg-neutral-200 text-black'
+                      }`}>
+                        {av.status}
+                      </span>
                     </div>
                   </div>
 
                   <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 shrink-0 ml-4 transition-opacity">
-                    <div className={`px-2 py-1 text-[10px] font-bold border rounded-md flex items-center gap-1 transition-colors ${
-                      isDarkMode ? 'bg-[#1C1C1C] border-neutral-6 text-white hover:border-brand-500' : 'bg-white border-neutral-3 text-neutral-7 hover:border-brand-500'
-                    }`}>
-                      Pergunte à IA <span className="text-[10px]">🌸</span>
-                    </div>
+                    <Button
+                      variant="tertiary"
+                      appearance="solid"
+                      size="xs"
+                      iconRight={<Sparkles size={11} />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      Pergunte à IA
+                    </Button>
                     <div className={`w-6 h-6 flex items-center justify-center border rounded-md transition-colors ${
                       isDarkMode ? 'bg-[#1C1C1C] border-neutral-6 text-neutral-4 hover:border-brand-500 hover:text-white' : 'bg-white border-neutral-3 text-neutral-5 hover:border-brand-500 hover:text-brand-600'
                     }`}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ChevronRight, ChevronLeft, Check, BookOpen, Puzzle, Brain, Target, Calendar, Cpu, Printer, Monitor, Sparkles } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, Check, Bookmark, BookMarked, BookOpenText, Route, Paperclip, Brain, Target, Calendar, Cpu, Printer, Monitor, Sparkles } from 'lucide-react';
 
 /**
  * CreateAssessmentWizard — Modal multi-step de criação personalizada de avaliação.
@@ -244,7 +244,7 @@ export default function CreateAssessmentWizard({ isOpen, onClose, onCreateAssess
           {currentStep === 2 && (
             <div className="space-y-4">
               <div className={`p-3 rounded-[8px] border flex items-center gap-2 ${isDarkMode ? 'bg-neutral-7/50 border-neutral-5' : 'bg-extended-storm-extraLight/30 border-extended-storm-light/30'}`}>
-                <BookOpen size={16} className="text-extended-storm-base" />
+                <BookMarked size={16} className="text-extended-storm-base" />
                 <span className="text-xs text-neutral-6 dark:text-neutral-2">
                   Cada <strong className="text-extended-storm-base">Teste</strong> representa um caderno do estudante. Você poderá adicionar Tarefas e Itens depois.
                 </span>
@@ -255,7 +255,7 @@ export default function CreateAssessmentWizard({ isOpen, onClose, onCreateAssess
                   <div key={idx} className={`p-3 rounded-[8px] border-l-4 border-l-extended-storm-base border border-neutral-2 dark:border-neutral-5 ${isDarkMode ? 'bg-neutral-7' : 'bg-white'}`}>
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-bold text-extended-storm-base flex items-center gap-1.5">
-                        <BookOpen size={14} />
+                        <BookMarked size={14} />
                         Teste {String(idx + 1).padStart(2, '0')}
                       </span>
                       {testsConfig.length > 1 && (
@@ -387,7 +387,7 @@ export default function CreateAssessmentWizard({ isOpen, onClose, onCreateAssess
                 <div className="mt-3 space-y-1.5">
                   {testsConfig.map((t, idx) => (
                     <div key={idx} className="flex items-center gap-2 text-xs p-2 rounded-[4px] border-l-4 border-l-extended-storm-base border border-neutral-2 dark:border-neutral-5 bg-white dark:bg-neutral-6">
-                      <BookOpen size={14} className="text-extended-storm-base" />
+                      <BookMarked size={14} className="text-extended-storm-base" />
                       <span className="font-semibold">{t.name}</span>
                       {t.description && <span className="text-neutral-4">— {t.description}</span>}
                     </div>

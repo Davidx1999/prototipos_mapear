@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Copy, BookOpen, Puzzle, PenLine, Brain, Play, AlertTriangle, Calendar } from 'lucide-react';
+import { ArrowRight, Copy, Bookmark, BookMarked, BookOpenText, Route, Paperclip, Brain, Play, AlertTriangle, Calendar } from 'lucide-react';
 import Button from '../../../ui/Button';
 import Chips from '../../../ui/Chips';
 import { CONTENT_MAX_WIDTH_PERCENT } from '../AvaliacoesHubV2';
@@ -156,7 +156,7 @@ export default function AvaliacoesQueueView({
                       <div className="flex items-start justify-between gap-2 mb-3">
                         <div className="flex items-center gap-2 flex-wrap">
                           <Chips label={av.code} status="storm" variant="dark" />
-                          <Chips label={av.type} status={typeStatus} variant="dark" />
+                          <Chips label={av.type} status={typeStatus} variant="stroked" className="!text-neutral-7 dark:!text-neutral-2" />
                           {av.schoolYear && (
                             <Chips label={av.schoolYear} status="neutral" variant="stroked" />
                           )}
@@ -185,22 +185,22 @@ export default function AvaliacoesQueueView({
                           <span className="font-semibold text-brand-500">{av.subjectSummary || av.subject}</span>
                         </div>
                         <div className="text-xs text-neutral-5 dark:text-neutral-4 flex items-center gap-1.5 mt-1">
-                          <Calendar size={13} className="text-brand-500" />
+                          <Calendar size={16} className="text-brand-500 shrink-0" />
                           <span>{getPeriodLabel(av)}</span>
                         </div>
                       </div>
 
                       {/* Hierarchy Progress Chips */}
                       <div className="flex items-center gap-2 text-xs font-bold p-2.5 rounded-[8px] bg-neutral-1 dark:bg-neutral-5/30 mb-4 flex-wrap">
-                        <Chips label={`${av.testsCount} Testes`} status="storm" variant="light" iconLeft={<BookOpen />} />
-                        <Chips label={`${av.tasksCount} Tarefas`} status="orange" variant="light" iconLeft={<Puzzle />} />
-                        <Chips label={`${av.itemsCount} Itens`} status="aqua" variant="light" iconLeft={<PenLine />} />
+                        <Chips label={`${av.testsCount} Testes`} status="storm" variant="light" iconLeft={<BookMarked size={16} />} />
+                        <Chips label={`${av.tasksCount} Tarefas`} status="orange" variant="light" iconLeft={<BookOpenText size={16} />} />
+                        <Chips label={`${av.itemsCount} Itens`} status="aqua" variant="light" iconLeft={<Paperclip size={16} />} />
                       </div>
 
                       {/* Pedagogical Chips */}
                       <div className="flex items-center gap-2 flex-wrap mb-4">
                         {dominantCog && (
-                          <Chips label={`Cognitivo: ${dominantCog}`} status={COGNITIVE_CHIP_MAP[dominantCog] || 'oliva'} variant="light" iconLeft={<Brain />} />
+                          <Chips label={`Cognitivo: ${dominantCog}`} status={COGNITIVE_CHIP_MAP[dominantCog] || 'oliva'} variant="light" iconLeft={<Brain size={16} />} />
                         )}
                         {av.correctionMethod && (
                           <Chips label={av.correctionMethod} status="neutral" variant="light" />
@@ -208,9 +208,9 @@ export default function AvaliacoesQueueView({
                       </div>
 
                       {blockers.length > 0 && (
-                        <div className="p-2.5 rounded-[8px] bg-extended-orange-extraLight/50 dark:bg-extended-orange-dark/20 border border-extended-orange-light/60 text-xs text-extended-orange-dark dark:text-extended-orange-light font-bold flex items-start gap-2 mb-4">
-                          <AlertTriangle size={14} className="text-extended-orange-base shrink-0 mt-0.5" />
-                          <span>Esta avaliação não pode ser publicada: {blockers[0]}</span>
+                        <div className="p-2 rounded-[8px] bg-extended-orange-extraLight/50 dark:bg-extended-orange-dark/20 border border-extended-orange-light/60 text-xs text-extended-orange-dark dark:text-extended-orange-light font-bold flex items-center gap-2 mb-4">
+                          <AlertTriangle size={16} className="text-extended-orange-base shrink-0" />
+                          <span>Edições Pendentes</span>
                         </div>
                       )}
                     </div>
@@ -218,7 +218,7 @@ export default function AvaliacoesQueueView({
                     {/* Bottom CTA using official Button */}
                     <div className="pt-3 border-t border-neutral-2 dark:border-neutral-5 flex items-center justify-between">
                       <div className="flex items-center gap-1.5 text-xs text-neutral-7 dark:text-neutral-2 font-semibold min-w-0 pr-2">
-                        <Play size={13} className="text-brand-500 shrink-0" />
+                        <Play size={16} className="text-brand-500 shrink-0" />
                         <span className="truncate">{av.nextStep}</span>
                       </div>
                       
