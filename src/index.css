@@ -4,6 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+}
+
 @layer utilities {
   @keyframes fadeInUp {
     from {
@@ -20,3 +29,26 @@
     animation: fadeInUp 0.5s ease-out forwards;
   }
 }
+
+/* Oculta visualmente o botão flutuante padrão do VLibras sem removê-lo do DOM */
+html body [vw] [vw-access-button],
+html body div[vw] [vw-access-button],
+html body div[vw].enabled div[vw-access-button],
+[vw] [vw-access-button],
+div[vw] [vw-access-button],
+div[vw-access-button],
+[vw-access-button],
+.vw-access-button {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: fixed !important;
+  right: -9999px !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  transform: scale(0) !important;
+}
+

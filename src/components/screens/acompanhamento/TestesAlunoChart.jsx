@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { TESTS_DATA_STANDARD, TESTS_DATA_EXTENDED } from './mockDataAcompanhamento';
+import { Loader2 } from 'lucide-react';
+import { TESTS_DATA_STANDARD, TESTS_DATA_EXTENDED, TESTS_DATA_BY_YEAR } from './mockDataAcompanhamento';
 
 export default function TestesAlunoChart({
   title = "Testes do Estudante",
   subtitle = "",
+  selectedYear = '2024',
+  isLoading = false,
   extendedMode = false
 }) {
   const [showDistribucao, setShowDistribucao] = useState(true);
-  const [selectedTestId, setSelectedTestId] = useState('T5');
+  const [hoveredTestId, setHoveredTestId] = useState(null);
 
-  const tests = extendedMode ? TESTS_DATA_EXTENDED : TESTS_DATA_STANDARD;
+  const yearTests = TESTS_DATA_BY_YEAR[selectedYear] || TESTS_DATA_BY_YEAR['2024'] || TESTS_DATA_STANDARD;
+  const tests = extendedMode ? TESTS_DATA_EXTENDED : yearTests;
 
   // Extrair grupos de meses únicos com seus testes
   const monthGroups = [];
@@ -30,12 +34,29 @@ export default function TestesAlunoChart({
     return '#EF4444'; // Vermelho
   };
 
+  // Helper para posicionar a tooltip horizontalmente sem cortar nas bordas
+  const getTooltipPositionClass = (idx, total) => {
+    if (idx < 2) return 'left-0 translate-x-0';
+    if (idx > total - 3) return 'right-0 translate-x-0';
+    return 'left-1/2 -translate-x-1/2';
+  };
+
   return (
-    <div className="flex flex-col flex-1">
-      {/* ─── CORPO DOS GRÁFICOS: 1 OU 2 COLUNAS CONFORME TOGGLE ─── */}
-      <div className={`grid grid-cols-1 ${showDistribucao ? 'lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-200' : ''}`}>
+    <div className="flex flex-col flex-1 relative z-20">
+      {/* Overlay de Loading com Spinner e Blur */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-white/75 backdrop-blur-[1.5px] flex flex-col items-center justify-center z-30 transition-all rounded-[8px]">
+          <Loader2 className="w-8 h-8 text-[#008BC9] animate-spin mb-2" />
+          <span className="text-xs font-semibold text-slate-600 animate-pulse">
+            Carregando resultados dos testes...
+          </span>
+        </div>
+      )}
+
+      {/* ─── CORPO DOS GRÁFICOS: 1 OU 2 COLUNAS CONFORME TOGGLE COM GAP DE 16PX ─── */}
+      <div className={`grid grid-cols-1 ${showDistribucao ? 'lg:grid-cols-2 gap-4 divide-y lg:divide-y-0 divide-slate-200' : ''}`}>
         {/* ─── GRÁFICO 1: PERCENTUAL DE ACERTO ─── */}
-        <div className="p-4 flex flex-col">
+        <div className="p-4 flex flex-col relative z-20">
           <span className="text-xs font-bold text-slate-700 mb-4 block">
             Percentual de Acerto
           </span>
@@ -51,39 +72,81 @@ export default function TestesAlunoChart({
               ))}
             </div>
 
-            {/* Barras dos Testes */}
+            {/* Barras dos Testes (Interativas via Hover com Fundo Escuro e Tooltip de Indicadores) */}
             <div className="flex items-end justify-between w-full h-full pl-8 pb-7 select-none">
-              {tests.map((t) => {
-                const isSelected = selectedTestId === t.id;
+              {tests.map((t, idx) => {
+                const isHovered = hoveredTestId === t.id;
                 const barColor = getBarColor(t.score, t.empty);
+                const posClass = getTooltipPositionClass(idx, tests.length);
 
                 return (
                   <div
                     key={t.id}
-                    onClick={() => setSelectedTestId(t.id)}
-                    className="flex-1 h-full flex flex-col justify-end items-center relative group cursor-pointer px-0.5"
+                    onMouseEnter={() => setHoveredTestId(t.id)}
+                    onMouseLeave={() => setHoveredTestId(null)}
+                    className="flex-1 h-full flex flex-col justify-end items-center relative group px-0.5"
                   >
-                    {/* Destaque sombreado em coluna quando selecionado (conforme Imagem 3) */}
-                    {isSelected && (
-                      <div className="absolute -inset-y-2 inset-x-0 bg-slate-200/60 rounded-sm pointer-events-none z-0" />
+                    {/* Fundo escuro sutil ativado por hover cobrindo até o rótulo T do teste */}
+                    {isHovered && (
+                      <div className="absolute -top-2 -bottom-6 inset-x-0 bg-[#1D2432]/15 rounded-[4px] pointer-events-none z-0 transition-colors" />
                     )}
 
-                    {/* Barra */}
+                    {/* Tooltip escura com os indicadores do estudante naquele teste (100% visível, fora do painel) */}
+                    {isHovered && (
+                      <div className={`absolute bottom-[calc(100%+8px)] ${posClass} z-[70] pointer-events-none`}>
+                        <div className="bg-[#1D2432] text-white rounded-[8px] p-3 shadow-2xl border border-slate-700 min-w-[190px] text-left">
+                          <div className="flex items-center justify-between gap-3 border-b border-slate-700/80 pb-1.5 mb-2">
+                            <span className="font-bold text-[11px] text-[#5AB6E2]">Teste {t.id}</span>
+                            <span className="text-[10px] text-slate-300">{t.monthGroup || '2024'}</span>
+                          </div>
+
+                          {t.empty ? (
+                            <span className="text-slate-400 text-[11px]">Teste não realizado</span>
+                          ) : (
+                            <div className="flex flex-col gap-1.5">
+                              <div className="flex justify-between items-center text-[11px]">
+                                <span className="text-slate-300">Percentual de Acerto:</span>
+                                <span className="font-bold text-[#4ADE80]">{t.score}%</span>
+                              </div>
+
+                              <div className="flex justify-between items-center text-[11px]">
+                                <span className="text-slate-300">Conceito Predominante:</span>
+                                <span className="font-semibold text-amber-300">
+                                  {t.score >= 70 ? 'Suficiente' : t.score >= 40 ? 'Parcialmente Suficiente' : 'Abaixo do Básico'}
+                                </span>
+                              </div>
+
+                              <div className="flex justify-between items-center text-[10px] text-slate-400 pt-1.5 border-t border-slate-700/60">
+                                <span>Itens Resolvidos:</span>
+                                <span className="text-white font-medium">
+                                  {Math.round((t.score / 100) * 40)} / 40
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Barra (Corner Radius no topo de 4px) */}
                     {!t.empty && (
                       <div
-                        className="w-full max-w-[28px] rounded-t-sm transition-all duration-300 relative z-10 hover:brightness-95"
+                        className="w-full max-w-[28px] rounded-t-[4px] transition-all duration-300 relative z-10"
                         style={{
                           height: `${t.score}%`,
                           backgroundColor: barColor
                         }}
-                        title={`${t.id}: ${t.score}%`}
                       />
                     )}
 
                     {/* Rótulo T1, T2, etc */}
                     <span
                       className={`absolute -bottom-5 text-[10px] font-bold w-full text-center transition-colors z-10 ${
-                        t.empty ? 'text-slate-300' : 'text-[#008BC9] group-hover:text-[#0078B0]'
+                        isHovered
+                          ? 'text-[#002C5E] scale-110'
+                          : t.empty
+                          ? 'text-slate-300'
+                          : 'text-[#008BC9]'
                       }`}
                     >
                       {t.id}
@@ -106,7 +169,7 @@ export default function TestesAlunoChart({
 
         {/* ─── GRÁFICO 2: DISTRIBUIÇÃO DE CONCEITO (VISÍVEL SE TOGGLE ATIVO) ─── */}
         {showDistribucao && (
-          <div className="p-4 flex flex-col">
+          <div className="p-4 flex flex-col relative z-20">
             <span className="text-xs font-bold text-slate-700 mb-4 block">
               Distribuição de Conceito
             </span>
@@ -124,28 +187,84 @@ export default function TestesAlunoChart({
 
               {/* Barras Empilhadas dos Testes */}
               <div className="flex items-end justify-between w-full h-full pl-8 pb-7 select-none">
-                {tests.map((t) => {
-                  const isSelected = selectedTestId === t.id;
+                {tests.map((t, idx) => {
+                  const isHovered = hoveredTestId === t.id;
                   const c = t.concept;
+                  const posClass = getTooltipPositionClass(idx, tests.length);
 
                   return (
                     <div
                       key={t.id}
-                      onClick={() => setSelectedTestId(t.id)}
-                      className="flex-1 h-full flex flex-col justify-end items-center relative group cursor-pointer px-0.5"
+                      onMouseEnter={() => setHoveredTestId(t.id)}
+                      onMouseLeave={() => setHoveredTestId(null)}
+                      className="flex-1 h-full flex flex-col justify-end items-center relative group px-0.5"
                     >
-                      {/* Destaque sombreado em coluna */}
-                      {isSelected && (
-                        <div className="absolute -inset-y-2 inset-x-0 bg-slate-200/60 rounded-sm pointer-events-none z-0" />
+                      {/* Fundo escuro sutil ativado por hover cobrindo até o rótulo T do teste */}
+                      {isHovered && (
+                        <div className="absolute -top-2 -bottom-6 inset-x-0 bg-[#1D2432]/15 rounded-[4px] pointer-events-none z-0 transition-colors" />
                       )}
 
-                      {/* Barra Empilhada */}
+                      {/* Tooltip escura com a distribuição detalhada (100% visível, fora do painel) */}
+                      {isHovered && (
+                        <div className={`absolute bottom-[calc(100%+8px)] ${posClass} z-[70] pointer-events-none`}>
+                          <div className="bg-[#1D2432] text-white rounded-[8px] p-3 shadow-2xl border border-slate-700 min-w-[200px] text-left">
+                            <div className="flex items-center justify-between gap-3 border-b border-slate-700/80 pb-1.5 mb-2">
+                              <span className="font-bold text-[11px] text-[#5AB6E2]">Teste {t.id}</span>
+                              <span className="text-[10px] text-slate-300">{t.monthGroup || '2024'}</span>
+                            </div>
+
+                            {t.empty ? (
+                              <span className="text-slate-400 text-[11px]">Teste não realizado</span>
+                            ) : (
+                              <div className="flex flex-col gap-1.5">
+                                <div className="text-[10px] font-semibold text-slate-300 mb-0.5">
+                                  Distribuição de Conceitos:
+                                </div>
+                                {c.green > 0 && (
+                                  <div className="flex justify-between items-center text-[10px]">
+                                    <span className="flex items-center gap-1 text-slate-300">
+                                      <span className="w-2 h-2 rounded-full bg-[#4ADE80]" /> Suficiente:
+                                    </span>
+                                    <span className="font-bold text-white">{c.green}%</span>
+                                  </div>
+                                )}
+                                {c.yellow > 0 && (
+                                  <div className="flex justify-between items-center text-[10px]">
+                                    <span className="flex items-center gap-1 text-slate-300">
+                                      <span className="w-2 h-2 rounded-full bg-[#FACC15]" /> Médio:
+                                    </span>
+                                    <span className="font-bold text-white">{c.yellow}%</span>
+                                  </div>
+                                )}
+                                {c.red > 0 && (
+                                  <div className="flex justify-between items-center text-[10px]">
+                                    <span className="flex items-center gap-1 text-slate-300">
+                                      <span className="w-2 h-2 rounded-full bg-[#EF4444]" /> Abaixo:
+                                    </span>
+                                    <span className="font-bold text-white">{c.red}%</span>
+                                  </div>
+                                )}
+                                {c.blue > 0 && (
+                                  <div className="flex justify-between items-center text-[10px]">
+                                    <span className="flex items-center gap-1 text-slate-300">
+                                      <span className="w-2 h-2 rounded-full bg-[#BAE6FD]" /> Em desenvolvimento:
+                                    </span>
+                                    <span className="font-bold text-white">{c.blue}%</span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Barra Empilhada (Corner Radius no topo de 4px) */}
                       {!t.empty ? (
-                        <div className="w-full max-w-[28px] h-full flex flex-col justify-end rounded-t-sm overflow-hidden z-10">
-                          {c.green > 0 && <div className="w-full bg-[#4ADE80]" style={{ height: `${c.green}%` }} title={`Suficiente: ${c.green}%`} />}
-                          {c.yellow > 0 && <div className="w-full bg-[#FACC15]" style={{ height: `${c.yellow}%` }} title={`Médio: ${c.yellow}%`} />}
-                          {c.red > 0 && <div className="w-full bg-[#EF4444]" style={{ height: `${c.red}%` }} title={`Abaixo: ${c.red}%`} />}
-                          {c.blue > 0 && <div className="w-full bg-[#BAE6FD]" style={{ height: `${c.blue}%` }} title={`Em desenvolvimento: ${c.blue}%`} />}
+                        <div className="w-full max-w-[28px] h-full flex flex-col justify-end rounded-t-[4px] overflow-hidden z-10">
+                          {c.green > 0 && <div className="w-full bg-[#4ADE80]" style={{ height: `${c.green}%` }} />}
+                          {c.yellow > 0 && <div className="w-full bg-[#FACC15]" style={{ height: `${c.yellow}%` }} />}
+                          {c.red > 0 && <div className="w-full bg-[#EF4444]" style={{ height: `${c.red}%` }} />}
+                          {c.blue > 0 && <div className="w-full bg-[#BAE6FD]" style={{ height: `${c.blue}%` }} />}
                           {c.white > 0 && <div className="w-full bg-white border-t border-slate-200" style={{ height: `${c.white}%` }} />}
                         </div>
                       ) : (
@@ -155,7 +274,11 @@ export default function TestesAlunoChart({
                       {/* Rótulo T1, T2, etc */}
                       <span
                         className={`absolute -bottom-5 text-[10px] font-bold w-full text-center transition-colors z-10 ${
-                          t.empty ? 'text-slate-300' : 'text-[#008BC9] group-hover:text-[#0078B0]'
+                          isHovered
+                            ? 'text-[#002C5E] scale-110'
+                            : t.empty
+                            ? 'text-slate-300'
+                            : 'text-[#008BC9]'
                         }`}
                       >
                         {t.id}

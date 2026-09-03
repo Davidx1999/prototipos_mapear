@@ -25,18 +25,30 @@ export function BlockInfoCallout({ title, text, onClose }) {
 /**
  * Dark tooltip balloon with pointer, matching Image 1
  */
-export function DarkTooltipBalloon({ text, position = 'bottom' }) {
+export function DarkTooltipBalloon({ text, position = 'bottom', align = 'center' }) {
+  const getAlignClass = () => {
+    if (align === 'right') return 'right-0 translate-x-0';
+    if (align === 'left') return 'left-0 translate-x-0';
+    return 'left-1/2 -translate-x-1/2';
+  };
+
+  const getArrowAlignClass = () => {
+    if (align === 'right') return 'right-2 translate-x-0';
+    if (align === 'left') return 'left-2 translate-x-0';
+    return 'left-1/2 -translate-x-1/2';
+  };
+
   return (
     <div
-      className={`absolute z-40 bg-[#1D2432] text-white text-[11px] font-medium leading-tight rounded-md px-3 py-2 shadow-xl pointer-events-none transition-all duration-150 max-w-[240px] text-left ${
+      className={`absolute z-50 bg-[#1D2432] text-white text-[11px] font-medium leading-tight rounded-md px-3 py-2 shadow-xl pointer-events-none transition-all duration-150 w-max max-w-[220px] text-left ${
         position === 'bottom'
-          ? 'top-full left-1/2 -translate-x-1/2 mt-2'
-          : 'bottom-full left-1/2 -translate-x-1/2 mb-2'
+          ? `top-full ${getAlignClass()} mt-2`
+          : `bottom-full ${getAlignClass()} mb-2`
       }`}
     >
       {/* Pointer arrow */}
       <div
-        className={`absolute left-1/2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent ${
+        className={`absolute ${getArrowAlignClass()} w-0 h-0 border-x-4 border-x-transparent ${
           position === 'bottom'
             ? 'bottom-full border-b-4 border-b-[#1D2432]'
             : 'top-full border-t-4 border-t-[#1D2432]'

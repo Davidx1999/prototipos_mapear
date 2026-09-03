@@ -1,5 +1,4 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { YEARS_LIST } from './mockDataAcompanhamento';
 
 export default function AcompanhamentoFilters({
@@ -11,89 +10,70 @@ export default function AcompanhamentoFilters({
   setTipoAmostra
 }) {
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 my-2 select-none">
-      {/* ─── ANO DE ACOMPANHAMENTO ─── */}
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 select-none">
+      {/* ─── ANO DE ACOMPANHAMENTO (Sem setas, alinhado em altura com os segmented buttons) ─── */}
       <div className="flex flex-col">
-        <label className="text-xs font-bold text-slate-800 mb-2">
+        <label className="text-sm font-bold text-[#1D2432] mb-2">
           Ano de Acompanhamento
         </label>
 
-        <div className="flex items-center gap-3 overflow-x-auto pb-1 scrollbar-hide text-xs font-bold">
-          {/* Opção "Todos" - sem borda, apenas texto azul */}
+        <div className="flex items-center gap-2 h-[40px] overflow-x-auto scrollbar-hide text-sm font-bold">
+          {/* Opção "Todos" */}
           <button
             onClick={() => setSelectedYear('Todos')}
-            className={`transition-colors whitespace-nowrap ${
+            className={`h-[40px] px-3.5 flex items-center justify-center rounded-[6px] transition-all cursor-pointer ${
               selectedYear === 'Todos'
-                ? 'bg-[#489EEA] text-[#0F172A] border border-[#1E293B] rounded-[4px] px-2.5 py-1'
-                : 'text-[#0078B0] hover:text-[#005580]'
+                ? 'bg-[#5AB6E2] text-[#002C5E] border-[1.5px] border-[#001D31] shadow-xs'
+                : 'text-[#002C5E] hover:bg-[#BCE5F8] hover:text-[#002C5E] border-[1.5px] border-transparent'
             }`}
           >
             Todos
           </button>
 
-          {/* Seta esquerda */}
-          <button
-            className="text-slate-500 hover:text-slate-800 transition-colors"
-            title="Ano anterior"
-          >
-            <ChevronLeft className="w-3.5 h-3.5" />
-          </button>
-
-          {/* Número 4 sutil */}
-          <span className="text-[11px] font-semibold text-slate-400">4</span>
-
-          {/* Anos */}
-          {YEARS_LIST.filter(y => y !== 'Todos').map((ano) => {
+          {/* Anos de 2023 a 2026 */}
+          {YEARS_LIST.filter((y) => y !== 'Todos').map((ano) => {
             const isSelected = selectedYear === ano;
             return (
               <button
                 key={ano}
                 onClick={() => setSelectedYear(ano)}
-                className={`transition-all whitespace-nowrap ${
+                className={`h-[40px] px-3.5 flex items-center justify-center rounded-[6px] transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-[#489EEA] text-[#0F172A] border border-[#1E293B] rounded-[4px] px-3.5 py-1 font-bold shadow-2xs'
-                    : 'text-[#0078B0] hover:text-[#005580] px-1'
+                    ? 'bg-[#5AB6E2] text-[#002C5E] border-[1.5px] border-[#001D31] shadow-xs'
+                    : 'text-[#002C5E] hover:bg-[#BCE5F8] hover:text-[#002C5E] border-[1.5px] border-transparent'
                 }`}
               >
                 {ano}
               </button>
             );
           })}
-
-          {/* Seta direita */}
-          <button
-            className="text-slate-500 hover:text-slate-800 transition-colors"
-            title="Próximo ano"
-          >
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
 
-      {/* ─── TIPO DE DOMÍNIO E TIPO DE AMOSTRA ─── */}
-      <div className="flex items-center gap-5 flex-wrap">
+      {/* ─── TIPO DE DOMÍNIO E TIPO DE AMOSTRA (SÓLIDOS COM BG #5AB6E2 QUANDO SELECIONADO, CORNER RADIUS 16PX) ─── */}
+      <div className="flex items-center gap-6 flex-wrap">
         {/* Tipo de Domínio */}
         <div className="flex flex-col">
-          <label className="text-xs font-bold text-slate-800 mb-2">
+          <label className="text-sm font-bold text-[#1D2432] mb-2">
             Tipo de Domínio
           </label>
-          <div className="inline-flex bg-white border border-slate-300 rounded-[6px] overflow-hidden shadow-2xs">
+          <div className="inline-flex h-[40px] items-center">
             <button
               onClick={() => setTipoDominio('Repertório')}
-              className={`px-4 py-1.5 text-xs font-bold transition-all border-none ${
+              className={`h-[40px] px-5 text-sm font-bold transition-all rounded-l-[16px] flex items-center justify-center cursor-pointer border ${
                 tipoDominio === 'Repertório'
-                  ? 'bg-[#489EEA] text-white shadow-2xs'
-                  : 'text-[#0078B0] hover:bg-slate-50'
+                  ? 'bg-[#5AB6E2] text-[#002C5E] border-[#5AB6E2] z-10'
+                  : 'bg-white text-[#002C5E] border-[#CBD5E1] hover:bg-[#BCE5F8] hover:text-[#008BC9] hover:border-[#008BC9]'
               }`}
             >
               Repertório
             </button>
             <button
               onClick={() => setTipoDominio('Cognitivo')}
-              className={`px-4 py-1.5 text-xs font-bold transition-all border-none ${
+              className={`h-[40px] px-5 text-sm font-bold transition-all rounded-r-[16px] -ml-[1px] flex items-center justify-center cursor-pointer border ${
                 tipoDominio === 'Cognitivo'
-                  ? 'bg-[#489EEA] text-white shadow-2xs'
-                  : 'text-[#0078B0] hover:bg-slate-50'
+                  ? 'bg-[#5AB6E2] text-[#002C5E] border-[#5AB6E2] z-10'
+                  : 'bg-white text-[#002C5E] border-[#CBD5E1] hover:bg-[#BCE5F8] hover:text-[#008BC9] hover:border-[#008BC9]'
               }`}
             >
               Cognitivo
@@ -103,26 +83,26 @@ export default function AcompanhamentoFilters({
 
         {/* Tipo de Amostra */}
         <div className="flex flex-col">
-          <label className="text-xs font-bold text-slate-800 mb-2">
+          <label className="text-sm font-bold text-[#1D2432] mb-2">
             Tipo de Amostra
           </label>
-          <div className="inline-flex bg-white border border-slate-300 rounded-[6px] overflow-hidden shadow-2xs">
+          <div className="inline-flex h-[40px] items-center">
             <button
               onClick={() => setTipoAmostra('TRI')}
-              className={`px-4 py-1.5 text-xs font-bold transition-all border-none ${
+              className={`h-[40px] px-5 text-sm font-bold transition-all rounded-l-[16px] flex items-center justify-center cursor-pointer border ${
                 tipoAmostra === 'TRI'
-                  ? 'bg-[#489EEA] text-white shadow-2xs'
-                  : 'text-[#0078B0] hover:bg-slate-50'
+                  ? 'bg-[#5AB6E2] text-[#002C5E] border-[#5AB6E2] z-10'
+                  : 'bg-white text-[#002C5E] border-[#CBD5E1] hover:bg-[#BCE5F8] hover:text-[#008BC9] hover:border-[#008BC9]'
               }`}
             >
               Correções TRI
             </button>
             <button
               onClick={() => setTipoAmostra('TCT')}
-              className={`px-4 py-1.5 text-xs font-bold transition-all border-none ${
+              className={`h-[40px] px-5 text-sm font-bold transition-all rounded-r-[16px] -ml-[1px] flex items-center justify-center cursor-pointer border ${
                 tipoAmostra === 'TCT'
-                  ? 'bg-[#489EEA] text-white shadow-2xs'
-                  : 'text-[#0078B0] hover:bg-slate-50'
+                  ? 'bg-[#5AB6E2] text-[#002C5E] border-[#5AB6E2] z-10'
+                  : 'bg-white text-[#002C5E] border-[#CBD5E1] hover:bg-[#BCE5F8] hover:text-[#008BC9] hover:border-[#008BC9]'
               }`}
             >
               Correções TCT

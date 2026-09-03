@@ -12,6 +12,17 @@ const AccessibilityMenu = ({
   fontScale,
   setFontScale
 }) => {
+  const handleOpenVLibras = () => {
+    const button = document.querySelector('[vw-access-button]');
+    if (button instanceof HTMLElement) {
+      button.click();
+      if (button.firstElementChild instanceof HTMLElement) {
+        button.firstElementChild.click();
+      }
+    }
+    setIsA11yOpen(false);
+  };
+
   return (
     <div className="relative">
       <Button
@@ -35,8 +46,17 @@ const AccessibilityMenu = ({
             borderColor: colors.neutral[3]
           }}
         >
-          {/* Tradutor de VLibras */}
+          {/* Tradução em Libras (Abre o VLibras oficial programaticamente) */}
           <div
+            onClick={handleOpenVLibras}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleOpenVLibras();
+              }
+            }}
             className="flex items-center gap-[12px] cursor-pointer p-[8px] rounded-[8px] transition-all active:scale-[0.98]"
             style={{ backgroundColor: 'transparent' }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isHighContrast ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)'}
@@ -51,7 +71,7 @@ const AccessibilityMenu = ({
             >
               VL
             </div>
-            <span className="text-[14px] md:text-[14px] font-semibold">Tradutor de VLibras</span>
+            <span className="text-[14px] md:text-[14px] font-semibold">Tradução em Libras</span>
           </div>
 
           <hr style={{ borderColor: isHighContrast ? colors.neutral[2] : 'rgba(255,255,255,0.2)' }} />

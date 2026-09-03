@@ -5,13 +5,56 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/prototipos_mapear/assets/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mapear - Gestão Educacional</title>
-  <script type="module" crossorigin src="/prototipos_mapear/assets/index-B-4GIyOQ.js"></script>
-  <link rel="stylesheet" crossorigin href="/prototipos_mapear/assets/index-Cyz44eIk.css">
+  <style>
+    /* Oculta visualmente o botão flutuante padrão do VLibras sem removê-lo do DOM */
+    html body [vw] [vw-access-button],
+    html body div[vw] [vw-access-button],
+    html body div[vw].enabled div[vw-access-button],
+    [vw] [vw-access-button],
+    div[vw] [vw-access-button],
+    div[vw-access-button],
+    [vw-access-button],
+    .vw-access-button {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      position: fixed !important;
+      right: -9999px !important;
+      left: -9999px !important;
+      top: -9999px !important;
+      pointer-events: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      transform: scale(0) !important;
+    }
+  </style>
+  <script type="module" crossorigin src="/prototipos_mapear/assets/index-C-TgaB3Q.js"></script>
+  <link rel="stylesheet" crossorigin href="/prototipos_mapear/assets/index-CUcYWMrQ.css">
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root"></div>
+
+  <!-- Estrutura oficial do widget VLibras -->
+  <div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+      <div class="vw-plugin-top-wrapper"></div>
+    </div>
+  </div>
+
+  <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+  <script>
+    if (window.VLibras && window.VLibras.Widget) {
+      new window.VLibras.Widget('https://vlibras.gov.br/app');
+    } else {
+      window.addEventListener('load', function () {
+        if (window.VLibras && window.VLibras.Widget) {
+          new window.VLibras.Widget('https://vlibras.gov.br/app');
+        }
+      });
+    }
+  </script>
 </body>
 
 </html>
